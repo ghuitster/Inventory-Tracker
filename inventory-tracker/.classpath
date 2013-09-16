@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/checkstyle-5.3/checkstyle-5.3-all.jar"/>
+	<classpathentry kind="lib" path="lib/cobertura-1.9.4.1/lib/asm-3.0.jar"/>
+	<classpathentry kind="lib" path="lib/cobertura-1.9.4.1/lib/asm-tree-3.0.jar"/>
+	<classpathentry kind="lib" path="lib/cobertura-1.9.4.1/lib/jakarta-oro-2.0.8.jar"/>
+	<classpathentry kind="lib" path="lib/cobertura-1.9.4.1/lib/log4j-1.2.9.jar"/>
+	<classpathentry kind="lib" path="lib/itext-5.1.0/itextpdf-5.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/junit-4.8.2/junit-4.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/sqlitejdbc-v056/sqlitejdbc-v056.jar"/>
+	<classpathentry kind="lib" path="lib/cobertura-1.9.4.1/cobertura.jar"/>
+	<classpathentry kind="lib" path="lib/tools.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
