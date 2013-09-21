@@ -38,127 +38,12 @@ public class Item
 	}
 
 	/**
-	 * @return the product
-	 */
-	public Product getProduct()
-	{
-		return product;
-	}
-
-	/**
-	 * @param product the product to set
-	 */
-	public void setProduct(Product product)
-	{
-		this.product = product;
-	}
-
-	/**
-	 * @param product the Product to attempt to set
-	 * @return whether or not the product can be set
-	 */
-	public boolean ableToSetProduct(Product product)
-	{
-		return true;
-	}
-
-	/**
-	 * @return the barcode
-	 */
-	public Barcode getBarcode()
-	{
-		return barcode;
-	}
-
-	/**
-	 * @param barcode the barcode to set
-	 */
-	public void setBarcode(Barcode barcode)
-	{
-		this.barcode = barcode;
-	}
-
-	/**
 	 * @param barcode the Barcode to attempt to set
 	 * @return whether or not the barcode can be set
 	 */
 	public boolean ableToSetBarcode(Barcode barcode)
 	{
 		return true;
-	}
-
-	/**
-	 * @return the entryDate
-	 */
-	public Date getEntryDate()
-	{
-		return entryDate;
-	}
-
-	/**
-	 * @return the expirationDate
-	 */
-	public Date getExpirationDate()
-	{
-		return expirationDate;
-	}
-
-	/**
-	 * @param expirationDate the expirationDate to set
-	 */
-	public void setExpirationDate(Date expirationDate)
-	{
-		this.expirationDate = expirationDate;
-	}
-
-	/**
-	 * @param expirationDate the expirationDate Date to attempt to set
-	 * @return whether or not the expirationDate can be set
-	 */
-	public boolean ableToSetExpirationDate(Date expirationDate)
-	{
-		return true;
-	}
-
-	/**
-	 * @return the exitTime
-	 */
-	public Date getExitTime()
-	{
-		return exitTime;
-	}
-
-	/**
-	 * @param exitTime the exitTime to set
-	 */
-	public void setExitTime(Date exitTime)
-	{
-		this.exitTime = exitTime;
-	}
-
-	/**
-	 * @param exitTime the exitTime Date to attempt to set
-	 * @return whether or not we can set the exitTime
-	 */
-	public boolean ableToSetExitTime(Date exitTime)
-	{
-		return true;
-	}
-
-	/**
-	 * @return the container
-	 */
-	public ProductContainer getContainer()
-	{
-		return container;
-	}
-
-	/**
-	 * @param container the container to set
-	 */
-	public void setContainer(ProductContainer container)
-	{
-		this.container = container;
 	}
 
 	/**
@@ -171,29 +56,30 @@ public class Item
 	}
 
 	/**
-	 * @see java.lang.Object#hashCode()
+	 * @param exitTime the exitTime Date to attempt to set
+	 * @return whether or not we can set the exitTime
 	 */
-	@Override
-	public int hashCode()
+	public boolean ableToSetExitTime(Date exitTime)
 	{
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((barcode == null) ? 0 : barcode.hashCode());
-		result =
-				prime * result
-						+ ((container == null) ? 0 : container.hashCode());
-		result =
-				prime * result
-						+ ((entryDate == null) ? 0 : entryDate.hashCode());
-		result =
-				prime * result + ((exitTime == null) ? 0 : exitTime.hashCode());
-		result =
-				prime
-						* result
-						+ ((expirationDate == null) ? 0 : expirationDate
-								.hashCode());
-		result = prime * result + ((product == null) ? 0 : product.hashCode());
-		return result;
+		return true;
+	}
+
+	/**
+	 * @param expirationDate the expirationDate Date to attempt to set
+	 * @return whether or not the expirationDate can be set
+	 */
+	public boolean ableToSetExpirationDate(Date expirationDate)
+	{
+		return true;
+	}
+
+	/**
+	 * @param product the Product to attempt to set
+	 * @return whether or not the product can be set
+	 */
+	public boolean ableToSetProduct(Product product)
+	{
+		return true;
 	}
 
 	/**
@@ -282,6 +168,120 @@ public class Item
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * @return the barcode
+	 */
+	public Barcode getBarcode()
+	{
+		return barcode;
+	}
+
+	/**
+	 * @return the container
+	 */
+	public ProductContainer getContainer()
+	{
+		return container;
+	}
+
+	/**
+	 * @return the entryDate
+	 */
+	public Date getEntryDate()
+	{
+		return entryDate;
+	}
+
+	/**
+	 * @return the exitTime
+	 */
+	public Date getExitTime()
+	{
+		return exitTime;
+	}
+
+	/**
+	 * @return the expirationDate
+	 */
+	public Date getExpirationDate()
+	{
+		return expirationDate;
+	}
+
+	/**
+	 * @return the product
+	 */
+	public Product getProduct()
+	{
+		return product;
+	}
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((barcode == null) ? 0 : barcode.hashCode());
+		result =
+				prime * result
+						+ ((container == null) ? 0 : container.hashCode());
+		result =
+				prime * result
+						+ ((entryDate == null) ? 0 : entryDate.hashCode());
+		result =
+				prime * result + ((exitTime == null) ? 0 : exitTime.hashCode());
+		result =
+				prime
+						* result
+						+ ((expirationDate == null) ? 0 : expirationDate
+								.hashCode());
+		result = prime * result + ((product == null) ? 0 : product.hashCode());
+		return result;
+	}
+
+	/**
+	 * @param barcode the barcode to set
+	 */
+	public void setBarcode(Barcode barcode)
+	{
+		this.barcode = barcode;
+	}
+
+	/**
+	 * @param container the container to set
+	 */
+	public void setContainer(ProductContainer container)
+	{
+		this.container = container;
+	}
+
+	/**
+	 * @param exitTime the exitTime to set
+	 */
+	public void setExitTime(Date exitTime)
+	{
+		this.exitTime = exitTime;
+	}
+
+	/**
+	 * @param expirationDate the expirationDate to set
+	 */
+	public void setExpirationDate(Date expirationDate)
+	{
+		this.expirationDate = expirationDate;
+	}
+
+	/**
+	 * @param product the product to set
+	 */
+	public void setProduct(Product product)
+	{
+		this.product = product;
 	}
 
 	/**
