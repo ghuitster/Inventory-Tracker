@@ -24,25 +24,6 @@ public class UnitSize
 		this.unit = unit;
 	}
 
-	// Methods
-	/**
-	 * Returns the size value of the UnitSize object
-	 * @return the size
-	 */
-	public float getSize()
-	{
-		return size;
-	}
-
-	/**
-	 * Sets the size value of the UnitSize object
-	 * @param size the size to set
-	 */
-	public void setSize(float size)
-	{
-		this.size = size;
-	}
-
 	/**
 	 * Checks to see if the size we want to set is valid.
 	 * @param size the size to attempt to set
@@ -54,43 +35,12 @@ public class UnitSize
 	}
 
 	/**
-	 * Returns the UnitType of the UnitSize object
-	 * @return unit the UnitType enumeration to return
-	 */
-	public UnitType getUnit()
-	{
-		return unit;
-	}
-
-	/**
-	 * Sets the UnitType value of the UnitSize object
-	 * @param unit the UnitType to set.
-	 */
-	public void setUnit(UnitType unit)
-	{
-		this.unit = unit;
-	}
-
-	/**
 	 * @param unit the UnitType to attempt to set
 	 * @return if the UnitType can be assigned or not
 	 */
 	public boolean ableToSetUnit(UnitType unit)
 	{
 		return true;
-	}
-
-	/**
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode()
-	{
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + Float.floatToIntBits(size);
-		result = prime * result + ((unit == null) ? 0 : unit.hashCode());
-		return result;
 	}
 
 	/**
@@ -121,6 +71,56 @@ public class UnitSize
 			return false;
 		}
 		return true;
+	}
+
+	// Methods
+	/**
+	 * Returns the size value of the UnitSize object
+	 * @return the size
+	 */
+	public float getSize()
+	{
+		return size;
+	}
+
+	/**
+	 * Returns the UnitType of the UnitSize object
+	 * @return unit the UnitType enumeration to return
+	 */
+	public UnitType getUnit()
+	{
+		return unit;
+	}
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Float.floatToIntBits(size);
+		result = prime * result + ((unit == null) ? 0 : unit.hashCode());
+		return result;
+	}
+
+	/**
+	 * Sets the size value of the UnitSize object
+	 * @param size the size to set
+	 */
+	public void setSize(float size)
+	{
+		this.size = size;
+	}
+
+	/**
+	 * Sets the UnitType value of the UnitSize object
+	 * @param unit the UnitType to set.
+	 */
+	public void setUnit(UnitType unit)
+	{
+		this.unit = unit;
 	}
 
 	/**
