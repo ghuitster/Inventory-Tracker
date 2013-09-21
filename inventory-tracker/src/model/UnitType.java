@@ -9,5 +9,33 @@ package model;
  */
 public enum UnitType
 {
-	Count, Pounds, Ounces, Grams, Kilograms, Gallons, Quarts, Pints, Fluid_Ounces, Liters, Elephant_Weight, Stone, Chevrolet
+	// Enumeration Values
+	COUNT ("count"),
+	POUNDS ("lbs"),
+	OUNCES ("oz"),
+	GRAMS ("g"),
+	KILOGRAMS ("kg"),
+	GALLONS ("gal"),
+	QUARTS ("qt"),
+	PINTS ("pt"),
+	FLUID_OUNCES ("fl oz"),
+	LITERS ("L"),
+	ELEPHANT_WEIGHT ("EL"),
+	STONE ("st"),
+	CHEVROLET("chevy");
+	
+	// Variables
+	private final String value;
+	
+	// Constructor
+	private UnitType (String val)
+	{
+		this.value = val;
+	}
+	
+	//Methods
+	public String toString()
+	{
+		return this.value;
+	}
 }
