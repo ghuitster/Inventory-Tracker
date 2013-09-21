@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package model;
 
 /**
@@ -28,12 +26,19 @@ public enum UnitType
 	private final String value;
 	
 	// Constructor
+	/**
+	 * The UnitType Enumeration constructor
+	 * @param val the enumeration value to pass in.
+	 */
 	private UnitType (String val)
 	{
 		this.value = val;
 	}
 	
 	//Methods
+	/**
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString()
 	{
 		return this.value;

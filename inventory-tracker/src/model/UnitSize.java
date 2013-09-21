@@ -1,27 +1,31 @@
-/**
- * 
- */
+
 package model;
 
 /**
+ * Class to represent the unit size of a Product.
  * @author Michael
- *
+ * 
  */
 public class UnitSize
 {
 	// Variables
-	private float size = 0.0f;
-	private UnitType unit = null;
+	private float size;
+	private UnitType unit;
 	
-	// Constructor
-	public UnitSize(float s, UnitType u)
+	/**
+	 * The UnitSize constructor.
+	 * @param size a float value indicating the size of the Product with a unit size.
+	 * @param unit a UnitType indicating the type of units for the Product
+	 */
+	public UnitSize(float size, UnitType unit)
 	{
-		this.size = s;
-		this.unit = u;
+		this.size = size;
+		this.unit = unit;
 	}
 	
 	// Methods
 	/**
+	 * Returns the size value of the UnitSize object
 	 * @return the size
 	 */
 	public float getSize()
@@ -30,6 +34,7 @@ public class UnitSize
 	}
 
 	/**
+	 * Sets the size value of the UnitSize object
 	 * @param size the size to set
 	 */
 	public void setSize(float size)
@@ -38,7 +43,17 @@ public class UnitSize
 	}
 
 	/**
-	 * @return the unit
+	 * Checks to see if the size we want to set is valid.
+	 * @param size the size to attempt to set
+	 * @return if the size can be set or not
+	 */
+	public boolean ableToSetSize(float size)
+	{
+		return true;
+	}
+	/**
+	 * Returns the UnitType of the UnitSize object
+	 * @return unit the UnitType enumeration to return
 	 */
 	public UnitType getUnit()
 	{
@@ -46,11 +61,21 @@ public class UnitSize
 	}
 
 	/**
-	 * @param unit the unit to set
+	 * Sets the UnitType value of the UnitSize object
+	 * @param unit the UnitType to set.
 	 */
 	public void setUnit(UnitType unit)
 	{
 		this.unit = unit;
+	}
+	
+	/**
+	 * @param unit the UnitType to attempt to set
+	 * @return if the UnitType can be assigned or not
+	 */
+	public boolean ableToSetUnit(UnitType unit)
+	{
+		return true;
 	}
 
 	/**
@@ -104,8 +129,5 @@ public class UnitSize
 	{
 		return this.size + " " + this.unit;
 	}
-
-	
-	
 	
 }
