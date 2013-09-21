@@ -1,43 +1,22 @@
+
 package gui.reports.supply;
 
-import gui.common.*;
+import gui.common.FileFormat;
+import gui.common.IView;
 
 /**
  * View interface for the N-month supply report view.
  */
-public interface ISupplyReportView extends IView {
+public interface ISupplyReportView extends IView
+{
 
-	/**
-	 * Returns the value of the "Format" field.
-	 */
-	FileFormat getFormat();
-	
-	/**
-	 * Sets the value of the "Format" field.
-	 * 
-	 * @param value New "Format" value
-	 */
-	void setFormat(FileFormat value);
-	
 	/**
 	 * Sets the enable/disable state of the "Format" field.
 	 * 
 	 * @param value New enable/disable value
 	 */
 	void enableFormat(boolean value);
-	
-	/**
-	 * Returns the value of the "Months" field.
-	 */
-	String getMonths();
-	
-	/**
-	 * Sets the value of the "Months" field.
-	 * 
-	 * @param value New "Months" value
-	 */
-	void setMonths(String value);
-	
+
 	/**
 	 * Sets the enable/disable state of the "Months" field.
 	 * 
@@ -52,5 +31,28 @@ public interface ISupplyReportView extends IView {
 	 */
 	void enableOK(boolean value);
 
-}
+	/**
+	 * Returns the value of the "Format" field.
+	 */
+	FileFormat getFormat();
 
+	/**
+	 * Returns the value of the "Months" field.
+	 */
+	String getMonths();
+
+	/**
+	 * Sets the value of the "Format" field.
+	 * 
+	 * @param value New "Format" value
+	 */
+	void setFormat(FileFormat value);
+
+	/**
+	 * Sets the value of the "Months" field.
+	 * 
+	 * @param value New "Months" value
+	 */
+	void setMonths(String value);
+
+}

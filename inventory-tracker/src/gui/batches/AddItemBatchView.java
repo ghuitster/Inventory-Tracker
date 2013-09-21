@@ -1,22 +1,39 @@
+
 package gui.batches;
 
+import gui.common.DialogBox;
+import gui.common.GridBagConstraintsExt;
+import gui.inventory.ProductContainerData;
+import gui.main.GUI;
+import gui.product.AddProductView;
+
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.text.ParseException;
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
+import java.util.Calendar;
+import java.util.Date;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JSplitPane;
+import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
+import javax.swing.SpinnerModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import common.util.DateUtils;
 
-import gui.common.*;
-import gui.inventory.*;
-import gui.main.GUI;
-import gui.product.*;
-
 @SuppressWarnings("serial")
 public class AddItemBatchView extends ItemBatchView implements
-		IAddItemBatchView {
+		IAddItemBatchView
+{
 
 	private JLabel entryDateLabel;
 	private SpinnerModel entryDateSpinnerModel;
@@ -26,7 +43,8 @@ public class AddItemBatchView extends ItemBatchView implements
 	private JTextField countField;
 
 	public AddItemBatchView(GUI parent, DialogBox dialog,
-			ProductContainerData target) {
+			ProductContainerData target)
+	{
 		super(parent, dialog);
 
 		construct();
@@ -35,7 +53,19 @@ public class AddItemBatchView extends ItemBatchView implements
 	}
 
 	@Override
-	protected void createComponents() {
+	protected void barcodeChanged()
+	{
+		getController().barcodeChanged();
+	}
+
+	private void countChanged()
+	{
+		getController().countChanged();
+	}
+
+	@Override
+	protected void createComponents()
+	{
 		super.createComponents();
 
 		Date initDate = DateUtils.currentDate();
@@ -44,75 +74,165 @@ public class AddItemBatchView extends ItemBatchView implements
 
 		entryDateLabel = new JLabel("Entry Date:");
 
-		entryDateSpinnerModel = new SpinnerDateModel(initDate, earliestDate,
-				latestDate, Calendar.YEAR);
+		entryDateSpinnerModel =
+				new SpinnerDateModel(initDate, earliestDate, latestDate,
+						Calendar.YEAR);
 		entryDateSpinner = new JSpinner(entryDateSpinnerModel);
-		entryDateSpinnerEditor = new JSpinner.DateEditor(entryDateSpinner,
-				DateUtils.DATE_FORMAT);
+		entryDateSpinnerEditor =
+				new JSpinner.DateEditor(entryDateSpinner, DateUtils.DATE_FORMAT);
 		entryDateSpinner.setEditor(entryDateSpinnerEditor);
 		entryDateSpinnerEditor.getTextField().getDocument()
-				.addDocumentListener(new DocumentListener() {
+				.addDocumentListener(new DocumentListener()
+				{
 
 					@Override
-					public void changedUpdate(DocumentEvent e) {
+					public void changedUpdate(DocumentEvent e)
+					{
 						return;
 					}
 
 					@Override
-					public void insertUpdate(DocumentEvent e) {
+					public void insertUpdate(DocumentEvent e)
+					{
 						processChange(e);
 					}
 
-					@Override
-					public void removeUpdate(DocumentEvent e) {
-						processChange(e);
-					}
-
-					private void processChange(DocumentEvent e) {
-						if (eventsAreDisabled()) {
+					private void processChange(DocumentEvent e)
+					{
+						if(eventsAreDisabled())
+						{
 							return;
 						}
-						if (entryDateSpinnerEditor.getTextField().hasFocus()) {
+						if(entryDateSpinnerEditor.getTextField().hasFocus())
+						{
 							entryDateChanged();
 						}
 					}
+
+					@Override
+					public void removeUpdate(DocumentEvent e)
+					{
+						processChange(e);
+					}
 				});
-//		entryDateSpinner.addChangeListener(new ChangeListener() {
-//			@Override
-//			public void stateChanged(ChangeEvent e) {
-//				if (eventsAreDisabled()) {
-//					return;
-//				}
-//				entryDateChanged();
-//			}
-//		});
+		// entryDateSpinner.addChangeListener(new ChangeListener() {
+		// @Override
+		// public void stateChanged(ChangeEvent e) {
+		// if (eventsAreDisabled()) {
+		// return;
+		// }
+		// entryDateChanged();
+		// }
+		// });
 
 		countLabel = new JLabel("Count:");
 
 		countField = new JTextField(5);
-		countField.addKeyListener(new KeyListener() {
+		countField.addKeyListener(new KeyListener()
+		{
 			@Override
-			public void keyPressed(KeyEvent e) {
+			public void keyPressed(KeyEvent e)
+			{
 				return;
 			}
 
 			@Override
-			public void keyReleased(KeyEvent e) {
-				if (eventsAreDisabled()) {
+			public void keyReleased(KeyEvent e)
+			{
+				if(eventsAreDisabled())
+				{
 					return;
 				}
 				countChanged();
 			}
 
 			@Override
-			public void keyTyped(KeyEvent arg0) {
+			public void keyTyped(KeyEvent arg0)
+			{
 				return;
 			}
 		});
 	}
 
 	@Override
-	protected void layoutComponents() {
+	public void displayAddProductView()
+	{
+		DialogBox dialogBox = new DialogBox(_parent, "Add Product");
+		AddProductView dialogView =
+				new AddProductView(_parent, dialogBox, getBarcode());
+		dialogBox.display(dialogView, false);
+	}
+
+	// //////////////////////////
+	// ItemBatchView Overrides
+	// //////////////////////////
+
+	@Override
+	protected void done()
+	{
+		getController().done();
+	}
+
+	private void entryDateChanged()
+	{
+		getController().entryDateChanged();
+	}
+
+	@Override
+	protected String getBarcodeLabel()
+	{
+		return "Product Barcode:";
+	}
+
+	@Override
+	public IAddItemBatchController getController()
+	{
+		return (IAddItemBatchController) super.getController();
+	}
+
+	@Override
+	public String getCount()
+	{
+		return countField.getText();
+	}
+
+	@Override
+	public Date getEntryDate()
+	{
+
+		// return DateUtils.removeTimeFromDate((Date) entryDateSpinnerModel
+		// .getValue());
+
+		String entryDateText = entryDateSpinnerEditor.getTextField().getText();
+		if(entryDateText == null)
+		{
+			return null;
+		}
+		try
+		{
+			return DateUtils.parseDate(entryDateText);
+		}
+		catch(ParseException e)
+		{
+			return null;
+		}
+	}
+
+	@Override
+	protected String getItemActionName()
+	{
+		return "Add Item";
+	}
+
+	@Override
+	protected void itemAction()
+	{
+		getController().addItem();
+	}
+
+	@Override
+	protected void layoutComponents()
+	{
 		batchPanel = new JPanel();
 		batchPanel.setLayout(new GridBagLayout());
 
@@ -164,78 +284,24 @@ public class AddItemBatchView extends ItemBatchView implements
 		productPanel.add(Box.createRigidArea(new Dimension(10, 10)));
 		productPanel.add(productTableScrollPane);
 
-		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, productPanel,
-				itemTableScrollPane);
+		splitPane =
+				new JSplitPane(JSplitPane.VERTICAL_SPLIT, productPanel,
+						itemTableScrollPane);
 
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.add(splitPane);
 	}
 
-	private void entryDateChanged() {
-		getController().entryDateChanged();
-	}
-
-	private void countChanged() {
-		getController().countChanged();
-	}
-
-	// //////////////////////////
-	// ItemBatchView Overrides
-	// //////////////////////////
-
 	@Override
-	protected String getBarcodeLabel() {
-		return "Product Barcode:";
-	}
-
-	@Override
-	public IAddItemBatchController getController() {
-		return (IAddItemBatchController) super.getController();
-	}
-
-	@Override
-	protected void done() {
-		getController().done();
-	}
-
-	@Override
-	protected void itemAction() {
-		getController().addItem();
-	}
-
-	@Override
-	protected String getItemActionName() {
-		return "Add Item";
-	}
-
-	@Override
-	protected void barcodeChanged() {
-		getController().barcodeChanged();
-	}
-
-	@Override
-	protected void useScannerChanged() {
-		getController().useScannerChanged();
-	}
-
-	@Override
-	protected void selectedProductChanged() {
-		getController().selectedProductChanged();
-	}
-
-	@Override
-	protected void selectedItemChanged() {
-		return;
-	}
-
-	@Override
-	protected void redo() {
+	protected void redo()
+	{
 		getController().redo();
 	}
 
 	@Override
-	protected void undo() {
-		getController().undo();
+	protected void selectedItemChanged()
+	{
+		return;
 	}
 
 	// //////////////////////////
@@ -243,59 +309,55 @@ public class AddItemBatchView extends ItemBatchView implements
 	// //////////////////////////
 
 	@Override
-	public void displayAddProductView() {
-		DialogBox dialogBox = new DialogBox(_parent, "Add Product");
-		AddProductView dialogView = new AddProductView(_parent, dialogBox,
-				getBarcode());
-		dialogBox.display(dialogView, false);
+	protected void selectedProductChanged()
+	{
+		getController().selectedProductChanged();
 	}
 
 	@Override
-	public String getCount() {
-		return countField.getText();
-	}
-
-	@Override
-	public Date getEntryDate() {
-		
-		// return DateUtils.removeTimeFromDate((Date) entryDateSpinnerModel
-		// 		.getValue());
-
-		String entryDateText = entryDateSpinnerEditor.getTextField().getText();
-		if (entryDateText == null) {
-			return null;
-		}
-		try {
-			return DateUtils.parseDate(entryDateText);
-		}
-		catch (ParseException e) {
-			return null;
-		}
-	}
-
-	@Override
-	public void setCount(String value) {
+	public void setCount(String value)
+	{
 		boolean disabledEvents = disableEvents();
-		try {
+		try
+		{
 			countField.setText(value);
-		} finally {
-			if (disabledEvents) {
+		}
+		finally
+		{
+			if(disabledEvents)
+			{
 				enableEvents();
 			}
 		}
 	}
 
 	@Override
-	public void setEntryDate(Date value) {
+	public void setEntryDate(Date value)
+	{
 		boolean disabledEvents = disableEvents();
-		try {
+		try
+		{
 			entryDateSpinnerModel.setValue(DateUtils.removeTimeFromDate(value));
-		} finally {
-			if (disabledEvents) {
+		}
+		finally
+		{
+			if(disabledEvents)
+			{
 				enableEvents();
 			}
 		}
+	}
+
+	@Override
+	protected void undo()
+	{
+		getController().undo();
+	}
+
+	@Override
+	protected void useScannerChanged()
+	{
+		getController().useScannerChanged();
 	}
 
 }
-

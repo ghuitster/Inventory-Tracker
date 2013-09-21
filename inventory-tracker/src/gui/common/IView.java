@@ -1,19 +1,32 @@
+
 package gui.common;
 
 /**
  * IView defines functionality that is supported by all views in the program.
  * Controllers invoke this functionality on their views.
  */
-public interface IView {
-	
+public interface IView
+{
+
+	/**
+	 * Displays an "error" message to the user.
+	 * 
+	 * @param message message text
+	 * 
+	 *            {@pre message != null}
+	 * 
+	 *            {@post The user has viewed the error message.}
+	 */
+	void displayErrorMessage(String message);
+
 	/**
 	 * Displays an "information" message to the user.
 	 * 
 	 * @param message message text
 	 * 
-	 * {@pre message != null}
+	 *            {@pre message != null}
 	 * 
-	 * {@post The user has viewed the information message.}
+	 *            {@post The user has viewed the information message.}
 	 */
 	void displayInformationMessage(String message);
 
@@ -22,21 +35,9 @@ public interface IView {
 	 * 
 	 * @param message message text
 	 * 
-	 * {@pre message != null}
+	 *            {@pre message != null}
 	 * 
-	 * {@post The user has viewed the warning message.}
+	 *            {@post The user has viewed the warning message.}
 	 */
 	void displayWarningMessage(String message);
-	
-	/**
-	 * Displays an "error" message to the user.
-	 * 
-	 * @param message message text
-	 * 
-	 * {@pre message != null}
-	 * 
-	 * {@post The user has viewed the error message.}
-	 */
-	void displayErrorMessage(String message);
 }
-

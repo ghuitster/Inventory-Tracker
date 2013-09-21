@@ -1,28 +1,34 @@
+
 package gui.common;
-
-
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import javax.swing.table.*;
 
 import gui.main.GUI;
 
+import java.awt.Color;
+import java.awt.Font;
+
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.UIManager;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
+
 /**
- * View is a base class that provides common functionality required
- * by all views in the program (i.e., view classes extend View 
- * instead of {@link javax.swing.JPanel JPanel}).
+ * View is a base class that provides common functionality required by all views
+ * in the program (i.e., view classes extend View instead of
+ * {@link javax.swing.JPanel JPanel}).
  * <P>
  * The functionality provided by View to its subclasses includes:
  * <UL>
  * <LI>A reference to the owning {@link gui.main.GUI GUI} object
  * <LI>A reference to the view's controller
- * <LI>A facility for turning off event notifications when
- * user interface components are being programmatically updated
+ * <LI>A facility for turning off event notifications when user interface
+ * components are being programmatically updated
  * <LI>Methods for displaying various types of messages to users
  * <LI>Utility methods for creating fonts, borders, and other UI objects.
  * <LI>An abstract method interface that must be supported by all subclasses
- * <LI>A template method that defines a standard algorithm for constructing 
+ * <LI>A template method that defines a standard algorithm for constructing
  * subclass instances
  * </UL>
  * <P>
@@ -30,119 +36,22 @@ import gui.main.GUI;
  * <UL>
  * <LI>{@link #createComponents() createComponents}
  * <LI>{@link #layoutComponents() layoutComponents}
-  * </UL>
+ * </UL>
  * <P>
  * Subclasses should also call {@link #construct() construct} from their
- * constructors.
- * Subclass constructors should also initialize the view's controller; 
+ * constructors. Subclass constructors should also initialize the view's
+ * controller;
  */
-public abstract class View extends JPanel implements IView {
-	
-	public static final int MenuFontSize = 14;
-	public static final int BorderFontSize = 14;
-	public static final int ContentFontSize = 12;
-	public static final int ContextInfoFontSize = 14;
-	public static final Color TableColumnHeaderColor = new Color(153, 204, 255);
-
-	/**
-	 * Owning {@link gui.main.GUI GUI} object.
-	 */
-	protected GUI _parent;
-	
-	/**
-	 * Controller for this view.
-	 */
-	protected IController _controller;
-
-	/**
-	 * Flag indicating whether event notifications are currently disabled
-	 */
-	private boolean _eventsDisabled;
-	
-	/**
-	 * Constructor.
-	 * 
-	 * @param parent Owning {@link gui.main.GUI GUI} object.
-	 * 
-	 * {@pre parent != null}
-	 * 
-	 * {@post The View has been initialized with the specified parent.}
-	 */
-	protected View(GUI parent) {
-		this._parent = parent;
-		this._controller = null;
-	}
-	
-	/**
-	 * Returns the controller for this view.
-	 * 
-	 * {@pre None}
-	 * 
-	 * {@post Returns the controller for this view}
-	 */
-	public IController getController() {
-		return _controller;
-	}
-	
-	/**
-	 * Creates a font.
-	 * 
-	 * @param prototype Prototype font on which the new font should be based.
-	 * @param size Point size of the new font.
-	 * 
-	 * {@pre prototype != null, size > 0}
-	 * 
-	 * {@post Returns a font based on the specified prototype and size.}
-	 */
-	public static Font createFont(Font prototype, int size) {
-		return new Font(prototype.getName(), prototype.getStyle(), size);
-	}
-	
-	/**
-	 * Creates a titled border.
-	 * 
-	 * @param borderTitle Title text for the border.
-	 * @param size Font size for the title text.
-	 * 
-	 * {@pre borderTitle != null, int size > 0}
-	 * 
-	 * {@post Returns a new titled border with the specified title text
-	 * and font size.}
-	 */
-	public static TitledBorder createTitledBorder(String borderTitle, int size) {
-		TitledBorder border = BorderFactory.createTitledBorder(borderTitle);
-		border.setTitleFont(createFont(UIManager.getFont("TitledBorder.font") , size));
-		return border;
-	}
-	
-	/**
-	 * Creates a table column.
-	 * 
-	 * @param columnIndex Index for the new table column.
-	 * @param columnTitle Title text for the new table column. 
-	 * @param size font size for the column title. 
-	 * 
-	 * {@pre columnIndex >= 0, columnTitle != null, size > 0}
-	 * 
-	 * {@post Returns a new table column with the specified column index,
-	 * title, and title font size.}
-	 */
-	public static TableColumn createTableColumn(int columnIndex, String columnTitle, int size) {
-		Font DefaultFont = new JTable().getFont();
-		TableColumn column = new TableColumn(columnIndex);
-		column.setHeaderRenderer(new TableHeaderRenderer(createFont(DefaultFont, size)));
-		column.setCellRenderer(new StringCellRenderer(createFont(DefaultFont, size)));
-		column.setHeaderValue(columnTitle);
-		return column;
-	}
-
+public abstract class View extends JPanel implements IView
+{
 
 	/**
 	 * Table cell renderer used to draw table cells.
 	 */
-	@SuppressWarnings("serial") 
-	private static class StringCellRenderer extends DefaultTableCellRenderer {
-		
+	@SuppressWarnings("serial")
+	private static class StringCellRenderer extends DefaultTableCellRenderer
+	{
+
 		/**
 		 * Font to be used to draw table cells.
 		 */
@@ -153,12 +62,13 @@ public abstract class View extends JPanel implements IView {
 		 * 
 		 * @param customFont Font to be used to draw table cells.
 		 * 
-		 * {@pre customFont != null}
+		 *            {@pre customFont != null}
 		 * 
-		 * {@post StringCellRenderer has been initialized with the
-		 * specified custom font.}
+		 *            {@post StringCellRenderer has been initialized with the
+		 *            specified custom font.}
 		 */
-		public StringCellRenderer(Font customFont) {
+		public StringCellRenderer(Font customFont)
+		{
 			this._customFont = customFont;
 			setFont(customFont);
 		}
@@ -167,131 +77,258 @@ public abstract class View extends JPanel implements IView {
 		 * Returns the custom font used to draw table cells.
 		 */
 		@Override
-		public Font getFont() {
+		public Font getFont()
+		{
 			return _customFont;
 		}
 	}
-	
-	
 	/**
 	 * Table cell renderer used to draw table headers.
-	 */	
-	@SuppressWarnings("serial") 
-	private static class TableHeaderRenderer extends StringCellRenderer {
+	 */
+	@SuppressWarnings("serial")
+	private static class TableHeaderRenderer extends StringCellRenderer
+	{
 
 		/**
 		 * Constructor.
 		 * 
 		 * @param customFont Custom font to be used to draw table headers.
 		 * 
-		 * {@pre customFont != null}
+		 *            {@pre customFont != null}
 		 * 
-		 * {@post TableHeaderRenderer has been initialized with the
-		 * specified custom font.}
+		 *            {@post TableHeaderRenderer has been initialized with the
+		 *            specified custom font.}
 		 */
-		public TableHeaderRenderer(Font customFont) {
+		public TableHeaderRenderer(Font customFont)
+		{
 			super(customFont);
 		}
-		
+
 		/**
 		 * Returns the background color used to draw table headers.
 		 */
 		@Override
-		public Color getBackground() {
+		public Color getBackground()
+		{
 			return TableColumnHeaderColor;
 		}
 	}
+	public static final int MenuFontSize = 14;
+	public static final int BorderFontSize = 14;
+	public static final int ContentFontSize = 12;
 
+	public static final int ContextInfoFontSize = 14;
 
-//	@SuppressWarnings("serial") 
-//	private static class NumberCellRenderer extends StringCellRenderer {
-//		
-//		public NumberCellRenderer(Font customFont) {
-//			super(customFont);
-//			setHorizontalAlignment(SwingConstants.RIGHT);
-//		}
-//	} 
-	
-	//
-	// Abstract subclass interface
-	//
-	
+	public static final Color TableColumnHeaderColor = new Color(153, 204, 255);
+
 	/**
-	 * This is a template method that defines the construction process 
-	 * for all subclasses.  Subclasses should call this method from their 
-	 * constructors in order to properly initialize themselves.
+	 * Creates a font.
+	 * 
+	 * @param prototype Prototype font on which the new font should be based.
+	 * @param size Point size of the new font.
+	 * 
+	 *            {@pre prototype != null, size > 0}
+	 * 
+	 *            {@post Returns a font based on the specified prototype and
+	 *            size.}
+	 */
+	public static Font createFont(Font prototype, int size)
+	{
+		return new Font(prototype.getName(), prototype.getStyle(), size);
+	}
+
+	/**
+	 * Creates a table column.
+	 * 
+	 * @param columnIndex Index for the new table column.
+	 * @param columnTitle Title text for the new table column.
+	 * @param size font size for the column title.
+	 * 
+	 *            {@pre columnIndex >= 0, columnTitle != null, size > 0}
+	 * 
+	 *            {@post Returns a new table column with the specified column
+	 *            index, title, and title font size.}
+	 */
+	public static TableColumn createTableColumn(int columnIndex,
+			String columnTitle, int size)
+	{
+		Font DefaultFont = new JTable().getFont();
+		TableColumn column = new TableColumn(columnIndex);
+		column.setHeaderRenderer(new TableHeaderRenderer(createFont(
+				DefaultFont, size)));
+		column.setCellRenderer(new StringCellRenderer(createFont(DefaultFont,
+				size)));
+		column.setHeaderValue(columnTitle);
+		return column;
+	}
+
+	/**
+	 * Creates a titled border.
+	 * 
+	 * @param borderTitle Title text for the border.
+	 * @param size Font size for the title text.
+	 * 
+	 *            {@pre borderTitle != null, int size > 0}
+	 * 
+	 *            {@post Returns a new titled border with the specified title
+	 *            text and font size.}
+	 */
+	public static TitledBorder createTitledBorder(String borderTitle, int size)
+	{
+		TitledBorder border = BorderFactory.createTitledBorder(borderTitle);
+		border.setTitleFont(createFont(UIManager.getFont("TitledBorder.font"),
+				size));
+		return border;
+	}
+
+	/**
+	 * Owning {@link gui.main.GUI GUI} object.
+	 */
+	protected GUI _parent;
+
+	/**
+	 * Controller for this view.
+	 */
+	protected IController _controller;
+
+	/**
+	 * Flag indicating whether event notifications are currently disabled
+	 */
+	private boolean _eventsDisabled;
+
+	/**
+	 * Constructor.
+	 * 
+	 * @param parent Owning {@link gui.main.GUI GUI} object.
+	 * 
+	 *            {@pre parent != null}
+	 * 
+	 *            {@post The View has been initialized with the specified
+	 *            parent.}
+	 */
+	protected View(GUI parent)
+	{
+		this._parent = parent;
+		this._controller = null;
+	}
+
+	/**
+	 * This is a template method that defines the construction process for all
+	 * subclasses. Subclasses should call this method from their constructors in
+	 * order to properly initialize themselves.
 	 * 
 	 * {@pre None}
 	 * 
-	 * {@post The components for this view have been created and lain out
-	 * on the panel.}
+	 * {@post The components for this view have been created and lain out on the
+	 * panel.}
 	 */
-	protected void construct() {
+	protected void construct()
+	{
 		createComponents();
 		layoutComponents();
 	}
-	
+
+	// @SuppressWarnings("serial")
+	// private static class NumberCellRenderer extends StringCellRenderer {
+	//
+	// public NumberCellRenderer(Font customFont) {
+	// super(customFont);
+	// setHorizontalAlignment(SwingConstants.RIGHT);
+	// }
+	// }
+
+	//
+	// Abstract subclass interface
+	//
+
 	/**
-	 * Creates and initializes the components that populate this view.
-	 * This method should only create/initialize the component objects, but not actually
-	 * add them to the panel.  Laying out the components on the panel is done by 
-	 * the {@link #layoutComponents() layoutComponents} method.
+	 * Creates and initializes the components that populate this view. This
+	 * method should only create/initialize the component objects, but not
+	 * actually add them to the panel. Laying out the components on the panel is
+	 * done by the {@link #layoutComponents() layoutComponents} method.
 	 * 
 	 * {@pre None}
 	 * 
 	 * {@post The components for this view have been created}
 	 */
-	protected void createComponents() {
+	protected void createComponents()
+	{
 		return;
 	}
-	
-	/**
-	 * Lays out components on the view.
-	 * 
-	 * {@pre None}
-	 * 
-	 * {@post The components for this view have been lain out on the panel}
-	 */
-	protected void layoutComponents() {
-		return;
-	}
- 	
-	//
-	// Event enable/disable routines
-	//
-	
+
 	/**
 	 * Disables events in this View if they are not already disabled.
 	 * 
 	 * {@pre None}
 	 * 
-	 * {@post Returns true if events were disabled.  Returns false if
-	 * events were already disabled.}
+	 * {@post Returns true if events were disabled. Returns false if events were
+	 * already disabled.}
 	 */
-	protected boolean disableEvents() {
-		if (_eventsDisabled) {
+	protected boolean disableEvents()
+	{
+		if(_eventsDisabled)
+		{
 			return false;
 		}
-		else {
+		else
+		{
 			_eventsDisabled = true;
 			return true;
 		}
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void displayErrorMessage(String message)
+	{
+		if(_parent != null)
+			_parent.displayErrorMessage(message);
+	}
+
+	//
+	// Event enable/disable routines
+	//
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void displayInformationMessage(String message)
+	{
+		if(_parent != null)
+			_parent.displayInformationMessage(message);
+
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void displayWarningMessage(String message)
+	{
+		if(_parent != null)
+			_parent.displayWarningMessage(message);
+	}
+
 	/**
 	 * Enables events in this View.
 	 * 
 	 * {@pre eventsAreDisabled() == true}
 	 * 
-	 * {@post Returns true if events were enabled.  Returns false if
-	 * events were already enabled.}
+	 * {@post Returns true if events were enabled. Returns false if events were
+	 * already enabled.}
 	 */
-	protected boolean enableEvents() {
-		if (_eventsDisabled) {
+	protected boolean enableEvents()
+	{
+		if(_eventsDisabled)
+		{
 			_eventsDisabled = false;
 			return true;
 		}
-		else {
+		else
+		{
 			return false;
 		}
 	}
@@ -301,37 +338,36 @@ public abstract class View extends JPanel implements IView {
 	 * 
 	 * {@pre None}
 	 * 
-	 * {@post Returns true if events are disabled.  Returns false
-	 * if events are enabled.}
+	 * {@post Returns true if events are disabled. Returns false if events are
+	 * enabled.}
 	 */
-	protected boolean eventsAreDisabled() {
+	protected boolean eventsAreDisabled()
+	{
 		return _eventsDisabled;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the controller for this view.
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post Returns the controller for this view}
 	 */
-	public void displayErrorMessage(String message) {
-		if (_parent != null)
-			_parent.displayErrorMessage(message);
+	public IController getController()
+	{
+		return _controller;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Lays out components on the view.
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post The components for this view have been lain out on the panel}
 	 */
-	public void displayInformationMessage(String message) {
-		if (_parent != null)
-			_parent.displayInformationMessage(message);
-		
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void displayWarningMessage(String message) {
-		if (_parent != null)
-			_parent.displayWarningMessage(message);
+	protected void layoutComponents()
+	{
+		return;
 	}
 
 }
-

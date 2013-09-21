@@ -1,34 +1,36 @@
+
 package gui.item;
 
-import java.util.*;
-
 import gui.common.Tagable;
+
+import java.util.Date;
 
 /**
  * Display data class for items.
  */
-public class ItemData extends Tagable {
+public class ItemData extends Tagable
+{
 
 	/**
 	 * EntryDate attribute.
 	 */
 	private Date _entryDate;
-	
+
 	/**
 	 * ExpirationDate attribute.
 	 */
 	private Date _expirationDate;
-	
+
 	/**
 	 * Barcode attribute.
 	 */
 	private String _barcode;
-	
+
 	/**
 	 * StorageUnit attribute.
 	 */
 	private String _storageUnit;
-	
+
 	/**
 	 * ProductGroup attribute.
 	 */
@@ -39,25 +41,57 @@ public class ItemData extends Tagable {
 	 * 
 	 * {@pre None}
 	 * 
-	 * {@post getEntryDate() == current date/time}
-	 * {@post getExpirationDate() == current date/time}
-	 * {@post getBarcode() == ""}
-	 * {@post getStorageUnit() == ""}
-	 * {@post getProductGroup() == ""}
+	 * {@post getEntryDate() == current date/time} {@post getExpirationDate() ==
+	 * current date/time} {@post getBarcode() == ""} {@post getStorageUnit() ==
+	 * ""} {@post getProductGroup() == ""}
 	 */
-	public ItemData() {
+	public ItemData()
+	{
 		_entryDate = new Date();
 		_expirationDate = new Date();
 		_barcode = "";
 		_storageUnit = "";
 		_productGroup = "";
 	}
-	
+
 	/**
 	 * Returns the value of the Barcode attribute.
 	 */
-	public String getBarcode() {
+	public String getBarcode()
+	{
 		return _barcode;
+	}
+
+	/**
+	 * Returns the value of the EntryDate attribute.
+	 */
+	public Date getEntryDate()
+	{
+		return _entryDate;
+	}
+
+	/**
+	 * Returns the value of the ExpirationDate attribute.
+	 */
+	public Date getExpirationDate()
+	{
+		return _expirationDate;
+	}
+
+	/**
+	 * Returns the value of the ProductGroup attribute.
+	 */
+	public String getProductGroup()
+	{
+		return _productGroup;
+	}
+
+	/**
+	 * Returns the value of the StorageUnit attribute.
+	 */
+	public String getStorageUnit()
+	{
+		return _storageUnit;
 	}
 
 	/**
@@ -65,19 +99,13 @@ public class ItemData extends Tagable {
 	 * 
 	 * @param barcode New Barcode value
 	 * 
-	 * {@pre barcode != null}
+	 *            {@pre barcode != null}
 	 * 
-	 * {@post getBarcode() == barcode}
+	 *            {@post getBarcode() == barcode}
 	 */
-	public void setBarcode(String barcode) {
+	public void setBarcode(String barcode)
+	{
 		this._barcode = barcode;
-	}
-
-	/**
-	 * Returns the value of the EntryDate attribute.
-	 */
-	public Date getEntryDate() {
-		return _entryDate;
 	}
 
 	/**
@@ -85,19 +113,13 @@ public class ItemData extends Tagable {
 	 * 
 	 * @param entryDate New EntryDate value
 	 * 
-	 * {@pre entryDate != null}
+	 *            {@pre entryDate != null}
 	 * 
-	 * {@post getEntryDate() == entryDate}
+	 *            {@post getEntryDate() == entryDate}
 	 */
-	public void setEntryDate(Date entryDate) {
+	public void setEntryDate(Date entryDate)
+	{
 		this._entryDate = entryDate;
-	}
-
-	/**
-	 * Returns the value of the ExpirationDate attribute.
-	 */
-	public Date getExpirationDate() {
-		return _expirationDate;
 	}
 
 	/**
@@ -105,39 +127,13 @@ public class ItemData extends Tagable {
 	 * 
 	 * @param expirationDate New ExpirationDate value
 	 * 
-	 * {@pre None}
+	 *            {@pre None}
 	 * 
-	 * {@post getExpirationDate() == expirationDate}
+	 *            {@post getExpirationDate() == expirationDate}
 	 */
-	public void setExpirationDate(Date expirationDate) {
+	public void setExpirationDate(Date expirationDate)
+	{
 		this._expirationDate = expirationDate;
-	}
-
-	/**
-	 * Returns the value of the StorageUnit attribute.
-	 */
-	public String getStorageUnit() {
-		return _storageUnit;
-	}
-
-	/**
-	 * Sets the value of the StorageUnit attribute.
-	 * 
-	 * @param storageUnit New StorageUnit value
-	 * 
-	 * {@pre storageUnit != null}
-	 * 
-	 * {@post getStorageUnit() == storageUnit}
-	 */
-	public void setStorageUnit(String storageUnit) {
-		this._storageUnit = storageUnit;
-	}
-
-	/**
-	 * Returns the value of the ProductGroup attribute.
-	 */
-	public String getProductGroup() {
-		return _productGroup;
 	}
 
 	/**
@@ -145,13 +141,27 @@ public class ItemData extends Tagable {
 	 * 
 	 * @param productGroup New ProductGroup value
 	 * 
-	 * {@pre productGroup != null}
+	 *            {@pre productGroup != null}
 	 * 
-	 * {@post getProductGroup() == productGroup}
+	 *            {@post getProductGroup() == productGroup}
 	 */
-	public void setProductGroup(String productGroup) {
+	public void setProductGroup(String productGroup)
+	{
 		this._productGroup = productGroup;
 	}
 
-}
+	/**
+	 * Sets the value of the StorageUnit attribute.
+	 * 
+	 * @param storageUnit New StorageUnit value
+	 * 
+	 *            {@pre storageUnit != null}
+	 * 
+	 *            {@post getStorageUnit() == storageUnit}
+	 */
+	public void setStorageUnit(String storageUnit)
+	{
+		this._storageUnit = storageUnit;
+	}
 
+}

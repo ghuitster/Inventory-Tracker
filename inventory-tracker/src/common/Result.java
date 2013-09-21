@@ -1,20 +1,22 @@
+
 package common;
 
 /**
  * Represents the result of an operation.
  */
-public class Result {
-	
+public class Result
+{
+
 	/**
 	 * Status attribute. Indicates success or failure of the operation.
 	 */
 	private boolean _status;
-	
+
 	/**
-	 * Message attribute.  Describes the reason for failure (empty on success).
+	 * Message attribute. Describes the reason for failure (empty on success).
 	 */
 	private String _message;
-	
+
 	/**
 	 * Constructor.
 	 * 
@@ -22,76 +24,70 @@ public class Result {
 	 * 
 	 * {@post getStatus() == false, getMessage() == ""}
 	 */
-	public Result() {
+	public Result()
+	{
 		_status = false;
 		_message = "";
 	}
-	
+
 	/**
 	 * Constructor.
 	 * 
 	 * @param status Initial value of Status attribute.
 	 * 
-	 * {@pre None}
+	 *            {@pre None}
 	 * 
-	 * {@post getStatus() == status, getMessage() == ""}
+	 *            {@post getStatus() == status, getMessage() == ""}
 	 */
-	public Result(boolean status) {
+	public Result(boolean status)
+	{
 		_status = status;
 		_message = "";
 	}
-	
+
 	/**
 	 * Constructor.
 	 * 
 	 * @param status Initial value of Status attribute.
 	 * @param message Initial value of Message attribute.
 	 * 
-	 * {@pre None}
+	 *            {@pre None}
 	 * 
-	 * {@post getStatus() == status, getMessage() == message}
+	 *            {@post getStatus() == status, getMessage() == message}
 	 */
-	public Result(boolean status, String message) {
+	public Result(boolean status, String message)
+	{
 		_status = status;
 		_message = message;
 	}
-	
+
 	/**
 	 * Copy Constructor.
 	 * 
 	 * @param other Object to be copied.
 	 * 
-	 * {@pre other != null}
+	 *            {@pre other != null}
 	 * 
-	 * {@post this is a copy of other}
+	 *            {@post this is a copy of other}
 	 */
-	public Result(Result other) {
+	public Result(Result other)
+	{
 		_status = other._status;
 		_message = other._message;
 	}
-	
+
 	/**
-	 * Returns value of Status attribute.
+	 * Appends string to Message attribute.
 	 * 
-	 * {@pre None}
+	 * @param message String to be appended to Message attribute.
 	 * 
-	 * {@post Returns value of Status attribute.}
+	 *            {@pre message != null}
+	 * 
+	 *            {@post getMessage() == old(getMessage()) + message}
 	 */
-	public boolean getStatus() {
-		return _status;
-	}
-	
-	/**
-	 * Sets value of Status attribute.
-	 * 
-	 * @param status New value of Status attribute
-	 * 
-	 * {@pre None}
-	 * 
-	 * {@post getStatus() == status}
-	 */
-	public void setStatus(boolean status) {
-		_status = status;
+	public void appendMessage(String message)
+	{
+		_message += message;
 	}
 
 	/**
@@ -101,44 +97,33 @@ public class Result {
 	 * 
 	 * {@post Returns value of Message attribute.}
 	 */
-	public String getMessage() {
+	public String getMessage()
+	{
 		return _message;
 	}
 
 	/**
-	 * Sets value of Message attribute.
-	 * 
-	 * @param message New value of Message attribute
+	 * Returns value of Status attribute.
 	 * 
 	 * {@pre None}
 	 * 
-	 * {@post getMessage() == message}
+	 * {@post Returns value of Status attribute.}
 	 */
-	public void setMessage(String message) {
-		_message = message;
+	public boolean getStatus()
+	{
+		return _status;
 	}
-	
-	/**
-	 * Appends string to Message attribute.
-	 * 
-	 * @param message String to be appended to Message attribute.
-	 * 
-	 * {@pre message != null}
-	 * 
-	 * {@post getMessage() == old(getMessage()) + message}
-	 */
-	public void appendMessage(String message) {
-		_message += message;
-	}
-	
+
 	/**
 	 * Returns true if Message is non-null and non-empty, and false otherwise.
 	 * 
 	 * {@pre None}
 	 * 
-	 * {@post Returns true if Message is non-null and non-empty, and false otherwise.}
+	 * {@post Returns true if Message is non-null and non-empty, and false
+	 * otherwise.}
 	 */
-	public boolean hasMessage() {
+	public boolean hasMessage()
+	{
 		return !StringOps.isNullOrEmpty(_message);
 	}
 
@@ -147,20 +132,48 @@ public class Result {
 	 * 
 	 * @param e Exception used to initialize Message
 	 * 
-	 * {@pre e != null}
+	 *            {@pre e != null}
 	 * 
-	 * {@post Message contains the message and stack trace contained in e.}
+	 *            {@post Message contains the message and stack trace contained
+	 *            in e.}
 	 */
 	public void setFrom(Exception e)
 	{
 		setStatus(false);
 		setMessage(e.getMessage());
-		
-		for(StackTraceElement ste : e.getStackTrace())
+
+		for(StackTraceElement ste: e.getStackTrace())
 		{
 			appendMessage("\n" + ste.toString());
 		}
 	}
-	
-}
 
+	/**
+	 * Sets value of Message attribute.
+	 * 
+	 * @param message New value of Message attribute
+	 * 
+	 *            {@pre None}
+	 * 
+	 *            {@post getMessage() == message}
+	 */
+	public void setMessage(String message)
+	{
+		_message = message;
+	}
+
+	/**
+	 * Sets value of Status attribute.
+	 * 
+	 * @param status New value of Status attribute
+	 * 
+	 *            {@pre None}
+	 * 
+	 *            {@post getStatus() == status}
+	 */
+	public void setStatus(boolean status)
+	{
+		_status = status;
+	}
+
+}

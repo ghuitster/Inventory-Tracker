@@ -1,16 +1,33 @@
+
 package gui.reports.productstats;
 
-import java.awt.*;
-import java.awt.event.*;
+import gui.common.ButtonBankListener;
+import gui.common.ButtonBankPanel;
+import gui.common.DialogBox;
+import gui.common.DialogView;
+import gui.common.FileFormat;
+import gui.common.GridBagConstraintsExt;
+import gui.main.GUI;
 
-import javax.swing.*;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-import gui.common.*;
-import gui.main.*;
-
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 @SuppressWarnings("serial")
-public class ProductStatsReportView extends DialogView implements IProductStatsReportView {
+public class ProductStatsReportView extends DialogView implements
+		IProductStatsReportView
+{
 
 	private JPanel _valuesPanel;
 	private JLabel _formatLabel;
@@ -19,90 +36,145 @@ public class ProductStatsReportView extends DialogView implements IProductStatsR
 	private JTextField _monthsField;
 	private ButtonBankPanel _buttonsPanel;
 	protected JButton _okButton;
-	
-	public ProductStatsReportView(GUI parent, DialogBox dialog) {
+
+	public ProductStatsReportView(GUI parent, DialogBox dialog)
+	{
 		super(parent, dialog);
 
 		construct();
-		
+
 		_controller = new ProductStatsReportController(this);
 	}
 
-	@Override
-	public IProductStatsReportController getController() {
-		return (IProductStatsReportController)super.getController();
+	private void cancel()
+	{
+		return;
 	}
-	
-	@Override
-	protected void createComponents() {
-		createValuesPanel();
-		createButtonsPanel();
-	}
-	
-	private void createValuesPanel() {
-		_valuesPanel = new JPanel();
-		
-		_formatLabel = new JLabel("Format:");
-		
-		_formatBox = new JComboBox();
-		_formatBox.addItem(FileFormat.PDF);
-		_formatBox.addItem(FileFormat.HTML);
-		_formatBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				if (eventsAreDisabled()) {
-					return;
-				}
-				valuesChanged();
-			}
-		});
-		
-		_monthsLabel = new JLabel("Months:");
-		
-		_monthsField = new JTextField(4);
-		_monthsField.addKeyListener(new KeyListener() {
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-				return;
-			}
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-				valuesChanged();
-			}
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				return;
-			}			
-		});
-	}
-	
-	private void createButtonsPanel() {
-		_buttonsPanel = new ButtonBankPanel(new String[]{"OK", "Cancel"},
-				new ButtonBankListener() {
-					public void buttonPressed(int index, String label) {
-						switch (index) {
-							case 0:
-								ok();
-								_dialog.dispose();
-								break;
-							case 1:
-								cancel();
-								_dialog.dispose();
-								break;
-							default:
-								assert false;
-								break;
-						}
-					}
-				}
-			);
+
+	private void createButtonsPanel()
+	{
+		_buttonsPanel =
+				new ButtonBankPanel(new String[] {"OK", "Cancel"},
+						new ButtonBankListener()
+						{
+							@Override
+							public void buttonPressed(int index, String label)
+							{
+								switch(index)
+								{
+								case 0:
+									ok();
+									_dialog.dispose();
+									break;
+								case 1:
+									cancel();
+									_dialog.dispose();
+									break;
+								default:
+									assert false;
+									break;
+								}
+							}
+						});
 
 		_okButton = _buttonsPanel.getButtons()[0];
 		_dialog.getRootPane().setDefaultButton(_okButton);
 	}
 
 	@Override
-	protected void layoutComponents() {
-		layoutValuesPanel();	
+	protected void createComponents()
+	{
+		createValuesPanel();
+		createButtonsPanel();
+	}
+
+	private void createValuesPanel()
+	{
+		_valuesPanel = new JPanel();
+
+		_formatLabel = new JLabel("Format:");
+
+		_formatBox = new JComboBox();
+		_formatBox.addItem(FileFormat.PDF);
+		_formatBox.addItem(FileFormat.HTML);
+		_formatBox.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent evt)
+			{
+				if(eventsAreDisabled())
+				{
+					return;
+				}
+				valuesChanged();
+			}
+		});
+
+		_monthsLabel = new JLabel("Months:");
+
+		_monthsField = new JTextField(4);
+		_monthsField.addKeyListener(new KeyListener()
+		{
+			@Override
+			public void keyPressed(KeyEvent arg0)
+			{
+				return;
+			}
+
+			@Override
+			public void keyReleased(KeyEvent arg0)
+			{
+				valuesChanged();
+			}
+
+			@Override
+			public void keyTyped(KeyEvent arg0)
+			{
+				return;
+			}
+		});
+	}
+
+	@Override
+	public void enableFormat(boolean value)
+	{
+		_formatBox.setEnabled(value);
+	}
+
+	@Override
+	public void enableMonths(boolean value)
+	{
+		_monthsField.setEnabled(value);
+	}
+
+	@Override
+	public void enableOK(boolean value)
+	{
+		_okButton.setEnabled(value);
+	}
+
+	@Override
+	public IProductStatsReportController getController()
+	{
+		return (IProductStatsReportController) super.getController();
+	}
+
+	@Override
+	public FileFormat getFormat()
+	{
+		return (FileFormat) _formatBox.getSelectedItem();
+	}
+
+	@Override
+	public String getMonths()
+	{
+		return _monthsField.getText();
+	}
+
+	@Override
+	protected void layoutComponents()
+	{
+		layoutValuesPanel();
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		add(Box.createVerticalStrut(15));
@@ -112,13 +184,14 @@ public class ProductStatsReportView extends DialogView implements IProductStatsR
 		add(Box.createVerticalStrut(15));
 	}
 
-	private void layoutValuesPanel() {
+	private void layoutValuesPanel()
+	{
 		_valuesPanel.setLayout(new GridBagLayout());
 
 		GridBagConstraintsExt c = new GridBagConstraintsExt();
 		c.ipadx = 2;
 		c.ipady = 2;
-		c.insets = new Insets(5,5,5,5);
+		c.insets = new Insets(5, 5, 5, 5);
 
 		c.place(0, 0, 1, 1);
 		_valuesPanel.add(Box.createHorizontalStrut(20), c);
@@ -138,61 +211,38 @@ public class ProductStatsReportView extends DialogView implements IProductStatsR
 		c.place(2, 1, 1, 1);
 		_valuesPanel.add(_monthsField, c);
 	}
-	
-	@Override
-	public FileFormat getFormat() {
-		return (FileFormat)_formatBox.getSelectedItem();
+
+	private void ok()
+	{
+		getController().display();
 	}
 
 	@Override
-	public void setFormat(FileFormat value) {
+	public void setFormat(FileFormat value)
+	{
 		boolean disabledEvents = disableEvents();
-		try {
+		try
+		{
 			_formatBox.setSelectedItem(value);
 		}
-		finally {
-			if (disabledEvents) {
+		finally
+		{
+			if(disabledEvents)
+			{
 				enableEvents();
 			}
 		}
 	}
-	
-	@Override
-	public void enableFormat(boolean value) {
-		_formatBox.setEnabled(value);
-	}
 
 	@Override
-	public String getMonths() {
-		return _monthsField.getText();
-	}
-
-	@Override
-	public void setMonths(String value) {
+	public void setMonths(String value)
+	{
 		_monthsField.setText(value);
 	}
 
-	@Override
-	public void enableMonths(boolean value) {
-		_monthsField.setEnabled(value);
-	}
-	
-	@Override
-	public void enableOK(boolean value) {
-		_okButton.setEnabled(value);
-	}
-
-	private void valuesChanged() {
+	private void valuesChanged()
+	{
 		getController().valuesChanged();
-	}
-	
-	private void cancel() {
-		return;
-	}
-	
-	private void ok() {
-		getController().display();
 	}
 
 }
-
