@@ -111,6 +111,7 @@ public class InventoryView extends View implements IInventoryView
 		}
 
 	}
+
 	private class ItemFormatter extends Tagable
 	{
 		private int column;
@@ -146,6 +147,7 @@ public class InventoryView extends View implements IInventoryView
 			return "";
 		}
 	}
+
 	private class ItemTransferHandler extends TransferHandler
 	{
 
@@ -177,6 +179,7 @@ public class InventoryView extends View implements IInventoryView
 		}
 
 	}
+
 	private class ProductContainerTransferHandler extends TransferHandler
 	{
 
@@ -308,6 +311,7 @@ public class InventoryView extends View implements IInventoryView
 		}
 
 	}
+
 	private class ProductFormatter extends Tagable
 	{
 		private int column;
@@ -344,6 +348,7 @@ public class InventoryView extends View implements IInventoryView
 			return "";
 		}
 	}
+
 	private class ProductTransferHandler extends TransferHandler
 	{
 
@@ -375,6 +380,7 @@ public class InventoryView extends View implements IInventoryView
 		}
 
 	}
+
 	// -------------------------------
 	// Product Container Tree members
 	// -------------------------------

@@ -44,6 +44,7 @@ public final class GUI extends JFrame implements IMainView
 			}
 		});
 	}
+
 	private IMainController _controller;
 	private JMenuBar _menuBar;
 	private SessionMenu _sessionMenu;

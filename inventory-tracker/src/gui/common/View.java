@@ -82,6 +82,7 @@ public abstract class View extends JPanel implements IView
 			return _customFont;
 		}
 	}
+
 	/**
 	 * Table cell renderer used to draw table headers.
 	 */
@@ -113,6 +114,7 @@ public abstract class View extends JPanel implements IView
 			return TableColumnHeaderColor;
 		}
 	}
+
 	public static final int MenuFontSize = 14;
 	public static final int BorderFontSize = 14;
 	public static final int ContentFontSize = 12;
