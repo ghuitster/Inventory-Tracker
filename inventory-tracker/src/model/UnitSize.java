@@ -11,10 +11,11 @@ public class UnitSize
 	// Variables
 	private float size;
 	private UnitType unit;
-	
+
 	/**
 	 * The UnitSize constructor.
-	 * @param size a float value indicating the size of the Product with a unit size.
+	 * @param size a float value indicating the size of the Product with a unit
+	 *            size.
 	 * @param unit a UnitType indicating the type of units for the Product
 	 */
 	public UnitSize(float size, UnitType unit)
@@ -22,7 +23,7 @@ public class UnitSize
 		this.size = size;
 		this.unit = unit;
 	}
-	
+
 	// Methods
 	/**
 	 * Returns the size value of the UnitSize object
@@ -51,6 +52,7 @@ public class UnitSize
 	{
 		return true;
 	}
+
 	/**
 	 * Returns the UnitType of the UnitSize object
 	 * @return unit the UnitType enumeration to return
@@ -68,7 +70,7 @@ public class UnitSize
 	{
 		this.unit = unit;
 	}
-	
+
 	/**
 	 * @param unit the UnitType to attempt to set
 	 * @return if the UnitType can be assigned or not
@@ -129,5 +131,5 @@ public class UnitSize
 	{
 		return this.size + " " + this.unit;
 	}
-	
+
 }
