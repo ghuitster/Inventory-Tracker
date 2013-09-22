@@ -4,14 +4,15 @@ package model;
 import java.util.Set;
 
 /**
- * @author David A class to represent a product container
+ * A class to represent a product container
+ * @author David
  */
 public class ProductContainer
 {
 	private String name;
-	private Set<Product> products;
-	private Set<Item> items;
-	private Set<ProductGroup> productGroups;
+	private final Set<Product> products;
+	private final Set<Item> items;
+	private final Set<ProductGroup> productGroups;
 
 	/**
 	 * @param name

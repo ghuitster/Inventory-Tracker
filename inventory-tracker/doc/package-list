@@ -1,0 +1,17 @@
+common
+common.util
+gui.batches
+gui.common
+gui.inventory
+gui.item
+gui.main
+gui.product
+gui.productgroup
+gui.reports.expired
+gui.reports.notices
+gui.reports.productstats
+gui.reports.removed
+gui.reports.supply
+gui.storageunit
+model
+tools

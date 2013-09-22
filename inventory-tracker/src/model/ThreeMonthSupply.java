@@ -2,7 +2,8 @@
 package model;
 
 /**
- * @author David A class to represent the three month supply
+ * A class to represent the three month supply
+ * @author David
  */
 public class ThreeMonthSupply
 {
