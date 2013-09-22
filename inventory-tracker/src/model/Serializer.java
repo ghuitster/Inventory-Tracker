@@ -1,6 +1,10 @@
 package model;
 
-//
+/**
+ * Static class which contains methods for serializing and deserializing Inventory
+ * @author Brian
+ *
+ */
 public final class Serializer 
 {
 	/**
