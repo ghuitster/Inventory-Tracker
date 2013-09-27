@@ -1,0 +1,5 @@
+Team 5: David Barley, Mike Eagar, Brian Spencer, Chris Thomsen
+
+Changes to Phase 1 Design
+
+We added the pre/ post conditions in our javadocs.  We also added our custom exceptions to Phase 1.  We also added the transfer method to ProductContainer class. We also looked into govern by visibility concept. It looks like this concept will not work the way we would want it to.  We changed our classes to represent the more normal composite.  This will also fix the cohesion problem we were having with the ProductContainer class.
