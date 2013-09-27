@@ -11,6 +11,17 @@ package model;
  */
 public class ProductDescription
 {
+	/**
+	 * @precondition description != null
+	 * @postcondition return true if description is valid
+	 * @param description
+	 * @return
+	 */
+	public static boolean isValid(String description)
+	{
+		return true;
+	}
+
 	// Variables
 	private String description;
 
@@ -24,24 +35,6 @@ public class ProductDescription
 	}
 
 	/**
-	 * @return the description
-	 */
-	public String getDescription()
-	{
-		return description;
-	}
-
-	/**
-	 * @precondition description != null
-	 * @postcondition description == passed in description
-	 * @param description the description to set
-	 */
-	public void setDescription(String description)
-	{
-		this.description = description;
-	}
-
-	/**
 	 * @precondition description != null
 	 * @param description the description to check for validity
 	 * @return
@@ -49,31 +42,6 @@ public class ProductDescription
 	public boolean ableToSetDescription(String description)
 	{
 		return true;
-	}
-
-	/**
-	 * @precondition description != null
-	 * @postcondition return true if description is valid
-	 * @param description
-	 * @return
-	 */
-	public static boolean isValid(String description)
-	{
-		return true;
-	}
-
-	/**
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode()
-	{
-		final int prime = 31;
-		int result = 1;
-		result =
-				prime * result
-						+ ((description == null) ? 0 : description.hashCode());
-		return result;
 	}
 
 	/**
@@ -107,6 +75,38 @@ public class ProductDescription
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription()
+	{
+		return description;
+	}
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result =
+				prime * result
+						+ ((description == null) ? 0 : description.hashCode());
+		return result;
+	}
+
+	/**
+	 * @precondition description != null
+	 * @postcondition description == passed in description
+	 * @param description the description to set
+	 */
+	public void setDescription(String description)
+	{
+		this.description = description;
 	}
 
 	/**

@@ -28,34 +28,6 @@ public abstract class NonCountAmount extends Amount
 	}
 
 	/**
-	 * Method to get the unit type returns unitType
-	 * @return unitType the UnitType for the amount
-	 */
-	@Override
-	public UnitType getUnitType()
-	{
-		return this.unitType;
-	}
-
-	/**
-	 * Method to get the amount
-	 * @return the amount
-	 */
-	public float getAmount()
-	{
-		return amount;
-	}
-
-	/**
-	 * Method to set the amount
-	 * @param amount the amount to set
-	 */
-	public void setAmount(float amount)
-	{
-		this.amount = amount;
-	}
-
-	/**
 	 * Method to see if we can set the amount to the amount provided
 	 * @param amount the amount to see if we can set
 	 * @return result the result of the test
@@ -65,18 +37,6 @@ public abstract class NonCountAmount extends Amount
 	{
 		boolean result = true;
 
-		return result;
-	}
-
-	/**
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode()
-	{
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + Float.floatToIntBits(amount);
 		return result;
 	}
 
@@ -104,6 +64,46 @@ public abstract class NonCountAmount extends Amount
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Method to get the amount
+	 * @return the amount
+	 */
+	public float getAmount()
+	{
+		return amount;
+	}
+
+	/**
+	 * Method to get the unit type returns unitType
+	 * @return unitType the UnitType for the amount
+	 */
+	@Override
+	public UnitType getUnitType()
+	{
+		return this.unitType;
+	}
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Float.floatToIntBits(amount);
+		return result;
+	}
+
+	/**
+	 * Method to set the amount
+	 * @param amount the amount to set
+	 */
+	public void setAmount(float amount)
+	{
+		this.amount = amount;
 	}
 
 }

@@ -16,7 +16,7 @@ public class Item
 	private final Date entryDate;
 	private Date expirationDate;
 	private Date exitTime;
-	private ProductContainer container;
+	private StorageUnit container;
 
 	/**
 	 * @precondition product must != null && must exist
@@ -36,7 +36,7 @@ public class Item
 	 * @param container
 	 */
 	public Item(Product product, Barcode barcode, Date entryDate,
-			Date expirationDate, Date exitTime, ProductContainer container)
+			Date expirationDate, Date exitTime, StorageUnit container)
 	{
 		this.product = product;
 		this.barcode = barcode;
@@ -61,7 +61,7 @@ public class Item
 	 * @param container the ProductContainer to attempt to set
 	 * @return whether or not container can be set
 	 */
-	public boolean ableToSetContainer(ProductContainer container)
+	public boolean ableToSetContainer(StorageUnit container)
 	{
 		return true;
 	}
@@ -195,7 +195,7 @@ public class Item
 	/**
 	 * @return the container
 	 */
-	public ProductContainer getContainer()
+	public StorageUnit getContainer()
 	{
 		return container;
 	}
@@ -273,7 +273,7 @@ public class Item
 	 * @postcondition container == passed in container
 	 * @param container the container to set
 	 */
-	public void setContainer(ProductContainer container)
+	public void setContainer(StorageUnit container)
 	{
 		this.container = container;
 	}

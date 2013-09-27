@@ -4,31 +4,15 @@ package model;
 import java.util.Set;
 
 /**
- * A class to represent a product container
  * @author David
+ * 
  */
-public class ProductContainer
+public abstract class ProductContainer
 {
-	private String name;
-	private final Set<Product> products;
-	private final Set<Item> items;
-	private final Set<ProductGroup> productGroups;
-
-	/**
-	 * @param name
-	 * @param products
-	 * @param items
-	 * @param productGroups
-	 */
-	public ProductContainer(String name, Set<Product> products,
-			Set<Item> items, Set<ProductGroup> productGroups)
-	{
-		super();
-		this.name = name;
-		this.products = products;
-		this.items = items;
-		this.productGroups = productGroups;
-	}
+	protected String name;
+	protected Set<Product> products;
+	protected Set<Item> items;
+	protected Set<ProductGroup> productGroups;
 
 	/**
 	 * 
@@ -91,15 +75,6 @@ public class ProductContainer
 	}
 
 	/**
-	 * @return if the name can be set or not
-	 * @param name the name to attempt to set
-	 */
-	public boolean ableToSetName(String name)
-	{
-		return true;
-	}
-
-	/**
 	 * 
 	 * @param item the Item to add
 	 */
@@ -127,75 +102,11 @@ public class ProductContainer
 	}
 
 	/**
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj)
-	{
-		if(this == obj)
-			return true;
-		if(obj == null)
-			return false;
-		if(getClass() != obj.getClass())
-			return false;
-		ProductContainer other = (ProductContainer) obj;
-		if(items == null)
-		{
-			if(other.items != null)
-				return false;
-		}
-		else if(!items.equals(other.items))
-			return false;
-		if(name == null)
-		{
-			if(other.name != null)
-				return false;
-		}
-		else if(!name.equals(other.name))
-			return false;
-		if(productGroups == null)
-		{
-			if(other.productGroups != null)
-				return false;
-		}
-		else if(!productGroups.equals(other.productGroups))
-			return false;
-		if(products == null)
-		{
-			if(other.products != null)
-				return false;
-		}
-		else if(!products.equals(other.products))
-			return false;
-		return true;
-	}
-
-	/**
 	 * @return the name
 	 */
 	public String getName()
 	{
 		return name;
-	}
-
-	/**
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode()
-	{
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((items == null) ? 0 : items.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result =
-				prime
-						* result
-						+ ((productGroups == null) ? 0 : productGroups
-								.hashCode());
-		result =
-				prime * result + ((products == null) ? 0 : products.hashCode());
-		return result;
 	}
 
 	/**
@@ -232,15 +143,4 @@ public class ProductContainer
 	{
 		this.name = name;
 	}
-
-	/**
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString()
-	{
-		return "ProductContainer [name=" + name + ", products=" + products
-				+ ", items=" + items + ", productGroups=" + productGroups + "]";
-	}
-
 }

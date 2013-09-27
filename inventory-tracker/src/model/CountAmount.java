@@ -29,33 +29,6 @@ public abstract class CountAmount extends Amount
 	}
 
 	/**
-	 * Method to get the unit type returns unitType
-	 */
-	@Override
-	public UnitType getUnitType()
-	{
-		return this.unitType;
-	}
-
-	/**
-	 * @return the amount
-	 */
-	public int getAmount()
-	{
-		return amount;
-	}
-
-	/**
-	 * @precondition amount must be > 0
-	 * @postcondition amount == passed in amount
-	 * @param amount the amount to set
-	 */
-	public void setAmount(int amount)
-	{
-		this.amount = amount;
-	}
-
-	/**
 	 * Method to test the amount to set
 	 * @precondition amount must be > 0
 	 * @param amount
@@ -64,18 +37,6 @@ public abstract class CountAmount extends Amount
 	public boolean ableToSetAmount(int amount)
 	{
 		boolean result = true;
-		return result;
-	}
-
-	/**
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode()
-	{
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + amount;
 		return result;
 	}
 
@@ -103,6 +64,45 @@ public abstract class CountAmount extends Amount
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * @return the amount
+	 */
+	public int getAmount()
+	{
+		return amount;
+	}
+
+	/**
+	 * Method to get the unit type returns unitType
+	 */
+	@Override
+	public UnitType getUnitType()
+	{
+		return this.unitType;
+	}
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + amount;
+		return result;
+	}
+
+	/**
+	 * @precondition amount must be > 0
+	 * @postcondition amount == passed in amount
+	 * @param amount the amount to set
+	 */
+	public void setAmount(int amount)
+	{
+		this.amount = amount;
 	}
 
 }

@@ -16,7 +16,7 @@ public class Product
 	private UnitSize size;
 	private int shelfLife;
 	private ThreeMonthSupply threeMonthSupply;
-	private final Set<ProductContainer> containers;
+	private final Set<StorageUnit> containers;
 
 	/**
 	 * @precondition creationDate must be == the earliest EntryDate for any item
@@ -46,7 +46,7 @@ public class Product
 	 */
 	public Product(Date creationDate, String description, Barcode barcode,
 			UnitSize size, int shelfLife, ThreeMonthSupply threeMonthSupply,
-			Set<ProductContainer> containers)
+			Set<StorageUnit> containers)
 	{
 		super();
 		this.creationDate = creationDate;
@@ -63,7 +63,7 @@ public class Product
 	 * @param container the container to attempt to add
 	 * @return whether the container can be added or not
 	 */
-	public boolean ableToAddContainer(ProductContainer container)
+	public boolean ableToAddContainer(StorageUnit container)
 	{
 		return true;
 	}
@@ -125,7 +125,7 @@ public class Product
 	 * @postcondition container == passed in container
 	 * @param container the container to add
 	 */
-	public void addContainer(ProductContainer container)
+	public void addContainer(StorageUnit container)
 	{
 
 	}

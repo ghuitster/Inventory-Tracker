@@ -26,24 +26,6 @@ public class CountUnitSize extends CountAmount
 	}
 
 	/**
-	 * @return the size
-	 */
-	public int getSize()
-	{
-		return size;
-	}
-
-	/**
-	 * @precondition size must be > 0
-	 * @postcondition size is set to passed in size
-	 * @param size the size to set
-	 */
-	public void setSize(int size)
-	{
-		this.size = size;
-	}
-
-	/**
 	 * Method to see if we can set size
 	 * @precondition size must be > 0
 	 * @param size
@@ -52,18 +34,6 @@ public class CountUnitSize extends CountAmount
 	public boolean ableToSetUnitSize(int size)
 	{
 		return super.ableToSetAmount(size);
-	}
-
-	/**
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode()
-	{
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + size;
-		return result;
 	}
 
 	/**
@@ -90,6 +60,36 @@ public class CountUnitSize extends CountAmount
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * @return the size
+	 */
+	public int getSize()
+	{
+		return size;
+	}
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + size;
+		return result;
+	}
+
+	/**
+	 * @precondition size must be > 0
+	 * @postcondition size is set to passed in size
+	 * @param size the size to set
+	 */
+	public void setSize(int size)
+	{
+		this.size = size;
 	}
 
 	/*

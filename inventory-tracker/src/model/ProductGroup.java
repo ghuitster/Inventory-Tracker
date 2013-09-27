@@ -1,8 +1,6 @@
 
 package model;
 
-import java.util.Set;
-
 /**
  * A class to represent a ProductGroup
  * @author David
@@ -13,18 +11,12 @@ public class ProductGroup extends ProductContainer
 	private ThreeMonthSupply threeMonthSupply;
 
 	/**
-	 * @param name
-	 * @param products
-	 * @param items
-	 * @param productGroups
 	 * @param container
 	 * @param threeMonthSupply
 	 */
-	public ProductGroup(String name, Set<Product> products, Set<Item> items,
-			Set<ProductGroup> productGroups, ProductContainer container,
+	public ProductGroup(ProductContainer container,
 			ThreeMonthSupply threeMonthSupply)
 	{
-		super(name, products, items, productGroups);
 		this.container = container;
 		this.threeMonthSupply = threeMonthSupply;
 	}
@@ -34,6 +26,16 @@ public class ProductGroup extends ProductContainer
 	 * @return if the container can be set or not
 	 */
 	public boolean ableToSetContainer(ProductContainer container)
+	{
+		return true;
+	}
+
+	/**
+	 * 
+	 * @param name the name to attempt to set
+	 * @return whether the name can be set or not
+	 */
+	public boolean ableToSetName(String name)
 	{
 		return true;
 	}
@@ -115,7 +117,7 @@ public class ProductGroup extends ProductContainer
 	/**
 	 * @param container the ProductContainer to set
 	 */
-	public void setContainer(ProductContainer container)
+	public void setContainer(StorageUnit container)
 	{
 		this.container = container;
 	}

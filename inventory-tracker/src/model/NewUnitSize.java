@@ -29,6 +29,15 @@ public class NewUnitSize extends NonCountAmount
 	}
 
 	/**
+	 * @precondition size must be > 0
+	 * @param size the size to test if we can set
+	 */
+	public boolean ableToSetSize(float size)
+	{
+		return true;
+	}
+
+	/**
 	 * @return the size
 	 */
 	public float getSize()
@@ -44,15 +53,6 @@ public class NewUnitSize extends NonCountAmount
 	public void setSize(float size)
 	{
 		this.size = size;
-	}
-
-	/**
-	 * @precondition size must be > 0
-	 * @param size the size to test if we can set
-	 */
-	public boolean ableToSetSize(float size)
-	{
-		return true;
 	}
 
 	/**
