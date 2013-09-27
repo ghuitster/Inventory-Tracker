@@ -4,8 +4,13 @@ package model;
 import java.util.Set;
 
 /**
+<<<<<<< Updated upstream
  * @author David
  * 
+=======
+ * A class to represent a product container
+ * @author David 
+>>>>>>> Stashed changes
  */
 public abstract class ProductContainer
 {
