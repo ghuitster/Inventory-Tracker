@@ -15,7 +15,7 @@ public abstract class ProductContainer
 	protected Set<ProductGroup> productGroups;
 
 	/**
-	 * 
+	 * @precondition item must be a valid Item and not null
 	 * @param item the Item to attempt to add
 	 * @return whether the Item can be added or not
 	 */
@@ -25,7 +25,7 @@ public abstract class ProductContainer
 	}
 
 	/**
-	 * 
+	 * @precondition product must be a valid Product and not null
 	 * @param product the Product to attempt to add
 	 * @return whether the Product can be added or not
 	 */
@@ -35,7 +35,7 @@ public abstract class ProductContainer
 	}
 
 	/**
-	 * 
+	 * @precondition productGroup must be a valid ProductGroup and not null
 	 * @param productGroup the ProductGroup to attempt to add
 	 * @return whether the ProductGroup can be added or not
 	 */
@@ -45,7 +45,7 @@ public abstract class ProductContainer
 	}
 
 	/**
-	 * 
+	 * @precondition item must be a valid Item and not null
 	 * @param item the Item to attempt to remove
 	 * @return whether the Item can be removed or not
 	 */
@@ -55,7 +55,7 @@ public abstract class ProductContainer
 	}
 
 	/**
-	 * 
+	 * @precondition product must be a valid Product and not null
 	 * @param product the Product to attempt to remove
 	 * @return whether the Product can be removed or not
 	 */
@@ -65,7 +65,7 @@ public abstract class ProductContainer
 	}
 
 	/**
-	 * 
+	 * @precondition productGroup must be a valid ProductGroup and not null
 	 * @param productGroup the ProductGroup to attempt to remove
 	 * @return whether the ProductGroup can be removed or not
 	 */
@@ -75,7 +75,8 @@ public abstract class ProductContainer
 	}
 
 	/**
-	 * 
+	 * @precondition item must be a valid Item and not null
+	 * @postcondition my.items.contains(item)
 	 * @param item the Item to add
 	 */
 	public void addItem(Item item)
@@ -84,7 +85,8 @@ public abstract class ProductContainer
 	}
 
 	/**
-	 * 
+	 * @precondition product must be a valid Product and not null
+	 * @postcondition my.products.contains(product)
 	 * @param product the Product to add
 	 */
 	public void addProduct(Product product)
@@ -93,7 +95,8 @@ public abstract class ProductContainer
 	}
 
 	/**
-	 * 
+	 * @precondition productGroup must be a valid ProductGroup and not null
+	 * @postcondition my.productGroups.contains(productGroup)
 	 * @param productGroup the ProductGroup to add
 	 */
 	public void addProductGroup(ProductGroup productGroup)
@@ -110,7 +113,8 @@ public abstract class ProductContainer
 	}
 
 	/**
-	 * 
+	 * @precondition item must be a valid Item and not null
+	 * @postcondition my.items.doesNotContain(item)
 	 * @param item the Item to remove
 	 */
 	public void removeItem(Item item)
@@ -119,7 +123,8 @@ public abstract class ProductContainer
 	}
 
 	/**
-	 * 
+	 * @precondition product must be a valid Product and not null
+	 * @postcondition my.products.doesNotContain(product)
 	 * @param product the Product to remove
 	 */
 	public void removeProduct(Product product)
@@ -128,7 +133,8 @@ public abstract class ProductContainer
 	}
 
 	/**
-	 * 
+	 * @precondition productGroup must be a valid ProductGroup and not null
+	 * @postcondition my.productGroups.doesNotContain(productGroup)
 	 * @param productGroup the ProductGroup to remove
 	 */
 	public void removeProductGroup(ProductGroup productGroup)
@@ -137,6 +143,8 @@ public abstract class ProductContainer
 	}
 
 	/**
+	 * @precondition name must be a valid String and not null
+	 * @postcondition my.name == name
 	 * @param name the name to set
 	 */
 	public void setName(String name)
@@ -145,7 +153,11 @@ public abstract class ProductContainer
 	}
 
 	/**
-	 * 
+	 * @precondition item must be a valid item and not null
+	 * @precondition otherProductContainer must be a valid ProductContainer and
+	 *               not null
+	 * @postcondition my.items.doesNotContain(item)
+	 * @postcondition otherProductContainer.items.contains(item)
 	 * @param item the Item to transfer
 	 * @param otherProductContainer the target ProductContainer
 	 */

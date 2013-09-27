@@ -4,7 +4,8 @@ package model;
 public class StorageUnit extends ProductContainer
 {
 	/**
-	 * 
+	 * @precondition name must be a valid String and not null
+	 * @postcondition my.name == passed in name
 	 * @param name the name to attempt to set
 	 * @return whether the name can be set or not
 	 */

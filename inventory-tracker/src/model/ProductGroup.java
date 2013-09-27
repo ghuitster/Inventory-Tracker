@@ -11,6 +11,9 @@ public class ProductGroup extends ProductContainer
 	private ThreeMonthSupply threeMonthSupply;
 
 	/**
+	 * @precondition container must be a valid ProductContainer and not null
+	 * @precondition threeMonthSupply must be a valid ThreeMonthSupply and not
+	 *               null
 	 * @param container
 	 * @param threeMonthSupply
 	 */
@@ -22,6 +25,7 @@ public class ProductGroup extends ProductContainer
 	}
 
 	/**
+	 * @precondition container must be a valid ProductContainer and not null
 	 * @param container the ProductContainer to attempt to set
 	 * @return if the container can be set or not
 	 */
@@ -31,7 +35,7 @@ public class ProductGroup extends ProductContainer
 	}
 
 	/**
-	 * 
+	 * @precondition name name must be a valid String and not null
 	 * @param name the name to attempt to set
 	 * @return whether the name can be set or not
 	 */
@@ -41,6 +45,8 @@ public class ProductGroup extends ProductContainer
 	}
 
 	/**
+	 * @precondition threeMonthSupply must be a valid ThreeMonthSupply and not
+	 *               null
 	 * @param threeMonthSupply the ThreeMonthSupply to attempt to set
 	 * @return if the threeMonthSupply can be set or not
 	 */
@@ -115,14 +121,19 @@ public class ProductGroup extends ProductContainer
 	}
 
 	/**
+	 * @precondition container must be a valid ProductContainer and not null
+	 * @postcondition my.container == passed in ProductContainer
 	 * @param container the ProductContainer to set
 	 */
-	public void setContainer(StorageUnit container)
+	public void setContainer(ProductContainer container)
 	{
 		this.container = container;
 	}
 
 	/**
+	 * @precondition threeMonthSupply must be a valid ThreeMonthSupply and not
+	 *               null
+	 * @postcondition my.threeMonthSupply == passed in ThreeMonthSupply
 	 * @param threeMonthSupply the ThreeMonthSupply to set
 	 */
 	public void setThreeMonthSupply(ThreeMonthSupply threeMonthSupply)
