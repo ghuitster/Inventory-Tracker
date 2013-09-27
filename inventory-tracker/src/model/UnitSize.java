@@ -14,6 +14,8 @@ public class UnitSize
 
 	/**
 	 * The UnitSize constructor.
+	 * @precondition size must be > 0.0f
+	 * @precondition unit != null
 	 * @param size a float value indicating the size of the Product with a unit
 	 *            size.
 	 * @param unit a UnitType indicating the type of units for the Product

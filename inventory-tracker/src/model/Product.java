@@ -19,6 +19,23 @@ public class Product
 	private final Set<ProductContainer> containers;
 
 	/**
+	 * @precondition creationDate must be == the earliest EntryDate for any item
+	 *               of this Product
+	 * @precondition description must be valid
+	 * @precondition barcode must be == to the manufacturer's barcode
+	 * @precondition size the number component must be > 0
+	 * @precondition shelfLife must be >= 0
+	 * @precondition threeMonthSupply number component must be >= 0
+	 * @precondition containers each container in set must exist
+	 * @precondition at most one product container in a storage unit may contain
+	 *               a particular project
+	 * @postcondition creationData == passed in creationDate
+	 * @postcondition description == passed in description
+	 * @postcondition barcode == passed in barcode
+	 * @postcondition size == passed in size
+	 * @postcondition shelfLife == passed in shelfLife
+	 * @postcondition threeMonthSupply == passed in threemonthSupply
+	 * @postcondition containers == passed in containers
 	 * @param creationDate
 	 * @param description
 	 * @param barcode
@@ -42,7 +59,7 @@ public class Product
 	}
 
 	/**
-	 * 
+	 * @precondition container != null
 	 * @param container the container to attempt to add
 	 * @return whether the container can be added or not
 	 */
@@ -52,6 +69,7 @@ public class Product
 	}
 
 	/**
+	 * @precondition barcode != null
 	 * @param barcode the Barcode to attempt to set
 	 * @return if the Barcode can be set or not
 	 */
@@ -61,6 +79,7 @@ public class Product
 	}
 
 	/**
+	 * @precondition description != null
 	 * @param description the description to attempt to set
 	 * @return if the description can be set or not
 	 */
@@ -70,6 +89,7 @@ public class Product
 	}
 
 	/**
+	 * @precondition shelfLife != null
 	 * @param shelfLife the shelfLife to attempt to set
 	 * @return if the shelflife can be set or not
 	 */
@@ -79,6 +99,7 @@ public class Product
 	}
 
 	/**
+	 * @precondition size != null
 	 * @param size the size to attempt to set
 	 * @return whether the size can be set or not
 	 */
@@ -88,6 +109,7 @@ public class Product
 	}
 
 	/**
+	 * @precondition threeMonthSupply != null
 	 * @param threeMonthSupply the threeMonthSupply to attempt to set
 	 * @return whether the threeMonthSupply could be set or not
 	 */
@@ -97,7 +119,10 @@ public class Product
 	}
 
 	/**
-	 * 
+	 * @precondition container != null
+	 * @precondition this Product must not exist in another product container in
+	 *               this storage unit
+	 * @postcondition container == passed in container
 	 * @param container the container to add
 	 */
 	public void addContainer(ProductContainer container)
@@ -247,6 +272,8 @@ public class Product
 	}
 
 	/**
+	 * @precondition barcode != null
+	 * @postcondition barcode == passed in barcode
 	 * @param barcode the Barcode to set
 	 */
 	public void setBarcode(Barcode barcode)
@@ -255,6 +282,9 @@ public class Product
 	}
 
 	/**
+	 * @precondition creationDate != null
+	 * @precondition creationDate == earliest entryDate of items of this product
+	 * @postcondition creationData == passed in creationDate
 	 * @param creationDate the creationDate to set
 	 */
 	public void setCreationDate(Date creationDate)
@@ -263,6 +293,8 @@ public class Product
 	}
 
 	/**
+	 * @precondition != null
+	 * @precondition description must be valid
 	 * @param description the description to set
 	 */
 	public void setDescription(String description)
@@ -271,6 +303,9 @@ public class Product
 	}
 
 	/**
+	 * @precondition shelfLife != null
+	 * @precondition shelfLife must be non negative
+	 * @postcondition shelfLife == passed in shelfLife
 	 * @param shelfLife the shelfLife to set
 	 */
 	public void setShelfLife(int shelfLife)
@@ -279,6 +314,9 @@ public class Product
 	}
 
 	/**
+	 * @precondition size number component must be > 0
+	 * @precondition size != null
+	 * @postcondition size == passed in size
 	 * @param size the size to set
 	 */
 	public void setSize(UnitSize size)
@@ -287,6 +325,9 @@ public class Product
 	}
 
 	/**
+	 * @precondition threeMonthSupply != null
+	 * @precondition threeMonthSupply number component must be > 0
+	 * @postcondition threeMonthSupply == passed in threeMonthSupply
 	 * @param threeMonthSupply the threeMonthSupply to set
 	 */
 	public void setThreeMonthSupply(ThreeMonthSupply threeMonthSupply)

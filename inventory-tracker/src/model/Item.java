@@ -19,6 +19,15 @@ public class Item
 	private ProductContainer container;
 
 	/**
+	 * @precondition product must != null && must exist
+	 * @precondition barcode must != null and must be valid
+	 * @precondition entryDate must be > 1/1/2000 and == the date item was
+	 *               entered
+	 * @precondition expirationDate != null only if Product shelfLife is defined
+	 * @precondition exitTime is only set when Item is removed.
+	 * @precondition container Before it is removed, an Item is contained in one
+	 *               Product Container. After it is removed, it is contained in
+	 *               no Product Containers.
 	 * @param product
 	 * @param barcode
 	 * @param entryDate
@@ -38,6 +47,7 @@ public class Item
 	}
 
 	/**
+	 * @precondition barcode != null
 	 * @param barcode the Barcode to attempt to set
 	 * @return whether or not the barcode can be set
 	 */
@@ -47,6 +57,7 @@ public class Item
 	}
 
 	/**
+	 * @precondition container != null
 	 * @param container the ProductContainer to attempt to set
 	 * @return whether or not container can be set
 	 */
@@ -56,6 +67,7 @@ public class Item
 	}
 
 	/**
+	 * @precondition exitTime != null
 	 * @param exitTime the exitTime Date to attempt to set
 	 * @return whether or not we can set the exitTime
 	 */
@@ -65,6 +77,7 @@ public class Item
 	}
 
 	/**
+	 * @precondition expirationDate != null
 	 * @param expirationDate the expirationDate Date to attempt to set
 	 * @return whether or not the expirationDate can be set
 	 */
@@ -74,6 +87,7 @@ public class Item
 	}
 
 	/**
+	 * @precondition product != null
 	 * @param product the Product to attempt to set
 	 * @return whether or not the product can be set
 	 */
@@ -245,6 +259,8 @@ public class Item
 	}
 
 	/**
+	 * @precondition barcode != null
+	 * @postcondition barcode == passed in barcode
 	 * @param barcode the barcode to set
 	 */
 	public void setBarcode(Barcode barcode)
@@ -253,6 +269,8 @@ public class Item
 	}
 
 	/**
+	 * @precondition container != null
+	 * @postcondition container == passed in container
 	 * @param container the container to set
 	 */
 	public void setContainer(ProductContainer container)
@@ -261,6 +279,8 @@ public class Item
 	}
 
 	/**
+	 * @precondition exitTime != null
+	 * @postcondition exitTime == passed in exitTime
 	 * @param exitTime the exitTime to set
 	 */
 	public void setExitTime(Date exitTime)
@@ -269,6 +289,8 @@ public class Item
 	}
 
 	/**
+	 * @precondition expirationDate != null
+	 * @postcondition expirationDate == passed in expirationDate
 	 * @param expirationDate the expirationDate to set
 	 */
 	public void setExpirationDate(Date expirationDate)
@@ -277,6 +299,8 @@ public class Item
 	}
 
 	/**
+	 * @precondition product != null
+	 * @postcondition product == product passed in
 	 * @param product the product to set
 	 */
 	public void setProduct(Product product)
