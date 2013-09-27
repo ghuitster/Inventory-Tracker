@@ -143,4 +143,14 @@ public abstract class ProductContainer
 	{
 		this.name = name;
 	}
+
+	/**
+	 * 
+	 * @param item the Item to transfer
+	 * @param otherProductContainer the target ProductContainer
+	 */
+	public void transferItem(Item item, ProductContainer otherProductContainer)
+	{
+
+	}
 }
