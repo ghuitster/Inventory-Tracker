@@ -1,6 +1,8 @@
 package model;
 
-import java.util.List;
+import java.util.Date;
+import java.util.Set;
+import java.util.SortedMap;
 
 /**
  * Singleton class to manage the entire Inventory system
@@ -12,10 +14,39 @@ public class Inventory
 	/**
 	 * A list of all the storage units
 	 */
-	private List<ProductContainer> storageUnits;
+	private Set<ProductContainer> storageUnits;
+	
+	/**
+	 * Persistence object for saving and loading data
+	 */
+	private IPersistence persistence;
 
 	/**
+	 * Mapping of all Item expirations, for easy retrieval
+	 */
+	private SortedMap<Date, Set<Item>> itemExpirations;
+	
+	/**
+	 * Mapping of all removed Items, for easy retrieval
+	 */
+	private SortedMap<Date, Set<Item>> removedItems;
+	
+	/**
+	 * Mapping for the nMonthSupply report. The Date key represents a month.
+	 * The corresponding products are those which will last up to the key's month
+	 */
+	private SortedMap<Integer, Set<Product>> nMonthSupplyMap;
+	/**Date
+	 * Mapping for the nMonthSupply report. The Date key represents a month.
+	 * The corresponding ProductGroups are those which will last up to the key's month
+	 */
+	private SortedMap<Date, Set<ProductGroup>> nMonthSupplyGroupMap;
+	
+	
+	/**
 	 * Creates a new instance of the Inventory class. Used only by singleton getter.
+	 * @pre (none)
+	 * @post This instance of Inventory will be ready for use
 	 */
 	private Inventory() 
 	{
@@ -27,8 +58,10 @@ public class Inventory
 	 */
 	private static Inventory instance;
 	/**
-	 * Gets the static Inentory instance. Creates it if it does not exist.
-	 * @return
+	 * Gets the static Inventory instance. Creates it if it does not exist.
+	 * @pre (none)
+	 * @post The single static instance of Inventory is not null 
+	 * @return The one and only instance of Inventory
 	 */
 	public static Inventory getInstance() 
 	{
@@ -39,24 +72,30 @@ public class Inventory
 	
 	/**
 	 * Gets all known products throughout all containers and their sub-containers
-	 * @return A list containing referenes to all of the products
+	 * @pre (none)
+	 * @post A list has been created containing all known products. This list may be empty
+	 * @return A list containing references to all of the products
 	 */
-	public List<Product> getAllProducts()
+	public Set<Product> getAllProducts()
 	{
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
 	
 	/**
 	 * Gets a list of all Storage Units in the system
+	 * @pre (none)
+	 * @post A list has been created containing all known Storage Units. This list may be empty
 	 * @return A list containing references to all top level ProductContainers
 	 */
-	public List<ProductContainer> getAllStorageUnits()
+	public Set<ProductContainer> getAllStorageUnits()
 	{
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
 	
 	/**
 	 * Adds a new Storage Unit to the system
+	 * @pre A storage unit does not exist with the same name
+	 * @post The passed storage unit has been inserted into the system
 	 * @param storageUnit The new storage unit
 	 */
 	public void addStorageUnit(ProductContainer storageUnit)
@@ -66,6 +105,8 @@ public class Inventory
 	
 	/**
 	 * Removes a storage unit from the system
+	 * @pre The passed storage unit exists in the system
+	 * @post The passed storage unit is no longer in the system
 	 * @param storageUnit The Storage Unit to remove
 	 */
 	public void removeStorageUnit(ProductContainer storageUnit)
@@ -75,8 +116,56 @@ public class Inventory
 	
 	/**
 	 * Clears all Storage Units from the system
+	 * @pre (none)
+	 * @post No storage units exist in the system
 	 */
 	public void removeAllStorageUnits()
+	{
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+	
+	/**
+	 * Gets a map of Dates to what items expire on those dates
+	 * @pre (none)
+	 * @post A Map has been created with the aforementioned expiration dates. This map may be empty.
+	 * @return A copy of the map containing all known expiration dates mapped to which items are expiring
+	 */
+	public SortedMap<Date, Set<Item>> getItemExpirations()
+	{
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+	
+	/**
+	 * Gets a map of Dates to what items were removed on each date
+	 * @pre (none)
+	 * @post A map has been created with the aforementioned properties. This map may be empty.
+	 * @return A copy of the map containing all item removal dates mapped to the items removed.
+	 */
+	public SortedMap<Date, Set<Item>> getRemovedItems()
+	{
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+	
+	/**
+	 * Gets a map of Dates (each of which represents a specific month) mapped to what Products' three month supplies
+	 * expire in the key's month
+	 * @pre (none)
+	 * @post A map has been created with the aforementioned properties. This map may be empty.
+	 * @return A copy of the map containing months correlated to what products' three month supplies expire on that month
+	 */
+	public SortedMap<Date, Set<Product>> getNMonthSupplyMap()
+	{
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+	
+	/**
+	 * Gets a map of Dates (each of which represents a specific month) mapped to what ProductGroups' three month supplies
+	 * expire in the key's month
+	 * @pre (none)
+	 * @post A map has been created with the aforementioned properties. This map may be empty.
+	 * @return A copy of the map containing months correlated to what ProductGroups' three month supplies expire on that month
+	 */
+	public SortedMap<Date, Set<ProductGroup>> getNMonthSupplyGroupMap()
 	{
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
