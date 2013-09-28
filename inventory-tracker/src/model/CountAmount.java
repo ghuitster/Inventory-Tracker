@@ -37,6 +37,9 @@ public abstract class CountAmount extends Amount
 	public boolean ableToSetAmount(int amount)
 	{
 		boolean result = true;
+		if (amount <= 0)
+			result = false;
+		
 		return result;
 	}
 
