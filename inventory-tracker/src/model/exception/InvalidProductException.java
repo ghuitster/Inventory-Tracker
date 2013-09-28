@@ -1,4 +1,4 @@
-package model;
+package model.exception;
 
 /**
  * A class if there is an invalid product request

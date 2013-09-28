@@ -1,4 +1,4 @@
-package model;
+package model.exception;
 
 /**
  * An Exception if there is an error for Serialzer

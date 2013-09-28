@@ -1,4 +1,4 @@
-package model;
+package model.exception;
 
 /**
  * An Exception if there is an invalid Unit Size
@@ -6,13 +6,13 @@ package model;
  *
  */
 
-public class InvalidUnitSize extends Exception
+public class InvalidUnitSizeException extends Exception
 {
 	/**
 	 * Constructor for a detail message of error
 	 * @param message
 	 */
-	public InvalidUnitSize(String message)
+	public InvalidUnitSizeException(String message)
 	{
 		super(message);
 	}
@@ -20,7 +20,7 @@ public class InvalidUnitSize extends Exception
 	/**
 	 * Constructor for no message
 	 */
-	public InvalidUnitSize()
+	public InvalidUnitSizeException()
 	{
 		
 	}

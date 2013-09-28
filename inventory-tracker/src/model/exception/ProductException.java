@@ -1,4 +1,4 @@
-package model;
+package model.exception;
 
 /**
  * This is a general Exception for the Product class

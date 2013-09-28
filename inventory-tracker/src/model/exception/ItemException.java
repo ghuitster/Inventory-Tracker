@@ -1,4 +1,4 @@
-package model;
+package model.exception;
 
 /**
  * A general exception for an error that happens in Item class
