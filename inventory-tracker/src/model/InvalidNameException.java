@@ -16,7 +16,7 @@ public class InvalidNameException extends NamingException
 	 */
 	public InvalidNameException(String message)
 	{
-		
+		super(message);
 	}
 	
 	/**

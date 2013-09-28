@@ -14,7 +14,7 @@ public class InvalidUnitSize extends Exception
 	 */
 	public InvalidUnitSize(String message)
 	{
-		
+		super(message);
 	}
 	
 	/**

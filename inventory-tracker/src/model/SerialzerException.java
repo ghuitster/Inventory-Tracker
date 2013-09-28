@@ -14,7 +14,7 @@ public class SerialzerException extends Exception
 	 */
 	public SerialzerException(String message)
 	{
-		
+		super(message);
 	}
 	
 	/**
