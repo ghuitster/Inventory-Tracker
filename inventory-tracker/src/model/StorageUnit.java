@@ -1,6 +1,10 @@
 
 package model;
 
+/**
+ * A class representing a Storage Unit
+ * @author David
+ */
 public class StorageUnit extends ProductContainer
 {
 	/**

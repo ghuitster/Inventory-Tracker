@@ -90,7 +90,7 @@ public class ProductGroup extends ProductContainer
 	 */
 	public ProductContainer getContainer()
 	{
-		return container;
+		return this.container;
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class ProductGroup extends ProductContainer
 	 */
 	public ThreeMonthSupply getThreeMonthSupply()
 	{
-		return threeMonthSupply;
+		return this.threeMonthSupply;
 	}
 
 	/**
@@ -147,7 +147,7 @@ public class ProductGroup extends ProductContainer
 	@Override
 	public String toString()
 	{
-		return "ProductGroup [container=" + container + ", threeMonthSupply="
-				+ threeMonthSupply + "]";
+		return "ProductGroup [container=" + this.container
+				+ ", threeMonthSupply=" + this.threeMonthSupply + "]";
 	}
 }

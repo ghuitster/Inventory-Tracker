@@ -4,9 +4,7 @@ package model;
 import java.util.Set;
 
 /**
- * @author David
- * 
- *         A class to represent a product container
+ * A class to represent a product container
  * @author David
  */
 public abstract class ProductContainer
@@ -23,7 +21,10 @@ public abstract class ProductContainer
 	 */
 	public boolean ableToAddItem(Item item)
 	{
-		return true;
+		if(item.getBarcode().getNumber().isEmpty())
+			return false;
+		else
+			return true;
 	}
 
 	/**
@@ -83,7 +84,20 @@ public abstract class ProductContainer
 	 */
 	public void addItem(Item item)
 	{
+		Product product = item.getProduct();
 
+		this.products.add(product);
+
+		for(ProductGroup group: this.productGroups)
+			if(group.products.contains(product))
+			{
+				product.addContainer(group);
+				group.products.add(product);
+			}
+
+		product.addContainer(this);
+
+		this.items.add(item);
 	}
 
 	/**
@@ -111,7 +125,7 @@ public abstract class ProductContainer
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	/**

@@ -123,9 +123,9 @@ public class Product
 	 * @precondition this Product must not exist in another product container in
 	 *               this storage unit
 	 * @postcondition container == passed in container
-	 * @param container the container to add
+	 * @param productContainer the container to add
 	 */
-	public void addContainer(StorageUnit container)
+	public void addContainer(ProductContainer productContainer)
 	{
 
 	}
