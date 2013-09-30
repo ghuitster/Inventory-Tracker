@@ -4,8 +4,6 @@
 
 package model;
 
-import model.exception.InvalidUnitSizeException;
-
 /**
  * Class to represent a three month supply with unit types other than "count"
  * @author Michael
@@ -22,9 +20,8 @@ public class ThreeMonthSupply extends NonCountAmount
 	 * ThreeMonthSupply constructor
 	 * @param amount the amount IE 50.3, 20
 	 * @param unitType what type of unit to use
-	 * @throws InvalidUnitSizeException
 	 */
-	public ThreeMonthSupply(float amount, UnitType unitType) throws InvalidUnitSizeException
+	public ThreeMonthSupply(float amount, UnitType unitType)
 	{
 		super(amount, unitType);
 		/*this.amount = amount;

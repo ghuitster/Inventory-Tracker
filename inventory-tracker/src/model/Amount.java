@@ -13,7 +13,7 @@ package model;
 public abstract class Amount
 {
 	// Variables
-	protected final UnitType unitType;
+	protected UnitType unitType;
 
 	/**
 	 * @precondition unitType must be of type UnitType

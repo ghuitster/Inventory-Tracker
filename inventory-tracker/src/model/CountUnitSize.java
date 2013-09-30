@@ -22,7 +22,7 @@ public class CountUnitSize extends CountAmount
 	 * @param size
 	 * @throws InvalidUnitSizeException 
 	 */
-	public CountUnitSize(int size) throws InvalidUnitSizeException
+	public CountUnitSize(int size)
 	{
 		super(size);
 		this.size = size;

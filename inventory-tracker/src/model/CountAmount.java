@@ -25,13 +25,10 @@ public abstract class CountAmount extends Amount
 	 * @param unitType the type of unit. "count" in this case
 	 * @throws InvalidUnitSizeException 
 	 */
-	public CountAmount(int amount) throws InvalidUnitSizeException
+	public CountAmount(int amount)
 	{
 		super(UnitType.COUNT);
-		if(ableToSetAmount(amount))
-			this.amount = amount;
-		else
-			throw new InvalidUnitSizeException();
+		this.amount = amount;
 	}
 
 	/**
@@ -110,12 +107,9 @@ public abstract class CountAmount extends Amount
 	 * @param amount the amount to set
 	 * @throws InvalidUnitSizeException 
 	 */
-	public void setAmount(int amount) throws InvalidUnitSizeException
+	public void setAmount(int amount)
 	{
-		if(this.ableToSetAmount(amount))
-			this.amount = amount;
-		else
-			throw new InvalidUnitSizeException();
+		this.amount = amount;
 	}
 
 }
