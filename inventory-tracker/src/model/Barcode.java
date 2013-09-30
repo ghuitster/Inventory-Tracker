@@ -83,6 +83,13 @@ public class Barcode
 		return result;
 	}
 
+	public static boolean isValid(String number)
+	{
+		boolean response = false;
+
+		return response;
+	}
+
 	/**
 	 * @param number the number to set
 	 */

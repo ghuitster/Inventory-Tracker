@@ -19,7 +19,14 @@ public class ProductDescription
 	 */
 	public static boolean isValid(String description)
 	{
-		return true;
+		boolean response = false;
+
+		if(!description.isEmpty())
+			response = true;
+		else if(description.matches("\\S"))
+			response = true;
+
+		return response;
 	}
 
 	// Variables
@@ -41,7 +48,16 @@ public class ProductDescription
 	 */
 	public boolean ableToSetDescription(String description)
 	{
-		return true;
+		boolean response = true;
+
+		if(description == null)
+			response = false;
+		else if(description.isEmpty())
+			response = false;
+		else if(!description.matches("\\S"))
+			response = false;
+
+		return response;
 	}
 
 	/**

@@ -15,8 +15,8 @@ public class Product
 	private Barcode barcode;
 	private UnitSize size;
 	private int shelfLife;
-	private ThreeMonthSupply threeMonthSupply;
-	private final Set<StorageUnit> containers;
+	private Amount threeMonthSupply;
+	private final Set<ProductContainer> containers;
 
 	/**
 	 * @precondition creationDate must be == the earliest EntryDate for any item
@@ -45,8 +45,8 @@ public class Product
 	 * @param containers
 	 */
 	public Product(Date creationDate, String description, Barcode barcode,
-			UnitSize size, int shelfLife, ThreeMonthSupply threeMonthSupply,
-			Set<StorageUnit> containers)
+			UnitSize size, int shelfLife, Amount threeMonthSupply,
+			Set<ProductContainer> containers)
 	{
 		super();
 		this.creationDate = creationDate;
@@ -59,75 +59,103 @@ public class Product
 	}
 
 	/**
-	 * @precondition container != null
+	 * @pre container != null
 	 * @param container the container to attempt to add
 	 * @return whether the container can be added or not
 	 */
 	public boolean ableToAddContainer(StorageUnit container)
 	{
-		return true;
+		boolean response = false;
+
+		if(container.ableToAddProduct(this))
+			response = true;
+
+		return response;
 	}
 
 	/**
-	 * @precondition barcode != null
+	 * @pre barcode != null
 	 * @param barcode the Barcode to attempt to set
 	 * @return if the Barcode can be set or not
 	 */
 	public boolean ableToSetBarcode(Barcode barcode)
 	{
-		return true;
+		boolean response = false;
+
+		if(Barcode.isValid(barcode.getNumber()))
+			response = true;
+
+		return response;
 	}
 
 	/**
-	 * @precondition description != null
+	 * @pre description != null
 	 * @param description the description to attempt to set
 	 * @return if the description can be set or not
 	 */
 	public boolean ableToSetDescription(String description)
 	{
-		return true;
+		return ProductDescription.isValid(description);
 	}
 
 	/**
-	 * @precondition shelfLife != null
+	 * @pre shelfLife must be > 0
 	 * @param shelfLife the shelfLife to attempt to set
 	 * @return if the shelflife can be set or not
 	 */
 	public boolean ableToSetShelfLife(int shelfLife)
 	{
-		return true;
+		boolean response = true;
+
+		if(shelfLife < 0)
+			response = false;
+
+		return response;
 	}
 
 	/**
-	 * @precondition size != null
+	 * @pre size != null
+	 * @pre size number component must not be <= 0
 	 * @param size the size to attempt to set
 	 * @return whether the size can be set or not
 	 */
 	public boolean ableToSetSize(UnitSize size)
 	{
-		return true;
+		boolean response = true;
+
+		if(size == null)
+			response = false;
+		else if(size.getSize() <= 0)
+			response = false;
+
+		return response;
 	}
 
 	/**
-	 * @precondition threeMonthSupply != null
+	 * @pre threeMonthSupply != null
 	 * @param threeMonthSupply the threeMonthSupply to attempt to set
 	 * @return whether the threeMonthSupply could be set or not
 	 */
-	public boolean ableToSetThreeMonthSupply(ThreeMonthSupply threeMonthSupply)
+	public boolean ableToSetThreeMonthSupply(Amount threeMonthSupply)
 	{
-		return true;
+		boolean response = true;
+
+		if(threeMonthSupply == null)
+			response = false;
+
+		return response;
 	}
 
 	/**
-	 * @precondition container != null
-	 * @precondition this Product must not exist in another product container in
-	 *               this storage unit
-	 * @postcondition container == passed in container
+	 * @pre container != null
+	 * @pre this Product must not exist in another product container in this
+	 *      storage unit
+	 * @post container == passed in container
 	 * @param productContainer the container to add
 	 */
 	public void addContainer(ProductContainer productContainer)
 	{
-
+		this.containers.add(productContainer);
 	}
 
 	/*
@@ -235,7 +263,7 @@ public class Product
 	/**
 	 * @return the threeMonthSupply
 	 */
-	public ThreeMonthSupply getThreeMonthSupply()
+	public Amount getThreeMonthSupply()
 	{
 		return threeMonthSupply;
 	}
@@ -272,19 +300,20 @@ public class Product
 	}
 
 	/**
-	 * @precondition barcode != null
-	 * @postcondition barcode == passed in barcode
+	 * @pre barcode != null
+	 * @post barcode == passed in barcode
 	 * @param barcode the Barcode to set
 	 */
 	public void setBarcode(Barcode barcode)
 	{
-		this.barcode = barcode;
+		if(barcode != null && Barcode.isValid(barcode.getNumber()))
+			this.barcode = barcode;
 	}
 
 	/**
-	 * @precondition creationDate != null
-	 * @precondition creationDate == earliest entryDate of items of this product
-	 * @postcondition creationData == passed in creationDate
+	 * @pre creationDate != null
+	 * @pre creationDate == earliest entryDate of items of this product
+	 * @post creationData == passed in creationDate
 	 * @param creationDate the creationDate to set
 	 */
 	public void setCreationDate(Date creationDate)
@@ -293,8 +322,8 @@ public class Product
 	}
 
 	/**
-	 * @precondition != null
-	 * @precondition description must be valid
+	 * @pre != null
+	 * @pre description must be valid
 	 * @param description the description to set
 	 */
 	public void setDescription(String description)
@@ -314,9 +343,9 @@ public class Product
 	}
 
 	/**
-	 * @precondition size number component must be > 0
-	 * @precondition size != null
-	 * @postcondition size == passed in size
+	 * @pre size number component must be > 0
+	 * @pre size != null
+	 * @post size == passed in size
 	 * @param size the size to set
 	 */
 	public void setSize(UnitSize size)
@@ -325,12 +354,12 @@ public class Product
 	}
 
 	/**
-	 * @precondition threeMonthSupply != null
-	 * @precondition threeMonthSupply number component must be > 0
-	 * @postcondition threeMonthSupply == passed in threeMonthSupply
+	 * @pre threeMonthSupply != null
+	 * @pre threeMonthSupply number component must be > 0
+	 * @post threeMonthSupply == passed in threeMonthSupply
 	 * @param threeMonthSupply the threeMonthSupply to set
 	 */
-	public void setThreeMonthSupply(ThreeMonthSupply threeMonthSupply)
+	public void setThreeMonthSupply(Amount threeMonthSupply)
 	{
 		this.threeMonthSupply = threeMonthSupply;
 	}

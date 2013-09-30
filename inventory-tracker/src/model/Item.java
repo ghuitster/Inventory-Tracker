@@ -53,7 +53,14 @@ public class Item
 	 */
 	public boolean ableToSetBarcode(Barcode barcode)
 	{
-		return true;
+		boolean response = true;
+
+		if(barcode == null)
+			response = false;
+		else if(!Barcode.isValid(barcode.getNumber()))
+			response = false;
+
+		return response;
 	}
 
 	/**
@@ -63,7 +70,7 @@ public class Item
 	 */
 	public boolean ableToSetContainer(StorageUnit container)
 	{
-		return true;
+		return container.ableToAddItem(this);
 	}
 
 	/**
@@ -73,7 +80,12 @@ public class Item
 	 */
 	public boolean ableToSetExitTime(Date exitTime)
 	{
-		return true;
+		boolean response = true;
+
+		if(exitTime == null)
+			response = false;
+
+		return response;
 	}
 
 	/**
@@ -83,7 +95,12 @@ public class Item
 	 */
 	public boolean ableToSetExpirationDate(Date expirationDate)
 	{
-		return true;
+		boolean response = true;
+
+		if(expirationDate == null)
+			response = false;
+
+		return response;
 	}
 
 	/**
@@ -93,7 +110,12 @@ public class Item
 	 */
 	public boolean ableToSetProduct(Product product)
 	{
-		return true;
+		boolean response = true;
+
+		if(product == null)
+			response = false;
+
+		return response;
 	}
 
 	/**
