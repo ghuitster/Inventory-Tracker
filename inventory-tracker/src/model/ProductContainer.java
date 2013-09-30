@@ -2,6 +2,7 @@
 package model;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -14,7 +15,7 @@ public abstract class ProductContainer
 {
 	protected String name;
 	protected Set<Product> products;
-	protected Set<Item> items;
+	protected List<Item> items;
 	protected Set<ProductGroup> productGroups;
 
 	/**
