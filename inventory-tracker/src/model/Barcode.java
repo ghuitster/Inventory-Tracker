@@ -8,13 +8,6 @@ package model;
  */
 public class Barcode
 {
-	public static boolean isValid(String number)
-	{
-		boolean response = false;
-
-		return response;
-	}
-
 	// Variables
 	private String number;
 
@@ -33,7 +26,15 @@ public class Barcode
 	 */
 	public boolean ableToSetNumber(String number)
 	{
-		return true;
+		boolean response = false;
+
+		if(number != null)
+		{
+			if(Barcode.isValid(number))
+				response = true;
+		}
+
+		return response;
 	}
 
 	/**
@@ -76,6 +77,21 @@ public class Barcode
 	public String getNumber()
 	{
 		return number;
+	}
+
+	/**
+	 * @pre number must not be null
+	 * @param number string of the barcode number to validate
+	 * @return true if valid number
+	 */
+	public static boolean isValid(String number)
+	{
+		boolean response = false;
+
+		if(!number.matches("[0-9]+") && number.length() == 12)
+			response = true;
+
+		return response;
 	}
 
 	/**

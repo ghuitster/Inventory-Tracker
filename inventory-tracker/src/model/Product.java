@@ -67,8 +67,11 @@ public class Product
 	{
 		boolean response = false;
 
-		if(container.ableToAddProduct(this))
-			response = true;
+		if(container != null)
+		{
+			if(container.ableToAddProduct(this))
+				response = true;
+		}
 
 		return response;
 	}
@@ -105,10 +108,10 @@ public class Product
 	 */
 	public boolean ableToSetShelfLife(int shelfLife)
 	{
-		boolean response = true;
+		boolean response = false;
 
-		if(shelfLife < 0)
-			response = false;
+		if(shelfLife > 0)
+			response = true;
 
 		return response;
 	}
@@ -121,12 +124,13 @@ public class Product
 	 */
 	public boolean ableToSetSize(UnitSize size)
 	{
-		boolean response = true;
+		boolean response = false;
 
-		if(size == null)
-			response = false;
-		else if(size.getSize() <= 0)
-			response = false;
+		if(size != null)
+		{
+			if(size.getSize() > 0)
+				response = true;
+		}
 
 		return response;
 	}
@@ -138,10 +142,20 @@ public class Product
 	 */
 	public boolean ableToSetThreeMonthSupply(Amount threeMonthSupply)
 	{
-		boolean response = true;
+		boolean response = false;
 
-		if(threeMonthSupply == null)
-			response = false;
+		if(threeMonthSupply != null)
+		{
+			if(threeMonthSupply instanceof ThreeMonthSupply)
+			{
+
+			}
+			else if(threeMonthSupply instanceof CountThreeMonthSupply)
+			{
+
+			}
+		}
+		response = false;
 
 		return response;
 	}
@@ -156,6 +170,36 @@ public class Product
 	public void addContainer(ProductContainer productContainer)
 	{
 		this.containers.add(productContainer);
+	}
+
+	/**
+	 * @pre productContainer must != null
+	 * @param productContainer the container to attempt to remove
+	 */
+	public boolean ableToRemoveContainer(ProductContainer productContainer)
+	{
+		boolean response = false;
+
+		if(productContainer != null)
+		{
+			if(productContainer.ableToRemoveProduct(this))
+				response = true;
+		}
+
+		return response;
+	}
+
+	/**
+	 * @pre productContainer != null
+	 * @pre productContainer must exist in the set of containers for this
+	 *      product
+	 * @post productContainer no longer exists in the set of containers for this
+	 *       product
+	 * @param productContainer the container to remove
+	 */
+	public void removeContainer(ProductContainer productContainer)
+	{
+		this.containers.remove(productContainer);
 	}
 
 	/*
