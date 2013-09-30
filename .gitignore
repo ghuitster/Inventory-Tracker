@@ -1,3 +1,4 @@
 *.class
 # Thumbnail garbage #
 Thumbs.db
+.metadata

@@ -2,17 +2,17 @@
 package model.exception;
 
 /**
- * An Exception if there is an error for Serialzer
+ * An Exception if there is an error for Serializer
  * @author chris
  * 
  */
 
-public class SerialzerException extends Exception
+public class SerializerException extends Exception
 {
 	/**
 	 * Constructor for no message
 	 */
-	public SerialzerException()
+	public SerializerException()
 	{
 
 	}
@@ -21,7 +21,7 @@ public class SerialzerException extends Exception
 	 * Constructor for detail error message
 	 * @param message
 	 */
-	public SerialzerException(String message)
+	public SerializerException(String message)
 	{
 		super(message);
 	}

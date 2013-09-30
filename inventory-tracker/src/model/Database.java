@@ -1,64 +1,54 @@
 
 package model;
 
+import model.exception.*;
+
 public class Database implements IPersistence
 {
-
 	/**
-	 * Determines whether the passed database name is valid and exists as in the
-	 * database system
-	 * @param storeName The name of the databse to verify
-	 * @pre (none)
-	 * @post (none)
-	 * @return True if the name is valid and the database exists. False if
-	 *         either condition is not true.
+	 * Initializes an instance of Database
+	 * @param databaseName The name of the database to store/load information from
 	 */
-	@Override
-	public boolean DataStoreExists(String storeName)
+	public Database(String databaseName)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		throw new UnsupportedOperationException("Not yet implemented");
 	}
-
+	
 	/**
-	 * Determines whether the passed store name is a valid database name
-	 * @param storeName The name to check for validity
-	 * @return True if the name is a valid database name. Otherwise, false
+	 * Determines whether a database exists which data can be loaded from
+	 * @return True if the database exists and is valid. Otherwise, false
 	 */
 	@Override
-	public boolean DataStoreNameIsValid(String storeName)
+	public boolean canLoadData()
 	{
-		// TODO Auto-generated method stub
-		return false;
+		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
 	/**
 	 * Loads all data from specified store to the passed Inventory
 	 * @param inventory The Inventory to load the data to
-	 * @param storeName The name of the database to load data from
 	 * @pre inventory is not null. storeName refers to a valid database
 	 * @post inventory's original contents have been cleared and replaced with
 	 *       the data from the specified database
+	 * @throws SerializerException
 	 */
 	@Override
-	public void LoadData(Inventory inventory, String storeName)
+	public void loadData(Inventory inventory) throws SerializerException
 	{
-		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
 	/**
 	 * Saves all data from the Inventory with the specified name to a database
 	 * @param inventory The Inventory to save
-	 * @param storeName The name of the database to use
 	 * @pre storeName is a valid string for a database name
 	 * @post The passed Inventory has been saved under the passed name
+	 * @throws SerializerException
 	 */
 	@Override
-	public void SaveData(Inventory inventory, String storeName)
+	public void saveData(Inventory inventory) throws SerializerException
 	{
-		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
 }

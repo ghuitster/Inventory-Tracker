@@ -1,6 +1,11 @@
 
 package model;
 
+import java.io.*;
+import java.util.Set;
+
+import model.exception.*;
+
 /**
  * Saves and loads Inventory data to a file
  * @author Brian
@@ -8,31 +13,30 @@ package model;
  */
 public class Serializer implements IPersistence
 {
-
+	private String filePath;
+	
 	/**
-	 * Determines whether the passed store name is a valid filename and exists
-	 * as a file in the current working directory
-	 * @param storeName The name of the store to verify
+	 * Initializes an instance of Serializer
 	 * @pre (none)
-	 * @post (none)
-	 * @return True if the name is valid and the store exists. False if either
-	 *         condition is not true.
+	 * @post this.filePath is set to the passed path
+	 * @param filePath The path to the file used to load and store data
 	 */
-	@Override
-	public boolean DataStoreExists(String storeName)
+	public Serializer(String filePath)
 	{
-		throw new UnsupportedOperationException("Not yet implemented");
+		this.filePath = filePath;
 	}
 
 	/**
-	 * Determines whether the passed store name is a valid file name
-	 * @param storeName The name to check for validity
-	 * @return True if the name is a valid store name. Otherwise, false
+	 * Determined whether the data file exists and can be loaded
+	 * @pre (none)
+	 * @post (none)
+	 * @return True if data can be loaded. Otherwise, false.
 	 */
 	@Override
-	public boolean DataStoreNameIsValid(String storeName)
+	public boolean canLoadData()
 	{
-		throw new UnsupportedOperationException("Not yet implemented");
+		File file = new File(this.filePath);
+		return file.exists() && file.canRead();
 	}
 
 	/**
@@ -43,11 +47,41 @@ public class Serializer implements IPersistence
 	 * @pre inventory is not null. storeName refers to a valid data store.
 	 * @post inventory's original contents have been cleared and replaced with
 	 *       the data from the specified file
+	 * @throws SerializerException      
 	 */
 	@Override
-	public void LoadData(Inventory inventory, String storeName)
+	public void loadData(Inventory inventory) throws SerializerException
 	{
-		throw new UnsupportedOperationException("Not yet implemented");
+		FileInputStream stream = null;
+		ObjectInputStream objIn = null;
+		try
+		{
+			stream = new FileInputStream(this.filePath);
+			objIn = new ObjectInputStream(stream);
+			Set<StorageUnit> storageUnits = (Set<StorageUnit>)objIn.readObject();
+			
+			inventory.removeAllStorageUnits();
+			for(StorageUnit storageUnit: storageUnits)
+			{
+				inventory.addStorageUnit(storageUnit);
+			}
+		}
+		catch(Exception e)
+		{
+			throw new SerializerException(e.getMessage());
+		}
+		finally
+		{
+			try
+			{
+				if(objIn != null)
+					objIn.close();
+				else if(stream != null)
+					stream.close();
+			}
+			catch(IOException e)
+			{ }
+		}
 	}
 
 	/**
@@ -59,9 +93,33 @@ public class Serializer implements IPersistence
 	 * @post The passed Inventory has been saved under the passed name
 	 */
 	@Override
-	public void SaveData(Inventory inventory, String storeName)
+	public void saveData(Inventory inventory) throws SerializerException
 	{
-		throw new UnsupportedOperationException("Not yet implemented");
+		FileOutputStream stream = null;
+		ObjectOutputStream objOut = null;
+		try
+		{
+			stream = new FileOutputStream(this.filePath);
+			objOut = new ObjectOutputStream(stream);
+			objOut.writeObject(inventory.getAllStorageUnits());
+		}
+		catch(IOException e)
+		{
+			throw new SerializerException(e.getMessage());
+		}
+		finally
+		{
+			try
+			{
+				if(objOut != null)
+					objOut.close();
+				else if(stream != null)
+					stream.close();
+			}
+			catch(IOException e)
+			{ }
+		}
+		
 	}
 
 }

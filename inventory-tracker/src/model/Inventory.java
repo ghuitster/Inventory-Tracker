@@ -1,9 +1,14 @@
 
 package model;
 
+import java.security.InvalidParameterException;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedMap;
+import java.util.TreeMap;
+
+import model.exception.*;
 
 /**
  * Singleton class to manage the entire Inventory system
@@ -48,7 +53,7 @@ public class Inventory
 	 * Mapping for the nMonthSupply report. The Date key represents a month. The
 	 * corresponding products are those which will last up to the key's month
 	 */
-	private SortedMap<Integer, Set<Product>> nMonthSupplyMap;
+	private SortedMap<Date, Set<Product>> nMonthSupplyMap;
 
 	/**
 	 * Date Mapping for the nMonthSupply report. The Date key represents a
@@ -70,7 +75,12 @@ public class Inventory
 	 */
 	private Inventory()
 	{
-
+		this.storageUnits = new HashSet<StorageUnit>();
+		this.persistence = new Serializer("data.inventory");
+		this.itemExpirations = new TreeMap<Date, Set<Item>>();
+		this.removedItems = new TreeMap<Date, Set<Item>>();
+		this.nMonthSupplyMap = new TreeMap<Date, Set<Product>>();
+		this.nMonthSupplyGroupMap = new TreeMap<Date, Set<ProductGroup>>();
 	}
 
 	/**
@@ -78,10 +88,16 @@ public class Inventory
 	 * @pre A storage unit does not exist with the same name
 	 * @post The passed storage unit has been inserted into the system
 	 * @param storageUnit The new storage unit
+	 * @throws InvalidNameException, NullPointerException 
 	 */
-	public void addStorageUnit(StorageUnit storageUnit)
+	public void addStorageUnit(StorageUnit storageUnit) throws InvalidNameException, NullPointerException
 	{
-		throw new UnsupportedOperationException("Not yet implemented");
+		if(storageUnit == null)
+			throw new NullPointerException();
+		else if (this.storageUnitNameInUse(storageUnit.getName()))
+			throw new InvalidNameException();
+		
+		this.storageUnits.add(storageUnit);
 	}
 
 	/**
@@ -94,9 +110,31 @@ public class Inventory
 	 */
 	public Set<Product> getAllProducts()
 	{
-		throw new UnsupportedOperationException("Not yet implemented");
+		HashSet<Product> products = new HashSet<Product>();
+		for(StorageUnit unit : this.storageUnits)
+		{
+			recurseProductContainer(unit, products);
+		}
+		return products;
 	}
 
+	/**
+	 * Adds all products from a container to the working set and recurses the sub-containers
+	 * @param container The container to add the products from and recurse the children of
+	 * @pre workingSet is not null
+	 * @post workingSet contains all products from container and its children
+	 * @param workingSet The current set being built
+	 */
+	private void recurseProductContainer(ProductContainer container, Set<Product> workingSet)
+	{
+		//TODO: uncomment when getters are implemented
+		/*workingSet.addAll(container.getProducts());
+		for(ProductContainer subContainer : container.getProductGroups())
+		{
+			recurseProductContainer(subContainer, workingSet);
+		}*/
+	}
+	
 	/**
 	 * Gets a list of all Storage Units in the system
 	 * @pre (none)
@@ -106,7 +144,7 @@ public class Inventory
 	 */
 	public Set<StorageUnit> getAllStorageUnits()
 	{
-		throw new UnsupportedOperationException("Not yet implemented");
+		return new HashSet<StorageUnit>(this.storageUnits);
 	}
 
 	/**
@@ -119,7 +157,7 @@ public class Inventory
 	 */
 	public SortedMap<Date, Set<Item>> getItemExpirations()
 	{
-		throw new UnsupportedOperationException("Not yet implemented");
+		return new TreeMap<Date, Set<Item>>(this.itemExpirations);
 	}
 
 	/**
@@ -133,7 +171,7 @@ public class Inventory
 	 */
 	public SortedMap<Date, Set<ProductGroup>> getNMonthSupplyGroupMap()
 	{
-		throw new UnsupportedOperationException("Not yet implemented");
+		return new TreeMap<Date, Set<ProductGroup>>(this.nMonthSupplyGroupMap);
 	}
 
 	/**
@@ -147,7 +185,7 @@ public class Inventory
 	 */
 	public SortedMap<Date, Set<Product>> getNMonthSupplyMap()
 	{
-		throw new UnsupportedOperationException("Not yet implemented");
+		return new TreeMap<Date, Set<Product>>(this.nMonthSupplyMap);
 	}
 
 	/**
@@ -160,7 +198,7 @@ public class Inventory
 	 */
 	public SortedMap<Date, Set<Item>> getRemovedItems()
 	{
-		throw new UnsupportedOperationException("Not yet implemented");
+		return new TreeMap<Date, Set<Item>>(this.removedItems);
 	}
 
 	/**
@@ -170,7 +208,7 @@ public class Inventory
 	 */
 	public void removeAllStorageUnits()
 	{
-		throw new UnsupportedOperationException("Not yet implemented");
+		this.storageUnits.clear();
 	}
 
 	/**
@@ -181,7 +219,57 @@ public class Inventory
 	 */
 	public void removeStorageUnit(StorageUnit storageUnit)
 	{
-		throw new UnsupportedOperationException("Not yet implemented");
+		if(!this.storageUnits.contains(storageUnit))
+			throw new InvalidParameterException("Passed StorageUnit was not found");
+			
+		this.storageUnits.remove(storageUnit);
+	}
+	
+	/**
+	 * Determined if a storage unit is valid for addition
+	 * @param storageUnit The new storage unit to check
+	 * @pre (none)
+	 * @post A boolean value is generated
+	 * @return True if the storage unit may be added. Otherwise, false
+	 */
+	public boolean ableToAddStorageUnit(StorageUnit storageUnit)
+	{
+		if(storageUnit == null)
+			return false;
+		
+		if(storageUnitNameInUse(storageUnit.getName()))
+			return false;
+		
+		return true;
+		
+	}
+
+	/**
+	 * Checks if a storage unit name is taken
+	 * @param unitName The name to check
+	 * @pre (none)
+	 * @post A boolean value is generated
+	 * @return True if the name is taken. Otherwise, false
+	 */
+	private boolean storageUnitNameInUse(String unitName)
+	{
+		for(StorageUnit unit : storageUnits)
+		{
+			if(unit.getName().equals(unitName))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Gets the persistence object for saving and loading data to this object
+	 * @return An object capable of saving and loading this object's state
+	 */
+	public IPersistence getPersistence()
+	{
+		return this.persistence;
 	}
 
 }
