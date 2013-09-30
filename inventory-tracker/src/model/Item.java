@@ -16,7 +16,7 @@ public class Item
 	private final Date entryDate;
 	private Date expirationDate;
 	private Date exitTime;
-	private StorageUnit container;
+	private ProductContainer container;
 
 	/**
 	 * @precondition product must != null && must exist
@@ -217,7 +217,7 @@ public class Item
 	/**
 	 * @return the container
 	 */
-	public StorageUnit getContainer()
+	public ProductContainer getContainer()
 	{
 		return container;
 	}
@@ -293,11 +293,11 @@ public class Item
 	/**
 	 * @precondition container != null
 	 * @postcondition container == passed in container
-	 * @param container the container to set
+	 * @param otherProductContainer the container to set
 	 */
-	public void setContainer(StorageUnit container)
+	public void setContainer(ProductContainer otherProductContainer)
 	{
-		this.container = container;
+		this.container = otherProductContainer;
 	}
 
 	/**

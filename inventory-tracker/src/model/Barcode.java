@@ -8,6 +8,13 @@ package model;
  */
 public class Barcode
 {
+	public static boolean isValid(String number)
+	{
+		boolean response = false;
+
+		return response;
+	}
+
 	// Variables
 	private String number;
 
@@ -81,13 +88,6 @@ public class Barcode
 		int result = 1;
 		result = prime * result + ((number == null) ? 0 : number.hashCode());
 		return result;
-	}
-
-	public static boolean isValid(String number)
-	{
-		boolean response = false;
-
-		return response;
 	}
 
 	/**

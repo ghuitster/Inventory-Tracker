@@ -1,35 +1,36 @@
+/**
+ * 
+ */
 
 package model;
 
 /**
- * Class to represent the unit size of a Product.
+ * Class to represent a unit size where the unit type is not "count"
  * @author Michael
  * 
  */
-public class UnitSize
+public class UnitSize extends NonCountAmount
 {
 	// Variables
 	private float size;
-	private UnitType unit;
 
 	/**
-	 * The UnitSize constructor.
 	 * @precondition size must be > 0.0f
-	 * @precondition unit != null
-	 * @param size a float value indicating the size of the Product with a unit
-	 *            size.
-	 * @param unit a UnitType indicating the type of units for the Product
+	 * @precondition unitType must != UnitType.COUNT
+	 * @postcondition size == passed in size
+	 * @postcondition unitType == passed in UnitType
+	 * @param size
+	 * @param unitType
 	 */
-	public UnitSize(float size, UnitType unit)
+	public UnitSize(float size, UnitType unitType)
 	{
+		super(size, unitType);
 		this.size = size;
-		this.unit = unit;
 	}
 
 	/**
-	 * Checks to see if the size we want to set is valid.
-	 * @param size the size to attempt to set
-	 * @return if the size can be set or not
+	 * @precondition size must be > 0
+	 * @param size the size to test if we can set
 	 */
 	public boolean ableToSetSize(float size)
 	{
@@ -37,47 +38,6 @@ public class UnitSize
 	}
 
 	/**
-	 * @param unit the UnitType to attempt to set
-	 * @return if the UnitType can be assigned or not
-	 */
-	public boolean ableToSetUnit(UnitType unit)
-	{
-		return true;
-	}
-
-	/**
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj)
-	{
-		if(this == obj)
-		{
-			return true;
-		}
-		if(obj == null)
-		{
-			return false;
-		}
-		if(getClass() != obj.getClass())
-		{
-			return false;
-		}
-		UnitSize other = (UnitSize) obj;
-		if(Float.floatToIntBits(size) != Float.floatToIntBits(other.size))
-		{
-			return false;
-		}
-		if(unit != other.unit)
-		{
-			return false;
-		}
-		return true;
-	}
-
-	// Methods
-	/**
-	 * Returns the size value of the UnitSize object
 	 * @return the size
 	 */
 	public float getSize()
@@ -86,29 +46,8 @@ public class UnitSize
 	}
 
 	/**
-	 * Returns the UnitType of the UnitSize object
-	 * @return unit the UnitType enumeration to return
-	 */
-	public UnitType getUnit()
-	{
-		return unit;
-	}
-
-	/**
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode()
-	{
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + Float.floatToIntBits(size);
-		result = prime * result + ((unit == null) ? 0 : unit.hashCode());
-		return result;
-	}
-
-	/**
-	 * Sets the size value of the UnitSize object
+	 * @precondition size must be > 0.0f
+	 * @postcondition size == passed in size
 	 * @param size the size to set
 	 */
 	public void setSize(float size)
@@ -117,21 +56,12 @@ public class UnitSize
 	}
 
 	/**
-	 * Sets the UnitType value of the UnitSize object
-	 * @param unit the UnitType to set.
-	 */
-	public void setUnit(UnitType unit)
-	{
-		this.unit = unit;
-	}
-
-	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString()
 	{
-		return this.size + " " + this.unit;
+		return "NewUnitSize [size=" + size + ", unitType=" + unitType + "]";
 	}
 
 }
