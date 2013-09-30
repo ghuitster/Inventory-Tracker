@@ -4,6 +4,8 @@
 
 package model;
 
+import model.exception.InvalidUnitSizeException;
+
 /**
  * Abstract Class to further define Non Count Three Month Supply and UnitSize
  * @author Michael
@@ -19,12 +21,15 @@ public abstract class NonCountAmount extends Amount
 	 * @precondition unitType must != UnitType.COUNT
 	 * @param amount the amount
 	 * @param unitType the unit type for the amount
+	 * @throws InvalidUnitSizeException 
 	 */
-	public NonCountAmount(float amount, UnitType unitType)
+	public NonCountAmount(float amount, UnitType unitType) throws InvalidUnitSizeException
 	{
 		super(unitType);
-		this.amount = amount;
-
+		if(ableToSetAmount(amount))
+			this.amount = amount;
+		else
+			throw new InvalidUnitSizeException();
 	}
 
 	/**
@@ -35,8 +40,9 @@ public abstract class NonCountAmount extends Amount
 	 */
 	public boolean ableToSetAmount(float amount)
 	{
-		boolean result = true;
-
+		boolean result = false;
+		if(amount > 0.0 && unitType != UnitType.COUNT)
+			result = true;
 		return result;
 	}
 
@@ -100,10 +106,14 @@ public abstract class NonCountAmount extends Amount
 	/**
 	 * Method to set the amount
 	 * @param amount the amount to set
+	 * @throws InvalidUnitSizeException 
 	 */
-	public void setAmount(float amount)
+	public void setAmount(float amount) throws InvalidUnitSizeException
 	{
-		this.amount = amount;
+		if(this.ableToSetAmount(amount))
+			this.amount = amount;
+		else
+			throw new InvalidUnitSizeException();
 	}
 
 }

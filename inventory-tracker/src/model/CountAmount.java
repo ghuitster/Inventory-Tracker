@@ -4,6 +4,8 @@
 
 package model;
 
+import model.exception.InvalidUnitSizeException;
+
 /**
  * Abstract class to further define CountThreeMonthSupply and CountUnitSize
  * where the unit type will only be "count"
@@ -21,11 +23,15 @@ public abstract class CountAmount extends Amount
 	 * @postcondition unitType == UnitType.COUNT
 	 * @param amount the amount of the count
 	 * @param unitType the type of unit. "count" in this case
+	 * @throws InvalidUnitSizeException 
 	 */
-	public CountAmount(int amount)
+	public CountAmount(int amount) throws InvalidUnitSizeException
 	{
 		super(UnitType.COUNT);
-		this.amount = amount;
+		if(ableToSetAmount(amount))
+			this.amount = amount;
+		else
+			throw new InvalidUnitSizeException();
 	}
 
 	/**
@@ -102,10 +108,14 @@ public abstract class CountAmount extends Amount
 	 * @precondition amount must be > 0
 	 * @postcondition amount == passed in amount
 	 * @param amount the amount to set
+	 * @throws InvalidUnitSizeException 
 	 */
-	public void setAmount(int amount)
+	public void setAmount(int amount) throws InvalidUnitSizeException
 	{
-		this.amount = amount;
+		if(this.ableToSetAmount(amount))
+			this.amount = amount;
+		else
+			throw new InvalidUnitSizeException();
 	}
 
 }
