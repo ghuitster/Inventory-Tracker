@@ -11,8 +11,6 @@ package model;
  */
 public class UnitSize extends NonCountAmount
 {
-	// Variables
-	private float size;
 
 	/**
 	 * @precondition size must be > 0.0f
@@ -25,7 +23,6 @@ public class UnitSize extends NonCountAmount
 	public UnitSize(float size, UnitType unitType)
 	{
 		super(size, unitType);
-		this.size = size;
 	}
 
 	/**
@@ -34,7 +31,7 @@ public class UnitSize extends NonCountAmount
 	 */
 	public boolean ableToSetSize(float size)
 	{
-		return true;
+		return super.ableToSetAmount(size);
 	}
 
 	/**
@@ -42,7 +39,7 @@ public class UnitSize extends NonCountAmount
 	 */
 	public float getSize()
 	{
-		return size;
+		return amount;
 	}
 
 	/**
@@ -52,7 +49,7 @@ public class UnitSize extends NonCountAmount
 	 */
 	public void setSize(float size)
 	{
-		this.size = size;
+		super.setAmount(size);
 	}
 
 	/**
@@ -61,7 +58,7 @@ public class UnitSize extends NonCountAmount
 	@Override
 	public String toString()
 	{
-		return "NewUnitSize [size=" + size + ", unitType=" + unitType + "]";
+		return "NewUnitSize [size=" + amount + ", unitType=" + unitType + "]";
 	}
 
 }

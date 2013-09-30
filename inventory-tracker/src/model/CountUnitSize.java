@@ -4,8 +4,6 @@
 
 package model;
 
-import model.exception.InvalidUnitSizeException;
-
 /**
  * A class to represent a count three month supply, where unit type is always
  * "count"
@@ -15,7 +13,6 @@ import model.exception.InvalidUnitSizeException;
 public class CountUnitSize extends CountAmount
 {
 	// Variables
-	private int size;
 
 	/**
 	 * @precondition size must be > 0
@@ -25,7 +22,6 @@ public class CountUnitSize extends CountAmount
 	public CountUnitSize(int size)
 	{
 		super(size);
-		this.size = size;
 	}
 
 	/**
@@ -58,7 +54,7 @@ public class CountUnitSize extends CountAmount
 			return false;
 		}
 		CountUnitSize other = (CountUnitSize) obj;
-		if(size != other.size)
+		if(amount != other.amount)
 		{
 			return false;
 		}
@@ -70,7 +66,7 @@ public class CountUnitSize extends CountAmount
 	 */
 	public int getSize()
 	{
-		return size;
+		return amount;
 	}
 
 	/**
@@ -81,7 +77,7 @@ public class CountUnitSize extends CountAmount
 	{
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + size;
+		result = prime * result + amount;
 		return result;
 	}
 
@@ -92,7 +88,7 @@ public class CountUnitSize extends CountAmount
 	 */
 	public void setSize(int size)
 	{
-		this.size = size;
+		super.setAmount(size);
 	}
 
 	/*
@@ -103,6 +99,6 @@ public class CountUnitSize extends CountAmount
 	@Override
 	public String toString()
 	{
-		return "CountUnitSize [size=" + size + ", unitType=" + unitType + "]";
+		return "CountUnitSize [size=" + amount + ", unitType=" + unitType + "]";
 	}
 }

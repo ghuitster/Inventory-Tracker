@@ -4,8 +4,6 @@
 
 package model;
 
-import model.exception.InvalidUnitSizeException;
-
 /**
  * Abstract class to further define CountThreeMonthSupply and CountUnitSize
  * where the unit type will only be "count"
