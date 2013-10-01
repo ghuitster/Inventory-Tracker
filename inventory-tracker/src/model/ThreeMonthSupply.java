@@ -34,7 +34,7 @@ public class ThreeMonthSupply extends NonCountAmount
 	 */
 	public boolean ableToSetAmount(float amount)
 	{
-		return true;
+		return super.ableToSetAmount(amount);
 	}
 
 	/**
@@ -43,7 +43,10 @@ public class ThreeMonthSupply extends NonCountAmount
 	 */
 	public boolean ableToSetUnitType(UnitType unitType)
 	{
-		return true;
+		boolean result = false;
+		if(unitType != UnitType.COUNT)
+			result = true;
+		return result;
 	}
 
 	/**
