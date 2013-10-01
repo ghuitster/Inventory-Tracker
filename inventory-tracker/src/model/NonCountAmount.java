@@ -64,6 +64,10 @@ public abstract class NonCountAmount extends Amount
 		{
 			return false;
 		}
+		if(unitType != other.getUnitType())
+		{
+			return false;
+		}
 		return true;
 	}
 

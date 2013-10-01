@@ -29,15 +29,6 @@ public class ThreeMonthSupply extends NonCountAmount
 	}
 
 	/**
-	 * @param amount the amount to attempt to set
-	 * @return if the amount can be set or not
-	 */
-	public boolean ableToSetAmount(float amount)
-	{
-		return super.ableToSetAmount(amount);
-	}
-
-	/**
 	 * @param unitType the unitType to attempt to set
 	 * @return if the unitType can be set or not
 	 */
@@ -71,22 +62,6 @@ public class ThreeMonthSupply extends NonCountAmount
 	}
 
 	/**
-	 * @return the amount
-	 */
-	public float getAmount()
-	{
-		return this.amount;
-	}
-
-	/**
-	 * @return the unitType
-	 */
-	public UnitType getUnitType()
-	{
-		return this.unitType;
-	}
-
-	/**
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -101,14 +76,6 @@ public class ThreeMonthSupply extends NonCountAmount
 						+ ((this.unitType == null) ? 0 : this.unitType
 								.hashCode());
 		return result;
-	}
-
-	/**
-	 * @param amount the amount to set
-	 */
-	public void setAmount(float amount)
-	{
-		this.amount = amount;
 	}
 
 	/**
