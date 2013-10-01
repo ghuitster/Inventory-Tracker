@@ -4,16 +4,23 @@
 
 package model;
 
+import java.io.Serializable;
+
 /**
  * Class to represent a Product description
  * @author Michael
  * 
  */
-public class ProductDescription
+public class ProductDescription implements Serializable
 {
+	// Variables
+	private static final long serialVersionUID = -4601997220157737995L;
+
+	private String description;
+
 	/**
-	 * @precondition description != null
-	 * @postcondition return true if description is valid
+	 * @pre description != null
+	 * @post return true if description is valid
 	 * @param description
 	 * @return
 	 */
@@ -28,9 +35,6 @@ public class ProductDescription
 
 		return response;
 	}
-
-	// Variables
-	private String description;
 
 	/**
 	 * @precondition descriptoin != null

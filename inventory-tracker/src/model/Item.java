@@ -1,16 +1,19 @@
 
 package model;
 
+import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Class to represent an individual Item in the Intentory Tracker
+ * Class to represent an individual Item in the Inventory Tracker
  * @author Michael
  * 
  */
-public class Item
+public class Item implements Serializable
 {
 	// Variables
+	private static final long serialVersionUID = -5007529040849157344L;
 	private Product product;
 	private Barcode barcode;
 	private final Date entryDate;
@@ -53,12 +56,15 @@ public class Item
 	 */
 	public boolean ableToSetBarcode(Barcode barcode)
 	{
-		boolean response = true;
+		boolean response = false;
 
-		if(barcode == null)
-			response = false;
-		else if(!Barcode.isValid(barcode.getNumber()))
-			response = false;
+		if(barcode != null)
+		{
+			if(Barcode.isValid(barcode.getNumber()))
+			{
+				response = true;
+			}
+		}
 
 		return response;
 	}
@@ -80,10 +86,16 @@ public class Item
 	 */
 	public boolean ableToSetExitTime(Date exitTime)
 	{
-		boolean response = true;
+		boolean response = false;
+		Calendar today = Calendar.getInstance();
 
-		if(exitTime == null)
-			response = false;
+		if(exitTime != null)
+		{
+			if(today.getTime().compareTo(exitTime) == 0)
+			{
+				response = true;
+			}
+		}
 
 		return response;
 	}
@@ -95,10 +107,16 @@ public class Item
 	 */
 	public boolean ableToSetExpirationDate(Date expirationDate)
 	{
-		boolean response = true;
+		boolean response = false;
+		Date today = new Date();
 
-		if(expirationDate == null)
-			response = false;
+		if(expirationDate != null)
+		{
+			if(today.compareTo(expirationDate) >= 0)
+			{
+				response = true;
+			}
+		}
 
 		return response;
 	}
@@ -110,10 +128,15 @@ public class Item
 	 */
 	public boolean ableToSetProduct(Product product)
 	{
-		boolean response = true;
+		boolean response = false;
 
-		if(product == null)
-			response = false;
+		if(product != null)
+		{
+			if(ProductDescription.isValid(product.getDescription()))
+			{
+				response = true;
+			}
+		}
 
 		return response;
 	}

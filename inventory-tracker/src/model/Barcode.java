@@ -1,14 +1,17 @@
 
 package model;
 
+import java.io.Serializable;
+
 /**
  * Class to represent the Barcode for an Item
  * @author Michael
  * 
  */
-public class Barcode
+public class Barcode implements Serializable
 {
 	// Variables
+	private static final long serialVersionUID = -4409370215399749663L;
 	private String number;
 
 	/**

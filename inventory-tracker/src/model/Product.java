@@ -1,6 +1,7 @@
 
 package model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -8,8 +9,10 @@ import java.util.Set;
  * A class to represent a product
  * @author David
  */
-public class Product
+public class Product implements Serializable
 {
+	// Variables
+	private static final long serialVersionUID = 1835988277946941153L;
 	private Date creationDate;
 	private String description;
 	private Barcode barcode;
@@ -19,23 +22,23 @@ public class Product
 	private final Set<ProductContainer> containers;
 
 	/**
-	 * @precondition creationDate must be == the earliest EntryDate for any item
-	 *               of this Product
-	 * @precondition description must be valid
-	 * @precondition barcode must be == to the manufacturer's barcode
-	 * @precondition size the number component must be > 0
-	 * @precondition shelfLife must be >= 0
-	 * @precondition threeMonthSupply number component must be >= 0
-	 * @precondition containers each container in set must exist
-	 * @precondition at most one product container in a storage unit may contain
-	 *               a particular project
-	 * @postcondition creationData == passed in creationDate
-	 * @postcondition description == passed in description
-	 * @postcondition barcode == passed in barcode
-	 * @postcondition size == passed in size
-	 * @postcondition shelfLife == passed in shelfLife
-	 * @postcondition threeMonthSupply == passed in threemonthSupply
-	 * @postcondition containers == passed in containers
+	 * @pre creationDate must be == the earliest EntryDate for any item of this
+	 *      Product
+	 * @pre description must be valid
+	 * @pre barcode must be == to the manufacturer's barcode
+	 * @pre size the number component must be > 0
+	 * @pre shelfLife must be >= 0
+	 * @pre threeMonthSupply number component must be >= 0
+	 * @pre containers each container in set must exist
+	 * @pre at most one product container in a storage unit may contain a
+	 *      particular project
+	 * @post creationData == passed in creationDate
+	 * @post description == passed in description
+	 * @post barcode == passed in barcode
+	 * @post size == passed in size
+	 * @post shelfLife == passed in shelfLife
+	 * @post threeMonthSupply == passed in threemonthSupply
+	 * @post containers == passed in containers
 	 * @param creationDate
 	 * @param description
 	 * @param barcode
@@ -122,14 +125,34 @@ public class Product
 	 * @param size the size to attempt to set
 	 * @return whether the size can be set or not
 	 */
-	public boolean ableToSetSize(UnitSize size)
+	public boolean ableToSetSize(Amount size)
 	{
 		boolean response = false;
 
 		if(size != null)
 		{
-			if(size.getSize() > 0)
-				response = true;
+			if(size instanceof UnitSize)
+			{
+				UnitSize temp = (UnitSize) size;
+				if(temp.getSize() > 0.0)
+				{
+					if(temp.getUnitType() != UnitType.COUNT)
+					{
+						response = true;
+					}
+				}
+			}
+			else if(size instanceof CountUnitSize)
+			{
+				CountUnitSize temp = (CountUnitSize) size;
+				if(temp.getSize() > 0)
+				{
+					if(temp.getUnitType() == UnitType.COUNT)
+					{
+						response = true;
+					}
+				}
+			}
 		}
 
 		return response;
@@ -148,14 +171,30 @@ public class Product
 		{
 			if(threeMonthSupply instanceof ThreeMonthSupply)
 			{
+				ThreeMonthSupply temp = (ThreeMonthSupply) threeMonthSupply;
 
+				if(temp.getAmount() > 0.0)
+				{
+					if(temp.getUnitType() != UnitType.COUNT)
+					{
+						response = true;
+					}
+				}
 			}
 			else if(threeMonthSupply instanceof CountThreeMonthSupply)
 			{
+				CountThreeMonthSupply temp =
+						(CountThreeMonthSupply) threeMonthSupply;
 
+				if(temp.getAmount() > 0)
+				{
+					if(temp.getUnitType() == UnitType.COUNT)
+					{
+						response = true;
+					}
+				}
 			}
 		}
-		response = false;
 
 		return response;
 	}
@@ -312,9 +351,7 @@ public class Product
 		return threeMonthSupply;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/**
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -408,9 +445,7 @@ public class Product
 		this.threeMonthSupply = threeMonthSupply;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
