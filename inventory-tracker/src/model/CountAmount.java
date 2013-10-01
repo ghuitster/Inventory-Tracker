@@ -1,7 +1,3 @@
-/**
- * 
- */
-
 package model;
 
 /**
@@ -21,7 +17,6 @@ public abstract class CountAmount extends Amount
 	 * @postcondition unitType == UnitType.COUNT
 	 * @param amount the amount of the count
 	 * @param unitType the type of unit. "count" in this case
-	 * @throws InvalidUnitSizeException 
 	 */
 	public CountAmount(int amount)
 	{
@@ -103,7 +98,6 @@ public abstract class CountAmount extends Amount
 	 * @precondition amount must be > 0
 	 * @postcondition amount == passed in amount
 	 * @param amount the amount to set
-	 * @throws InvalidUnitSizeException 
 	 */
 	public void setAmount(int amount)
 	{

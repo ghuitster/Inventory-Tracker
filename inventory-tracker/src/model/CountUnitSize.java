@@ -17,7 +17,6 @@ public class CountUnitSize extends CountAmount
 	/**
 	 * @precondition size must be > 0
 	 * @param size
-	 * @throws InvalidUnitSizeException 
 	 */
 	public CountUnitSize(int size)
 	{
