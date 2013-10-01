@@ -4,3 +4,8 @@ http://www.dafont.com/speculum.font?text=TEAM+5&psize=l&back=theme
 Romance Fatal Something or other
 http://www.dafont.com/romance-fatal-serif.font?text=Team+Five&psize=l&back=theme
 
+Old London
+http://www.dafont.com/old-london.font
+
+Fleur Corner Caps
+http://www.dafont.com/fleur-corner-caps.font
