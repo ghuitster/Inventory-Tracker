@@ -398,9 +398,9 @@ public class Product implements Serializable
 	}
 
 	/**
-	 * @precondition shelfLife != null
-	 * @precondition shelfLife must be non negative
-	 * @postcondition shelfLife == passed in shelfLife
+	 * @pre shelfLife != null
+	 * @pre shelfLife must be non negative
+	 * @post shelfLife == passed in shelfLife
 	 * @param shelfLife the shelfLife to set
 	 */
 	public void setShelfLife(int shelfLife)

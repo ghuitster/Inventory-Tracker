@@ -35,7 +35,7 @@ public class ProductDescription implements Serializable
 	}
 
 	/**
-	 * @precondition descriptoin != null
+	 * @pre descriptoin != null
 	 * 
 	 */
 	public ProductDescription(String description)
@@ -44,7 +44,7 @@ public class ProductDescription implements Serializable
 	}
 
 	/**
-	 * @precondition description != null
+	 * @pre description != null
 	 * @param description the description to check for validity
 	 * @return
 	 */
@@ -118,8 +118,8 @@ public class ProductDescription implements Serializable
 	}
 
 	/**
-	 * @precondition description != null
-	 * @postcondition description == passed in description
+	 * @pre description != null
+	 * @post description == passed in description
 	 * @param description the description to set
 	 */
 	public void setDescription(String description)

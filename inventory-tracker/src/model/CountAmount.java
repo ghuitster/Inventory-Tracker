@@ -12,9 +12,9 @@ public abstract class CountAmount extends Amount
 	protected int amount;
 
 	/**
-	 * @precondition amount must be > 0
-	 * @postcondition amount == passed in amount
-	 * @postcondition unitType == UnitType.COUNT
+	 * @pre amount must be > 0
+	 * @post amount == passed in amount
+	 * @post unitType == UnitType.COUNT
 	 * @param amount the amount of the count
 	 * @param unitType the type of unit. "count" in this case
 	 */
@@ -26,7 +26,7 @@ public abstract class CountAmount extends Amount
 
 	/**
 	 * Method to test the amount to set
-	 * @precondition amount must be > 0
+	 * @pre amount must be > 0
 	 * @param amount
 	 * @return result the result of the test
 	 */
@@ -95,8 +95,8 @@ public abstract class CountAmount extends Amount
 	}
 
 	/**
-	 * @precondition amount must be > 0
-	 * @postcondition amount == passed in amount
+	 * @pre amount must be > 0
+	 * @post amount == passed in amount
 	 * @param amount the amount to set
 	 */
 	public void setAmount(int amount)

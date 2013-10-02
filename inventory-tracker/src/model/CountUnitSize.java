@@ -15,7 +15,7 @@ public class CountUnitSize extends CountAmount
 	// Variables
 
 	/**
-	 * @precondition size must be > 0
+	 * @pre size must be > 0
 	 * @param size
 	 */
 	public CountUnitSize(int size)
@@ -25,7 +25,7 @@ public class CountUnitSize extends CountAmount
 
 	/**
 	 * Method to see if we can set size
-	 * @precondition size must be > 0
+	 * @pre size must be > 0
 	 * @param size
 	 * @return
 	 */
@@ -81,8 +81,8 @@ public class CountUnitSize extends CountAmount
 	}
 
 	/**
-	 * @precondition size must be > 0
-	 * @postcondition size is set to passed in size
+	 * @pre size must be > 0
+	 * @post size is set to passed in size
 	 * @param size the size to set
 	 */
 	public void setSize(int size)

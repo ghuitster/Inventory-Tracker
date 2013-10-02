@@ -15,8 +15,8 @@ public abstract class NonCountAmount extends Amount
 	protected float amount;
 
 	/**
-	 * @precondition amount must be > 0.0f
-	 * @precondition unitType must != UnitType.COUNT
+	 * @pre amount must be > 0.0f
+	 * @pre unitType must != UnitType.COUNT
 	 * @param amount the amount
 	 * @param unitType the unit type for the amount
 	 * @throws InvalidUnitSizeException 

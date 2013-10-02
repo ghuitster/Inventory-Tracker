@@ -11,8 +11,8 @@ public class ProductGroup extends ProductContainer
 	private ThreeMonthSupply threeMonthSupply;
 
 	/**
-	 * @precondition container must be a valid ProductContainer and not null
-	 * @precondition threeMonthSupply must be a valid ThreeMonthSupply and not
+	 * @pre container must be a valid ProductContainer and not null
+	 * @pre threeMonthSupply must be a valid ThreeMonthSupply and not
 	 *               null
 	 * @param container
 	 * @param threeMonthSupply
@@ -91,8 +91,8 @@ public class ProductGroup extends ProductContainer
 	}
 
 	/**
-	 * @precondition container != null
-	 * @postcondition my.container == passed in ProductContainer
+	 * @pre container != null
+	 * @post my.container == passed in ProductContainer
 	 * @param container the ProductContainer to set
 	 */
 	public void setContainer(ProductContainer container)
@@ -101,9 +101,9 @@ public class ProductGroup extends ProductContainer
 	}
 
 	/**
-	 * @precondition threeMonthSupply must be a valid ThreeMonthSupply and not
+	 * @pre threeMonthSupply must be a valid ThreeMonthSupply and not
 	 *               null
-	 * @postcondition my.threeMonthSupply == passed in ThreeMonthSupply
+	 * @post my.threeMonthSupply == passed in ThreeMonthSupply
 	 * @param threeMonthSupply the ThreeMonthSupply to set
 	 */
 	public void setThreeMonthSupply(ThreeMonthSupply threeMonthSupply)

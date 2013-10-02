@@ -13,8 +13,8 @@ public class ThreeMonthSupply extends NonCountAmount
 {
 
 	/**
-	 * @precondition amount must be > 0.0f
-	 * @precondition unitType must != UnitType.COUNT
+	 * @pre amount must be > 0.0f
+	 * @pre unitType must != UnitType.COUNT
 	 * @param amount
 	 * @param unitType
 	 * ThreeMonthSupply constructor

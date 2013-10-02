@@ -14,8 +14,8 @@ public class CountThreeMonthSupply extends CountAmount
 {
 
 	/**
-	 * @precondition amount must be > 0;
-	 * @postcondition amount is set to passed in amount
+	 * @pre amount must be > 0;
+	 * @post amount is set to passed in amount
 	 * @param amount
 	 * @throws InvalidUnitSizeException 
 	 */

@@ -9,10 +9,10 @@ public class UnitSize extends NonCountAmount
 {
 
 	/**
-	 * @precondition size must be > 0.0f
-	 * @precondition unitType must != UnitType.COUNT
-	 * @postcondition size == passed in size
-	 * @postcondition unitType == passed in UnitType
+	 * @pre size must be > 0.0f
+	 * @pre unitType must != UnitType.COUNT
+	 * @post size == passed in size
+	 * @post unitType == passed in UnitType
 	 * @param size
 	 * @param unitType
 	 */
@@ -22,7 +22,7 @@ public class UnitSize extends NonCountAmount
 	}
 
 	/**
-	 * @precondition size must be > 0
+	 * @pre size must be > 0
 	 * @param size the size to test if we can set
 	 */
 	public boolean ableToSetSize(float size)
@@ -39,8 +39,8 @@ public class UnitSize extends NonCountAmount
 	}
 
 	/**
-	 * @precondition size must be > 0.0f
-	 * @postcondition size == passed in size
+	 * @pre size must be > 0.0f
+	 * @post size == passed in size
 	 * @param size the size to set
 	 */
 	public void setSize(float size)

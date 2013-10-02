@@ -18,8 +18,8 @@ public abstract class Amount implements Serializable
 	protected UnitType unitType;
 
 	/**
-	 * @precondition unitType must be of type UnitType
-	 * @precondition unitType == passed in unitType
+	 * @pre unitType must be of type UnitType
+	 * @pre unitType == passed in unitType
 	 * @param unitType
 	 */
 	public Amount(UnitType unitType)
