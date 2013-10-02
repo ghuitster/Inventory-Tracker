@@ -4,7 +4,12 @@
 
 package model;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import java.util.Date;
+import java.util.HashSet;
 
 import org.junit.Test;
 
@@ -20,7 +25,28 @@ public class ProductTest
 	@Test
 	public final void testHashCode()
 	{
-		fail("Not yet implemented"); // TODO
+		Date creDate = new Date();
+		String desc = "Test Product No. 1";
+		String desc2 = "Test Product No. 2";
+		Barcode bc = new Barcode("400000000001");
+		UnitSize size = new UnitSize(1.0f, UnitType.CHEVROLET);
+		int shelfLife = 5;
+		CountThreeMonthSupply threeMonthSupply = new CountThreeMonthSupply(1);
+		HashSet<ProductContainer> containers = new HashSet<ProductContainer>();
+
+		Product prod1 =
+				new Product(creDate, desc, bc, size, shelfLife,
+						threeMonthSupply, containers);
+		Product prod2 =
+				new Product(creDate, desc2, bc, size, shelfLife,
+						threeMonthSupply, containers);
+
+		assertFalse(prod1.hashCode() == prod2.hashCode());
+		prod2 =
+				new Product(creDate, desc, bc, size, shelfLife,
+						threeMonthSupply, containers);
+
+		assertTrue(prod1.hashCode() == prod2.hashCode());
 	}
 
 	/**
@@ -31,7 +57,22 @@ public class ProductTest
 	@Test
 	public final void testProduct()
 	{
-		fail("Not yet implemented"); // TODO
+		Date creDate = new Date();
+		String desc = "Test Product No. 1";
+		Barcode bc = new Barcode("400000000001");
+		UnitSize size = new UnitSize(1.0f, UnitType.CHEVROLET);
+		int shelfLife = 5;
+		CountThreeMonthSupply threeMonthSupply = new CountThreeMonthSupply(1);
+		HashSet<ProductContainer> containers = new HashSet<ProductContainer>();
+
+		Product prod1 =
+				new Product(creDate, desc, bc, size, shelfLife,
+						threeMonthSupply, containers);
+		assertTrue(creDate.equals(prod1.getCreationDate()));
+		assertTrue(desc.equals(prod1.getDescription()));
+		assertTrue(bc.equals(prod1.getBarcode()));
+		assertTrue(size.equals(prod1.getSize()));
+
 	}
 
 	/**

@@ -132,7 +132,8 @@ public class Item implements Serializable
 
 		if(product != null)
 		{
-			if(ProductDescription.isValid(product.getDescription()))
+			if(ProductDescription.isValid(product.getDescription()
+					.getDescription()))
 			{
 				response = true;
 			}

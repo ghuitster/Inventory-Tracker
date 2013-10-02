@@ -14,7 +14,7 @@ public class Product implements Serializable
 	// Variables
 	private static final long serialVersionUID = 1835988277946941153L;
 	private Date creationDate;
-	private String description;
+	private ProductDescription description;
 	private Barcode barcode;
 	private Amount size;
 	private int shelfLife;
@@ -53,7 +53,7 @@ public class Product implements Serializable
 	{
 		super();
 		this.creationDate = creationDate;
-		this.description = description;
+		this.description = new ProductDescription(description);
 		this.barcode = barcode;
 		this.size = size;
 		this.shelfLife = shelfLife;
@@ -299,7 +299,7 @@ public class Product implements Serializable
 	/**
 	 * @return the description
 	 */
-	public String getDescription()
+	public ProductDescription getDescription()
 	{
 		return description;
 	}
@@ -384,7 +384,7 @@ public class Product implements Serializable
 	 * @pre description must be valid
 	 * @param description the description to set
 	 */
-	public void setDescription(String description)
+	public void setDescription(ProductDescription description)
 	{
 		this.description = description;
 	}
