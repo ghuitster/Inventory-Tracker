@@ -136,7 +136,23 @@ public class ProductTest
 	@Test
 	public final void testAbleToSetDescription()
 	{
-		fail("Not yet implemented"); // TODO
+		Date creDate = new Date();
+		String desc = "Test Product No. 1";
+		Barcode bc = new Barcode("400000000001");
+		UnitSize size = new UnitSize(1.0f, UnitType.CHEVROLET);
+		int shelfLife = 5;
+		CountThreeMonthSupply threeMonthSupply = new CountThreeMonthSupply(1);
+		HashSet<ProductContainer> containers = new HashSet<ProductContainer>();
+
+		Product prod1 =
+				new Product(creDate, desc, bc, size, shelfLife,
+						threeMonthSupply, containers);
+
+		String desc2 = "Test Product No. 2";
+
+		assertFalse(desc2.equals(prod1.getDescription().getDescription()));
+		prod1.setDescription(new ProductDescription(desc2));
+		assertTrue(desc2.equals(prod1.getDescription().getDescription()));
 	}
 
 	/**
