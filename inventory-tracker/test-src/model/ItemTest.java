@@ -11,58 +11,32 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
+
 /**
  * @author Michael
  *
  */
 public class ItemTest
 {
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception
-	{}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception
-	{}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@Before
-	public void setUp() throws Exception
-	{}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@After
-	public void tearDown() throws Exception
-	{}
-
-	/**
-	 * Test method for {@link model.Item#hashCode()}.
-	 */
-	@Test
-	public final void testHashCode()
-	{
-		fail("Not yet implemented"); // TODO
-	}
-
 	/**
 	 * Test method for {@link model.Item#Item(model.Product, model.Barcode, java.util.Date, java.util.Date, java.util.Date, model.StorageUnit)}.
 	 */
-	@Test
+	/*@Test
 	public final void testItem()
 	{
-		fail("Not yet implemented"); // TODO
-	}
+		Date creDate = new Date();
+		String desc = "Test Product No. 1";
+		String desc2 = "Test Product No. 2";
+		Barcode bc = new Barcode("400000000001");
+		UnitSize size = new UnitSize(1.0f, UnitType.CHEVROLET);
+		int shelfLife = 5;
+		CountThreeMonthSupply threeMonthSupply = new CountThreeMonthSupply(1);
+		HashSet<ProductContainer> containers = new HashSet<ProductContainer>();
+		Item itm = new Item(new Product(creDate, desc, bc, size, shelfLife, threeMonthSupply, containers), new Barcode("400000000000"), new Date(), new Date(), new Date(), new ProductContainer());
+	}*/
 
 	/**
 	 * Test method for {@link model.Item#ableToSetBarcode(model.Barcode)}.
@@ -213,15 +187,6 @@ public class ItemTest
 	 */
 	@Test
 	public final void testSetProduct()
-	{
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for {@link model.Item#toString()}.
-	 */
-	@Test
-	public final void testToString()
 	{
 		fail("Not yet implemented"); // TODO
 	}
