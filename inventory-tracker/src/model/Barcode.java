@@ -33,8 +33,7 @@ public class Barcode implements Serializable
 
 		if(number != null)
 		{
-			if(Barcode.isValid(number))
-				response = true;
+			response = Barcode.isValid(number);
 		}
 
 		return response;
@@ -91,7 +90,7 @@ public class Barcode implements Serializable
 	{
 		boolean response = false;
 
-		if(!number.matches("4[0-9]{11}"))
+		if(number.matches("4[0-9]{11}"))
 			response = true;
 
 		return response;
