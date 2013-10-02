@@ -23,10 +23,10 @@ public class InventoryTest
 		assertTrue(Inventory.getInstance() != null);
 		assertEquals(Inventory.getInstance().getAllStorageUnits().size(), 0);
 		assertEquals(Inventory.getInstance().getAllProducts().size(), 0);
-		assertEquals(Inventory.getInstance().getItemExpirations(), 0);
-		assertEquals(Inventory.getInstance().getNMonthSupplyGroupMap(), 0);
-		assertEquals(Inventory.getInstance().getNMonthSupplyMap(), 0);
-		assertEquals(Inventory.getInstance().getRemovedItems(), 0);
+		assertEquals(Inventory.getInstance().getItemExpirations().size(), 0);
+		assertEquals(Inventory.getInstance().getNMonthSupplyGroupMap().size(), 0);
+		assertEquals(Inventory.getInstance().getNMonthSupplyMap().size(), 0);
+		assertEquals(Inventory.getInstance().getRemovedItems().size(), 0);
 	}
 	
 	@Test
@@ -51,15 +51,15 @@ public class InventoryTest
 	private void populateInventory() throws InvalidNameException
 	{
 		Inventory.getInstance().removeAllStorageUnits();
-		unit1 = new StorageUnit();
-		ProductGroup pg1 = new ProductGroup(unit1, new ThreeMonthSupply(1.0f, UnitType.CHEVROLET));
+		unit1 = new StorageUnit("unit1");
+		ProductGroup pg1 = new ProductGroup("pg1", unit1, new ThreeMonthSupply(1.0f, UnitType.CHEVROLET));
 		HashSet<ProductContainer> set = new HashSet<ProductContainer>();
 		set.add(pg1);
 		prod = new Product(new Date(), "asdf", new Barcode("1"), new CountUnitSize(1), 1, new CountThreeMonthSupply(1), set);
 		pg1.addProduct(prod);
 		unit1.addProductGroup(pg1);
 		Inventory.getInstance().addStorageUnit(unit1);
-		unit2 = new StorageUnit();
+		unit2 = new StorageUnit("unit2");
 		Inventory.getInstance().addStorageUnit(unit2);
 	}
 	
@@ -87,6 +87,15 @@ public class InventoryTest
 		assertEquals(Inventory.getInstance().getAllStorageUnits().size(), 2);
 		assertEquals(Inventory.getInstance().getAllProducts().size(), 1);
 		assertTrue(Inventory.getInstance().getAllProducts().iterator().next().getDescription().equals("asdf"));
+	}
+	
+	@Test
+	public void reportDeletedItemTest() throws Exception
+	{
+		populateInventory();
+		assertEquals(Inventory.getInstance().getRemovedItems().size(), 0);
+		Inventory.getInstance().reportRemovedItem(new Item(prod, new Barcode("1"), new Date(), new Date(), new Date(), unit1));
+		assertEquals(Inventory.getInstance().getRemovedItems().size(), 1);
 	}
 
 }

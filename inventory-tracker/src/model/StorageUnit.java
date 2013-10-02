@@ -7,6 +7,11 @@ package model;
  */
 public class StorageUnit extends ProductContainer
 {
+	public StorageUnit(String name)
+	{
+		super(name);
+	}
+	
 	/**
 	 * @precondition name must be a valid String and not null
 	 * @postcondition my.name == passed in name

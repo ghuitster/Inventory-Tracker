@@ -17,9 +17,10 @@ public class ProductGroup extends ProductContainer
 	 * @param container
 	 * @param threeMonthSupply
 	 */
-	public ProductGroup(ProductContainer container,
+	public ProductGroup(String name, ProductContainer container,
 			ThreeMonthSupply threeMonthSupply)
 	{
+		super(name);
 		this.container = container;
 		this.threeMonthSupply = threeMonthSupply;
 	}

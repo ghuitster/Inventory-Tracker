@@ -2,6 +2,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -16,6 +17,14 @@ public abstract class ProductContainer implements Serializable
 	protected Set<Item> items;
 	protected Set<ProductGroup> productGroups;
 
+	protected ProductContainer(String name)
+	{
+		this.name = name;
+		products = new HashSet<Product>();
+		items = new HashSet<Item>();
+		productGroups = new HashSet<ProductGroup>();
+	}
+	
 	/**
 	 * @precondition item.barcode != empty
 	 * @precondition item.barcode is a valid UPC barcode
