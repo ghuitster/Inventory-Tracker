@@ -20,21 +20,19 @@ public interface IPersistence
 	/**
 	 * When overridden in a child class, loads all data from specified store to
 	 * the passed Inventory
-	 * @param inventory The Inventory to load the data to
 	 * @pre inventory is not null. storeName refers to a valid data store.
 	 * @post inventory's original contents have been cleared and replaced with
 	 *       the data from the specified data store
 	 * @throws SerializerException
 	 */
-	void loadData(Inventory inventory) throws SerializerException;
+	void loadData() throws SerializerException;
 
 	/**
 	 * When overridden in a child class, saves all data from the Inventory with
 	 * the specified name
-	 * @param inventory The Inventory to save
 	 * @pre storeName is a valid string for the system we are saving to
 	 * @post The passed Inventory has been saved under the passed name
 	 * @throws SerializerException
 	 */
-	void saveData(Inventory inventory) throws SerializerException;
+	void saveData() throws SerializerException;
 }

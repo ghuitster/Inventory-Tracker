@@ -50,6 +50,7 @@ public class InventoryTest
 
 	private void populateInventory() throws InvalidNameException
 	{
+		Inventory.getInstance().removeAllStorageUnits();
 		unit1 = new StorageUnit();
 		ProductGroup pg1 = new ProductGroup(unit1, new CountThreeMonthSupply(1)));
 		TreeSet<ProductContainer> set = new TreeSet<ProductContainer>();
@@ -80,9 +81,9 @@ public class InventoryTest
 	public void persistenceTest() throws Exception
 	{
 		populateInventory();
-		Inventory.getInstance().getPersistence().saveData(Inventory.getInstance());
+		Inventory.getInstance().getPersistence().saveData();
 		Inventory.getInstance().removeAllStorageUnits();
-		Inventory.getInstance().getPersistence().loadData(Inventory.getInstance());
+		Inventory.getInstance().getPersistence().loadData();
 		assertEquals(Inventory.getInstance().getAllStorageUnits().size(), 2);
 		assertEquals(Inventory.getInstance().getAllProducts().size(), 1);
 		assertTrue(Inventory.getInstance().getAllProducts().iterator().next().getDescription().equals("asdf"));

@@ -30,6 +30,11 @@ public class Inventory
 			instance = new Inventory();
 		return instance;
 	}
+	
+	protected static void setInstance(Inventory inventory)
+	{
+		instance = inventory;
+	}
 
 	/**
 	 * A list of all the storage units
@@ -44,12 +49,12 @@ public class Inventory
 	/**
 	 * Mapping of all Item expirations, for easy retrieval
 	 */
-	private SortedMap<Date, List<Item>> itemExpirations;
+	private SortedMap<Date, Set<Item>> itemExpirations;
 
 	/**
 	 * Mapping of all removed Items, for easy retrieval
 	 */
-	private SortedMap<Date, List<Item>> removedItems;
+	private SortedMap<Date, Set<Item>> removedItems;
 	/**
 	 * Mapping for the nMonthSupply report. The Date key represents a month. The
 	 * corresponding products are those which will last up to the key's month
@@ -78,8 +83,8 @@ public class Inventory
 	{
 		this.storageUnits = new HashSet<StorageUnit>();
 		this.persistence = new Serializer("data.inventory");
-		this.itemExpirations = new TreeMap<Date, List<Item>>();
-		this.removedItems = new TreeMap<Date, List<Item>>();
+		this.itemExpirations = new TreeMap<Date, Set<Item>>();
+		this.removedItems = new TreeMap<Date, Set<Item>>();
 		this.nMonthSupplyMap = new TreeMap<Date, Set<Product>>();
 		this.nMonthSupplyGroupMap = new TreeMap<Date, Set<ProductGroup>>();
 	}
@@ -156,9 +161,9 @@ public class Inventory
 	 * @return A copy of the map containing all known expiration dates mapped to
 	 *         which items are expiring
 	 */
-	public SortedMap<Date, List<Item>> getItemExpirations()
+	public SortedMap<Date, Set<Item>> getItemExpirations()
 	{
-		return new TreeMap<Date, List<Item>>(this.itemExpirations);
+		return new TreeMap<Date, Set<Item>>(this.itemExpirations);
 	}
 
 	/**
@@ -197,9 +202,9 @@ public class Inventory
 	 * @return A copy of the map containing all item removal dates mapped to the
 	 *         items removed.
 	 */
-	public SortedMap<Date, List<Item>> getRemovedItems()
+	public SortedMap<Date, Set<Item>> getRemovedItems()
 	{
-		return new TreeMap<Date, List<Item>>(this.removedItems);
+		return new TreeMap<Date, Set<Item>>(this.removedItems);
 	}
 
 	/**

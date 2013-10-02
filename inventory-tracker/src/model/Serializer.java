@@ -41,16 +41,13 @@ public class Serializer implements IPersistence
 
 	/**
 	 * Loads all data from specified store to the passed Inventory
-	 * @param inventory The Inventory to load the data to
-	 * @param storeName The filename of the data store to load data from (based
-	 *            on the current working directory)
 	 * @pre inventory is not null. storeName refers to a valid data store.
 	 * @post inventory's original contents have been cleared and replaced with
 	 *       the data from the specified file
 	 * @throws SerializerException      
 	 */
 	@Override
-	public void loadData(Inventory inventory) throws SerializerException
+	public void loadData() throws SerializerException
 	{
 		FileInputStream stream = null;
 		ObjectInputStream objIn = null;
@@ -58,13 +55,9 @@ public class Serializer implements IPersistence
 		{
 			stream = new FileInputStream(this.filePath);
 			objIn = new ObjectInputStream(stream);
-			Set<StorageUnit> storageUnits = (Set<StorageUnit>)objIn.readObject();
+			Inventory inventory = (Inventory)objIn.readObject();
+			Inventory.setInstance(inventory);
 			
-			inventory.removeAllStorageUnits();
-			for(StorageUnit storageUnit: storageUnits)
-			{
-				inventory.addStorageUnit(storageUnit);
-			}
 		}
 		catch(Exception e)
 		{
@@ -86,14 +79,13 @@ public class Serializer implements IPersistence
 
 	/**
 	 * Saves all data from the Inventory to a file with the specified name
-	 * @param inventory The Inventory to save
 	 * @param storeName The filename of the store (based on the current working
 	 *            directory)
 	 * @pre storeName is a valid string for the system we are saving to
 	 * @post The passed Inventory has been saved under the passed name
 	 */
 	@Override
-	public void saveData(Inventory inventory) throws SerializerException
+	public void saveData() throws SerializerException
 	{
 		FileOutputStream stream = null;
 		ObjectOutputStream objOut = null;
@@ -101,7 +93,7 @@ public class Serializer implements IPersistence
 		{
 			stream = new FileOutputStream(this.filePath);
 			objOut = new ObjectOutputStream(stream);
-			objOut.writeObject(inventory.getAllStorageUnits());
+			objOut.writeObject(Inventory.getInstance());
 		}
 		catch(IOException e)
 		{

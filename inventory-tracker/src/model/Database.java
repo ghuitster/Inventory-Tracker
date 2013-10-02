@@ -26,27 +26,25 @@ public class Database implements IPersistence
 
 	/**
 	 * Loads all data from specified store to the passed Inventory
-	 * @param inventory The Inventory to load the data to
 	 * @pre inventory is not null. storeName refers to a valid database
 	 * @post inventory's original contents have been cleared and replaced with
 	 *       the data from the specified database
 	 * @throws SerializerException
 	 */
 	@Override
-	public void loadData(Inventory inventory) throws SerializerException
+	public void loadData() throws SerializerException
 	{
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
 	/**
 	 * Saves all data from the Inventory with the specified name to a database
-	 * @param inventory The Inventory to save
 	 * @pre storeName is a valid string for a database name
 	 * @post The passed Inventory has been saved under the passed name
 	 * @throws SerializerException
 	 */
 	@Override
-	public void saveData(Inventory inventory) throws SerializerException
+	public void saveData() throws SerializerException
 	{
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
