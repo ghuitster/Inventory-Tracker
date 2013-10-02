@@ -24,7 +24,7 @@ public abstract class ProductContainer implements Serializable
 		items = new HashSet<Item>();
 		productGroups = new HashSet<ProductGroup>();
 	}
-	
+
 	/**
 	 * @precondition item.barcode != empty
 	 * @precondition item.barcode is a valid UPC barcode
@@ -38,6 +38,24 @@ public abstract class ProductContainer implements Serializable
 	public boolean ableToAddItem(Item item)
 	{
 		return true;
+	}
+
+	/**
+	 * @precondition this.products != null
+	 * @return the Set<Product> of all products
+	 */
+	public Set<Product> getAllProducts()
+	{
+		return new HashSet<Product>(this.products);
+	}
+
+	/**
+	 * @precondition this.items != null
+	 * @return the Set<Product> of all products
+	 */
+	public Set<Item> getAllItems()
+	{
+		return new HashSet<Item>(this.items);
 	}
 
 	/**
