@@ -134,23 +134,17 @@ public class Product implements Serializable
 			if(size instanceof UnitSize)
 			{
 				UnitSize temp = (UnitSize) size;
-				if(temp.getSize() > 0.0)
+				if(temp.getSize() > 0.0 && temp.getUnitType() != UnitType.COUNT)
 				{
-					if(temp.getUnitType() != UnitType.COUNT)
-					{
-						response = true;
-					}
+					response = true;
 				}
 			}
 			else if(size instanceof CountUnitSize)
 			{
 				CountUnitSize temp = (CountUnitSize) size;
-				if(temp.getSize() > 0)
+				if(temp.getSize() > 0 && temp.getUnitType() == UnitType.COUNT)
 				{
-					if(temp.getUnitType() == UnitType.COUNT)
-					{
-						response = true;
-					}
+					response = true;
 				}
 			}
 		}
