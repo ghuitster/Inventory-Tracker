@@ -1,26 +1,25 @@
 
 package model;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.io.Serializable;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * A class to represent a product container
  * @author David
  */
-public abstract class ProductContainer
+public abstract class ProductContainer implements Serializable
 {
+	private static final long serialVersionUID = 9015876223451150036L;
 	protected String name;
 	protected Set<Product> products;
-	protected List<Item> items;
+	protected Set<Item> items;
 	protected Set<ProductGroup> productGroups;
 
 	/**
 	 * @precondition item.barcode != empty
 	 * @precondition item.barcode is a valid UPC barcode
+	 * @precondition item.barcode is unique among all items
 	 * @precondition item.date != empty
 	 * @precondition item.date is not in the future
 	 * @precondition item.date is not before 1/1/2000
@@ -29,11 +28,6 @@ public abstract class ProductContainer
 	 */
 	public boolean ableToAddItem(Item item)
 	{
-		for(StorageUnit unit: Inventory.getInstance().getAllStorageUnits())
-			for(Item ite: unit.items)
-				if(ite.getBarcode().equals(item.getBarcode()))
-					return false;
-
 		return true;
 	}
 
@@ -48,12 +42,11 @@ public abstract class ProductContainer
 	 */
 	public boolean ableToAddProduct(Product product)
 	{
-		for(ProductContainer container: this.productGroups)
-			if(container.products.contains(product))
-				return false;
-
 		if(this.products.contains(product))
 			return false;
+
+		for(ProductContainer container: this.productGroups)
+			return (container.ableToAddProduct(product));
 
 		return true;
 	}
@@ -118,18 +111,31 @@ public abstract class ProductContainer
 	{
 		Product product = item.getProduct();
 
-		this.products.add(product);
+		ProductContainer container = this.findContainer(product);
 
-		for(ProductGroup group: this.productGroups)
-			if(group.products.contains(product))
-			{
-				product.addContainer(group);
-				group.products.add(product);
-			}
+		if(container == null)
+		{
+			product.addContainer(this);
+			this.products.add(product);
+			this.items.add(item);
+		}
+		else
+		{
+			product.addContainer(container);
+			container.products.add(product);
+			container.items.add(item);
+		}
+	}
 
-		product.addContainer(this);
+	private ProductContainer findContainer(Product product)
+	{
+		for(ProductContainer con: this.productGroups)
+			return con.findContainer(product);
 
-		this.items.add(item);
+		if(this.products.contains(product))
+			return this;
+		else
+			return null;
 	}
 
 	/**
@@ -139,30 +145,31 @@ public abstract class ProductContainer
 	 */
 	public void addProduct(Product product)
 	{
-		boolean found = false;
-		ProductGroup existingGroup = null;
+		ProductContainer container = this.findContainer(product);
 
-		for(ProductGroup group: this.productGroups)
-			if(group.products.contains(product))
-			{
-				found = true;
-				existingGroup = group;
-			}
-
-		if(found)
+		if(container == null)
 		{
-			for(Item item: existingGroup.items)
-				if(item.getProduct().equals(product))
-					existingGroup.items.remove(item);
-
-			existingGroup.products.remove(product);
+			this.products.add(product);
+			product.addContainer(this);
 		}
 		else
+		{
 			this.products.add(product);
+			product.addContainer(this);
+			product.removeContainer(container);
+
+			for(Item item: container.items)
+				if(item.getProduct().equals(product))
+				{
+					this.items.add(item);
+					container.items.remove(item);
+				}
+		}
 	}
 
 	/**
 	 * @precondition productGroup must be a valid ProductGroup and not null
+	 * @precondition productGroup.name is unique in this ProductContainer
 	 * @postcondition my.productGroups.contains(productGroup)
 	 * @param productGroup the ProductGroup to add
 	 */
@@ -187,23 +194,12 @@ public abstract class ProductContainer
 	public void removeItem(Item item)
 	{
 		this.items.remove(item);
-		item.setExitTime(new Date(System.currentTimeMillis()));
-		item.setContainer(null);
-		Map<Date, Set<Item>> removedItems =
-				Inventory.getInstance().getRemovedItems();
-
-		if(removedItems.get(item.getExitTime()) == null)
-		{
-			Set<Item> items = new TreeSet<Item>();
-			items.add(item);
-			removedItems.put(item.getExitTime(), items);
-		}
-		else
-			removedItems.get(item.getExitTime()).add(item);
+		Inventory.getInstance().reportRemovedItem(item);
 	}
 
 	/**
 	 * @precondition product must be a valid Product and not null
+	 * @precondition my.items.doesNotContain(Items of this Product type)
 	 * @postcondition my.products.doesNotContain(product)
 	 * @param product the Product to remove
 	 */
@@ -239,24 +235,35 @@ public abstract class ProductContainer
 	 * @postcondition my.items.doesNotContain(item)
 	 * @postcondition otherProductContainer.items.contains(item)
 	 * @param item the Item to transfer
-	 * @param otherProductContainer the target ProductContainer
+	 * @param targetProductContainer the target ProductContainer
 	 */
-	public void transferItem(Item item, ProductContainer otherProductContainer)
+	public void transferItem(Item item, ProductContainer targetContainer)
 	{
-		for(ProductGroup productGroup: this.productGroups)
-			productGroup.products.remove(item.getProduct());
+		ProductContainer container = this.findContainer(item.getProduct());
 
-		this.products.remove(item.getProduct());
-		item.getProduct().addContainer(otherProductContainer);
+		if(container == null)
+		{
+			targetContainer.products.add(item.getProduct());
+			item.getProduct().addContainer(targetContainer);
+		}
+		else
+		{
+			for(Item it: this.items)
+				if(it.getProduct().equals(item.getProduct()))
+				{
+					this.items.remove(it);
+					targetContainer.items.add(it);
+					it.setContainer(targetContainer);
+				}
 
-		ProductGroup targetGroup = (ProductGroup) otherProductContainer;
-		for(ProductGroup productGroup: otherProductContainer.productGroups)
-			if(productGroup.products.contains(item.getProduct()))
-				targetGroup = productGroup;
+			this.products.remove(item.getProduct());
+			item.getProduct().removeContainer(this);
+			targetContainer.products.add(item.getProduct());
+			item.getProduct().addContainer(targetContainer);
+		}
 
-		// need to be able to remove myself from the product's set of containers
-
-		item.setContainer(targetGroup);
+		targetContainer.items.add(item);
+		item.setContainer(targetContainer);
 		this.items.remove(item);
 	}
 }
