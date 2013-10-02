@@ -73,7 +73,8 @@ public class ProductTest
 		assertTrue(bc.equals(prod1.getBarcode()));
 		assertTrue(size.equals(prod1.getSize()));
 		assertTrue(shelfLife == prod1.getShelfLife());
-		assertTrue(threeMonthSupply.equals(prod1.getThreeMonthSupply())):
+		assertTrue(threeMonthSupply.equals(prod1.getThreeMonthSupply()));
+		assertTrue(containers.equals(prod1.getContainers()));
 
 	}
 
@@ -84,7 +85,23 @@ public class ProductTest
 	@Test
 	public final void testAbleToAddContainer()
 	{
-		fail("Not yet implemented"); // TODO
+		Date creDate = new Date();
+		String desc = "Test Product No. 1";
+		Barcode bc = new Barcode("400000000001");
+		UnitSize size = new UnitSize(1.0f, UnitType.CHEVROLET);
+		int shelfLife = 5;
+		CountThreeMonthSupply threeMonthSupply = new CountThreeMonthSupply(1);
+		HashSet<ProductContainer> containers = new HashSet<ProductContainer>();
+
+		Product prod1 =
+				new Product(creDate, desc, bc, size, shelfLife,
+						threeMonthSupply, containers);
+		ProductContainer test = new StorageUnit("Storage Unit 1");
+
+		prod1.addContainer(test);
+
+		assertTrue(prod1.getContainers().contains(test));
+
 	}
 
 	/**
@@ -93,7 +110,23 @@ public class ProductTest
 	@Test
 	public final void testAbleToSetBarcode()
 	{
-		fail("Not yet implemented"); // TODO
+		Date creDate = new Date();
+		String desc = "Test Product No. 1";
+		Barcode bc = new Barcode("400000000001");
+		UnitSize size = new UnitSize(1.0f, UnitType.CHEVROLET);
+		int shelfLife = 5;
+		CountThreeMonthSupply threeMonthSupply = new CountThreeMonthSupply(1);
+		HashSet<ProductContainer> containers = new HashSet<ProductContainer>();
+
+		Product prod1 =
+				new Product(creDate, desc, bc, size, shelfLife,
+						threeMonthSupply, containers);
+
+		Barcode bc2 = new Barcode("400000000002");
+
+		assertFalse(prod1.getBarcode().equals(bc2));
+		prod1.setBarcode(bc2);
+		assertTrue(prod1.getBarcode().equals(bc2));
 	}
 
 	/**

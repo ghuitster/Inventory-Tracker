@@ -281,6 +281,14 @@ public class Product implements Serializable
 	}
 
 	/**
+	 * @return the containers set
+	 */
+	public Set<ProductContainer> getContainers()
+	{
+		return this.containers;
+	}
+
+	/**
 	 * @return the barcode
 	 */
 	public Barcode getBarcode()

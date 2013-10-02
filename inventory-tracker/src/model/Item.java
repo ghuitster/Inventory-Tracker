@@ -39,7 +39,7 @@ public class Item implements Serializable
 	 * @param container
 	 */
 	public Item(Product product, Barcode barcode, Date entryDate,
-			Date expirationDate, Date exitTime, StorageUnit container)
+			Date expirationDate, Date exitTime, ProductContainer container)
 	{
 		this.product = product;
 		this.barcode = barcode;
