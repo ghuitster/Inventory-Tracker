@@ -91,7 +91,7 @@ public class Barcode implements Serializable
 	{
 		boolean response = false;
 
-		if(!number.matches("[0-9]+") && number.length() == 12)
+		if(!number.matches("4[0-9]{11}"))
 			response = true;
 
 		return response;

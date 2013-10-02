@@ -16,7 +16,7 @@ public class Product implements Serializable
 	private Date creationDate;
 	private String description;
 	private Barcode barcode;
-	private UnitSize size;
+	private Amount size;
 	private int shelfLife;
 	private Amount threeMonthSupply;
 	private final Set<ProductContainer> containers;
@@ -48,7 +48,7 @@ public class Product implements Serializable
 	 * @param containers
 	 */
 	public Product(Date creationDate, String description, Barcode barcode,
-			UnitSize size, int shelfLife, Amount threeMonthSupply,
+			Amount size, int shelfLife, Amount threeMonthSupply,
 			Set<ProductContainer> containers)
 	{
 		super();
@@ -338,9 +338,9 @@ public class Product implements Serializable
 	/**
 	 * @return the size
 	 */
-	public UnitSize getSize()
+	public Amount getSize()
 	{
-		return size;
+		return this.size;
 	}
 
 	/**
