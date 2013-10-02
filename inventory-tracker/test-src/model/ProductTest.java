@@ -72,6 +72,8 @@ public class ProductTest
 		assertTrue(desc.equals(prod1.getDescription()));
 		assertTrue(bc.equals(prod1.getBarcode()));
 		assertTrue(size.equals(prod1.getSize()));
+		assertTrue(shelfLife == prod1.getShelfLife());
+		assertTrue(threeMonthSupply.equals(prod1.getThreeMonthSupply())):
 
 	}
 
