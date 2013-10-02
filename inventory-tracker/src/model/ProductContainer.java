@@ -42,7 +42,7 @@ public abstract class ProductContainer implements Serializable
 
 	/**
 	 * @precondition this.products != null
-	 * @return the Set<Product> of all products
+	 * @return the Set<Product> of all Products
 	 */
 	public Set<Product> getAllProducts()
 	{
@@ -50,8 +50,17 @@ public abstract class ProductContainer implements Serializable
 	}
 
 	/**
+	 * @precondition this.productGroups != null
+	 * @return the Set<ProductGroup> of all ProductGroups
+	 */
+	public Set<ProductGroup> getAllProductGroups()
+	{
+		return new HashSet<ProductGroup>(this.productGroups);
+	}
+
+	/**
 	 * @precondition this.items != null
-	 * @return the Set<Product> of all products
+	 * @return the Set<Item> of all Items
 	 */
 	public Set<Item> getAllItems()
 	{

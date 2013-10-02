@@ -11,15 +11,14 @@ public class StorageUnit extends ProductContainer
 	{
 		super(name);
 	}
-	
+
 	/**
-	 * @precondition name must be a valid String and not null
-	 * @postcondition my.name == passed in name
-	 * @param name the name to attempt to set
-	 * @return whether the name can be set or not
+	 * @see java.lang.Object#toString()
 	 */
-	public boolean ableToSetName(String name)
+	@Override
+	public String toString()
 	{
-		return true;
+		return "StorageUnit [name=" + name + ", products=" + products
+				+ ", items=" + items + ", productGroups=" + productGroups + "]";
 	}
 }
