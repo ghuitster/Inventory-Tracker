@@ -18,7 +18,7 @@ public class Product implements Serializable
 	private Barcode barcode;
 	private Amount size;
 	private int shelfLife;
-	private Amount threeMonthSupply;
+	private CountThreeMonthSupply threeMonthSupply;
 	private final Set<ProductContainer> containers;
 
 	/**
@@ -48,7 +48,7 @@ public class Product implements Serializable
 	 * @param containers
 	 */
 	public Product(Date creationDate, String description, Barcode barcode,
-			Amount size, int shelfLife, Amount threeMonthSupply,
+			Amount size, int shelfLife, CountThreeMonthSupply threeMonthSupply,
 			Set<ProductContainer> containers)
 	{
 		super();
@@ -163,35 +163,18 @@ public class Product implements Serializable
 	 * @param threeMonthSupply the threeMonthSupply to attempt to set
 	 * @return whether the threeMonthSupply could be set or not
 	 */
-	public boolean ableToSetThreeMonthSupply(Amount threeMonthSupply)
+	public boolean ableToSetThreeMonthSupply(
+			CountThreeMonthSupply threeMonthSupply)
 	{
 		boolean response = false;
 
 		if(threeMonthSupply != null)
 		{
-			if(threeMonthSupply instanceof ThreeMonthSupply)
+			if(threeMonthSupply.getAmount() > 0)
 			{
-				ThreeMonthSupply temp = (ThreeMonthSupply) threeMonthSupply;
-
-				if(temp.getAmount() > 0.0)
+				if(threeMonthSupply.getUnitType() == UnitType.COUNT)
 				{
-					if(temp.getUnitType() != UnitType.COUNT)
-					{
-						response = true;
-					}
-				}
-			}
-			else if(threeMonthSupply instanceof CountThreeMonthSupply)
-			{
-				CountThreeMonthSupply temp =
-						(CountThreeMonthSupply) threeMonthSupply;
-
-				if(temp.getAmount() > 0)
-				{
-					if(temp.getUnitType() == UnitType.COUNT)
-					{
-						response = true;
-					}
+					response = true;
 				}
 			}
 		}
@@ -440,7 +423,7 @@ public class Product implements Serializable
 	 * @post threeMonthSupply == passed in threeMonthSupply
 	 * @param threeMonthSupply the threeMonthSupply to set
 	 */
-	public void setThreeMonthSupply(Amount threeMonthSupply)
+	public void setThreeMonthSupply(CountThreeMonthSupply threeMonthSupply)
 	{
 		this.threeMonthSupply = threeMonthSupply;
 	}
