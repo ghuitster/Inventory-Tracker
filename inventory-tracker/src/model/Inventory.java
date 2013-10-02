@@ -208,9 +208,20 @@ public class Inventory
 		return new TreeMap<Date, Set<Item>>(this.removedItems);
 	}
 	
+	/**
+	 * Reports that an item has been removed from the system
+	 * @pre Item is not null
+	 * @post Item's exit time has been set to the current time, 
+	 * its container is null, and it has been added to the map
+	 * of removed items
+	 * @param item The item that has been removed
+	 */
 	protected void reportRemovedItem(Item item)
 	{
 		Date current = new Date();
+		item.setExitTime(current);
+		item.setContainer(null);
+		
 		Date month = new Date(current.getYear(), current.getMonth(), current.getDate());
 		
 		Set<Item> itemsForMonth;
