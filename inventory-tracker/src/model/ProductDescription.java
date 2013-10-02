@@ -28,9 +28,7 @@ public class ProductDescription implements Serializable
 	{
 		boolean response = false;
 
-		if(!description.isEmpty())
-			response = true;
-		else if(description.matches("\\S"))
+		if(!description.isEmpty() && description.matches("\\S"))
 			response = true;
 
 		return response;

@@ -1,51 +1,19 @@
 /**
  * 
  */
+
 package model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  * @author Michael
- *
+ * 
  */
 public class ProductTest
 {
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception
-	{}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception
-	{}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@Before
-	public void setUp() throws Exception
-	{}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@After
-	public void tearDown() throws Exception
-	{}
-
 	/**
 	 * Test method for {@link model.Product#hashCode()}.
 	 */
@@ -56,7 +24,9 @@ public class ProductTest
 	}
 
 	/**
-	 * Test method for {@link model.Product#Product(java.util.Date, java.lang.String, model.Barcode, model.UnitSize, int, model.Amount, java.util.Set)}.
+	 * Test method for
+	 * {@link model.Product#Product(java.util.Date, java.lang.String, model.Barcode, model.UnitSize, int, model.Amount, java.util.Set)}
+	 * .
 	 */
 	@Test
 	public final void testProduct()
@@ -65,7 +35,8 @@ public class ProductTest
 	}
 
 	/**
-	 * Test method for {@link model.Product#ableToAddContainer(model.StorageUnit)}.
+	 * Test method for
+	 * {@link model.Product#ableToAddContainer(model.StorageUnit)}.
 	 */
 	@Test
 	public final void testAbleToAddContainer()
@@ -83,7 +54,8 @@ public class ProductTest
 	}
 
 	/**
-	 * Test method for {@link model.Product#ableToSetDescription(java.lang.String)}.
+	 * Test method for
+	 * {@link model.Product#ableToSetDescription(java.lang.String)}.
 	 */
 	@Test
 	public final void testAbleToSetDescription()
@@ -110,7 +82,8 @@ public class ProductTest
 	}
 
 	/**
-	 * Test method for {@link model.Product#ableToSetThreeMonthSupply(model.Amount)}.
+	 * Test method for
+	 * {@link model.Product#ableToSetThreeMonthSupply(model.Amount)}.
 	 */
 	@Test
 	public final void testAbleToSetThreeMonthSupply()
@@ -119,7 +92,8 @@ public class ProductTest
 	}
 
 	/**
-	 * Test method for {@link model.Product#addContainer(model.ProductContainer)}.
+	 * Test method for
+	 * {@link model.Product#addContainer(model.ProductContainer)}.
 	 */
 	@Test
 	public final void testAddContainer()
@@ -128,7 +102,8 @@ public class ProductTest
 	}
 
 	/**
-	 * Test method for {@link model.Product#ableToRemoveContainer(model.ProductContainer)}.
+	 * Test method for
+	 * {@link model.Product#ableToRemoveContainer(model.ProductContainer)}.
 	 */
 	@Test
 	public final void testAbleToRemoveContainer()
@@ -137,7 +112,8 @@ public class ProductTest
 	}
 
 	/**
-	 * Test method for {@link model.Product#removeContainer(model.ProductContainer)}.
+	 * Test method for
+	 * {@link model.Product#removeContainer(model.ProductContainer)}.
 	 */
 	@Test
 	public final void testRemoveContainer()
