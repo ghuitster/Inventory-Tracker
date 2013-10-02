@@ -4,7 +4,6 @@ package model;
 import java.security.InvalidParameterException;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -97,7 +96,8 @@ public class Inventory
 	 * @param storageUnit The new storage unit
 	 * @throws InvalidNameException, NullPointerException 
 	 */
-	public void addStorageUnit(StorageUnit storageUnit) throws InvalidNameException, NullPointerException
+	public void addStorageUnit(StorageUnit storageUnit) 
+			throws InvalidNameException, NullPointerException
 	{
 		if(storageUnit == null)
 			throw new NullPointerException();
@@ -206,6 +206,20 @@ public class Inventory
 	public SortedMap<Date, Set<Item>> getRemovedItems()
 	{
 		return new TreeMap<Date, Set<Item>>(this.removedItems);
+	}
+	
+	protected void reportRemovedItem(Item item)
+	{
+		Date current = new Date();
+		Date month = new Date(current.getYear(), current.getMonth(), current.getDate());
+		
+		Set<Item> itemsForMonth;
+		if(removedItems.containsKey(month))
+			itemsForMonth = removedItems.get(month);
+		else itemsForMonth = new HashSet<Item>();
+		itemsForMonth.add(item);
+		
+		this.removedItems.put(month, itemsForMonth);
 	}
 
 	/**

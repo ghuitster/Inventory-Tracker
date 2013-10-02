@@ -1,0 +1,123 @@
+Testsuite: model.ItemTest
+Tests run: 20, Failures: 20, Errors: 0, Time elapsed: 0.078 sec
+
+Testcase: testAbleToSetExpirationDate took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ItemTest.testAbleToSetExpirationDate(ItemTest.java:100)
+
+Testcase: testHashCode took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ItemTest.testHashCode(ItemTest.java:55)
+
+Testcase: testItem took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ItemTest.testItem(ItemTest.java:64)
+
+Testcase: testToString took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ItemTest.testToString(ItemTest.java:226)
+
+Testcase: testAbleToSetContainer took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ItemTest.testAbleToSetContainer(ItemTest.java:82)
+
+Testcase: testAbleToSetBarcode took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ItemTest.testAbleToSetBarcode(ItemTest.java:73)
+
+Testcase: testAbleToSetExitTime took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ItemTest.testAbleToSetExitTime(ItemTest.java:91)
+
+Testcase: testSetExitTime took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ItemTest.testSetExitTime(ItemTest.java:199)
+
+Testcase: testGetProduct took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ItemTest.testGetProduct(ItemTest.java:172)
+
+Testcase: testSetContainer took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ItemTest.testSetContainer(ItemTest.java:190)
+
+Testcase: testSetExpirationDate took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ItemTest.testSetExpirationDate(ItemTest.java:208)
+
+Testcase: testSetProduct took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ItemTest.testSetProduct(ItemTest.java:217)
+
+Testcase: testAbleToSetProduct took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ItemTest.testAbleToSetProduct(ItemTest.java:109)
+
+Testcase: testGetExpirationDate took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ItemTest.testGetExpirationDate(ItemTest.java:163)
+
+Testcase: testSetBarcode took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ItemTest.testSetBarcode(ItemTest.java:181)
+
+Testcase: testGetExitTime took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ItemTest.testGetExitTime(ItemTest.java:154)
+
+Testcase: testGetBarcode took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ItemTest.testGetBarcode(ItemTest.java:127)
+
+Testcase: testEqualsObject took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ItemTest.testEqualsObject(ItemTest.java:118)
+
+Testcase: testGetContainer took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ItemTest.testGetContainer(ItemTest.java:136)
+
+Testcase: testGetEntryDate took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ItemTest.testGetEntryDate(ItemTest.java:145)
+

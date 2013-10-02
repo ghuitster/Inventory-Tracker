@@ -1,0 +1,51 @@
+Testsuite: model.BarcodeTest
+Tests run: 8, Failures: 8, Errors: 0, Time elapsed: 0.047 sec
+
+Testcase: testHashCode took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.BarcodeTest.testHashCode(BarcodeTest.java:24)
+
+Testcase: testGetNumber took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.BarcodeTest.testGetNumber(BarcodeTest.java:60)
+
+Testcase: testBarcode took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.BarcodeTest.testBarcode(BarcodeTest.java:33)
+
+Testcase: testToString took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.BarcodeTest.testToString(BarcodeTest.java:87)
+
+Testcase: testIsValid took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.BarcodeTest.testIsValid(BarcodeTest.java:69)
+
+Testcase: testSetNumber took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.BarcodeTest.testSetNumber(BarcodeTest.java:78)
+
+Testcase: testEqualsObject took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.BarcodeTest.testEqualsObject(BarcodeTest.java:51)
+
+Testcase: testAbleToSetNumber took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.BarcodeTest.testAbleToSetNumber(BarcodeTest.java:42)
+

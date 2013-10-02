@@ -3,8 +3,8 @@ package model;
 import static org.junit.Assert.*;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 import model.exception.InvalidNameException;
 
@@ -53,7 +53,7 @@ public class InventoryTest
 		Inventory.getInstance().removeAllStorageUnits();
 		unit1 = new StorageUnit();
 		ProductGroup pg1 = new ProductGroup(unit1, new ThreeMonthSupply(1.0f, UnitType.CHEVROLET));
-		TreeSet<ProductContainer> set = new TreeSet<ProductContainer>();
+		HashSet<ProductContainer> set = new HashSet<ProductContainer>();
 		set.add(pg1);
 		prod = new Product(new Date(), "asdf", new Barcode("1"), new CountUnitSize(1), 1, new CountThreeMonthSupply(1), set);
 		pg1.addProduct(prod);

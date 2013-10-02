@@ -1,0 +1,51 @@
+Testsuite: model.ProductDescriptionTest
+Tests run: 8, Failures: 8, Errors: 0, Time elapsed: 0.031 sec
+
+Testcase: testSetDescription took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ProductDescriptionTest.testSetDescription(ProductDescriptionTest.java:69)
+
+Testcase: testIsValid took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ProductDescriptionTest.testIsValid(ProductDescriptionTest.java:39)
+
+Testcase: testToString took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ProductDescriptionTest.testToString(ProductDescriptionTest.java:75)
+
+Testcase: testHashCode took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ProductDescriptionTest.testHashCode(ProductDescriptionTest.java:33)
+
+Testcase: testGetDescription took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ProductDescriptionTest.testGetDescription(ProductDescriptionTest.java:63)
+
+Testcase: testEqualsObject took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ProductDescriptionTest.testEqualsObject(ProductDescriptionTest.java:57)
+
+Testcase: testAbleToSetDescription took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ProductDescriptionTest.testAbleToSetDescription(ProductDescriptionTest.java:51)
+
+Testcase: testProductDescription took 0 sec
+	FAILED
+Not yet implemented
+junit.framework.AssertionFailedError: Not yet implemented
+	at model.ProductDescriptionTest.testProductDescription(ProductDescriptionTest.java:45)
+
