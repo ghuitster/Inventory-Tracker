@@ -87,6 +87,7 @@ public class Inventory
 		this.removedItems = new TreeMap<Date, Set<Item>>();
 		this.nMonthSupplyMap = new TreeMap<Date, Set<Product>>();
 		this.nMonthSupplyGroupMap = new TreeMap<Date, Set<ProductGroup>>();
+		this.lastGeneratedBarCode = 400000000000l;
 	}
 
 	/**
@@ -269,6 +270,17 @@ public class Inventory
 		return false;
 	}
 	
+	private long lastGeneratedBarCode;
+	
+	/**
+	 * Returns a unique bar code
+	 * @return A bar code which is unique
+	 */
+	protected long getUniqueBarCode()
+	{
+		return lastGeneratedBarCode++;
+	}
+
 	/**
 	 * Gets the persistence object for saving and loading data to this object
 	 * @return An object capable of saving and loading this object's state
