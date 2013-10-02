@@ -20,8 +20,8 @@ public class InventoryTest
 	@Test
 	public void constructorTest()
 	{
+		Inventory.setInstance(null);
 		assertTrue(Inventory.getInstance() != null);
-		Inventory.getInstance().removeAllStorageUnits();
 		assertEquals(0, Inventory.getInstance().getAllStorageUnits().size());
 		assertEquals(0, Inventory.getInstance().getAllProducts().size());
 		assertEquals(0, Inventory.getInstance().getItemExpirations().size());
@@ -89,7 +89,7 @@ public class InventoryTest
 		Inventory.getInstance().getPersistence().loadData();
 		assertEquals(2, Inventory.getInstance().getAllStorageUnits().size());
 		assertEquals(1, Inventory.getInstance().getAllProducts().size());
-		assertTrue(Inventory.getInstance().getAllProducts().iterator().next().getDescription().equals("asdf"));
+		assertTrue(Inventory.getInstance().getAllProducts().iterator().next().getDescription().equals(new ProductDescription("asdf")));
 	}
 	
 	@Test
