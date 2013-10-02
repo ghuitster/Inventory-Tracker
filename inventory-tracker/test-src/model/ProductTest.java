@@ -11,6 +11,8 @@ import static org.junit.Assert.fail;
 import java.util.Date;
 import java.util.HashSet;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -19,33 +21,52 @@ import org.junit.Test;
  */
 public class ProductTest
 {
+
+	// Global Variables
+	Date creDate = new Date();
+	String desc = "Test Product No. 1";
+	String desc2 = "Test Product No. 2";
+	Barcode bc = new Barcode("400000000001");
+	UnitSize size = new UnitSize(1.0f, UnitType.CHEVROLET);
+	int shelfLife = 5;
+	CountThreeMonthSupply threeMonthSupply = new CountThreeMonthSupply(1);
+	HashSet<ProductContainer> containers = new HashSet<ProductContainer>();
+
+	Product prod1;
+	Product prod2;
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@Before
+	public void setUp() throws Exception
+	{
+		prod1 =
+				new Product(creDate, desc, bc, size, shelfLife,
+						threeMonthSupply, containers);
+		prod2 =
+				new Product(creDate, desc2, bc, size, shelfLife,
+						threeMonthSupply, containers);
+	}
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@After
+	public void tearDown() throws Exception
+	{
+		prod1 = null;
+		prod2 = null;
+	}
+
 	/**
 	 * Test method for {@link model.Product#hashCode()}.
 	 */
 	@Test
 	public final void testHashCode()
 	{
-		Date creDate = new Date();
-		String desc = "Test Product No. 1";
-		String desc2 = "Test Product No. 2";
-		Barcode bc = new Barcode("400000000001");
-		UnitSize size = new UnitSize(1.0f, UnitType.CHEVROLET);
-		int shelfLife = 5;
-		CountThreeMonthSupply threeMonthSupply = new CountThreeMonthSupply(1);
-		HashSet<ProductContainer> containers = new HashSet<ProductContainer>();
-
-		Product prod1 =
-				new Product(creDate, desc, bc, size, shelfLife,
-						threeMonthSupply, containers);
-		Product prod2 =
-				new Product(creDate, desc2, bc, size, shelfLife,
-						threeMonthSupply, containers);
-
 		assertFalse(prod1.hashCode() == prod2.hashCode());
-		prod2 =
-				new Product(creDate, desc, bc, size, shelfLife,
-						threeMonthSupply, containers);
-
+		prod2.setDescription(new ProductDescription(desc2));
 		assertTrue(prod1.hashCode() == prod2.hashCode());
 	}
 
@@ -57,17 +78,6 @@ public class ProductTest
 	@Test
 	public final void testProduct()
 	{
-		Date creDate = new Date();
-		String desc = "Test Product No. 1";
-		Barcode bc = new Barcode("400000000001");
-		UnitSize size = new UnitSize(1.0f, UnitType.CHEVROLET);
-		int shelfLife = 5;
-		CountThreeMonthSupply threeMonthSupply = new CountThreeMonthSupply(1);
-		HashSet<ProductContainer> containers = new HashSet<ProductContainer>();
-
-		Product prod1 =
-				new Product(creDate, desc, bc, size, shelfLife,
-						threeMonthSupply, containers);
 		assertTrue(creDate.equals(prod1.getCreationDate()));
 		assertTrue(desc.equals(prod1.getDescription()));
 		assertTrue(bc.equals(prod1.getBarcode()));
@@ -75,7 +85,6 @@ public class ProductTest
 		assertTrue(shelfLife == prod1.getShelfLife());
 		assertTrue(threeMonthSupply.equals(prod1.getThreeMonthSupply()));
 		assertTrue(containers.equals(prod1.getContainers()));
-
 	}
 
 	/**
@@ -85,23 +94,9 @@ public class ProductTest
 	@Test
 	public final void testAbleToAddContainer()
 	{
-		Date creDate = new Date();
-		String desc = "Test Product No. 1";
-		Barcode bc = new Barcode("400000000001");
-		UnitSize size = new UnitSize(1.0f, UnitType.CHEVROLET);
-		int shelfLife = 5;
-		CountThreeMonthSupply threeMonthSupply = new CountThreeMonthSupply(1);
-		HashSet<ProductContainer> containers = new HashSet<ProductContainer>();
-
-		Product prod1 =
-				new Product(creDate, desc, bc, size, shelfLife,
-						threeMonthSupply, containers);
 		ProductContainer test = new StorageUnit("Storage Unit 1");
-
 		prod1.addContainer(test);
-
 		assertTrue(prod1.getContainers().contains(test));
-
 	}
 
 	/**
@@ -110,20 +105,7 @@ public class ProductTest
 	@Test
 	public final void testAbleToSetBarcode()
 	{
-		Date creDate = new Date();
-		String desc = "Test Product No. 1";
-		Barcode bc = new Barcode("400000000001");
-		UnitSize size = new UnitSize(1.0f, UnitType.CHEVROLET);
-		int shelfLife = 5;
-		CountThreeMonthSupply threeMonthSupply = new CountThreeMonthSupply(1);
-		HashSet<ProductContainer> containers = new HashSet<ProductContainer>();
-
-		Product prod1 =
-				new Product(creDate, desc, bc, size, shelfLife,
-						threeMonthSupply, containers);
-
 		Barcode bc2 = new Barcode("400000000002");
-
 		assertFalse(prod1.getBarcode().equals(bc2));
 		prod1.setBarcode(bc2);
 		assertTrue(prod1.getBarcode().equals(bc2));
@@ -136,20 +118,6 @@ public class ProductTest
 	@Test
 	public final void testAbleToSetDescription()
 	{
-		Date creDate = new Date();
-		String desc = "Test Product No. 1";
-		Barcode bc = new Barcode("400000000001");
-		UnitSize size = new UnitSize(1.0f, UnitType.CHEVROLET);
-		int shelfLife = 5;
-		CountThreeMonthSupply threeMonthSupply = new CountThreeMonthSupply(1);
-		HashSet<ProductContainer> containers = new HashSet<ProductContainer>();
-
-		Product prod1 =
-				new Product(creDate, desc, bc, size, shelfLife,
-						threeMonthSupply, containers);
-
-		String desc2 = "Test Product No. 2";
-
 		assertFalse(desc2.equals(prod1.getDescription().getDescription()));
 		prod1.setDescription(new ProductDescription(desc2));
 		assertTrue(desc2.equals(prod1.getDescription().getDescription()));
@@ -329,14 +297,4 @@ public class ProductTest
 	{
 		fail("Not yet implemented"); // TODO
 	}
-
-	/**
-	 * Test method for {@link model.Product#toString()}.
-	 */
-	@Test
-	public final void testToString()
-	{
-		fail("Not yet implemented"); // TODO
-	}
-
 }
