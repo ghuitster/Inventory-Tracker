@@ -11,7 +11,7 @@ import model.exception.*;
  * @author Brian
  * 
  */
-public class Serializer implements IPersistence
+public class Serializer implements IPersistence, Serializable
 {
 	private String filePath;
 	

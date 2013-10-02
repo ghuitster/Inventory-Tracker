@@ -2,3 +2,4 @@
 # Thumbnail garbage #
 Thumbs.db
 .metadata
+.\inventory-tracker\data.inventory

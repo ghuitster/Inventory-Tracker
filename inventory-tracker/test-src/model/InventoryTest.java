@@ -21,21 +21,23 @@ public class InventoryTest
 	public void constructorTest()
 	{
 		assertTrue(Inventory.getInstance() != null);
-		assertEquals(Inventory.getInstance().getAllStorageUnits().size(), 0);
-		assertEquals(Inventory.getInstance().getAllProducts().size(), 0);
-		assertEquals(Inventory.getInstance().getItemExpirations().size(), 0);
-		assertEquals(Inventory.getInstance().getNMonthSupplyGroupMap().size(), 0);
-		assertEquals(Inventory.getInstance().getNMonthSupplyMap().size(), 0);
-		assertEquals(Inventory.getInstance().getRemovedItems().size(), 0);
+		Inventory.getInstance().removeAllStorageUnits();
+		assertEquals(0, Inventory.getInstance().getAllStorageUnits().size());
+		assertEquals(0, Inventory.getInstance().getAllProducts().size());
+		assertEquals(0, Inventory.getInstance().getItemExpirations().size());
+		assertEquals(0, Inventory.getInstance().getNMonthSupplyGroupMap().size());
+		assertEquals(0, Inventory.getInstance().getNMonthSupplyMap().size());
+		assertEquals(0, Inventory.getInstance().getRemovedItems().size());
 	}
 	
 	@Test
 	public void storageUnitTest() throws Exception
 	{
-		assertEquals(Inventory.getInstance().getAllStorageUnits().size(), 0);
+		Inventory.getInstance().removeAllStorageUnits();
+		assertEquals(0, Inventory.getInstance().getAllStorageUnits().size());
 		populateInventory();
 		Set<StorageUnit> units = Inventory.getInstance().getAllStorageUnits(); 
-		assertEquals(units.size(), 2);
+		assertEquals(2, units.size());
 		assertTrue(units.contains(unit1));
 		assertTrue(units.contains(unit2));
 	}
@@ -45,6 +47,7 @@ public class InventoryTest
 	{
 		populateInventory();
 		Set<Product> products = Inventory.getInstance().getAllProducts();
+		assertEquals(1, products.size());
 		assertTrue(products.contains(prod));
 	}
 
@@ -68,13 +71,13 @@ public class InventoryTest
 	{
 		populateInventory();
 		Set<StorageUnit> units = Inventory.getInstance().getAllStorageUnits(); 
-		assertEquals(units.size(), 2);
+		assertEquals(2, units.size());
 		Inventory.getInstance().removeStorageUnit(unit1);
 		units = Inventory.getInstance().getAllStorageUnits();
-		assertEquals(units.size(), 1);
+		assertEquals(1, units.size());
 		Inventory.getInstance().removeAllStorageUnits();
 		units = Inventory.getInstance().getAllStorageUnits();
-		assertEquals(units.size(), 0);
+		assertEquals(0, units.size());
 	}
 	
 	@Test
@@ -84,8 +87,8 @@ public class InventoryTest
 		Inventory.getInstance().getPersistence().saveData();
 		Inventory.getInstance().removeAllStorageUnits();
 		Inventory.getInstance().getPersistence().loadData();
-		assertEquals(Inventory.getInstance().getAllStorageUnits().size(), 2);
-		assertEquals(Inventory.getInstance().getAllProducts().size(), 1);
+		assertEquals(2, Inventory.getInstance().getAllStorageUnits().size());
+		assertEquals(1, Inventory.getInstance().getAllProducts().size());
 		assertTrue(Inventory.getInstance().getAllProducts().iterator().next().getDescription().equals("asdf"));
 	}
 	
@@ -93,9 +96,9 @@ public class InventoryTest
 	public void reportDeletedItemTest() throws Exception
 	{
 		populateInventory();
-		assertEquals(Inventory.getInstance().getRemovedItems().size(), 0);
+		assertEquals(0, Inventory.getInstance().getRemovedItems().size());
 		Inventory.getInstance().reportRemovedItem(new Item(prod, new Barcode("1"), new Date(), new Date(), new Date(), unit1));
-		assertEquals(Inventory.getInstance().getRemovedItems().size(), 1);
+		assertEquals(1, Inventory.getInstance().getRemovedItems().size());
 	}
 
 }

@@ -1,6 +1,7 @@
 
 package model;
 
+import java.io.Serializable;
 import java.security.InvalidParameterException;
 import java.util.Date;
 import java.util.HashSet;
@@ -15,7 +16,7 @@ import model.exception.*;
  * @author Brian
  * 
  */
-public class Inventory
+public class Inventory implements Serializable
 {
 	/**
 	 * Gets the static Inventory instance. Creates it if it does not exist.
@@ -81,7 +82,7 @@ public class Inventory
 	private Inventory()
 	{
 		this.storageUnits = new HashSet<StorageUnit>();
-		this.persistence = new Serializer("data.inventory");
+		this.persistence = new Serializer("./data.inventory");
 		this.itemExpirations = new TreeMap<Date, Set<Item>>();
 		this.removedItems = new TreeMap<Date, Set<Item>>();
 		this.nMonthSupplyMap = new TreeMap<Date, Set<Product>>();
@@ -134,12 +135,11 @@ public class Inventory
 	 */
 	private void recurseProductContainer(ProductContainer container, Set<Product> workingSet)
 	{
-		//TODO: uncomment when getters are implemented
-		/*workingSet.addAll(container.getProducts());
-		for(ProductContainer subContainer : container.getProductGroups())
+		workingSet.addAll(container.getAllProducts());
+		for(ProductContainer subContainer : container.getAllProductGroups())
 		{
 			recurseProductContainer(subContainer, workingSet);
-		}*/
+		}
 	}
 	
 	/**
