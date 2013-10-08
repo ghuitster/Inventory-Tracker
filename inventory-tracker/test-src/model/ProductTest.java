@@ -60,34 +60,6 @@ public class ProductTest
 	}
 
 	/**
-	 * Test method for {@link model.Product#hashCode()}.
-	 */
-	@Test
-	public final void testHashCode()
-	{
-		assertFalse(prod1.hashCode() == prod2.hashCode());
-		prod2.setDescription(new ProductDescription(desc2));
-		assertTrue(prod1.hashCode() == prod2.hashCode());
-	}
-
-	/**
-	 * Test method for
-	 * {@link model.Product#Product(java.util.Date, java.lang.String, model.Barcode, model.UnitSize, int, model.Amount, java.util.Set)}
-	 * .
-	 */
-	@Test
-	public final void testProduct()
-	{
-		assertTrue(creDate.equals(prod1.getCreationDate()));
-		assertTrue(desc.equals(prod1.getDescription()));
-		assertTrue(bc.equals(prod1.getBarcode()));
-		assertTrue(size.equals(prod1.getSize()));
-		assertTrue(shelfLife == prod1.getShelfLife());
-		assertTrue(threeMonthSupply.equals(prod1.getThreeMonthSupply()));
-		assertTrue(containers.equals(prod1.getContainers()));
-	}
-
-	/**
 	 * Test method for
 	 * {@link model.Product#ableToAddContainer(model.StorageUnit)}.
 	 */
@@ -97,6 +69,16 @@ public class ProductTest
 		ProductContainer test = new StorageUnit("Storage Unit 1");
 		prod1.addContainer(test);
 		assertTrue(prod1.getContainers().contains(test));
+	}
+
+	/**
+	 * Test method for
+	 * {@link model.Product#ableToRemoveContainer(model.ProductContainer)}.
+	 */
+	@Test
+	public final void testAbleToRemoveContainer()
+	{
+		fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -162,26 +144,6 @@ public class ProductTest
 	}
 
 	/**
-	 * Test method for
-	 * {@link model.Product#ableToRemoveContainer(model.ProductContainer)}.
-	 */
-	@Test
-	public final void testAbleToRemoveContainer()
-	{
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link model.Product#removeContainer(model.ProductContainer)}.
-	 */
-	@Test
-	public final void testRemoveContainer()
-	{
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
 	 * Test method for {@link model.Product#equals(java.lang.Object)}.
 	 */
 	@Test
@@ -240,6 +202,44 @@ public class ProductTest
 	 */
 	@Test
 	public final void testGetThreeMonthSupply()
+	{
+		fail("Not yet implemented"); // TODO
+	}
+
+	/**
+	 * Test method for {@link model.Product#hashCode()}.
+	 */
+	@Test
+	public final void testHashCode()
+	{
+		assertFalse(prod1.hashCode() == prod2.hashCode());
+		prod2.setDescription(new ProductDescription(desc2));
+		assertTrue(prod1.hashCode() == prod2.hashCode());
+	}
+
+	/**
+	 * Test method for
+	 * {@link model.Product#Product(java.util.Date, java.lang.String, model.Barcode, model.UnitSize, int, model.Amount, java.util.Set)}
+	 * .
+	 */
+	@Test
+	public final void testProduct()
+	{
+		assertTrue(creDate.equals(prod1.getCreationDate()));
+		assertTrue(desc.equals(prod1.getDescription()));
+		assertTrue(bc.equals(prod1.getBarcode()));
+		assertTrue(size.equals(prod1.getSize()));
+		assertTrue(shelfLife == prod1.getShelfLife());
+		assertTrue(threeMonthSupply.equals(prod1.getThreeMonthSupply()));
+		assertTrue(containers.equals(prod1.getContainers()));
+	}
+
+	/**
+	 * Test method for
+	 * {@link model.Product#removeContainer(model.ProductContainer)}.
+	 */
+	@Test
+	public final void testRemoveContainer()
 	{
 		fail("Not yet implemented"); // TODO
 	}

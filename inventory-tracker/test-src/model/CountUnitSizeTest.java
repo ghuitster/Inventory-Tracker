@@ -1,11 +1,28 @@
+
 package model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 public class CountUnitSizeTest
 {
+
+	@Test
+	public void equalsTest()
+	{
+		CountUnitSize countUnitSize = new CountUnitSize(5);
+		assertTrue(countUnitSize.equals(countUnitSize));
+		assertFalse(countUnitSize.equals(5));
+		assertFalse(countUnitSize.equals(new String(
+				"This is going to return false")));
+		CountUnitSize countUnitSize2 = new CountUnitSize(10);
+		assertFalse(countUnitSize.equals(countUnitSize2));
+		countUnitSize2.setAmount(5);
+		assertTrue(countUnitSize.equals(countUnitSize2));
+	}
 
 	@Test
 	public void valueTest()
@@ -16,19 +33,6 @@ public class CountUnitSizeTest
 		assertEquals(countUnitSize.getSize(), 5);
 		countUnitSize.setSize(10);
 		assertEquals(countUnitSize.getSize(), 10);
-	}
-	
-	@Test
-	public void equalsTest()
-	{
-		CountUnitSize countUnitSize = new CountUnitSize(5);
-		assertTrue(countUnitSize.equals(countUnitSize));
-		assertFalse(countUnitSize.equals(5));
-		assertFalse(countUnitSize.equals(new String("This is going to return false")));
-		CountUnitSize countUnitSize2 = new CountUnitSize(10);
-		assertFalse(countUnitSize.equals(countUnitSize2));
-		countUnitSize2.setAmount(5);
-		assertTrue(countUnitSize.equals(countUnitSize2));
 	}
 
 }

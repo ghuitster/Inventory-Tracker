@@ -4,6 +4,8 @@
 
 package model;
 
+import model.exception.InvalidUnitSizeException;
+
 /**
  * A class to represent a count three month supply, where unit type is always
  * "count"
@@ -17,7 +19,7 @@ public class CountThreeMonthSupply extends CountAmount
 	 * @pre amount must be > 0;
 	 * @post amount is set to passed in amount
 	 * @param amount
-	 * @throws InvalidUnitSizeException 
+	 * @throws InvalidUnitSizeException
 	 */
 	public CountThreeMonthSupply(int amount)
 	{

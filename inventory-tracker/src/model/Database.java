@@ -1,19 +1,20 @@
 
 package model;
 
-import model.exception.*;
+import model.exception.SerializerException;
 
 public class Database implements IPersistence
 {
 	/**
 	 * Initializes an instance of Database
-	 * @param databaseName The name of the database to store/load information from
+	 * @param databaseName The name of the database to store/load information
+	 *            from
 	 */
 	public Database(String databaseName)
 	{
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
-	
+
 	/**
 	 * Determines whether a database exists which data can be loaded from
 	 * @return True if the database exists and is valid. Otherwise, false

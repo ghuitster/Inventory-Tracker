@@ -16,8 +16,6 @@ public class ProductDescription implements Serializable
 	// Variables
 	private static final long serialVersionUID = -4601997220157737995L;
 
-	private String description;
-
 	/**
 	 * @pre description != null
 	 * @post return true if description is valid
@@ -33,6 +31,8 @@ public class ProductDescription implements Serializable
 
 		return response;
 	}
+
+	private String description;
 
 	/**
 	 * @pre descriptoin != null

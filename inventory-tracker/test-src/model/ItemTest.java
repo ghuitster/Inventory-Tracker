@@ -1,42 +1,35 @@
 /**
  * 
  */
+
 package model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
 
 /**
  * @author Michael
- *
+ * 
  */
 public class ItemTest
 {
 	/**
-	 * Test method for {@link model.Item#Item(model.Product, model.Barcode, java.util.Date, java.util.Date, java.util.Date, model.StorageUnit)}.
+	 * Test method for
+	 * {@link model.Item#Item(model.Product, model.Barcode, java.util.Date, java.util.Date, java.util.Date, model.StorageUnit)}
+	 * .
 	 */
-	/*@Test
-	public final void testItem()
-	{
-		Date creDate = new Date();
-		String desc = "Test Product No. 1";
-		String desc2 = "Test Product No. 2";
-		Barcode bc = new Barcode("400000000001");
-		UnitSize size = new UnitSize(1.0f, UnitType.CHEVROLET);
-		int shelfLife = 5;
-		CountThreeMonthSupply threeMonthSupply = new CountThreeMonthSupply(1);
-		HashSet<ProductContainer> containers = new HashSet<ProductContainer>();
-		Item itm = new Item(new Product(creDate, desc, bc, size, shelfLife, threeMonthSupply, containers), new Barcode("400000000000"), new Date(), new Date(), new Date(), new ProductContainer());
-	}*/
+	/*
+	 * @Test public final void testItem() { Date creDate = new Date(); String
+	 * desc = "Test Product No. 1"; String desc2 = "Test Product No. 2"; Barcode
+	 * bc = new Barcode("400000000001"); UnitSize size = new UnitSize(1.0f,
+	 * UnitType.CHEVROLET); int shelfLife = 5; CountThreeMonthSupply
+	 * threeMonthSupply = new CountThreeMonthSupply(1);
+	 * HashSet<ProductContainer> containers = new HashSet<ProductContainer>();
+	 * Item itm = new Item(new Product(creDate, desc, bc, size, shelfLife,
+	 * threeMonthSupply, containers), new Barcode("400000000000"), new Date(),
+	 * new Date(), new Date(), new ProductContainer()); }
+	 */
 
 	/**
 	 * Test method for {@link model.Item#ableToSetBarcode(model.Barcode)}.
@@ -66,7 +59,8 @@ public class ItemTest
 	}
 
 	/**
-	 * Test method for {@link model.Item#ableToSetExpirationDate(java.util.Date)}.
+	 * Test method for
+	 * {@link model.Item#ableToSetExpirationDate(java.util.Date)}.
 	 */
 	@Test
 	public final void testAbleToSetExpirationDate()

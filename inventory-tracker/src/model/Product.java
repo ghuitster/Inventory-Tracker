@@ -1,6 +1,8 @@
 
 package model;
 
+import gui.common.Tagable;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -9,7 +11,7 @@ import java.util.Set;
  * A class to represent a product
  * @author David
  */
-public class Product implements Serializable
+public class Product extends Tagable implements Serializable
 {
 	// Variables
 	private static final long serialVersionUID = 1835988277946941153L;
@@ -73,6 +75,23 @@ public class Product implements Serializable
 		if(container != null)
 		{
 			if(container.ableToAddProduct(this))
+				response = true;
+		}
+
+		return response;
+	}
+
+	/**
+	 * @pre productContainer must != null
+	 * @param productContainer the container to attempt to remove
+	 */
+	public boolean ableToRemoveContainer(ProductContainer productContainer)
+	{
+		boolean response = false;
+
+		if(productContainer != null)
+		{
+			if(productContainer.ableToRemoveProduct(this))
 				response = true;
 		}
 
@@ -188,36 +207,6 @@ public class Product implements Serializable
 		this.containers.add(productContainer);
 	}
 
-	/**
-	 * @pre productContainer must != null
-	 * @param productContainer the container to attempt to remove
-	 */
-	public boolean ableToRemoveContainer(ProductContainer productContainer)
-	{
-		boolean response = false;
-
-		if(productContainer != null)
-		{
-			if(productContainer.ableToRemoveProduct(this))
-				response = true;
-		}
-
-		return response;
-	}
-
-	/**
-	 * @pre productContainer != null
-	 * @pre productContainer must exist in the set of containers for this
-	 *      product
-	 * @post productContainer no longer exists in the set of containers for this
-	 *       product
-	 * @param productContainer the container to remove
-	 */
-	public void removeContainer(ProductContainer productContainer)
-	{
-		this.containers.remove(productContainer);
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -281,19 +270,19 @@ public class Product implements Serializable
 	}
 
 	/**
-	 * @return the containers set
-	 */
-	public Set<ProductContainer> getContainers()
-	{
-		return this.containers;
-	}
-
-	/**
 	 * @return the barcode
 	 */
 	public Barcode getBarcode()
 	{
 		return barcode;
+	}
+
+	/**
+	 * @return the containers set
+	 */
+	public Set<ProductContainer> getContainers()
+	{
+		return this.containers;
 	}
 
 	/**
@@ -363,6 +352,19 @@ public class Product implements Serializable
 						+ ((threeMonthSupply == null) ? 0 : threeMonthSupply
 								.hashCode());
 		return result;
+	}
+
+	/**
+	 * @pre productContainer != null
+	 * @pre productContainer must exist in the set of containers for this
+	 *      product
+	 * @post productContainer no longer exists in the set of containers for this
+	 *       product
+	 * @param productContainer the container to remove
+	 */
+	public void removeContainer(ProductContainer productContainer)
+	{
+		this.containers.remove(productContainer);
 	}
 
 	/**

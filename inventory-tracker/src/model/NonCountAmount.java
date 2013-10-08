@@ -4,6 +4,8 @@
 
 package model;
 
+import model.exception.InvalidUnitSizeException;
+
 /**
  * Abstract Class to further define Non Count Three Month Supply and UnitSize
  * @author Michael
@@ -19,7 +21,7 @@ public abstract class NonCountAmount extends Amount
 	 * @pre unitType must != UnitType.COUNT
 	 * @param amount the amount
 	 * @param unitType the unit type for the amount
-	 * @throws InvalidUnitSizeException 
+	 * @throws InvalidUnitSizeException
 	 */
 	public NonCountAmount(float amount, UnitType unitType)
 	{
@@ -105,7 +107,7 @@ public abstract class NonCountAmount extends Amount
 	/**
 	 * Method to set the amount
 	 * @param amount the amount to set
-	 * @throws InvalidUnitSizeException 
+	 * @throws InvalidUnitSizeException
 	 */
 	public void setAmount(float amount)
 	{

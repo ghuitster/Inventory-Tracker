@@ -1,6 +1,8 @@
 
 package model;
 
+import gui.common.Tagable;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,7 +11,7 @@ import java.util.Set;
  * A class to represent a product container
  * @author David
  */
-public abstract class ProductContainer implements Serializable
+public abstract class ProductContainer extends Tagable implements Serializable
 {
 	private static final long serialVersionUID = 9015876223451150036L;
 	protected String name;
@@ -38,33 +40,6 @@ public abstract class ProductContainer implements Serializable
 	public boolean ableToAddItem(Item item)
 	{
 		return true;
-	}
-
-	/**
-	 * @pre this.products != null
-	 * @return the Set<Product> of all Products
-	 */
-	public Set<Product> getAllProducts()
-	{
-		return new HashSet<Product>(this.products);
-	}
-
-	/**
-	 * @pre this.productGroups != null
-	 * @return the Set<ProductGroup> of all ProductGroups
-	 */
-	public Set<ProductGroup> getAllProductGroups()
-	{
-		return new HashSet<ProductGroup>(this.productGroups);
-	}
-
-	/**
-	 * @pre this.items != null
-	 * @return the Set<Item> of all Items
-	 */
-	public Set<Item> getAllItems()
-	{
-		return new HashSet<Item>(this.items);
 	}
 
 	/**
@@ -163,17 +138,6 @@ public abstract class ProductContainer implements Serializable
 		}
 	}
 
-	private ProductContainer findContainer(Product product)
-	{
-		for(ProductContainer con: this.productGroups)
-			return con.findContainer(product);
-
-		if(this.products.contains(product))
-			return this;
-		else
-			return null;
-	}
-
 	/**
 	 * @pre product must be a valid Product and not null
 	 * @post my.products.contains(product)
@@ -212,6 +176,44 @@ public abstract class ProductContainer implements Serializable
 	public void addProductGroup(ProductGroup productGroup)
 	{
 		this.productGroups.add(productGroup);
+	}
+
+	private ProductContainer findContainer(Product product)
+	{
+		for(ProductContainer con: this.productGroups)
+			return con.findContainer(product);
+
+		if(this.products.contains(product))
+			return this;
+		else
+			return null;
+	}
+
+	/**
+	 * @pre this.items != null
+	 * @return the Set<Item> of all Items
+	 */
+	public Set<Item> getAllItems()
+	{
+		return new HashSet<Item>(this.items);
+	}
+
+	/**
+	 * @pre this.productGroups != null
+	 * @return the Set<ProductGroup> of all ProductGroups
+	 */
+	public Set<ProductGroup> getAllProductGroups()
+	{
+		return new HashSet<ProductGroup>(this.productGroups);
+	}
+
+	/**
+	 * @pre this.products != null
+	 * @return the Set<Product> of all Products
+	 */
+	public Set<Product> getAllProducts()
+	{
+		return new HashSet<Product>(this.products);
 	}
 
 	/**
@@ -266,8 +268,7 @@ public abstract class ProductContainer implements Serializable
 
 	/**
 	 * @pre item must be a valid item and not null
-	 * @pre otherProductContainer must be a valid ProductContainer and
-	 *               not null
+	 * @pre otherProductContainer must be a valid ProductContainer and not null
 	 * @post my.items.doesNotContain(item)
 	 * @post otherProductContainer.items.contains(item)
 	 * @param item the Item to transfer

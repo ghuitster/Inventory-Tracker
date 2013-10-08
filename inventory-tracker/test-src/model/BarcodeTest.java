@@ -13,17 +13,17 @@ import org.junit.Test;
 public class BarcodeTest
 {
 	/**
-	 * Test method for {@link model.Barcode#hashCode()}.
+	 * Test method for {@link model.Barcode#ableToSetNumber(java.lang.String)}.
 	 */
 	@Test
-	public final void testHashCode()
+	public final void testAbleToSetNumber()
 	{
-		Barcode goodBC = new Barcode("400000000001");
-		Barcode badBC = new Barcode("012345678912");
-		Barcode testBC = new Barcode("400000000001");
+		String goodBCNum = "400000000001";
+		String badBCNum = "012345678912";
+		Barcode goodBC = new Barcode(goodBCNum);
 
-		assertTrue(goodBC.hashCode() == testBC.hashCode());
-		assertFalse(badBC.hashCode() == testBC.hashCode());
+		assertFalse(goodBC.ableToSetNumber(badBCNum));
+		assertTrue(goodBC.ableToSetNumber(goodBCNum));
 	}
 
 	/**
@@ -42,20 +42,6 @@ public class BarcodeTest
 		goodBC.setNumber(goodBCNum2);
 		assertTrue(goodBCNum2.equals(goodBC.getNumber()));
 		assertFalse(goodBCNum.equals(goodBC.getNumber()));
-	}
-
-	/**
-	 * Test method for {@link model.Barcode#ableToSetNumber(java.lang.String)}.
-	 */
-	@Test
-	public final void testAbleToSetNumber()
-	{
-		String goodBCNum = "400000000001";
-		String badBCNum = "012345678912";
-		Barcode goodBC = new Barcode(goodBCNum);
-
-		assertFalse(goodBC.ableToSetNumber(badBCNum));
-		assertTrue(goodBC.ableToSetNumber(goodBCNum));
 	}
 
 	/**
@@ -86,6 +72,20 @@ public class BarcodeTest
 
 		assertFalse(empty.equals(test.getNumber()));
 		assertTrue(bcNum.equals(test.getNumber()));
+	}
+
+	/**
+	 * Test method for {@link model.Barcode#hashCode()}.
+	 */
+	@Test
+	public final void testHashCode()
+	{
+		Barcode goodBC = new Barcode("400000000001");
+		Barcode badBC = new Barcode("012345678912");
+		Barcode testBC = new Barcode("400000000001");
+
+		assertTrue(goodBC.hashCode() == testBC.hashCode());
+		assertFalse(badBC.hashCode() == testBC.hashCode());
 	}
 
 	/**

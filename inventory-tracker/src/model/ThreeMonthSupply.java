@@ -16,16 +16,16 @@ public class ThreeMonthSupply extends NonCountAmount
 	 * @pre amount must be > 0.0f
 	 * @pre unitType must != UnitType.COUNT
 	 * @param amount
-	 * @param unitType
-	 * ThreeMonthSupply constructor
+	 * @param unitType ThreeMonthSupply constructor
 	 * @param amount the amount IE 50.3, 20
 	 * @param unitType what type of unit to use
 	 */
 	public ThreeMonthSupply(float amount, UnitType unitType)
 	{
 		super(amount, unitType);
-		/*this.amount = amount;
-		this.unitType = unitType;*/
+		/*
+		 * this.amount = amount; this.unitType = unitType;
+		 */
 	}
 
 	/**

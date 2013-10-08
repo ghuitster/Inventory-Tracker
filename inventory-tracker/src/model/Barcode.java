@@ -12,6 +12,21 @@ public class Barcode implements Serializable
 {
 	// Variables
 	private static final long serialVersionUID = -4409370215399749663L;
+	/**
+	 * @pre number must not be null
+	 * @param number string of the barcode number to validate
+	 * @return true if valid number
+	 */
+	public static boolean isValid(String number)
+	{
+		boolean response = false;
+
+		if(number.matches("4[0-9]{11}"))
+			response = true;
+
+		return response;
+	}
+
 	private String number;
 
 	/**
@@ -79,21 +94,6 @@ public class Barcode implements Serializable
 	public String getNumber()
 	{
 		return number;
-	}
-
-	/**
-	 * @pre number must not be null
-	 * @param number string of the barcode number to validate
-	 * @return true if valid number
-	 */
-	public static boolean isValid(String number)
-	{
-		boolean response = false;
-
-		if(number.matches("4[0-9]{11}"))
-			response = true;
-
-		return response;
 	}
 
 	/**

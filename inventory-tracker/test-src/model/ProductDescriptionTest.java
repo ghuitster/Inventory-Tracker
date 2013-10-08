@@ -9,42 +9,6 @@ import org.junit.Test;
 public class ProductDescriptionTest
 {
 	@Test
-	public final void testHashCode()
-	{
-		String goodPD = "Test Product No. 1";
-		String goodPD2 = "Test Product No. 2";
-		String test = goodPD.toString();
-
-		ProductDescription pdGood = new ProductDescription(goodPD);
-		ProductDescription pdGood2 = new ProductDescription(goodPD2);
-		ProductDescription pdTest = new ProductDescription(test);
-
-		assertFalse(pdTest.hashCode() == pdGood2.hashCode());
-		assertTrue(pdTest.hashCode() == pdGood.hashCode());
-	}
-
-	@Test
-	public final void testIsValid()
-	{
-		String goodPD = "Test Product No. 1";
-		String badPD = "\t\t\t\n   \r\n\t";
-
-		assertFalse(ProductDescription.isValid(badPD));
-		assertTrue(ProductDescription.isValid(goodPD));
-	}
-
-	@Test
-	public final void testProductDescription()
-	{
-		String goodPD = "Test Product No. 1";
-		String badPD = "TestProductNo.1";
-
-		ProductDescription pdGood = new ProductDescription(goodPD);
-		assertFalse(badPD.equals(pdGood.getDescription()));
-		assertTrue(goodPD.equals(pdGood.getDescription()));
-	}
-
-	@Test
 	public final void testAbleToSetDescription()
 	{
 		String goodPD = "Test Product No. 1";
@@ -78,6 +42,42 @@ public class ProductDescriptionTest
 		ProductDescription pdGood = new ProductDescription(goodPD);
 
 		assertFalse(goodPD2.equals(pdGood.getDescription()));
+		assertTrue(goodPD.equals(pdGood.getDescription()));
+	}
+
+	@Test
+	public final void testHashCode()
+	{
+		String goodPD = "Test Product No. 1";
+		String goodPD2 = "Test Product No. 2";
+		String test = goodPD.toString();
+
+		ProductDescription pdGood = new ProductDescription(goodPD);
+		ProductDescription pdGood2 = new ProductDescription(goodPD2);
+		ProductDescription pdTest = new ProductDescription(test);
+
+		assertFalse(pdTest.hashCode() == pdGood2.hashCode());
+		assertTrue(pdTest.hashCode() == pdGood.hashCode());
+	}
+
+	@Test
+	public final void testIsValid()
+	{
+		String goodPD = "Test Product No. 1";
+		String badPD = "\t\t\t\n   \r\n\t";
+
+		assertFalse(ProductDescription.isValid(badPD));
+		assertTrue(ProductDescription.isValid(goodPD));
+	}
+
+	@Test
+	public final void testProductDescription()
+	{
+		String goodPD = "Test Product No. 1";
+		String badPD = "TestProductNo.1";
+
+		ProductDescription pdGood = new ProductDescription(goodPD);
+		assertFalse(badPD.equals(pdGood.getDescription()));
 		assertTrue(goodPD.equals(pdGood.getDescription()));
 	}
 

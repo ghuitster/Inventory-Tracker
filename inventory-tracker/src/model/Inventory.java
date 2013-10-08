@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import model.exception.*;
+import model.exception.InvalidNameException;
 
 /**
  * Singleton class to manage the entire Inventory system
@@ -30,7 +30,7 @@ public class Inventory implements Serializable
 			instance = new Inventory();
 		return instance;
 	}
-	
+
 	protected static void setInstance(Inventory inventory)
 	{
 		instance = inventory;
@@ -73,6 +73,8 @@ public class Inventory implements Serializable
 	 */
 	private static Inventory instance;
 
+	private long lastGeneratedBarCode;
+
 	/**
 	 * Creates a new instance of the Inventory class. Used only by singleton
 	 * getter.
@@ -91,20 +93,39 @@ public class Inventory implements Serializable
 	}
 
 	/**
+	 * Determined if a storage unit is valid for addition
+	 * @param storageUnit The new storage unit to check
+	 * @pre (none)
+	 * @post A boolean value is generated
+	 * @return True if the storage unit may be added. Otherwise, false
+	 */
+	public boolean ableToAddStorageUnit(StorageUnit storageUnit)
+	{
+		if(storageUnit == null)
+			return false;
+
+		if(storageUnitNameInUse(storageUnit.getName()))
+			return false;
+
+		return true;
+
+	}
+
+	/**
 	 * Adds a new Storage Unit to the system
 	 * @pre A storage unit does not exist with the same name
 	 * @post The passed storage unit has been inserted into the system
 	 * @param storageUnit The new storage unit
-	 * @throws InvalidNameException, NullPointerException 
+	 * @throws InvalidNameException, NullPointerException
 	 */
-	public void addStorageUnit(StorageUnit storageUnit) 
+	public void addStorageUnit(StorageUnit storageUnit)
 			throws InvalidNameException, NullPointerException
 	{
 		if(storageUnit == null)
 			throw new NullPointerException();
-		else if (this.storageUnitNameInUse(storageUnit.getName()))
+		else if(this.storageUnitNameInUse(storageUnit.getName()))
 			throw new InvalidNameException();
-		
+
 		this.storageUnits.add(storageUnit);
 	}
 
@@ -119,29 +140,13 @@ public class Inventory implements Serializable
 	public Set<Product> getAllProducts()
 	{
 		HashSet<Product> products = new HashSet<Product>();
-		for(StorageUnit unit : this.storageUnits)
+		for(StorageUnit unit: this.storageUnits)
 		{
 			recurseProductContainer(unit, products);
 		}
 		return products;
 	}
 
-	/**
-	 * Adds all products from a container to the working set and recurses the sub-containers
-	 * @param container The container to add the products from and recurse the children of
-	 * @pre workingSet is not null
-	 * @post workingSet contains all products from container and its children
-	 * @param workingSet The current set being built
-	 */
-	private void recurseProductContainer(ProductContainer container, Set<Product> workingSet)
-	{
-		workingSet.addAll(container.getAllProducts());
-		for(ProductContainer subContainer : container.getAllProductGroups())
-		{
-			recurseProductContainer(subContainer, workingSet);
-		}
-	}
-	
 	/**
 	 * Gets a list of all Storage Units in the system
 	 * @pre (none)
@@ -196,6 +201,15 @@ public class Inventory implements Serializable
 	}
 
 	/**
+	 * Gets the persistence object for saving and loading data to this object
+	 * @return An object capable of saving and loading this object's state
+	 */
+	public IPersistence getPersistence()
+	{
+		return this.persistence;
+	}
+
+	/**
 	 * Gets a map of Dates to what items were removed on each date
 	 * @pre (none)
 	 * @post A map has been created with the aforementioned properties. This map
@@ -207,30 +221,33 @@ public class Inventory implements Serializable
 	{
 		return new TreeMap<Date, Set<Item>>(this.removedItems);
 	}
-	
+
 	/**
-	 * Reports that an item has been removed from the system
-	 * @pre Item is not null
-	 * @post Item's exit time has been set to the current time, 
-	 * its container is null, and it has been added to the map
-	 * of removed items
-	 * @param item The item that has been removed
+	 * Returns a unique bar code
+	 * @return A bar code which is unique
 	 */
-	protected void reportRemovedItem(Item item)
+	protected long getUniqueBarCode()
 	{
-		Date current = new Date();
-		item.setExitTime(current);
-		item.setContainer(null);
-		
-		Date month = new Date(current.getYear(), current.getMonth(), current.getDate());
-		
-		Set<Item> itemsForMonth;
-		if(removedItems.containsKey(month))
-			itemsForMonth = removedItems.get(month);
-		else itemsForMonth = new HashSet<Item>();
-		itemsForMonth.add(item);
-		
-		this.removedItems.put(month, itemsForMonth);
+		return lastGeneratedBarCode++;
+	}
+
+	/**
+	 * Adds all products from a container to the working set and recurses the
+	 * sub-containers
+	 * @param container The container to add the products from and recurse the
+	 *            children of
+	 * @pre workingSet is not null
+	 * @post workingSet contains all products from container and its children
+	 * @param workingSet The current set being built
+	 */
+	private void recurseProductContainer(ProductContainer container,
+			Set<Product> workingSet)
+	{
+		workingSet.addAll(container.getAllProducts());
+		for(ProductContainer subContainer: container.getAllProductGroups())
+		{
+			recurseProductContainer(subContainer, workingSet);
+		}
 	}
 
 	/**
@@ -252,28 +269,37 @@ public class Inventory implements Serializable
 	public void removeStorageUnit(StorageUnit storageUnit)
 	{
 		if(!this.storageUnits.contains(storageUnit))
-			throw new InvalidParameterException("Passed StorageUnit was not found");
-			
+			throw new InvalidParameterException(
+					"Passed StorageUnit was not found");
+
 		this.storageUnits.remove(storageUnit);
 	}
-	
+
 	/**
-	 * Determined if a storage unit is valid for addition
-	 * @param storageUnit The new storage unit to check
-	 * @pre (none)
-	 * @post A boolean value is generated
-	 * @return True if the storage unit may be added. Otherwise, false
+	 * Reports that an item has been removed from the system
+	 * @pre Item is not null
+	 * @post Item's exit time has been set to the current time, its container is
+	 *       null, and it has been added to the map of removed items
+	 * @param item The item that has been removed
 	 */
-	public boolean ableToAddStorageUnit(StorageUnit storageUnit)
+	protected void reportRemovedItem(Item item)
 	{
-		if(storageUnit == null)
-			return false;
-		
-		if(storageUnitNameInUse(storageUnit.getName()))
-			return false;
-		
-		return true;
-		
+		Date current = new Date();
+		item.setExitTime(current);
+		item.setContainer(null);
+
+		Date month =
+				new Date(current.getYear(), current.getMonth(),
+						current.getDate());
+
+		Set<Item> itemsForMonth;
+		if(removedItems.containsKey(month))
+			itemsForMonth = removedItems.get(month);
+		else
+			itemsForMonth = new HashSet<Item>();
+		itemsForMonth.add(item);
+
+		this.removedItems.put(month, itemsForMonth);
 	}
 
 	/**
@@ -285,7 +311,7 @@ public class Inventory implements Serializable
 	 */
 	private boolean storageUnitNameInUse(String unitName)
 	{
-		for(StorageUnit unit : storageUnits)
+		for(StorageUnit unit: storageUnits)
 		{
 			if(unit.getName().equals(unitName))
 			{
@@ -293,26 +319,6 @@ public class Inventory implements Serializable
 			}
 		}
 		return false;
-	}
-	
-	private long lastGeneratedBarCode;
-	
-	/**
-	 * Returns a unique bar code
-	 * @return A bar code which is unique
-	 */
-	protected long getUniqueBarCode()
-	{
-		return lastGeneratedBarCode++;
-	}
-
-	/**
-	 * Gets the persistence object for saving and loading data to this object
-	 * @return An object capable of saving and loading this object's state
-	 */
-	public IPersistence getPersistence()
-	{
-		return this.persistence;
 	}
 
 }

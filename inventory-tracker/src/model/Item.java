@@ -1,6 +1,8 @@
 
 package model;
 
+import gui.common.Tagable;
+
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,7 +12,7 @@ import java.util.Date;
  * @author Michael
  * 
  */
-public class Item implements Serializable
+public class Item extends Tagable implements Serializable
 {
 	// Variables
 	private static final long serialVersionUID = -5007529040849157344L;
@@ -24,13 +26,12 @@ public class Item implements Serializable
 	/**
 	 * @pre product must != null && must exist
 	 * @pre barcode must != null and must be valid
-	 * @pre entryDate must be > 1/1/2000 and == the date item was
-	 *               entered
+	 * @pre entryDate must be > 1/1/2000 and == the date item was entered
 	 * @pre expirationDate != null only if Product shelfLife is defined
 	 * @pre exitTime is only set when Item is removed.
-	 * @pre container Before it is removed, an Item is contained in one
-	 *               Product Container. After it is removed, it is contained in
-	 *               no Product Containers.
+	 * @pre container Before it is removed, an Item is contained in one Product
+	 *      Container. After it is removed, it is contained in no Product
+	 *      Containers.
 	 * @param product
 	 * @param barcode
 	 * @param entryDate

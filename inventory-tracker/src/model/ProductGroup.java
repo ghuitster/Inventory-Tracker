@@ -7,13 +7,13 @@ package model;
  */
 public class ProductGroup extends ProductContainer
 {
+	private static final long serialVersionUID = 4647265154277890697L;
 	private ProductContainer container;
 	private ThreeMonthSupply threeMonthSupply;
 
 	/**
 	 * @pre container must be a valid ProductContainer and not null
-	 * @pre threeMonthSupply must be a valid ThreeMonthSupply and not
-	 *               null
+	 * @pre threeMonthSupply must be a valid ThreeMonthSupply and not null
 	 * @param container
 	 * @param threeMonthSupply
 	 */
@@ -101,8 +101,7 @@ public class ProductGroup extends ProductContainer
 	}
 
 	/**
-	 * @pre threeMonthSupply must be a valid ThreeMonthSupply and not
-	 *               null
+	 * @pre threeMonthSupply must be a valid ThreeMonthSupply and not null
 	 * @post my.threeMonthSupply == passed in ThreeMonthSupply
 	 * @param threeMonthSupply the ThreeMonthSupply to set
 	 */

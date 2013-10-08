@@ -7,6 +7,8 @@ package model;
  */
 public class StorageUnit extends ProductContainer
 {
+	private static final long serialVersionUID = -4003256091489850639L;
+
 	public StorageUnit(String name)
 	{
 		super(name);

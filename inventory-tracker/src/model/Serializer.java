@@ -1,10 +1,15 @@
 
 package model;
 
-import java.io.*;
-import java.util.Set;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
-import model.exception.*;
+import model.exception.SerializerException;
 
 /**
  * Saves and loads Inventory data to a file
@@ -14,7 +19,7 @@ import model.exception.*;
 public class Serializer implements IPersistence, Serializable
 {
 	private String filePath;
-	
+
 	/**
 	 * Initializes an instance of Serializer
 	 * @pre (none)
@@ -44,7 +49,7 @@ public class Serializer implements IPersistence, Serializable
 	 * @pre inventory is not null. storeName refers to a valid data store.
 	 * @post inventory's original contents have been cleared and replaced with
 	 *       the data from the specified file
-	 * @throws SerializerException      
+	 * @throws SerializerException
 	 */
 	@Override
 	public void loadData() throws SerializerException
@@ -55,9 +60,9 @@ public class Serializer implements IPersistence, Serializable
 		{
 			stream = new FileInputStream(this.filePath);
 			objIn = new ObjectInputStream(stream);
-			Inventory inventory = (Inventory)objIn.readObject();
+			Inventory inventory = (Inventory) objIn.readObject();
 			Inventory.setInstance(inventory);
-			
+
 		}
 		catch(Exception e)
 		{
@@ -73,7 +78,7 @@ public class Serializer implements IPersistence, Serializable
 					stream.close();
 			}
 			catch(IOException e)
-			{ }
+			{}
 		}
 	}
 
@@ -109,9 +114,9 @@ public class Serializer implements IPersistence, Serializable
 					stream.close();
 			}
 			catch(IOException e)
-			{ }
+			{}
 		}
-		
+
 	}
 
 }

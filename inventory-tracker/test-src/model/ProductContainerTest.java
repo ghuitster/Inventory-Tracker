@@ -25,39 +25,6 @@ public class ProductContainerTest
 	}
 
 	@Test
-	public void testGetAllProducts()
-	{
-		StorageUnit unit = new StorageUnit("test");
-		ProductContainer container =
-				new ProductGroup("test", unit, new ThreeMonthSupply(1,
-						UnitType.FLUID_OUNCES));
-
-		assertFalse(container.getAllProducts() == null);
-	}
-
-	@Test
-	public void testGetAllProductGroups()
-	{
-		StorageUnit unit = new StorageUnit("test");
-		ProductContainer container =
-				new ProductGroup("test", unit, new ThreeMonthSupply(1,
-						UnitType.FLUID_OUNCES));
-
-		assertFalse(container.getAllProductGroups() == null);
-	}
-
-	@Test
-	public void testGetAllItems()
-	{
-		StorageUnit unit = new StorageUnit("test");
-		ProductContainer container =
-				new ProductGroup("test", unit, new ThreeMonthSupply(1,
-						UnitType.FLUID_OUNCES));
-
-		assertFalse(container.getAllItems() == null);
-	}
-
-	@Test
 	public void testAbleToAddProduct()
 	{
 		StorageUnit unit = new StorageUnit("test");
@@ -146,5 +113,38 @@ public class ProductContainerTest
 		group.addItem(new Item(product, new Barcode("400000000000"),
 				new Date(), new Date(), new Date(), unit));
 		assertFalse(container.ableToRemoveProductGroup(group));
+	}
+
+	@Test
+	public void testGetAllItems()
+	{
+		StorageUnit unit = new StorageUnit("test");
+		ProductContainer container =
+				new ProductGroup("test", unit, new ThreeMonthSupply(1,
+						UnitType.FLUID_OUNCES));
+
+		assertFalse(container.getAllItems() == null);
+	}
+
+	@Test
+	public void testGetAllProductGroups()
+	{
+		StorageUnit unit = new StorageUnit("test");
+		ProductContainer container =
+				new ProductGroup("test", unit, new ThreeMonthSupply(1,
+						UnitType.FLUID_OUNCES));
+
+		assertFalse(container.getAllProductGroups() == null);
+	}
+
+	@Test
+	public void testGetAllProducts()
+	{
+		StorageUnit unit = new StorageUnit("test");
+		ProductContainer container =
+				new ProductGroup("test", unit, new ThreeMonthSupply(1,
+						UnitType.FLUID_OUNCES));
+
+		assertFalse(container.getAllProducts() == null);
 	}
 }

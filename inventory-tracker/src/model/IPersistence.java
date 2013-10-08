@@ -1,7 +1,7 @@
 
 package model;
 
-import model.exception.*;
+import model.exception.SerializerException;
 
 /**
  * Interface which defines methods for persisting data
@@ -10,7 +10,8 @@ import model.exception.*;
 public interface IPersistence
 {
 	/**
-	 * When overridden in a child class, determines whether data exists which can be loaded
+	 * When overridden in a child class, determines whether data exists which
+	 * can be loaded
 	 * @pre (none)
 	 * @post (none)
 	 * @return True if data can be loaded. Otherwise, false.
