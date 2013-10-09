@@ -14,4 +14,6 @@ gui.reports.removed
 gui.reports.supply
 gui.storageunit
 model
+model.exception
+observer
 tools
