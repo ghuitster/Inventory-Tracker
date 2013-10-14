@@ -13,6 +13,11 @@ import com.itextpdf.text.DocumentException;
 // import com.itextpdf.text.pdf.BarcodeEANSUPP;
 import com.itextpdf.text.Rectangle;
 
+/**
+ * class for printing out batches of Barcode labels for newly added Items.
+ * @author Michael
+ * 
+ */
 public class BarcodeLabelPage
 {
 	// Variables
