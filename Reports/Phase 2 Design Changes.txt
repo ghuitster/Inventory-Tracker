@@ -1,0 +1,8 @@
+Team 5: Brian Spencer, Chris "Ginger Ale" Thomsen, David Barley, Mike Eagar
+
+Phase 2 Design Changes
+
+• Added the BarcodeLabelPage class to our Phase 2 UML diagram for printing pages of barcode labels
+• Changed the Phase 2 Sequence Diagram for Adding an Item to show method calls between the involved classes, including the notify/update mechanism between ProductContainer, the NSA, and the Controller.
+• Added an ObservableArg class to our UML diagram for representing changes that have been made.  It includes a reference to the Object that changed, as well as an enum stating what type of change was made.
+• Added interfaces for the main parts of our model: Product, Item, ProductGroup, StorageUnit and ProductContainer.
