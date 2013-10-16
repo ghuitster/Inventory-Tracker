@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @author Michael
  * 
  */
-public class ProductDescription implements Serializable
+public class ProductDescription implements Serializable, IProductDescription
 {
 	// Variables
 	private static final long serialVersionUID = -4601997220157737995L;
@@ -43,11 +43,12 @@ public class ProductDescription implements Serializable
 		this.description = description;
 	}
 
-	/**
-	 * @pre description != null
-	 * @param description the description to check for validity
-	 * @return
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductDescription#ableToSetDescription(java.lang.String)
 	 */
+	@Override
 	public boolean ableToSetDescription(String description)
 	{
 		boolean response = true;
@@ -62,8 +63,10 @@ public class ProductDescription implements Serializable
 		return response;
 	}
 
-	/**
-	 * @see java.lang.Object#equals(java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductDescription#equals(java.lang.Object)
 	 */
 	@Override
 	public boolean equals(Object obj)
@@ -95,16 +98,21 @@ public class ProductDescription implements Serializable
 		return true;
 	}
 
-	/**
-	 * @return the description
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductDescription#getDescription()
 	 */
+	@Override
 	public String getDescription()
 	{
 		return description;
 	}
 
-	/**
-	 * @see java.lang.Object#hashCode()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductDescription#hashCode()
 	 */
 	@Override
 	public int hashCode()
@@ -117,18 +125,21 @@ public class ProductDescription implements Serializable
 		return result;
 	}
 
-	/**
-	 * @pre description != null
-	 * @post description == passed in description
-	 * @param description the description to set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductDescription#setDescription(java.lang.String)
 	 */
+	@Override
 	public void setDescription(String description)
 	{
 		this.description = description;
 	}
 
-	/**
-	 * @see java.lang.Object#toString()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductDescription#toString()
 	 */
 	@Override
 	public String toString()

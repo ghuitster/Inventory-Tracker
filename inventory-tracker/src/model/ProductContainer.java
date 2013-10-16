@@ -11,7 +11,8 @@ import java.util.Set;
  * A class to represent a product container
  * @author David
  */
-public abstract class ProductContainer extends Tagable implements Serializable
+public abstract class ProductContainer extends Tagable implements Serializable,
+		IProductContainer
 {
 	private static final long serialVersionUID = 9015876223451150036L;
 	protected String name;
@@ -27,48 +28,41 @@ public abstract class ProductContainer extends Tagable implements Serializable
 		productGroups = new HashSet<ProductGroup>();
 	}
 
-	/**
-	 * @pre item.barcode != empty
-	 * @pre item.barcode is a valid UPC barcode
-	 * @pre item.barcode is unique among all items
-	 * @pre item.date != empty
-	 * @pre item.date is not in the future
-	 * @pre item.date is not before 1/1/2000
-	 * @param item the Item to attempt to add
-	 * @return whether the Item can be added or not
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductContainer#ableToAddItem(model.IItem)
 	 */
-	public boolean ableToAddItem(Item item)
+	@Override
+	public boolean ableToAddItem(IItem item)
 	{
 		return true;
 	}
 
-	/**
-	 * @pre product.barcode != empty
-	 * @pre product.description != empty
-	 * @pre product.shelfLife > 0
-	 * @pre product.threeMonthSupply > 0
-	 * @pre product.unitSize > 0
-	 * @param product the Product to attempt to add
-	 * @return whether the Product can be added or not
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductContainer#ableToAddProduct(model.IProduct)
 	 */
-	public boolean ableToAddProduct(Product product)
+	@Override
+	public boolean ableToAddProduct(IProduct product)
 	{
 		if(this.products.contains(product))
 			return false;
 
-		for(ProductContainer container: this.productGroups)
+		for(IProductContainer container: this.productGroups)
 			return (container.ableToAddProduct(product));
 
 		return true;
 	}
 
-	/**
-	 * @pre productGroup.name != empty
-	 * @pre productGroup.container != empty
-	 * @param productGroup the ProductGroup to attempt to add
-	 * @return whether the ProductGroup can be added or not
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductContainer#ableToAddProductGroup(model.ProductGroup)
 	 */
-	public boolean ableToAddProductGroup(ProductGroup productGroup)
+	@Override
+	public boolean ableToAddProductGroup(IProductGroup productGroup)
 	{
 		if(this.productGroups.contains(productGroup))
 			return false;
@@ -76,35 +70,38 @@ public abstract class ProductContainer extends Tagable implements Serializable
 		return true;
 	}
 
-	/**
-	 * @pre this.items.contains(item)
-	 * @param item the Item to attempt to remove
-	 * @return whether the Item can be removed or not
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductContainer#ableToRemoveItem(model.IItem)
 	 */
-	public boolean ableToRemoveItem(Item item)
+	@Override
+	public boolean ableToRemoveItem(IItem item)
 	{
 		return true;
 	}
 
-	/**
-	 * @pre this.products.contains(product)
-	 * @param product the Product to attempt to remove
-	 * @return whether the Product can be removed or not
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductContainer#ableToRemoveProduct(model.IProduct)
 	 */
-	public boolean ableToRemoveProduct(Product product)
+	@Override
+	public boolean ableToRemoveProduct(IProduct product)
 	{
-		for(Item item: this.items)
+		for(IItem item: this.items)
 			if(item.getProduct().equals(product))
 				return false;
 
 		return true;
 	}
 
-	/**
-	 * @pre productGroup must be a valid ProductGroup and not null
-	 * @param productGroup the ProductGroup to attempt to remove
-	 * @return whether the ProductGroup can be removed or not
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductContainer#ableToRemoveProductGroup(model.ProductGroup)
 	 */
+	@Override
 	public boolean ableToRemoveProductGroup(ProductGroup productGroup)
 	{
 		if(!productGroup.items.isEmpty())
@@ -113,11 +110,12 @@ public abstract class ProductContainer extends Tagable implements Serializable
 		return true;
 	}
 
-	/**
-	 * @pre item must be a valid Item and not null
-	 * @post my.items.contains(item)
-	 * @param item the Item to add
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductContainer#addItem(model.Item)
 	 */
+	@Override
 	public void addItem(Item item)
 	{
 		Product product = item.getProduct();
@@ -138,11 +136,12 @@ public abstract class ProductContainer extends Tagable implements Serializable
 		}
 	}
 
-	/**
-	 * @pre product must be a valid Product and not null
-	 * @post my.products.contains(product)
-	 * @param product the Product to add
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductContainer#addProduct(model.Product)
 	 */
+	@Override
 	public void addProduct(Product product)
 	{
 		ProductContainer container = this.findContainer(product);
@@ -167,18 +166,18 @@ public abstract class ProductContainer extends Tagable implements Serializable
 		}
 	}
 
-	/**
-	 * @pre productGroup must be a valid ProductGroup and not null
-	 * @pre productGroup.name is unique in this ProductContainer
-	 * @post my.productGroups.contains(productGroup)
-	 * @param productGroup the ProductGroup to add
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductContainer#addProductGroup(model.ProductGroup)
 	 */
+	@Override
 	public void addProductGroup(ProductGroup productGroup)
 	{
 		this.productGroups.add(productGroup);
 	}
 
-	private ProductContainer findContainer(Product product)
+	private ProductContainer findContainer(IProduct product)
 	{
 		for(ProductContainer con: this.productGroups)
 			return con.findContainer(product);
@@ -189,94 +188,105 @@ public abstract class ProductContainer extends Tagable implements Serializable
 			return null;
 	}
 
-	/**
-	 * @pre this.items != null
-	 * @return the Set<Item> of all Items
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductContainer#getAllItems()
 	 */
+	@Override
 	public Set<Item> getAllItems()
 	{
 		return new HashSet<Item>(this.items);
 	}
 
-	/**
-	 * @pre this.productGroups != null
-	 * @return the Set<ProductGroup> of all ProductGroups
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductContainer#getAllProductGroups()
 	 */
+	@Override
 	public Set<ProductGroup> getAllProductGroups()
 	{
 		return new HashSet<ProductGroup>(this.productGroups);
 	}
 
-	/**
-	 * @pre this.products != null
-	 * @return the Set<Product> of all Products
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductContainer#getAllProducts()
 	 */
+	@Override
 	public Set<Product> getAllProducts()
 	{
 		return new HashSet<Product>(this.products);
 	}
 
-	/**
-	 * @return the name
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductContainer#getName()
 	 */
+	@Override
 	public String getName()
 	{
 		return this.name;
 	}
 
-	/**
-	 * @pre item must be a valid Item and not null
-	 * @post my.items.doesNotContain(item)
-	 * @param item the Item to remove
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductContainer#removeItem(model.Item)
 	 */
+	@Override
 	public void removeItem(Item item)
 	{
 		this.items.remove(item);
 		Inventory.getInstance().reportRemovedItem(item);
 	}
 
-	/**
-	 * @pre product must be a valid Product and not null
-	 * @pre my.items.doesNotContain(Items of this Product type)
-	 * @post my.products.doesNotContain(product)
-	 * @param product the Product to remove
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductContainer#removeProduct(model.IProduct)
 	 */
-	public void removeProduct(Product product)
+	@Override
+	public void removeProduct(IProduct product)
 	{
 		this.products.remove(product);
 	}
 
-	/**
-	 * @pre productGroup must be a valid ProductGroup and not null
-	 * @post my.productGroups.doesNotContain(productGroup)
-	 * @param productGroup the ProductGroup to remove
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductContainer#removeProductGroup(model.ProductGroup)
 	 */
-	public void removeProductGroup(ProductGroup productGroup)
+	@Override
+	public void removeProductGroup(IProductGroup productGroup)
 	{
 		this.productGroups.remove(productGroup);
 	}
 
-	/**
-	 * @pre name must be a valid String and not null
-	 * @post my.name == name
-	 * @param name the name to set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductContainer#setName(java.lang.String)
 	 */
+	@Override
 	public void setName(String name)
 	{
 		this.name = name;
 	}
 
-	/**
-	 * @pre item must be a valid item and not null
-	 * @pre otherProductContainer must be a valid ProductContainer and not null
-	 * @post my.items.doesNotContain(item)
-	 * @post otherProductContainer.items.contains(item)
-	 * @param item the Item to transfer
-	 * @param targetProductContainer the target ProductContainer
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductContainer#transferItem(model.Item,
+	 * model.ProductContainer)
 	 */
+	@Override
 	public void transferItem(Item item, ProductContainer targetContainer)
 	{
-		ProductContainer container = this.findContainer(item.getProduct());
+		IProductContainer container = this.findContainer(item.getProduct());
 
 		if(container == null)
 		{

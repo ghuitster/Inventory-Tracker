@@ -11,13 +11,13 @@ import java.util.Set;
  * A class to represent a product
  * @author David
  */
-public class Product extends Tagable implements Serializable
+public class Product extends Tagable implements Serializable, IProduct
 {
 	// Variables
 	private static final long serialVersionUID = 1835988277946941153L;
 	private Date creationDate;
-	private ProductDescription description;
-	private Barcode barcode;
+	private IProductDescription description;
+	private IBarcode barcode;
 	private Amount size;
 	private int shelfLife;
 	private CountThreeMonthSupply threeMonthSupply;
@@ -49,7 +49,7 @@ public class Product extends Tagable implements Serializable
 	 * @param threeMonthSupply
 	 * @param containers
 	 */
-	public Product(Date creationDate, String description, Barcode barcode,
+	public Product(Date creationDate, String description, IBarcode barcode,
 			Amount size, int shelfLife, CountThreeMonthSupply threeMonthSupply,
 			Set<ProductContainer> containers)
 	{
@@ -63,11 +63,12 @@ public class Product extends Tagable implements Serializable
 		this.containers = containers;
 	}
 
-	/**
-	 * @pre container != null
-	 * @param container the container to attempt to add
-	 * @return whether the container can be added or not
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#ableToAddContainer(model.StorageUnit)
 	 */
+	@Override
 	public boolean ableToAddContainer(StorageUnit container)
 	{
 		boolean response = false;
@@ -81,11 +82,13 @@ public class Product extends Tagable implements Serializable
 		return response;
 	}
 
-	/**
-	 * @pre productContainer must != null
-	 * @param productContainer the container to attempt to remove
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#ableToRemoveContainer(model.ProductContainer)
 	 */
-	public boolean ableToRemoveContainer(ProductContainer productContainer)
+	@Override
+	public boolean ableToRemoveContainer(IProductContainer productContainer)
 	{
 		boolean response = false;
 
@@ -98,12 +101,13 @@ public class Product extends Tagable implements Serializable
 		return response;
 	}
 
-	/**
-	 * @pre barcode != null
-	 * @param barcode the Barcode to attempt to set
-	 * @return if the Barcode can be set or not
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#ableToSetBarcode(model.IBarcode)
 	 */
-	public boolean ableToSetBarcode(Barcode barcode)
+	@Override
+	public boolean ableToSetBarcode(IBarcode barcode)
 	{
 		boolean response = false;
 
@@ -113,21 +117,23 @@ public class Product extends Tagable implements Serializable
 		return response;
 	}
 
-	/**
-	 * @pre description != null
-	 * @param description the description to attempt to set
-	 * @return if the description can be set or not
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#ableToSetDescription(java.lang.String)
 	 */
+	@Override
 	public boolean ableToSetDescription(String description)
 	{
 		return ProductDescription.isValid(description);
 	}
 
-	/**
-	 * @pre shelfLife must be > 0
-	 * @param shelfLife the shelfLife to attempt to set
-	 * @return if the shelflife can be set or not
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#ableToSetShelfLife(int)
 	 */
+	@Override
 	public boolean ableToSetShelfLife(int shelfLife)
 	{
 		boolean response = false;
@@ -138,12 +144,12 @@ public class Product extends Tagable implements Serializable
 		return response;
 	}
 
-	/**
-	 * @pre size != null
-	 * @pre size number component must not be <= 0
-	 * @param size the size to attempt to set
-	 * @return whether the size can be set or not
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#ableToSetSize(model.Amount)
 	 */
+	@Override
 	public boolean ableToSetSize(Amount size)
 	{
 		boolean response = false;
@@ -171,11 +177,13 @@ public class Product extends Tagable implements Serializable
 		return response;
 	}
 
-	/**
-	 * @pre threeMonthSupply != null
-	 * @param threeMonthSupply the threeMonthSupply to attempt to set
-	 * @return whether the threeMonthSupply could be set or not
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * model.IProduct#ableToSetThreeMonthSupply(model.CountThreeMonthSupply)
 	 */
+	@Override
 	public boolean ableToSetThreeMonthSupply(
 			CountThreeMonthSupply threeMonthSupply)
 	{
@@ -195,13 +203,12 @@ public class Product extends Tagable implements Serializable
 		return response;
 	}
 
-	/**
-	 * @pre container != null
-	 * @pre this Product must not exist in another product container in this
-	 *      storage unit
-	 * @post container == passed in container
-	 * @param productContainer the container to add
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#addContainer(model.ProductContainer)
 	 */
+	@Override
 	public void addContainer(ProductContainer productContainer)
 	{
 		this.containers.add(productContainer);
@@ -212,6 +219,12 @@ public class Product extends Tagable implements Serializable
 	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#equals(java.lang.Object)
+	 */
+
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -269,64 +282,87 @@ public class Product extends Tagable implements Serializable
 		return true;
 	}
 
-	/**
-	 * @return the barcode
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#getBarcode()
 	 */
-	public Barcode getBarcode()
+	@Override
+	public IBarcode getBarcode()
 	{
 		return barcode;
 	}
 
-	/**
-	 * @return the containers set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#getContainers()
 	 */
+	@Override
 	public Set<ProductContainer> getContainers()
 	{
 		return this.containers;
 	}
 
-	/**
-	 * @return the creationDate
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#getCreationDate()
 	 */
+	@Override
 	public Date getCreationDate()
 	{
 		return creationDate;
 	}
 
-	/**
-	 * @return the description
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#getDescription()
 	 */
-	public ProductDescription getDescription()
+	@Override
+	public IProductDescription getDescription()
 	{
 		return description;
 	}
 
-	/**
-	 * @return the shelfLife
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#getShelfLife()
 	 */
+	@Override
 	public int getShelfLife()
 	{
 		return shelfLife;
 	}
 
-	/**
-	 * @return the size
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#getSize()
 	 */
+	@Override
 	public Amount getSize()
 	{
 		return this.size;
 	}
 
-	/**
-	 * @return the threeMonthSupply
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#getThreeMonthSupply()
 	 */
+	@Override
 	public Amount getThreeMonthSupply()
 	{
 		return threeMonthSupply;
 	}
 
-	/**
-	 * @see java.lang.Object#hashCode()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#hashCode()
 	 */
 	@Override
 	public int hashCode()
@@ -354,86 +390,88 @@ public class Product extends Tagable implements Serializable
 		return result;
 	}
 
-	/**
-	 * @pre productContainer != null
-	 * @pre productContainer must exist in the set of containers for this
-	 *      product
-	 * @post productContainer no longer exists in the set of containers for this
-	 *       product
-	 * @param productContainer the container to remove
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#removeContainer(model.ProductContainer)
 	 */
-	public void removeContainer(ProductContainer productContainer)
+	@Override
+	public void removeContainer(IProductContainer productContainer)
 	{
 		this.containers.remove(productContainer);
 	}
 
-	/**
-	 * @pre barcode != null
-	 * @post barcode == passed in barcode
-	 * @param barcode the Barcode to set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#setBarcode(model.IBarcode)
 	 */
-	public void setBarcode(Barcode barcode)
+	@Override
+	public void setBarcode(IBarcode barcode)
 	{
 		if(barcode != null && Barcode.isValid(barcode.getNumber()))
 			this.barcode = barcode;
 	}
 
-	/**
-	 * @pre creationDate != null
-	 * @pre creationDate == earliest entryDate of items of this product
-	 * @post creationData == passed in creationDate
-	 * @param creationDate the creationDate to set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#setCreationDate(java.util.Date)
 	 */
+	@Override
 	public void setCreationDate(Date creationDate)
 	{
 		this.creationDate = creationDate;
 	}
 
-	/**
-	 * @pre != null
-	 * @pre description must be valid
-	 * @param description the description to set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#setDescription(model.ProductDescription)
 	 */
-	public void setDescription(ProductDescription description)
+	@Override
+	public void setDescription(IProductDescription description)
 	{
 		this.description = description;
 	}
 
-	/**
-	 * @pre shelfLife != null
-	 * @pre shelfLife must be non negative
-	 * @post shelfLife == passed in shelfLife
-	 * @param shelfLife the shelfLife to set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#setShelfLife(int)
 	 */
+	@Override
 	public void setShelfLife(int shelfLife)
 	{
 		this.shelfLife = shelfLife;
 	}
 
-	/**
-	 * @pre size number component must be > 0
-	 * @pre size != null
-	 * @post size == passed in size
-	 * @param size the size to set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#setSize(model.UnitSize)
 	 */
+	@Override
 	public void setSize(UnitSize size)
 	{
 		this.size = size;
 	}
 
-	/**
-	 * @pre threeMonthSupply != null
-	 * @pre threeMonthSupply number component must be > 0
-	 * @post threeMonthSupply == passed in threeMonthSupply
-	 * @param threeMonthSupply the threeMonthSupply to set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#setThreeMonthSupply(model.CountThreeMonthSupply)
 	 */
+	@Override
 	public void setThreeMonthSupply(CountThreeMonthSupply threeMonthSupply)
 	{
 		this.threeMonthSupply = threeMonthSupply;
 	}
 
-	/**
-	 * @see java.lang.Object#toString()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#toString()
 	 */
 	@Override
 	public String toString()

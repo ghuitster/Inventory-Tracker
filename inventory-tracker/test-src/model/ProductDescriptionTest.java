@@ -14,7 +14,7 @@ public class ProductDescriptionTest
 		String goodPD = "Test Product No. 1";
 		String goodPD2 = "Test Product No. 2";
 
-		ProductDescription pdGood = new ProductDescription(goodPD);
+		IProductDescription pdGood = new ProductDescription(goodPD);
 		assertFalse(goodPD2.equals(pdGood.getDescription()));
 		pdGood.setDescription(goodPD2);
 		assertTrue(goodPD2.equals(pdGood.getDescription()));
@@ -26,8 +26,8 @@ public class ProductDescriptionTest
 		String goodPD = "Test Product No. 1";
 		String goodPD2 = "Test Product No. 2";
 
-		ProductDescription pdGood = new ProductDescription(goodPD);
-		ProductDescription pdGood2 = new ProductDescription(goodPD2);
+		IProductDescription pdGood = new ProductDescription(goodPD);
+		IProductDescription pdGood2 = new ProductDescription(goodPD2);
 
 		assertFalse(pdGood.equals(pdGood2));
 		pdGood2.setDescription(goodPD);
@@ -39,7 +39,7 @@ public class ProductDescriptionTest
 	{
 		String goodPD = "Test Product No. 1";
 		String goodPD2 = "Test Product No. 2";
-		ProductDescription pdGood = new ProductDescription(goodPD);
+		IProductDescription pdGood = new ProductDescription(goodPD);
 
 		assertFalse(goodPD2.equals(pdGood.getDescription()));
 		assertTrue(goodPD.equals(pdGood.getDescription()));
@@ -52,9 +52,9 @@ public class ProductDescriptionTest
 		String goodPD2 = "Test Product No. 2";
 		String test = goodPD.toString();
 
-		ProductDescription pdGood = new ProductDescription(goodPD);
-		ProductDescription pdGood2 = new ProductDescription(goodPD2);
-		ProductDescription pdTest = new ProductDescription(test);
+		IProductDescription pdGood = new ProductDescription(goodPD);
+		IProductDescription pdGood2 = new ProductDescription(goodPD2);
+		IProductDescription pdTest = new ProductDescription(test);
 
 		assertFalse(pdTest.hashCode() == pdGood2.hashCode());
 		assertTrue(pdTest.hashCode() == pdGood.hashCode());
@@ -76,7 +76,7 @@ public class ProductDescriptionTest
 		String goodPD = "Test Product No. 1";
 		String badPD = "TestProductNo.1";
 
-		ProductDescription pdGood = new ProductDescription(goodPD);
+		IProductDescription pdGood = new ProductDescription(goodPD);
 		assertFalse(badPD.equals(pdGood.getDescription()));
 		assertTrue(goodPD.equals(pdGood.getDescription()));
 	}
@@ -86,7 +86,7 @@ public class ProductDescriptionTest
 	{
 		String goodPD = "Test Product No. 1";
 		String goodPD2 = "Test Product No. 2";
-		ProductDescription pdGood = new ProductDescription(goodPD);
+		IProductDescription pdGood = new ProductDescription(goodPD);
 
 		assertFalse(goodPD2.equals(pdGood.getDescription()));
 		pdGood.setDescription(goodPD2);
@@ -98,7 +98,7 @@ public class ProductDescriptionTest
 	{
 		String goodPD = "Test Product No. 1";
 		String test = "ProductDescription [description=Test Product No. 1]";
-		ProductDescription pdGood = new ProductDescription(goodPD);
+		IProductDescription pdGood = new ProductDescription(goodPD);
 
 		assertFalse(goodPD.equals(pdGood.toString()));
 		assertTrue(test.equals(pdGood.toString()));

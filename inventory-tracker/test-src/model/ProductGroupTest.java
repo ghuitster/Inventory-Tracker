@@ -43,7 +43,7 @@ public class ProductGroupTest
 	{
 		ProductGroup group = createTestGroup();
 		assertEquals(0, group.getAllProducts().size());
-		Item item = populateTestGroup(group);
+		IItem item = populateTestGroup(group);
 		group.addProduct(item.getProduct());
 		assertEquals(1, group.getAllProducts().size());
 		assertEquals(item.getProduct(), group.getAllProducts().iterator()

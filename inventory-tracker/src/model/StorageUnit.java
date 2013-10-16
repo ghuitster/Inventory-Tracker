@@ -5,7 +5,7 @@ package model;
  * A class representing a Storage Unit
  * @author David
  */
-public class StorageUnit extends ProductContainer
+public class StorageUnit extends ProductContainer implements IStorageUnit
 {
 	private static final long serialVersionUID = -4003256091489850639L;
 
@@ -14,8 +14,10 @@ public class StorageUnit extends ProductContainer
 		super(name);
 	}
 
-	/**
-	 * @see java.lang.Object#toString()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IStorageUnit#toString()
 	 */
 	@Override
 	public String toString()

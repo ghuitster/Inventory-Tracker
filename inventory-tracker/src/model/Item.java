@@ -12,16 +12,16 @@ import java.util.Date;
  * @author Michael
  * 
  */
-public class Item extends Tagable implements Serializable
+public class Item extends Tagable implements Serializable, IItem
 {
 	// Variables
 	private static final long serialVersionUID = -5007529040849157344L;
 	private Product product;
-	private Barcode barcode;
+	private IBarcode barcode;
 	private final Date entryDate;
 	private Date expirationDate;
 	private Date exitTime;
-	private ProductContainer container;
+	private IProductContainer container;
 
 	/**
 	 * @pre product must != null && must exist
@@ -39,8 +39,8 @@ public class Item extends Tagable implements Serializable
 	 * @param exitTime
 	 * @param container
 	 */
-	public Item(Product product, Barcode barcode, Date entryDate,
-			Date expirationDate, Date exitTime, ProductContainer container)
+	public Item(Product product, IBarcode barcode, Date entryDate,
+			Date expirationDate, Date exitTime, IProductContainer container)
 	{
 		this.product = product;
 		this.barcode = barcode;
@@ -50,12 +50,13 @@ public class Item extends Tagable implements Serializable
 		this.container = container;
 	}
 
-	/**
-	 * @pre barcode != null
-	 * @param barcode the Barcode to attempt to set
-	 * @return whether or not the barcode can be set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IItem#ableToSetBarcode(model.IBarcode)
 	 */
-	public boolean ableToSetBarcode(Barcode barcode)
+	@Override
+	public boolean ableToSetBarcode(IBarcode barcode)
 	{
 		boolean response = false;
 
@@ -70,21 +71,23 @@ public class Item extends Tagable implements Serializable
 		return response;
 	}
 
-	/**
-	 * @pre container != null
-	 * @param container the ProductContainer to attempt to set
-	 * @return whether or not container can be set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IItem#ableToSetContainer(model.StorageUnit)
 	 */
+	@Override
 	public boolean ableToSetContainer(StorageUnit container)
 	{
 		return container.ableToAddItem(this);
 	}
 
-	/**
-	 * @pre exitTime != null
-	 * @param exitTime the exitTime Date to attempt to set
-	 * @return whether or not we can set the exitTime
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IItem#ableToSetExitTime(java.util.Date)
 	 */
+	@Override
 	public boolean ableToSetExitTime(Date exitTime)
 	{
 		boolean response = false;
@@ -101,11 +104,12 @@ public class Item extends Tagable implements Serializable
 		return response;
 	}
 
-	/**
-	 * @pre expirationDate != null
-	 * @param expirationDate the expirationDate Date to attempt to set
-	 * @return whether or not the expirationDate can be set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IItem#ableToSetExpirationDate(java.util.Date)
 	 */
+	@Override
 	public boolean ableToSetExpirationDate(Date expirationDate)
 	{
 		boolean response = false;
@@ -122,12 +126,13 @@ public class Item extends Tagable implements Serializable
 		return response;
 	}
 
-	/**
-	 * @pre product != null
-	 * @param product the Product to attempt to set
-	 * @return whether or not the product can be set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IItem#ableToSetProduct(model.Product)
 	 */
-	public boolean ableToSetProduct(Product product)
+	@Override
+	public boolean ableToSetProduct(IProduct product)
 	{
 		boolean response = false;
 
@@ -143,8 +148,10 @@ public class Item extends Tagable implements Serializable
 		return response;
 	}
 
-	/**
-	 * @see java.lang.Object#equals(java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IItem#equals(java.lang.Object)
 	 */
 	@Override
 	public boolean equals(Object obj)
@@ -231,57 +238,78 @@ public class Item extends Tagable implements Serializable
 		return true;
 	}
 
-	/**
-	 * @return the barcode
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IItem#getBarcode()
 	 */
-	public Barcode getBarcode()
+	@Override
+	public IBarcode getBarcode()
 	{
 		return barcode;
 	}
 
-	/**
-	 * @return the container
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IItem#getContainer()
 	 */
-	public ProductContainer getContainer()
+	@Override
+	public IProductContainer getContainer()
 	{
 		return container;
 	}
 
-	/**
-	 * @return the entryDate
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IItem#getEntryDate()
 	 */
+	@Override
 	public Date getEntryDate()
 	{
 		return entryDate;
 	}
 
-	/**
-	 * @return the exitTime
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IItem#getExitTime()
 	 */
+	@Override
 	public Date getExitTime()
 	{
 		return exitTime;
 	}
 
-	/**
-	 * @return the expirationDate
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IItem#getExpirationDate()
 	 */
+	@Override
 	public Date getExpirationDate()
 	{
 		return expirationDate;
 	}
 
-	/**
-	 * @return the product
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IItem#getProduct()
 	 */
+	@Override
 	public Product getProduct()
 	{
 		return product;
 	}
 
-	/**
-	 * @see java.lang.Object#hashCode()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IItem#hashCode()
 	 */
+
 	@Override
 	public int hashCode()
 	{
@@ -305,58 +333,65 @@ public class Item extends Tagable implements Serializable
 		return result;
 	}
 
-	/**
-	 * @pre barcode != null
-	 * @post barcode == passed in barcode
-	 * @param barcode the barcode to set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IItem#setBarcode(model.IBarcode)
 	 */
-	public void setBarcode(Barcode barcode)
+	@Override
+	public void setBarcode(IBarcode barcode)
 	{
 		this.barcode = barcode;
 	}
 
-	/**
-	 * @pre container != null
-	 * @post container == passed in container
-	 * @param otherProductContainer the container to set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IItem#setContainer(model.ProductContainer)
 	 */
-	public void setContainer(ProductContainer otherProductContainer)
+	@Override
+	public void setContainer(IProductContainer otherProductContainer)
 	{
 		this.container = otherProductContainer;
 	}
 
-	/**
-	 * @pre exitTime != null
-	 * @post exitTime == passed in exitTime
-	 * @param exitTime the exitTime to set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IItem#setExitTime(java.util.Date)
 	 */
+	@Override
 	public void setExitTime(Date exitTime)
 	{
 		this.exitTime = exitTime;
 	}
 
-	/**
-	 * @pre expirationDate != null
-	 * @post expirationDate == passed in expirationDate
-	 * @param expirationDate the expirationDate to set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IItem#setExpirationDate(java.util.Date)
 	 */
+	@Override
 	public void setExpirationDate(Date expirationDate)
 	{
 		this.expirationDate = expirationDate;
 	}
 
-	/**
-	 * @pre product != null
-	 * @post product == product passed in
-	 * @param product the product to set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IItem#setProduct(model.Product)
 	 */
+	@Override
 	public void setProduct(Product product)
 	{
 		this.product = product;
 	}
 
-	/**
-	 * @see java.lang.Object#toString()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IItem#toString()
 	 */
 	@Override
 	public String toString()

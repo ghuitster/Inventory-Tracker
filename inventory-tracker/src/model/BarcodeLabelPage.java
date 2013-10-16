@@ -18,7 +18,7 @@ import com.itextpdf.text.Rectangle;
  * @author Michael
  * 
  */
-public class BarcodeLabelPage
+public class BarcodeLabelPage implements IBarcodeLabelPage
 {
 	// Variables
 	private final ArrayList<Barcode> barcodes = null;
@@ -38,17 +38,12 @@ public class BarcodeLabelPage
 
 	}
 
-	/**
-	 * Creates a PDF document containing Barcode labels (UPC-A) generated from
-	 * the Barcode objects passed in.
-	 * @pre this.barcodes must not be null;
-	 * @pre this.document must not be null;
-	 * @pre this.pageCount must != 0;
-	 * @post this.RESULT represents a location to the Valid PDF we created.
-	 * @param filename the path to the new PDF document
-	 * @throws IOException
-	 * @throws DocumentException
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IBarcodeLabelPage#createPDF(java.lang.String)
 	 */
+	@Override
 	public void createPDF(String filename) throws IOException,
 			DocumentException
 	{

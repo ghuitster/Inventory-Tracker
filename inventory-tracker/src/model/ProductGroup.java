@@ -5,10 +5,10 @@ package model;
  * A class to represent a ProductGroup
  * @author David
  */
-public class ProductGroup extends ProductContainer
+public class ProductGroup extends ProductContainer implements IProductGroup
 {
 	private static final long serialVersionUID = 4647265154277890697L;
-	private ProductContainer container;
+	private IProductContainer container;
 	private ThreeMonthSupply threeMonthSupply;
 
 	/**
@@ -17,7 +17,7 @@ public class ProductGroup extends ProductContainer
 	 * @param container
 	 * @param threeMonthSupply
 	 */
-	public ProductGroup(String name, ProductContainer container,
+	public ProductGroup(String name, IProductContainer container,
 			ThreeMonthSupply threeMonthSupply)
 	{
 		super(name);
@@ -25,8 +25,10 @@ public class ProductGroup extends ProductContainer
 		this.threeMonthSupply = threeMonthSupply;
 	}
 
-	/**
-	 * @see java.lang.Object#equals(java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductGroup#equals(java.lang.Object)
 	 */
 	@Override
 	public boolean equals(Object obj)
@@ -55,24 +57,32 @@ public class ProductGroup extends ProductContainer
 		return true;
 	}
 
-	/**
-	 * @return the container
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductGroup#getContainer()
 	 */
-	public ProductContainer getContainer()
+	@Override
+	public IProductContainer getContainer()
 	{
 		return this.container;
 	}
 
-	/**
-	 * @return the threeMonthSupply
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductGroup#getThreeMonthSupply()
 	 */
+	@Override
 	public ThreeMonthSupply getThreeMonthSupply()
 	{
 		return this.threeMonthSupply;
 	}
 
-	/**
-	 * @see java.lang.Object#hashCode()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductGroup#hashCode()
 	 */
 	@Override
 	public int hashCode()
@@ -90,28 +100,32 @@ public class ProductGroup extends ProductContainer
 		return result;
 	}
 
-	/**
-	 * @pre container != null
-	 * @post my.container == passed in ProductContainer
-	 * @param container the ProductContainer to set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductGroup#setContainer(model.IProductContainer)
 	 */
-	public void setContainer(ProductContainer container)
+	@Override
+	public void setContainer(IProductContainer container)
 	{
 		this.container = container;
 	}
 
-	/**
-	 * @pre threeMonthSupply must be a valid ThreeMonthSupply and not null
-	 * @post my.threeMonthSupply == passed in ThreeMonthSupply
-	 * @param threeMonthSupply the ThreeMonthSupply to set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductGroup#setThreeMonthSupply(model.ThreeMonthSupply)
 	 */
+	@Override
 	public void setThreeMonthSupply(ThreeMonthSupply threeMonthSupply)
 	{
 		this.threeMonthSupply = threeMonthSupply;
 	}
 
-	/**
-	 * @see java.lang.Object#toString()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProductGroup#toString()
 	 */
 	@Override
 	public String toString()

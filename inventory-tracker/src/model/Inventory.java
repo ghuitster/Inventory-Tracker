@@ -16,7 +16,7 @@ import model.exception.InvalidNameException;
  * @author Brian
  * 
  */
-public class Inventory implements Serializable
+public class Inventory implements Serializable, IInventory
 {
 	/**
 	 * Gets the static Inventory instance. Creates it if it does not exist.
@@ -92,13 +92,12 @@ public class Inventory implements Serializable
 		this.lastGeneratedBarCode = 400000000000l;
 	}
 
-	/**
-	 * Determined if a storage unit is valid for addition
-	 * @param storageUnit The new storage unit to check
-	 * @pre (none)
-	 * @post A boolean value is generated
-	 * @return True if the storage unit may be added. Otherwise, false
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IInventory#ableToAddStorageUnit(model.StorageUnit)
 	 */
+	@Override
 	public boolean ableToAddStorageUnit(StorageUnit storageUnit)
 	{
 		if(storageUnit == null)
@@ -111,13 +110,12 @@ public class Inventory implements Serializable
 
 	}
 
-	/**
-	 * Adds a new Storage Unit to the system
-	 * @pre A storage unit does not exist with the same name
-	 * @post The passed storage unit has been inserted into the system
-	 * @param storageUnit The new storage unit
-	 * @throws InvalidNameException, NullPointerException
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IInventory#addStorageUnit(model.StorageUnit)
 	 */
+	@Override
 	public void addStorageUnit(StorageUnit storageUnit)
 			throws InvalidNameException, NullPointerException
 	{
@@ -129,14 +127,12 @@ public class Inventory implements Serializable
 		this.storageUnits.add(storageUnit);
 	}
 
-	/**
-	 * Gets all known products throughout all containers and their
-	 * sub-containers
-	 * @pre (none)
-	 * @post A list has been created containing all known products. This list
-	 *       may be empty
-	 * @return A list containing references to all of the products
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IInventory#getAllProducts()
 	 */
+	@Override
 	public Set<Product> getAllProducts()
 	{
 		HashSet<Product> products = new HashSet<Product>();
@@ -147,76 +143,67 @@ public class Inventory implements Serializable
 		return products;
 	}
 
-	/**
-	 * Gets a list of all Storage Units in the system
-	 * @pre (none)
-	 * @post A list has been created containing all known Storage Units. This
-	 *       list may be empty
-	 * @return A list containing references to all top level ProductContainers
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IInventory#getAllStorageUnits()
 	 */
+	@Override
 	public Set<StorageUnit> getAllStorageUnits()
 	{
 		return new HashSet<StorageUnit>(this.storageUnits);
 	}
 
-	/**
-	 * Gets a map of Dates to what items expire on those dates
-	 * @pre (none)
-	 * @post A Map has been created with the aforementioned expiration dates.
-	 *       This map may be empty.
-	 * @return A copy of the map containing all known expiration dates mapped to
-	 *         which items are expiring
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IInventory#getItemExpirations()
 	 */
+	@Override
 	public SortedMap<Date, Set<Item>> getItemExpirations()
 	{
 		return new TreeMap<Date, Set<Item>>(this.itemExpirations);
 	}
 
-	/**
-	 * Gets a map of Dates (each of which represents a specific month) mapped to
-	 * what ProductGroups' three month supplies expire in the key's month
-	 * @pre (none)
-	 * @post A map has been created with the aforementioned properties. This map
-	 *       may be empty.
-	 * @return A copy of the map containing months correlated to what
-	 *         ProductGroups' three month supplies expire on that month
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IInventory#getNMonthSupplyGroupMap()
 	 */
+	@Override
 	public SortedMap<Date, Set<ProductGroup>> getNMonthSupplyGroupMap()
 	{
 		return new TreeMap<Date, Set<ProductGroup>>(this.nMonthSupplyGroupMap);
 	}
 
-	/**
-	 * Gets a map of Dates (each of which represents a specific month) mapped to
-	 * what Products' three month supplies expire in the key's month
-	 * @pre (none)
-	 * @post A map has been created with the aforementioned properties. This map
-	 *       may be empty.
-	 * @return A copy of the map containing months correlated to what products'
-	 *         three month supplies expire on that month
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IInventory#getNMonthSupplyMap()
 	 */
+	@Override
 	public SortedMap<Date, Set<Product>> getNMonthSupplyMap()
 	{
 		return new TreeMap<Date, Set<Product>>(this.nMonthSupplyMap);
 	}
 
-	/**
-	 * Gets the persistence object for saving and loading data to this object
-	 * @return An object capable of saving and loading this object's state
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IInventory#getPersistence()
 	 */
+	@Override
 	public IPersistence getPersistence()
 	{
 		return this.persistence;
 	}
 
-	/**
-	 * Gets a map of Dates to what items were removed on each date
-	 * @pre (none)
-	 * @post A map has been created with the aforementioned properties. This map
-	 *       may be empty.
-	 * @return A copy of the map containing all item removal dates mapped to the
-	 *         items removed.
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IInventory#getRemovedItems()
 	 */
+	@Override
 	public SortedMap<Date, Set<Item>> getRemovedItems()
 	{
 		return new TreeMap<Date, Set<Item>>(this.removedItems);
@@ -240,33 +227,34 @@ public class Inventory implements Serializable
 	 * @post workingSet contains all products from container and its children
 	 * @param workingSet The current set being built
 	 */
-	private void recurseProductContainer(ProductContainer container,
+	private void recurseProductContainer(IProductContainer container,
 			Set<Product> workingSet)
 	{
 		workingSet.addAll(container.getAllProducts());
-		for(ProductContainer subContainer: container.getAllProductGroups())
+		for(IProductContainer subContainer: container.getAllProductGroups())
 		{
 			recurseProductContainer(subContainer, workingSet);
 		}
 	}
 
-	/**
-	 * Clears all Storage Units from the system
-	 * @pre (none)
-	 * @post No storage units exist in the system
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IInventory#removeAllStorageUnits()
 	 */
+	@Override
 	public void removeAllStorageUnits()
 	{
 		this.storageUnits.clear();
 	}
 
-	/**
-	 * Removes a storage unit from the system
-	 * @pre The passed storage unit exists in the system
-	 * @post The passed storage unit is no longer in the system
-	 * @param storageUnit The Storage Unit to remove
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IInventory#removeStorageUnit(model.StorageUnit)
 	 */
-	public void removeStorageUnit(StorageUnit storageUnit)
+	@Override
+	public void removeStorageUnit(IStorageUnit storageUnit)
 	{
 		if(!this.storageUnits.contains(storageUnit))
 			throw new InvalidParameterException(

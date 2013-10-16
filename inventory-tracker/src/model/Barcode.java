@@ -8,10 +8,11 @@ import java.io.Serializable;
  * @author Michael
  * 
  */
-public class Barcode implements Serializable
+public class Barcode implements Serializable, IBarcode
 {
 	// Variables
 	private static final long serialVersionUID = -4409370215399749663L;
+
 	/**
 	 * @pre number must not be null
 	 * @param number string of the barcode number to validate
@@ -38,10 +39,12 @@ public class Barcode implements Serializable
 		this.number = number;
 	}
 
-	/**
-	 * @param number the number to attempt to set
-	 * @return whether or not the number can be set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IBarcode#ableToSetNumber(java.lang.String)
 	 */
+	@Override
 	public boolean ableToSetNumber(String number)
 	{
 		boolean response = false;
@@ -54,8 +57,10 @@ public class Barcode implements Serializable
 		return response;
 	}
 
-	/**
-	 * @see java.lang.Object#equals(java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IBarcode#equals(java.lang.Object)
 	 */
 	@Override
 	public boolean equals(Object obj)
@@ -88,16 +93,21 @@ public class Barcode implements Serializable
 	}
 
 	// Methods
-	/**
-	 * @return the number
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IBarcode#getNumber()
 	 */
+	@Override
 	public String getNumber()
 	{
 		return number;
 	}
 
-	/**
-	 * @see java.lang.Object#hashCode()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IBarcode#hashCode()
 	 */
 	@Override
 	public int hashCode()
@@ -108,16 +118,21 @@ public class Barcode implements Serializable
 		return result;
 	}
 
-	/**
-	 * @param number the number to set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IBarcode#setNumber(java.lang.String)
 	 */
+	@Override
 	public void setNumber(String number)
 	{
 		this.number = number;
 	}
 
-	/**
-	 * @see java.lang.Object#toString()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IBarcode#toString()
 	 */
 	@Override
 	public String toString()

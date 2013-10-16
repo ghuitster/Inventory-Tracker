@@ -16,7 +16,7 @@ public class ProductContainerTest
 	public void testAbleToAddItem()
 	{
 		StorageUnit unit = new StorageUnit("test");
-		ProductContainer container =
+		IProductContainer container =
 				new ProductGroup("test", unit, new ThreeMonthSupply(1,
 						UnitType.FLUID_OUNCES));
 
@@ -28,17 +28,17 @@ public class ProductContainerTest
 	public void testAbleToAddProduct()
 	{
 		StorageUnit unit = new StorageUnit("test");
-		ProductContainer container =
+		IProductContainer container =
 				new ProductGroup("test", unit, new ThreeMonthSupply(1,
 						UnitType.FLUID_OUNCES));
-		Product product =
+		IProduct product =
 				new Product(new Date(), "test", new Barcode("400000000000"),
 						new CountUnitSize(3), 3, null,
 						new HashSet<ProductContainer>());
 		assertTrue(container.ableToAddProduct(product));
 		Set<Product> products = container.getAllProducts();
 
-		for(Product prod: products)
+		for(IProduct prod: products)
 			assertFalse(container.ableToAddProduct(prod));
 	}
 
@@ -46,16 +46,16 @@ public class ProductContainerTest
 	public void testAbleToAddProductGroup()
 	{
 		StorageUnit unit = new StorageUnit("test");
-		ProductContainer container =
+		IProductContainer container =
 				new ProductGroup("test", unit, new ThreeMonthSupply(1,
 						UnitType.FLUID_OUNCES));
-		ProductGroup group =
+		IProductGroup group =
 				new ProductGroup("test", container, new ThreeMonthSupply(3,
 						UnitType.FLUID_OUNCES));
 		assertTrue(container.ableToAddProductGroup(group));
 		Set<ProductGroup> groups = container.getAllProductGroups();
 
-		for(ProductGroup gro: groups)
+		for(IProductGroup gro: groups)
 			assertFalse(container.ableToAddProductGroup(gro));
 	}
 
@@ -63,7 +63,7 @@ public class ProductContainerTest
 	public void testAbleToRemoveItem()
 	{
 		StorageUnit unit = new StorageUnit("test");
-		ProductContainer container =
+		IProductContainer container =
 				new ProductGroup("test", unit, new ThreeMonthSupply(1,
 						UnitType.FLUID_OUNCES));
 
@@ -75,7 +75,7 @@ public class ProductContainerTest
 	public void testAbleToRemoveProduct()
 	{
 		StorageUnit unit = new StorageUnit("test");
-		ProductContainer container =
+		IProductContainer container =
 				new ProductGroup("test", unit, new ThreeMonthSupply(1,
 						UnitType.FLUID_OUNCES));
 
@@ -100,7 +100,7 @@ public class ProductContainerTest
 	public void testAbleToRemoveProductGroup()
 	{
 		StorageUnit unit = new StorageUnit("test");
-		ProductContainer container =
+		IProductContainer container =
 				new ProductGroup("test", unit, new ThreeMonthSupply(1,
 						UnitType.FLUID_OUNCES));
 		Product product =
@@ -119,7 +119,7 @@ public class ProductContainerTest
 	public void testGetAllItems()
 	{
 		StorageUnit unit = new StorageUnit("test");
-		ProductContainer container =
+		IProductContainer container =
 				new ProductGroup("test", unit, new ThreeMonthSupply(1,
 						UnitType.FLUID_OUNCES));
 
@@ -130,7 +130,7 @@ public class ProductContainerTest
 	public void testGetAllProductGroups()
 	{
 		StorageUnit unit = new StorageUnit("test");
-		ProductContainer container =
+		IProductContainer container =
 				new ProductGroup("test", unit, new ThreeMonthSupply(1,
 						UnitType.FLUID_OUNCES));
 
@@ -141,7 +141,7 @@ public class ProductContainerTest
 	public void testGetAllProducts()
 	{
 		StorageUnit unit = new StorageUnit("test");
-		ProductContainer container =
+		IProductContainer container =
 				new ProductGroup("test", unit, new ThreeMonthSupply(1,
 						UnitType.FLUID_OUNCES));
 
