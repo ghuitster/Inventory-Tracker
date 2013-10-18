@@ -18,6 +18,7 @@ public class AddItemBatchController extends Controller implements
 	private final Date entryDate;
 	private int count;
 	private boolean validCount;
+	private final String barcode;
 
 	/**
 	 * Constructor.
@@ -34,6 +35,7 @@ public class AddItemBatchController extends Controller implements
 		entryDate = ((IAddItemBatchView) (_view)).getEntryDate();
 		useBarcodeScanner = ((IAddItemBatchView) (_view)).getUseScanner();
 		validCount = true;
+		barcode = ((IAddItemBatchView) (_view)).getBarcode();
 
 		construct();
 	}
@@ -76,8 +78,11 @@ public class AddItemBatchController extends Controller implements
 		}
 		catch(NumberFormatException nfe)
 		{
-			((IAddItemBatchView) (_view)).enableItemAction(false);
 			validCount = false;
+		}
+		finally
+		{
+			enableComponents();
 		}
 	}
 
