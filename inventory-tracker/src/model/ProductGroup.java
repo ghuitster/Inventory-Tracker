@@ -8,7 +8,7 @@ package model;
 public class ProductGroup extends ProductContainer implements IProductGroup
 {
 	private static final long serialVersionUID = 4647265154277890697L;
-	private BaseProductContainer container;
+	private IProductContainer container;
 	private ThreeMonthSupply threeMonthSupply;
 
 	/**
@@ -17,7 +17,7 @@ public class ProductGroup extends ProductContainer implements IProductGroup
 	 * @param container
 	 * @param threeMonthSupply
 	 */
-	public ProductGroup(String name, BaseProductContainer container,
+	public ProductGroup(String name, IProductContainer container,
 			ThreeMonthSupply threeMonthSupply)
 	{
 		super(name);
@@ -63,7 +63,7 @@ public class ProductGroup extends ProductContainer implements IProductGroup
 	 * @see model.IProductGroup#getContainer()
 	 */
 	@Override
-	public BaseProductContainer getContainer()
+	public IProductContainer getContainer()
 	{
 		return this.container;
 	}
@@ -106,7 +106,7 @@ public class ProductGroup extends ProductContainer implements IProductGroup
 	 * @see model.IProductGroup#setContainer(model.IProductContainer)
 	 */
 	@Override
-	public void setContainer(BaseProductContainer container)
+	public void setContainer(IProductContainer container)
 	{
 		this.container = container;
 	}

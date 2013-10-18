@@ -4,7 +4,7 @@ package model;
 import java.util.Date;
 import java.util.Observable;
 
-public abstract class BaseItem extends Observable implements ITaggable
+public interface IItem extends IObservable, ITaggable
 {
 
 	/**
@@ -19,7 +19,7 @@ public abstract class BaseItem extends Observable implements ITaggable
 	 * @param container the ProductContainer to attempt to set
 	 * @return whether or not container can be set
 	 */
-	public abstract boolean ableToSetContainer(StorageUnit container);
+	public abstract boolean ableToSetContainer(IStorageUnit container);
 
 	/**
 	 * @pre exitTime != null
@@ -40,7 +40,7 @@ public abstract class BaseItem extends Observable implements ITaggable
 	 * @param product the Product to attempt to set
 	 * @return whether or not the product can be set
 	 */
-	public abstract boolean ableToSetProduct(BaseProduct product);
+	public abstract boolean ableToSetProduct(IProduct product);
 
 	/**
 	 * @see java.lang.Object#equals(java.lang.Object)
@@ -56,7 +56,7 @@ public abstract class BaseItem extends Observable implements ITaggable
 	/**
 	 * @return the container
 	 */
-	public abstract BaseProductContainer getContainer();
+	public abstract IProductContainer getContainer();
 
 	/**
 	 * @return the entryDate
@@ -76,7 +76,7 @@ public abstract class BaseItem extends Observable implements ITaggable
 	/**
 	 * @return the product
 	 */
-	public abstract BaseProduct getProduct();
+	public abstract IProduct getProduct();
 
 	/**
 	 * @see java.lang.Object#hashCode()
@@ -96,7 +96,7 @@ public abstract class BaseItem extends Observable implements ITaggable
 	 * @post container == passed in container
 	 * @param otherProductContainer the container to set
 	 */
-	protected abstract void setContainer(BaseProductContainer otherProductContainer);
+	abstract void setContainer(IProductContainer otherProductContainer);
 
 	/**
 	 * @pre exitTime != null
@@ -117,7 +117,7 @@ public abstract class BaseItem extends Observable implements ITaggable
 	 * @post product == product passed in
 	 * @param product the product to set
 	 */
-	public abstract void setProduct(BaseProduct product);
+	public abstract void setProduct(IProduct product);
 
 	/**
 	 * @see java.lang.Object#toString()

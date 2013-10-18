@@ -4,13 +4,14 @@ package model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Observable;
 import java.util.Set;
 
 /**
  * A class to represent a product
  * @author David
  */
-public class Product extends BaseProduct implements Serializable
+public class Product extends Observable implements IProduct, Serializable
 {
 	// Variables
 	private static final long serialVersionUID = 1835988277946941153L;
@@ -20,7 +21,7 @@ public class Product extends BaseProduct implements Serializable
 	private Amount size;
 	private int shelfLife;
 	private CountThreeMonthSupply threeMonthSupply;
-	private Set<BaseProductContainer> containers;
+	private Set<IProductContainer> containers;
 
 	/**
 	 * @pre creationDate must be == the earliest EntryDate for any item of this
@@ -57,7 +58,7 @@ public class Product extends BaseProduct implements Serializable
 		this.size = size;
 		this.shelfLife = shelfLife;
 		this.threeMonthSupply = threeMonthSupply;
-		this.containers = new HashSet<BaseProductContainer>();
+		this.containers = new HashSet<IProductContainer>();
 	}
 
 	/*
@@ -66,7 +67,7 @@ public class Product extends BaseProduct implements Serializable
 	 * @see model.IProduct#ableToAddContainer(model.StorageUnit)
 	 */
 	@Override
-	public boolean ableToAddContainer(StorageUnit container)
+	public boolean ableToAddContainer(IStorageUnit container)
 	{
 		boolean response = false;
 
@@ -85,7 +86,7 @@ public class Product extends BaseProduct implements Serializable
 	 * @see model.IProduct#ableToRemoveContainer(model.ProductContainer)
 	 */
 	@Override
-	public boolean ableToRemoveContainer(BaseProductContainer productContainer)
+	public boolean ableToRemoveContainer(IProductContainer productContainer)
 	{
 		boolean response = false;
 
@@ -206,7 +207,7 @@ public class Product extends BaseProduct implements Serializable
 	 * @see model.IProduct#addContainer(model.ProductContainer)
 	 */
 	@Override
-	protected void addContainer(ProductContainer productContainer)
+	public void addContainer(IProductContainer productContainer)
 	{
 		this.containers.add(productContainer);
 		
@@ -299,9 +300,9 @@ public class Product extends BaseProduct implements Serializable
 	 * @see model.IProduct#getContainers()
 	 */
 	@Override
-	public Set<BaseProductContainer> getContainers()
+	public Set<IProductContainer> getContainers()
 	{
-		return new HashSet<BaseProductContainer>(this.containers);
+		return new HashSet<IProductContainer>(this.containers);
 	}
 
 	/*
@@ -396,7 +397,7 @@ public class Product extends BaseProduct implements Serializable
 	 * @see model.IProduct#removeContainer(model.ProductContainer)
 	 */
 	@Override
-	protected void removeContainer(BaseProductContainer productContainer)
+	public void removeContainer(IProductContainer productContainer)
 	{
 		this.containers.remove(productContainer);
 		

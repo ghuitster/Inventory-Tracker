@@ -4,7 +4,7 @@ package model;
 import java.util.Observable;
 import java.util.Set;
 
-public abstract class BaseProductContainer extends Observable implements ITaggable
+public interface IProductContainer extends IObservable, ITaggable
 {
 
 	/**
@@ -17,7 +17,7 @@ public abstract class BaseProductContainer extends Observable implements ITaggab
 	 * @param item the Item to attempt to add
 	 * @return whether the Item can be added or not
 	 */
-	public abstract boolean ableToAddItem(BaseItem item);
+	public abstract boolean ableToAddItem(IItem item);
 
 	/**
 	 * @pre product.barcode != empty
@@ -28,7 +28,7 @@ public abstract class BaseProductContainer extends Observable implements ITaggab
 	 * @param product the Product to attempt to add
 	 * @return whether the Product can be added or not
 	 */
-	public abstract boolean ableToAddProduct(BaseProduct product);
+	public abstract boolean ableToAddProduct(IProduct product);
 
 	/**
 	 * @pre productGroup.name != empty
@@ -43,35 +43,35 @@ public abstract class BaseProductContainer extends Observable implements ITaggab
 	 * @param item the Item to attempt to remove
 	 * @return whether the Item can be removed or not
 	 */
-	public abstract boolean ableToRemoveItem(BaseItem item);
+	public abstract boolean ableToRemoveItem(IItem item);
 
 	/**
 	 * @pre this.products.contains(product)
 	 * @param product the Product to attempt to remove
 	 * @return whether the Product can be removed or not
 	 */
-	public abstract boolean ableToRemoveProduct(BaseProduct product);
+	public abstract boolean ableToRemoveProduct(IProduct product);
 
 	/**
 	 * @pre productGroup must be a valid ProductGroup and not null
 	 * @param productGroup the ProductGroup to attempt to remove
 	 * @return whether the ProductGroup can be removed or not
 	 */
-	public abstract boolean ableToRemoveProductGroup(ProductGroup productGroup);
+	public abstract boolean ableToRemoveProductGroup(IProductGroup productGroup);
 
 	/**
 	 * @pre item must be a valid Item and not null
 	 * @post my.items.contains(item)
 	 * @param item the Item to add
 	 */
-	public abstract void addItem(Item item);
+	public abstract void addItem(IItem item);
 
 	/**
 	 * @pre product must be a valid Product and not null
 	 * @post my.products.contains(product)
 	 * @param product the Product to add
 	 */
-	public abstract void addProduct(BaseProduct product);
+	public abstract void addProduct(IProduct product);
 
 	/**
 	 * @pre productGroup must be a valid ProductGroup and not null
@@ -79,25 +79,25 @@ public abstract class BaseProductContainer extends Observable implements ITaggab
 	 * @post my.productGroups.contains(productGroup)
 	 * @param productGroup the ProductGroup to add
 	 */
-	public abstract void addProductGroup(ProductGroup productGroup);
+	public abstract void addProductGroup(IProductGroup productGroup);
 
 	/**
 	 * @pre this.items != null
 	 * @return the Set<Item> of all Items
 	 */
-	public abstract Set<Item> getAllItems();
+	public abstract Set<IItem> getAllItems();
 
 	/**
 	 * @pre this.productGroups != null
 	 * @return the Set<ProductGroup> of all ProductGroups
 	 */
-	public abstract Set<ProductGroup> getAllProductGroups();
+	public abstract Set<IProductGroup> getAllProductGroups();
 
 	/**
 	 * @pre this.products != null
 	 * @return the Set<Product> of all Products
 	 */
-	public abstract Set<BaseProduct> getAllProducts();
+	public abstract Set<IProduct> getAllProducts();
 
 	/**
 	 * @return the name
@@ -109,7 +109,7 @@ public abstract class BaseProductContainer extends Observable implements ITaggab
 	 * @post my.items.doesNotContain(item)
 	 * @param item the Item to remove
 	 */
-	public abstract void removeItem(Item item);
+	public abstract void removeItem(IItem item);
 
 	/**
 	 * @pre product must be a valid Product and not null
@@ -117,7 +117,7 @@ public abstract class BaseProductContainer extends Observable implements ITaggab
 	 * @post my.products.doesNotContain(product)
 	 * @param product the Product to remove
 	 */
-	public abstract void removeProduct(BaseProduct product);
+	public abstract void removeProduct(IProduct product);
 
 	/**
 	 * @pre productGroup must be a valid ProductGroup and not null
@@ -141,7 +141,14 @@ public abstract class BaseProductContainer extends Observable implements ITaggab
 	 * @param item the Item to transfer
 	 * @param targetProductContainer the target ProductContainer
 	 */
-	public abstract void transferItem(Item item,
-			ProductContainer targetContainer);
+	public abstract void transferItem(IItem item,
+			IProductContainer targetContainer);
+	
+	/**
+	 * Finds the container which contains the passed product
+	 * @param product The product to search with
+	 * @return The matching product container, or null if not found
+	 */
+	public abstract IProductContainer findContainer(IProduct product);
 
 }

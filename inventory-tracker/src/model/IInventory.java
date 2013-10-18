@@ -9,7 +9,7 @@ import java.util.SortedMap;
 
 import model.exception.InvalidNameException;
 
-public abstract class BaseInventory extends Observable implements Observer
+public interface IInventory extends Observer, IObservable
 {
 
 	/**
@@ -19,7 +19,9 @@ public abstract class BaseInventory extends Observable implements Observer
 	 * @post A boolean value is generated
 	 * @return True if the storage unit may be added. Otherwise, false
 	 */
-	public abstract boolean ableToAddStorageUnit(StorageUnit storageUnit);
+	public abstract boolean ableToAddStorageUnit(IStorageUnit storageUnit);
+	
+	public abstract boolean ableToRemoveStorageUnit(IStorageUnit storageUnit);
 
 	/**
 	 * Adds a new Storage Unit to the system
@@ -28,7 +30,7 @@ public abstract class BaseInventory extends Observable implements Observer
 	 * @param storageUnit The new storage unit
 	 * @throws InvalidNameException, NullPointerException
 	 */
-	public abstract void addStorageUnit(StorageUnit storageUnit)
+	public abstract void addStorageUnit(IStorageUnit storageUnit)
 			throws InvalidNameException, NullPointerException;
 
 	/**
@@ -39,7 +41,7 @@ public abstract class BaseInventory extends Observable implements Observer
 	 *       may be empty
 	 * @return A list containing references to all of the products
 	 */
-	public abstract Set<BaseProduct> getAllProducts();
+	public abstract Set<IProduct> getAllProducts();
 
 	/**
 	 * Gets a list of all Storage Units in the system
@@ -48,7 +50,7 @@ public abstract class BaseInventory extends Observable implements Observer
 	 *       list may be empty
 	 * @return A list containing references to all top level ProductContainers
 	 */
-	public abstract Set<StorageUnit> getAllStorageUnits();
+	public abstract Set<IStorageUnit> getAllStorageUnits();
 
 	/**
 	 * Gets a map of Dates to what items expire on those dates
@@ -58,7 +60,7 @@ public abstract class BaseInventory extends Observable implements Observer
 	 * @return A copy of the map containing all known expiration dates mapped to
 	 *         which items are expiring
 	 */
-	public abstract SortedMap<Date, Set<BaseItem>> getItemExpirations();
+	public abstract SortedMap<Date, Set<IItem>> getItemExpirations();
 
 	/**
 	 * Gets a map of Dates (each of which represents a specific month) mapped to
@@ -81,7 +83,7 @@ public abstract class BaseInventory extends Observable implements Observer
 	 * @return A copy of the map containing months correlated to what products'
 	 *         three month supplies expire on that month
 	 */
-	public abstract SortedMap<Date, Set<BaseProduct>> getNMonthSupplyMap();
+	public abstract SortedMap<Date, Set<IProduct>> getNMonthSupplyMap();
 
 	/**
 	 * Gets the persistence object for saving and loading data to this object
@@ -97,7 +99,7 @@ public abstract class BaseInventory extends Observable implements Observer
 	 * @return A copy of the map containing all item removal dates mapped to the
 	 *         items removed.
 	 */
-	public abstract SortedMap<Date, Set<BaseItem>> getRemovedItems();
+	public abstract SortedMap<Date, Set<IItem>> getRemovedItems();
 
 	/**
 	 * Clears all Storage Units from the system

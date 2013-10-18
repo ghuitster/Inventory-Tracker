@@ -67,7 +67,7 @@ public class InventoryTest
 	public void productListTest() throws Exception
 	{
 		populateInventory();
-		Set<BaseProduct> products = Inventory.getInstance().getAllProducts();
+		Set<IProduct> products = Inventory.getInstance().getAllProducts();
 		assertEquals(1, products.size());
 		assertTrue(products.contains(prod));
 	}
@@ -76,7 +76,7 @@ public class InventoryTest
 	public void removeTest() throws Exception
 	{
 		populateInventory();
-		Set<StorageUnit> units = Inventory.getInstance().getAllStorageUnits();
+		Set<IStorageUnit> units = Inventory.getInstance().getAllStorageUnits();
 		assertEquals(2, units.size());
 		Inventory.getInstance().removeStorageUnit(unit1);
 		units = Inventory.getInstance().getAllStorageUnits();
@@ -92,7 +92,7 @@ public class InventoryTest
 		Inventory.getInstance().removeAllStorageUnits();
 		assertEquals(0, Inventory.getInstance().getAllStorageUnits().size());
 		populateInventory();
-		Set<StorageUnit> units = Inventory.getInstance().getAllStorageUnits();
+		Set<IStorageUnit> units = Inventory.getInstance().getAllStorageUnits();
 		assertEquals(2, units.size());
 		assertTrue(units.contains(unit1));
 		assertTrue(units.contains(unit2));

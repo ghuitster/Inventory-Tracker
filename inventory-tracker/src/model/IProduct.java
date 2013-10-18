@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.Observable;
 import java.util.Set;
 
-public abstract class BaseProduct extends Observable implements ITaggable
+public interface IProduct extends ITaggable, IObservable
 {
 
 	/**
@@ -13,14 +13,14 @@ public abstract class BaseProduct extends Observable implements ITaggable
 	 * @param container the container to attempt to add
 	 * @return whether the container can be added or not
 	 */
-	public abstract boolean ableToAddContainer(StorageUnit container);
+	public abstract boolean ableToAddContainer(IStorageUnit container);
 
 	/**
 	 * @pre productContainer must != null
 	 * @param productContainer the container to attempt to remove
 	 */
 	public abstract boolean ableToRemoveContainer(
-			BaseProductContainer productContainer);
+			IProductContainer productContainer);
 
 	/**
 	 * @pre barcode != null
@@ -66,7 +66,7 @@ public abstract class BaseProduct extends Observable implements ITaggable
 	 * @post container == passed in container
 	 * @param productContainer the container to add
 	 */
-	protected abstract void addContainer(ProductContainer productContainer);
+	public abstract void addContainer(IProductContainer productContainer);
 
 	/*
 	 * (non-Javadoc)
@@ -84,7 +84,7 @@ public abstract class BaseProduct extends Observable implements ITaggable
 	/**
 	 * @return the containers set
 	 */
-	public abstract Set<BaseProductContainer> getContainers();
+	public abstract Set<IProductContainer> getContainers();
 
 	/**
 	 * @return the creationDate
@@ -125,7 +125,7 @@ public abstract class BaseProduct extends Observable implements ITaggable
 	 *       product
 	 * @param productContainer the container to remove
 	 */
-	protected abstract void removeContainer(BaseProductContainer productContainer);
+	public abstract void removeContainer(IProductContainer productContainer);
 
 	/**
 	 * @pre barcode != null

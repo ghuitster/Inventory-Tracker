@@ -1,7 +1,7 @@
 
 package model;
 
-public interface IProductGroup
+public interface IProductGroup extends IProductContainer
 {
 
 	/**
@@ -13,7 +13,7 @@ public interface IProductGroup
 	/**
 	 * @return the container
 	 */
-	public abstract BaseProductContainer getContainer();
+	public abstract IProductContainer getContainer();
 
 	/**
 	 * @return the threeMonthSupply
@@ -31,7 +31,7 @@ public interface IProductGroup
 	 * @post my.container == passed in ProductContainer
 	 * @param container the ProductContainer to set
 	 */
-	public abstract void setContainer(BaseProductContainer container);
+	public abstract void setContainer(IProductContainer container);
 
 	/**
 	 * @pre threeMonthSupply must be a valid ThreeMonthSupply and not null

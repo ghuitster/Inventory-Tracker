@@ -3,27 +3,28 @@ package model;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Observable;
 import java.util.Set;
 
 /**
  * A class to represent a product container
  * @author David
  */
-public abstract class ProductContainer extends BaseProductContainer implements Serializable
+public abstract class ProductContainer extends Observable implements IProductContainer, Serializable
 		
 {
 	private static final long serialVersionUID = 9015876223451150036L;
 	protected String name;
-	protected Set<BaseProduct> products;
-	protected Set<Item> items;
-	protected Set<ProductGroup> productGroups;
+	protected Set<IProduct> products;
+	protected Set<IItem> items;
+	protected Set<IProductGroup> productGroups;
 
 	protected ProductContainer(String name)
 	{
 		this.name = name;
-		products = new HashSet<BaseProduct>();
-		items = new HashSet<Item>();
-		productGroups = new HashSet<ProductGroup>();
+		products = new HashSet<IProduct>();
+		items = new HashSet<IItem>();
+		productGroups = new HashSet<IProductGroup>();
 		this.addObserver(Inventory.getInstance());
 	}
 
@@ -32,7 +33,7 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	 * 
 	 * @see model.IProductContainer#ableToAddItem(model.IItem)
 	 */
-	public boolean ableToAddItem(BaseItem item)
+	public boolean ableToAddItem(IItem item)
 	{
 		return true;
 	}
@@ -42,12 +43,12 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	 * 
 	 * @see model.IProductContainer#ableToAddProduct(model.IProduct)
 	 */
-	public boolean ableToAddProduct(BaseProduct product)
+	public boolean ableToAddProduct(IProduct product)
 	{
 		if(this.products.contains(product))
 			return false;
 
-		for(BaseProductContainer container: this.productGroups)
+		for(IProductContainer container: this.productGroups)
 			return (container.ableToAddProduct(product));
 
 		return true;
@@ -71,7 +72,7 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	 * 
 	 * @see model.IProductContainer#ableToRemoveItem(model.IItem)
 	 */
-	public boolean ableToRemoveItem(BaseItem item)
+	public boolean ableToRemoveItem(IItem item)
 	{
 		return true;
 	}
@@ -81,9 +82,9 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	 * 
 	 * @see model.IProductContainer#ableToRemoveProduct(model.IProduct)
 	 */
-	public boolean ableToRemoveProduct(BaseProduct product)
+	public boolean ableToRemoveProduct(IProduct product)
 	{
-		for(BaseItem item: this.items)
+		for(IItem item: this.items)
 			if(item.getProduct().equals(product))
 				return false;
 
@@ -95,9 +96,9 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	 * 
 	 * @see model.IProductContainer#ableToRemoveProductGroup(model.ProductGroup)
 	 */
-	public boolean ableToRemoveProductGroup(ProductGroup productGroup)
+	public boolean ableToRemoveProductGroup(IProductGroup productGroup)
 	{
-		if(!productGroup.items.isEmpty())
+		if(!productGroup.getAllItems().isEmpty())
 			return false;
 
 		return true;
@@ -108,11 +109,11 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	 * 
 	 * @see model.IProductContainer#addItem(model.Item)
 	 */
-	public void addItem(Item item)
+	public void addItem(IItem item)
 	{
-		BaseProduct product = item.getProduct();
+		IProduct product = item.getProduct();
 
-		ProductContainer container = this.findContainer(product);
+		IProductContainer container = this.findContainer(product);
 
 		if(container == null)
 		{
@@ -125,8 +126,8 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 		{
 			product.addContainer(container);
 			item.setContainer(container);
-			container.products.add(product);
-			container.items.add(item);
+			container.addProduct(product);
+			container.addItem(item);
 		}
 		
 		this.notifyObservers(new ObservableArgs(item, UpdateType.ADDED));
@@ -137,9 +138,9 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	 * 
 	 * @see model.IProductContainer#addProduct(model.Product)
 	 */
-	public void addProduct(BaseProduct product)
+	public void addProduct(IProduct product)
 	{
-		ProductContainer container = this.findContainer(product);
+		IProductContainer container = this.findContainer(product);
 
 		if(container == null)
 		{
@@ -152,11 +153,11 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 			product.addContainer(this);
 			product.removeContainer(container);
 
-			for(Item item: container.items)
+			for(IItem item: container.getAllItems())
 				if(item.getProduct().equals(product))
 				{
 					this.items.add(item);
-					container.items.remove(item);
+					container.removeItem(item);
 				}
 		}
 		
@@ -168,16 +169,17 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	 * 
 	 * @see model.IProductContainer#addProductGroup(model.ProductGroup)
 	 */
-	public void addProductGroup(ProductGroup productGroup)
+	public void addProductGroup(IProductGroup productGroup)
 	{
 		this.productGroups.add(productGroup);
 		
 		this.notifyObservers(new ObservableArgs(productGroup, UpdateType.ADDED));
 	}
 
-	private ProductContainer findContainer(BaseProduct product)
+	
+	public IProductContainer findContainer(IProduct product)
 	{
-		for(ProductContainer con: this.productGroups)
+		for(IProductContainer con: this.productGroups)
 			return con.findContainer(product);
 
 		if(this.products.contains(product))
@@ -191,9 +193,9 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	 * 
 	 * @see model.IProductContainer#getAllItems()
 	 */
-	public Set<Item> getAllItems()
+	public Set<IItem> getAllItems()
 	{
-		return new HashSet<Item>(this.items);
+		return new HashSet<IItem>(this.items);
 	}
 
 	/*
@@ -201,9 +203,9 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	 * 
 	 * @see model.IProductContainer#getAllProductGroups()
 	 */
-	public Set<ProductGroup> getAllProductGroups()
+	public Set<IProductGroup> getAllProductGroups()
 	{
-		return new HashSet<ProductGroup>(this.productGroups);
+		return new HashSet<IProductGroup>(this.productGroups);
 	}
 
 	/*
@@ -211,9 +213,9 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	 * 
 	 * @see model.IProductContainer#getAllProducts()
 	 */
-	public Set<BaseProduct> getAllProducts()
+	public Set<IProduct> getAllProducts()
 	{
-		return new HashSet<BaseProduct>(this.products);
+		return new HashSet<IProduct>(this.products);
 	}
 
 	/*
@@ -231,7 +233,7 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	 * 
 	 * @see model.IProductContainer#removeItem(model.Item)
 	 */
-	public void removeItem(Item item)
+	public void removeItem(IItem item)
 	{
 		item.setContainer(null);
 		this.items.remove(item);
@@ -244,7 +246,7 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	 * 
 	 * @see model.IProductContainer#removeProduct(model.IProduct)
 	 */
-	public void removeProduct(BaseProduct product)
+	public void removeProduct(IProduct product)
 	{
 		product.removeContainer(this);
 		this.products.remove(product);
@@ -280,36 +282,34 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	 * @see model.IProductContainer#transferItem(model.Item,
 	 * model.ProductContainer)
 	 */
-	public void transferItem(Item item, ProductContainer targetContainer)
+	public void transferItem(IItem item, IProductContainer targetContainer)
 	{
-		BaseProductContainer container = this.findContainer(item.getProduct());
+		IProductContainer container = this.findContainer(item.getProduct());
 
 		if(container == null)
 		{
-			targetContainer.products.add(item.getProduct());
+			targetContainer.addProduct(item.getProduct());
 			item.getProduct().addContainer(targetContainer);
 		}
 		else
 		{
-			for(Item it: this.items)
+			for(IItem it: this.items)
 				if(it.getProduct().equals(item.getProduct()))
 				{
-					this.items.remove(it);
-					targetContainer.items.add(it);
+					this.removeItem(it);
+					targetContainer.addItem(it);
 					it.setContainer(targetContainer);
 				}
 
-			this.products.remove(item.getProduct());
+			this.removeProduct(item.getProduct());
 			item.getProduct().removeContainer(this);
-			targetContainer.products.add(item.getProduct());
+			targetContainer.addProduct(item.getProduct());
 			item.getProduct().addContainer(targetContainer);
 		}
 
-		targetContainer.items.add(item);
+		targetContainer.addItem(item);
 		item.setContainer(targetContainer);
-		this.items.remove(item);
-		
-		this.notifyObservers(new ObservableArgs(item, UpdateType.MOVED));
+		this.removeItem(item);
 	}
 	
 	private Object tag;

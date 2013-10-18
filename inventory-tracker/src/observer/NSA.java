@@ -26,7 +26,7 @@ public class NSA implements Observer
 	/**
 	 * Reference to the inventory we're tracking
 	 */
-	private BaseInventory inventory;
+	private IInventory inventory;
 	
 	private IView view;
 

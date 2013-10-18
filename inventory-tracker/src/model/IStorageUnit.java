@@ -1,7 +1,7 @@
 
 package model;
 
-public interface IStorageUnit
+public interface IStorageUnit extends IProductContainer
 {
 
 	/**

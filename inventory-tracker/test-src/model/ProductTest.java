@@ -31,8 +31,8 @@ public class ProductTest
 	int shelfLife = 5;
 	CountThreeMonthSupply threeMonthSupply = new CountThreeMonthSupply(1);
 
-	BaseProduct prod1;
-	BaseProduct prod2;
+	IProduct prod1;
+	IProduct prod2;
 
 	/**
 	 * @throws java.lang.Exception

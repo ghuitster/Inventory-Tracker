@@ -4,22 +4,23 @@ package model;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Observable;
 
 /**
  * Class to represent an individual Item in the Inventory Tracker
  * @author Michael
  * 
  */
-public class Item extends BaseItem implements Serializable, ITaggable
+public class Item extends Observable implements IItem, Serializable, ITaggable
 {
 	// Variables
 	private static final long serialVersionUID = -5007529040849157344L;
-	private BaseProduct product;
+	private IProduct product;
 	private IBarcode barcode;
 	private Date entryDate;
 	private Date expirationDate;
 	private Date exitTime;
-	private BaseProductContainer container;
+	private IProductContainer container;
 
 	/**
 	 * @pre product must != null && must exist
@@ -37,7 +38,7 @@ public class Item extends BaseItem implements Serializable, ITaggable
 	 * @param exitTime
 	 * @param container
 	 */
-	public Item(BaseProduct product, IBarcode barcode, Date entryDate,
+	public Item(IProduct product, IBarcode barcode, Date entryDate,
 			Date expirationDate, Date exitTime)
 	{
 		this.product = product;
@@ -74,7 +75,7 @@ public class Item extends BaseItem implements Serializable, ITaggable
 	 * @see model.IItem#ableToSetContainer(model.StorageUnit)
 	 */
 	@Override
-	public boolean ableToSetContainer(StorageUnit container)
+	public boolean ableToSetContainer(IStorageUnit container)
 	{
 		return container.ableToAddItem(this);
 	}
@@ -129,7 +130,7 @@ public class Item extends BaseItem implements Serializable, ITaggable
 	 * @see model.IItem#ableToSetProduct(model.Product)
 	 */
 	@Override
-	public boolean ableToSetProduct(BaseProduct product)
+	public boolean ableToSetProduct(IProduct product)
 	{
 		boolean response = false;
 
@@ -252,7 +253,7 @@ public class Item extends BaseItem implements Serializable, ITaggable
 	 * @see model.IItem#getContainer()
 	 */
 	@Override
-	public BaseProductContainer getContainer()
+	public IProductContainer getContainer()
 	{
 		return container;
 	}
@@ -296,7 +297,7 @@ public class Item extends BaseItem implements Serializable, ITaggable
 	 * @see model.IItem#getProduct()
 	 */
 	@Override
-	public BaseProduct getProduct()
+	public IProduct getProduct()
 	{
 		return product;
 	}
@@ -349,7 +350,7 @@ public class Item extends BaseItem implements Serializable, ITaggable
 	 * @see model.IItem#setContainer(model.ProductContainer)
 	 */
 	@Override
-	public void setContainer(BaseProductContainer otherProductContainer)
+	public void setContainer(IProductContainer otherProductContainer)
 	{
 		this.container = otherProductContainer;
 	}
@@ -390,7 +391,7 @@ public class Item extends BaseItem implements Serializable, ITaggable
 	 * @see model.IItem#setProduct(model.Product)
 	 */
 	@Override
-	public void setProduct(BaseProduct product)
+	public void setProduct(IProduct product)
 	{
 		this.product = product;
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
