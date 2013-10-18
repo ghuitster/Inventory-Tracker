@@ -70,7 +70,7 @@ public class InventoryController extends Controller implements
 			ProductContainerData containerData)
 	{
 		BaseProductContainer PC = (ProductContainer) containerData.getTag();
-		Product product = (Product) productData.getTag();
+		BaseProduct product = (BaseProduct) productData.getTag();
 		if(PC.ableToAddProduct(product))
 		{
 			PC.addProduct(product);
