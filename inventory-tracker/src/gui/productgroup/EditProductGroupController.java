@@ -11,7 +11,6 @@ import gui.inventory.ProductContainerData;
 public class EditProductGroupController extends Controller implements
 		IEditProductGroupController
 {
-
 	/**
 	 * Constructor.
 	 * 
@@ -86,5 +85,4 @@ public class EditProductGroupController extends Controller implements
 	@Override
 	public void valuesChanged()
 	{}
-
 }

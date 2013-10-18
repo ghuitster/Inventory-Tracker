@@ -10,7 +10,6 @@ import gui.common.IView;
 public class AddStorageUnitController extends Controller implements
 		IAddStorageUnitController
 {
-
 	/**
 	 * Constructor.
 	 * 
@@ -84,5 +83,4 @@ public class AddStorageUnitController extends Controller implements
 	@Override
 	public void valuesChanged()
 	{}
-
 }

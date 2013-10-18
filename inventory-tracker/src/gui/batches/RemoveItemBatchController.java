@@ -10,7 +10,6 @@ import gui.common.IView;
 public class RemoveItemBatchController extends Controller implements
 		IRemoveItemBatchController
 {
-
 	/**
 	 * Constructor.
 	 * 
@@ -114,5 +113,4 @@ public class RemoveItemBatchController extends Controller implements
 	@Override
 	public void useScannerChanged()
 	{}
-
 }
