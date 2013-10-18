@@ -12,6 +12,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
 
+import model.*;
+
 /**
  * Controller class for inventory view.
  */
@@ -66,7 +68,14 @@ public class InventoryController extends Controller implements
 	@Override
 	public void addProductToContainer(ProductData productData,
 			ProductContainerData containerData)
-	{}
+	{
+		IProductContainer PC = (ProductContainer) containerData.getTag();
+		IProduct product = (IProduct) productData.getTag();
+		if(PC.ableToAddProduct(product))
+		{
+			PC.addProduct(product);
+		}
+	}
 
 	/**
 	 * This method is called when the user selects the "Add Storage Unit" menu
@@ -212,7 +221,9 @@ public class InventoryController extends Controller implements
 	 */
 	@Override
 	public void deleteProduct()
-	{}
+	{
+		
+	}
 
 	/**
 	 * This method is called when the user selects the "Delete Product Group"
@@ -220,7 +231,9 @@ public class InventoryController extends Controller implements
 	 */
 	@Override
 	public void deleteProductGroup()
-	{}
+	{
+		
+	}
 
 	/**
 	 * This method is called when the user selects the "Delete Storage Unit"
@@ -228,7 +241,9 @@ public class InventoryController extends Controller implements
 	 */
 	@Override
 	public void deleteStorageUnit()
-	{}
+	{
+		
+	}
 
 	/**
 	 * This method is called when the user selects the "Edit Item" menu item.
@@ -360,7 +375,9 @@ public class InventoryController extends Controller implements
 	@Override
 	public void moveItemToContainer(ItemData itemData,
 			ProductContainerData containerData)
-	{}
+	{
+		
+	}
 
 	/**
 	 * This method is called when the selected item container changes.
@@ -429,7 +446,9 @@ public class InventoryController extends Controller implements
 	 */
 	@Override
 	public void removeItem()
-	{}
+	{
+		
+	}
 
 	/**
 	 * This method is called when the user selects the "Remove Items" menu item.

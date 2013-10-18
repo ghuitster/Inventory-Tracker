@@ -1,6 +1,8 @@
 
 package gui.main;
 
+import model.*;
+import model.exception.SerializerException;
 import gui.common.Controller;
 
 /**
@@ -42,7 +44,7 @@ public class MainController extends Controller implements IMainController
 	@Override
 	public boolean canPrintExpiredReport()
 	{
-		return true;
+		return false;
 	}
 
 	/**
@@ -51,7 +53,7 @@ public class MainController extends Controller implements IMainController
 	@Override
 	public boolean canPrintNoticesReport()
 	{
-		return true;
+		return false;
 	}
 
 	/**
@@ -61,7 +63,7 @@ public class MainController extends Controller implements IMainController
 	@Override
 	public boolean canPrintProductReport()
 	{
-		return true;
+		return false;
 	}
 
 	/**
@@ -71,7 +73,7 @@ public class MainController extends Controller implements IMainController
 	@Override
 	public boolean canPrintRemovedReport()
 	{
-		return true;
+		return false;
 	}
 
 	/**
@@ -81,7 +83,7 @@ public class MainController extends Controller implements IMainController
 	@Override
 	public boolean canPrintSupplyReport()
 	{
-		return true;
+		return false;
 	}
 
 	/**
@@ -89,7 +91,18 @@ public class MainController extends Controller implements IMainController
 	 */
 	@Override
 	public void exit()
-	{}
+	{
+		IPersistence persistence = new Serializer("data.Inventory");
+		try
+		{
+			persistence.saveData();
+		}
+		catch(SerializerException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Returns a reference to the view for this controller.

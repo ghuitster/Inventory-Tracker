@@ -1,0 +1,9 @@
+Testsuite: model.InventoryTest
+Tests run: 6, Failures: 0, Errors: 0, Time elapsed: 0.101 sec
+
+Testcase: removeTest took 0.02 sec
+Testcase: storageUnitTest took 0.001 sec
+Testcase: constructorTest took 0.001 sec
+Testcase: persistenceTest took 0.047 sec
+Testcase: reportDeletedItemTest took 0.009 sec
+Testcase: productListTest took 0.001 sec
