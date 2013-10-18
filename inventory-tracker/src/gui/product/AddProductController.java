@@ -1,8 +1,16 @@
 
 package gui.product;
 
+import model.Amount;
+import model.CountThreeMonthSupply;
+import model.IBarcode;
+import model.IProduct;
+import model.Product;
 import gui.common.Controller;
 import gui.common.IView;
+import gui.common.SizeUnits;
+
+import java.util.Date;
 
 /**
  * Controller class for the add item view.
@@ -10,6 +18,11 @@ import gui.common.IView;
 public class AddProductController extends Controller implements
 		IAddProductController
 {
+	private String descript = "";
+	private IBarcode barcode = null;
+	private Amount size = null;
+	private int shelflife = 0;
+	private CountThreeMonthSupply cThreeMonthSupply = null;
 
 	/**
 	 * Constructor.
@@ -34,7 +47,11 @@ public class AddProductController extends Controller implements
 	 */
 	@Override
 	public void addProduct()
-	{}
+	{
+		//TODO
+		Date creationDate = new Date();
+		IProduct product = new Product(creationDate,this.descript, this.barcode, this.size, this.shelflife, this.cThreeMonthSupply);
+	}
 
 	/**
 	 * Sets the enable/disable state of all components in the controller's view.
@@ -48,7 +65,11 @@ public class AddProductController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents()
-	{}
+	{
+//		getView().
+		if(getView().getSizeUnit() == SizeUnits.Count)
+			getView().enableSizeValue(false);
+	}
 
 	/**
 	 * Returns a reference to the view for this controller.
@@ -76,7 +97,9 @@ public class AddProductController extends Controller implements
 	 */
 	@Override
 	protected void loadValues()
-	{}
+	{
+		//TODO
+	}
 
 	/**
 	 * This method is called when any of the fields in the add product view is
@@ -84,6 +107,8 @@ public class AddProductController extends Controller implements
 	 */
 	@Override
 	public void valuesChanged()
-	{}
+	{
+		//TODO
+	}
 
 }
