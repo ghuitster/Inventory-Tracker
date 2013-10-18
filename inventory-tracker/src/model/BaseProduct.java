@@ -84,7 +84,7 @@ public abstract class BaseProduct extends Observable implements ITaggable
 	/**
 	 * @return the containers set
 	 */
-	public abstract Set<ProductContainer> getContainers();
+	public abstract Set<BaseProductContainer> getContainers();
 
 	/**
 	 * @return the creationDate

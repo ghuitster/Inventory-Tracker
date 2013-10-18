@@ -23,7 +23,7 @@ public class ObservableArgs
 	}
 	
 	/**
-	 * Gets what action occured with the changed object
+	 * Gets what action occurred with the changed object
 	 * @pre none
 	 * @post none
 	 * @return An enumeration representing the update type

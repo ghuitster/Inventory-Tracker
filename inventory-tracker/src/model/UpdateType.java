@@ -9,5 +9,5 @@ package model;
  */
 public enum UpdateType
 {
-	CREATED, UPDATED, REMOVED
+	ADDED, UPDATED, MOVED, REMOVED
 }

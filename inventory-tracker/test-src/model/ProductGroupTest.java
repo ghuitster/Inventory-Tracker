@@ -71,15 +71,13 @@ public class ProductGroupTest
 
 	private Item populateTestGroup(ProductGroup group)
 	{
-		Set<ProductContainer> groupSet = new HashSet<ProductContainer>();
-		groupSet.add(group);
 		Product prod =
 				new Product(new Date(), "product", new Barcode("2"),
-						new CountUnitSize(1), 1, new CountThreeMonthSupply(1),
-						groupSet);
+						new CountUnitSize(1), 1, new CountThreeMonthSupply(1));
 		Item item =
 				new Item(prod, new Barcode("3"), new Date(), new Date(),
 						new Date(), group);
+		group.addProduct(prod);
 		return item;
 	}
 

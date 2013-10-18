@@ -18,7 +18,7 @@ public class Item extends BaseItem implements Serializable, ITaggable
 	private static final long serialVersionUID = -5007529040849157344L;
 	private Product product;
 	private IBarcode barcode;
-	private final Date entryDate;
+	private Date entryDate;
 	private Date expirationDate;
 	private Date exitTime;
 	private BaseProductContainer container;
@@ -355,6 +355,11 @@ public class Item extends BaseItem implements Serializable, ITaggable
 		this.container = otherProductContainer;
 	}
 
+	public void setEntryDate(Date entryDate)
+	{
+		this.entryDate = entryDate;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

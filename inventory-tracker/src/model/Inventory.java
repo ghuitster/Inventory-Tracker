@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.security.InvalidParameterException;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Observable;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -296,6 +297,12 @@ public class Inventory extends BaseInventory implements Serializable
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public void update(Observable o, Object arg)
+	{
+		this.notifyObservers(arg);
 	}
 
 }

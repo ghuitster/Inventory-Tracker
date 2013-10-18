@@ -3,12 +3,13 @@ package model;
 
 import java.util.Date;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 import java.util.SortedMap;
 
 import model.exception.InvalidNameException;
 
-public abstract class BaseInventory extends Observable
+public abstract class BaseInventory extends Observable implements Observer
 {
 
 	/**

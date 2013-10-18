@@ -33,8 +33,7 @@ public class ProductContainerTest
 						UnitType.FLUID_OUNCES));
 		BaseProduct product =
 				new Product(new Date(), "test", new Barcode("400000000000"),
-						new CountUnitSize(3), 3, null,
-						new HashSet<ProductContainer>());
+						new CountUnitSize(3), 3, null);
 		assertTrue(container.ableToAddProduct(product));
 		Set<Product> products = container.getAllProducts();
 
@@ -81,8 +80,7 @@ public class ProductContainerTest
 
 		Product product =
 				new Product(new Date(), "test", new Barcode("400000000000"),
-						new CountUnitSize(3), 3, null,
-						new HashSet<ProductContainer>());
+						new CountUnitSize(3), 3, null);
 		container.addProduct(product);
 		Item item = new Item(product, null, null, null, null, unit);
 		for(Product prod: container.getAllProducts())
@@ -105,8 +103,7 @@ public class ProductContainerTest
 						UnitType.FLUID_OUNCES));
 		Product product =
 				new Product(new Date(), "test", new Barcode("400000000000"),
-						new CountUnitSize(3), 3, null,
-						new HashSet<ProductContainer>());
+						new CountUnitSize(3), 3, null);
 		ProductGroup group =
 				new ProductGroup("test", container, new ThreeMonthSupply(3,
 						UnitType.FLUID_OUNCES));

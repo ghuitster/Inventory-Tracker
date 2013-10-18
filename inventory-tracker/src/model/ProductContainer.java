@@ -24,6 +24,7 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 		products = new HashSet<Product>();
 		items = new HashSet<Item>();
 		productGroups = new HashSet<ProductGroup>();
+		this.addObserver(Inventory.getInstance());
 	}
 
 	/*
@@ -125,6 +126,9 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 			container.products.add(product);
 			container.items.add(item);
 		}
+		
+		this.notifyObservers(new ObservableArgs(item, UpdateType.ADDED));
+		item.addObserver(Inventory.getInstance());
 	}
 
 	/*
@@ -154,6 +158,8 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 					container.items.remove(item);
 				}
 		}
+		
+		this.notifyObservers(new ObservableArgs(product, UpdateType.ADDED));
 	}
 
 	/*
@@ -164,6 +170,8 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	public void addProductGroup(ProductGroup productGroup)
 	{
 		this.productGroups.add(productGroup);
+		
+		this.notifyObservers(new ObservableArgs(productGroup, UpdateType.ADDED));
 	}
 
 	private ProductContainer findContainer(BaseProduct product)
@@ -226,6 +234,8 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	{
 		this.items.remove(item);
 		Inventory.getInstance().reportRemovedItem(item);
+		this.notifyObservers(new ObservableArgs(item, UpdateType.REMOVED));
+		item.deleteObservers();
 	}
 
 	/*
@@ -235,7 +245,10 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	 */
 	public void removeProduct(BaseProduct product)
 	{
+		product.removeContainer(this);
 		this.products.remove(product);
+		
+		this.notifyObservers(new ObservableArgs(product, UpdateType.REMOVED));
 	}
 
 	/*
@@ -246,6 +259,7 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	public void removeProductGroup(IProductGroup productGroup)
 	{
 		this.productGroups.remove(productGroup);
+		this.notifyObservers(new ObservableArgs(productGroup, UpdateType.REMOVED));
 	}
 
 	/*
@@ -256,6 +270,7 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	public void setName(String name)
 	{
 		this.name = name;
+		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
 	/*
@@ -292,6 +307,8 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 		targetContainer.items.add(item);
 		item.setContainer(targetContainer);
 		this.items.remove(item);
+		
+		this.notifyObservers(new ObservableArgs(item, UpdateType.MOVED));
 	}
 	
 	private Object tag;

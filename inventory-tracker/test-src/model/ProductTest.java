@@ -30,7 +30,6 @@ public class ProductTest
 	UnitSize size = new UnitSize(1.0f, UnitType.CHEVROLET);
 	int shelfLife = 5;
 	CountThreeMonthSupply threeMonthSupply = new CountThreeMonthSupply(1);
-	HashSet<ProductContainer> containers = new HashSet<ProductContainer>();
 
 	BaseProduct prod1;
 	BaseProduct prod2;
@@ -43,10 +42,10 @@ public class ProductTest
 	{
 		prod1 =
 				new Product(creDate, desc, bc, size, shelfLife,
-						threeMonthSupply, containers);
+						threeMonthSupply);
 		prod2 =
 				new Product(creDate, desc2, bc, size, shelfLife,
-						threeMonthSupply, containers);
+						threeMonthSupply);
 	}
 
 	/**
@@ -231,7 +230,6 @@ public class ProductTest
 		assertTrue(size.equals(prod1.getSize()));
 		assertTrue(shelfLife == prod1.getShelfLife());
 		assertTrue(threeMonthSupply.equals(prod1.getThreeMonthSupply()));
-		assertTrue(containers.equals(prod1.getContainers()));
 	}
 
 	/**

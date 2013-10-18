@@ -5,6 +5,7 @@ import gui.common.Tagable;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -21,7 +22,7 @@ public class Product extends BaseProduct implements Serializable
 	private Amount size;
 	private int shelfLife;
 	private CountThreeMonthSupply threeMonthSupply;
-	private final Set<ProductContainer> containers;
+	private Set<BaseProductContainer> containers;
 
 	/**
 	 * @pre creationDate must be == the earliest EntryDate for any item of this
@@ -47,11 +48,9 @@ public class Product extends BaseProduct implements Serializable
 	 * @param size
 	 * @param shelfLife
 	 * @param threeMonthSupply
-	 * @param containers
 	 */
 	public Product(Date creationDate, String description, IBarcode barcode,
-			Amount size, int shelfLife, CountThreeMonthSupply threeMonthSupply,
-			Set<ProductContainer> containers)
+			Amount size, int shelfLife, CountThreeMonthSupply threeMonthSupply)
 	{
 		super();
 		this.creationDate = creationDate;
@@ -60,7 +59,7 @@ public class Product extends BaseProduct implements Serializable
 		this.size = size;
 		this.shelfLife = shelfLife;
 		this.threeMonthSupply = threeMonthSupply;
-		this.containers = containers;
+		this.containers = new HashSet<BaseProductContainer>();
 	}
 
 	/*
@@ -212,6 +211,9 @@ public class Product extends BaseProduct implements Serializable
 	public void addContainer(ProductContainer productContainer)
 	{
 		this.containers.add(productContainer);
+		
+		if(this.countObservers() == 0)
+			this.addObserver(Inventory.getInstance());
 	}
 
 	/*
@@ -299,9 +301,9 @@ public class Product extends BaseProduct implements Serializable
 	 * @see model.IProduct#getContainers()
 	 */
 	@Override
-	public Set<ProductContainer> getContainers()
+	public Set<BaseProductContainer> getContainers()
 	{
-		return this.containers;
+		return new HashSet<BaseProductContainer>(this.containers);
 	}
 
 	/*
@@ -399,6 +401,9 @@ public class Product extends BaseProduct implements Serializable
 	public void removeContainer(BaseProductContainer productContainer)
 	{
 		this.containers.remove(productContainer);
+		
+		if(this.getContainers().size() == 0)
+			this.deleteObservers();
 	}
 
 	/*
