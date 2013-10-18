@@ -96,7 +96,7 @@ public abstract class BaseItem extends Observable implements ITaggable
 	 * @post container == passed in container
 	 * @param otherProductContainer the container to set
 	 */
-	public abstract void setContainer(BaseProductContainer otherProductContainer);
+	protected abstract void setContainer(BaseProductContainer otherProductContainer);
 
 	/**
 	 * @pre exitTime != null

@@ -16,8 +16,6 @@ public class ProductDescriptionTest
 
 		IProductDescription pdGood = new ProductDescription(goodPD);
 		assertFalse(goodPD2.equals(pdGood.getDescription()));
-		pdGood.setDescription(goodPD2);
-		assertTrue(goodPD2.equals(pdGood.getDescription()));
 	}
 
 	@Test
@@ -30,8 +28,6 @@ public class ProductDescriptionTest
 		IProductDescription pdGood2 = new ProductDescription(goodPD2);
 
 		assertFalse(pdGood.equals(pdGood2));
-		pdGood2.setDescription(goodPD);
-		assertTrue(pdGood.equals(pdGood2));
 	}
 
 	@Test
@@ -89,8 +85,6 @@ public class ProductDescriptionTest
 		IProductDescription pdGood = new ProductDescription(goodPD);
 
 		assertFalse(goodPD2.equals(pdGood.getDescription()));
-		pdGood.setDescription(goodPD2);
-		assertTrue(goodPD2.equals(pdGood.getDescription()));
 	}
 
 	@Test

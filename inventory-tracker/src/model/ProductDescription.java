@@ -128,17 +128,6 @@ public class ProductDescription implements Serializable, IProductDescription
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.IProductDescription#setDescription(java.lang.String)
-	 */
-	@Override
-	public void setDescription(String description)
-	{
-		this.description = description;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see model.IProductDescription#toString()
 	 */
 	@Override

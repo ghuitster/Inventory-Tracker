@@ -67,7 +67,7 @@ public class InventoryTest
 	public void productListTest() throws Exception
 	{
 		populateInventory();
-		Set<Product> products = Inventory.getInstance().getAllProducts();
+		Set<BaseProduct> products = Inventory.getInstance().getAllProducts();
 		assertEquals(1, products.size());
 		assertTrue(products.contains(prod));
 	}
@@ -84,17 +84,6 @@ public class InventoryTest
 		Inventory.getInstance().removeAllStorageUnits();
 		units = Inventory.getInstance().getAllStorageUnits();
 		assertEquals(0, units.size());
-	}
-
-	@Test
-	public void reportDeletedItemTest() throws Exception
-	{
-		populateInventory();
-		assertEquals(0, Inventory.getInstance().getRemovedItems().size());
-		Inventory.getInstance().reportRemovedItem(
-				new Item(prod, new Barcode("1"), new Date(), new Date(),
-						new Date(), unit1));
-		assertEquals(1, Inventory.getInstance().getRemovedItems().size());
 	}
 
 	@Test

@@ -66,7 +66,7 @@ public abstract class BaseProduct extends Observable implements ITaggable
 	 * @post container == passed in container
 	 * @param productContainer the container to add
 	 */
-	public abstract void addContainer(ProductContainer productContainer);
+	protected abstract void addContainer(ProductContainer productContainer);
 
 	/*
 	 * (non-Javadoc)
@@ -125,7 +125,7 @@ public abstract class BaseProduct extends Observable implements ITaggable
 	 *       product
 	 * @param productContainer the container to remove
 	 */
-	public abstract void removeContainer(BaseProductContainer productContainer);
+	protected abstract void removeContainer(BaseProductContainer productContainer);
 
 	/**
 	 * @pre barcode != null

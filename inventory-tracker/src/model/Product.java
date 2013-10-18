@@ -208,7 +208,7 @@ public class Product extends BaseProduct implements Serializable
 	 * @see model.IProduct#addContainer(model.ProductContainer)
 	 */
 	@Override
-	public void addContainer(ProductContainer productContainer)
+	protected void addContainer(ProductContainer productContainer)
 	{
 		this.containers.add(productContainer);
 		
@@ -398,7 +398,7 @@ public class Product extends BaseProduct implements Serializable
 	 * @see model.IProduct#removeContainer(model.ProductContainer)
 	 */
 	@Override
-	public void removeContainer(BaseProductContainer productContainer)
+	protected void removeContainer(BaseProductContainer productContainer)
 	{
 		this.containers.remove(productContainer);
 		
@@ -416,6 +416,8 @@ public class Product extends BaseProduct implements Serializable
 	{
 		if(barcode != null && Barcode.isValid(barcode.getNumber()))
 			this.barcode = barcode;
+		
+		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
 	/*
@@ -427,6 +429,8 @@ public class Product extends BaseProduct implements Serializable
 	public void setCreationDate(Date creationDate)
 	{
 		this.creationDate = creationDate;
+		
+		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
 	/*
@@ -438,6 +442,8 @@ public class Product extends BaseProduct implements Serializable
 	public void setDescription(IProductDescription description)
 	{
 		this.description = description;
+		
+		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
 	/*
@@ -449,6 +455,8 @@ public class Product extends BaseProduct implements Serializable
 	public void setShelfLife(int shelfLife)
 	{
 		this.shelfLife = shelfLife;
+		
+		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
 	/*
@@ -460,6 +468,8 @@ public class Product extends BaseProduct implements Serializable
 	public void setSize(UnitSize size)
 	{
 		this.size = size;
+		
+		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
 	/*
@@ -471,6 +481,8 @@ public class Product extends BaseProduct implements Serializable
 	public void setThreeMonthSupply(CountThreeMonthSupply threeMonthSupply)
 	{
 		this.threeMonthSupply = threeMonthSupply;
+		
+		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
 	/*

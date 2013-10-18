@@ -117,18 +117,19 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 		if(container == null)
 		{
 			product.addContainer(this);
+			item.setContainer(this);
 			this.products.add(product);
 			this.items.add(item);
 		}
 		else
 		{
 			product.addContainer(container);
+			item.setContainer(container);
 			container.products.add(product);
 			container.items.add(item);
 		}
 		
 		this.notifyObservers(new ObservableArgs(item, UpdateType.ADDED));
-		item.addObserver(Inventory.getInstance());
 	}
 
 	/*
@@ -232,10 +233,10 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	 */
 	public void removeItem(Item item)
 	{
+		item.setContainer(null);
 		this.items.remove(item);
-		Inventory.getInstance().reportRemovedItem(item);
+		
 		this.notifyObservers(new ObservableArgs(item, UpdateType.REMOVED));
-		item.deleteObservers();
 	}
 
 	/*

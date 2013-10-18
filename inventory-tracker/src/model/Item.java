@@ -40,14 +40,13 @@ public class Item extends BaseItem implements Serializable, ITaggable
 	 * @param container
 	 */
 	public Item(Product product, IBarcode barcode, Date entryDate,
-			Date expirationDate, Date exitTime, BaseProductContainer container)
+			Date expirationDate, Date exitTime)
 	{
 		this.product = product;
 		this.barcode = barcode;
 		this.entryDate = entryDate;
 		this.expirationDate = expirationDate;
 		this.exitTime = exitTime;
-		this.container = container;
 	}
 
 	/*

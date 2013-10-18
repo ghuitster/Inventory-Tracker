@@ -76,7 +76,8 @@ public class ProductGroupTest
 						new CountUnitSize(1), 1, new CountThreeMonthSupply(1));
 		Item item =
 				new Item(prod, new Barcode("3"), new Date(), new Date(),
-						new Date(), group);
+						new Date());
+		group.addItem(item);
 		group.addProduct(prod);
 		return item;
 	}

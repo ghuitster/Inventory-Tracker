@@ -29,13 +29,6 @@ public interface IProductDescription
 	public abstract int hashCode();
 
 	/**
-	 * @pre description != null
-	 * @post description == passed in description
-	 * @param description the description to set
-	 */
-	public abstract void setDescription(String description);
-
-	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

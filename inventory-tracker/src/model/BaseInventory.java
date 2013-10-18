@@ -39,7 +39,7 @@ public abstract class BaseInventory extends Observable implements Observer
 	 *       may be empty
 	 * @return A list containing references to all of the products
 	 */
-	public abstract Set<Product> getAllProducts();
+	public abstract Set<BaseProduct> getAllProducts();
 
 	/**
 	 * Gets a list of all Storage Units in the system
@@ -58,7 +58,7 @@ public abstract class BaseInventory extends Observable implements Observer
 	 * @return A copy of the map containing all known expiration dates mapped to
 	 *         which items are expiring
 	 */
-	public abstract SortedMap<Date, Set<Item>> getItemExpirations();
+	public abstract SortedMap<Date, Set<BaseItem>> getItemExpirations();
 
 	/**
 	 * Gets a map of Dates (each of which represents a specific month) mapped to
@@ -69,7 +69,7 @@ public abstract class BaseInventory extends Observable implements Observer
 	 * @return A copy of the map containing months correlated to what
 	 *         ProductGroups' three month supplies expire on that month
 	 */
-	public abstract SortedMap<Date, Set<ProductGroup>>
+	public abstract SortedMap<Date, Set<IProductGroup>>
 			getNMonthSupplyGroupMap();
 
 	/**
@@ -81,7 +81,7 @@ public abstract class BaseInventory extends Observable implements Observer
 	 * @return A copy of the map containing months correlated to what products'
 	 *         three month supplies expire on that month
 	 */
-	public abstract SortedMap<Date, Set<Product>> getNMonthSupplyMap();
+	public abstract SortedMap<Date, Set<BaseProduct>> getNMonthSupplyMap();
 
 	/**
 	 * Gets the persistence object for saving and loading data to this object
@@ -97,7 +97,7 @@ public abstract class BaseInventory extends Observable implements Observer
 	 * @return A copy of the map containing all item removal dates mapped to the
 	 *         items removed.
 	 */
-	public abstract SortedMap<Date, Set<Item>> getRemovedItems();
+	public abstract SortedMap<Date, Set<BaseItem>> getRemovedItems();
 
 	/**
 	 * Clears all Storage Units from the system

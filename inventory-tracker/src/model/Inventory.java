@@ -50,24 +50,24 @@ public class Inventory extends BaseInventory implements Serializable
 	/**
 	 * Mapping of all Item expirations, for easy retrieval
 	 */
-	private SortedMap<Date, Set<Item>> itemExpirations;
+	private SortedMap<Date, Set<BaseItem>> itemExpirations;
 
 	/**
 	 * Mapping of all removed Items, for easy retrieval
 	 */
-	private SortedMap<Date, Set<Item>> removedItems;
+	private SortedMap<Date, Set<BaseItem>> removedItems;
 	/**
 	 * Mapping for the nMonthSupply report. The Date key represents a month. The
 	 * corresponding products are those which will last up to the key's month
 	 */
-	private SortedMap<Date, Set<Product>> nMonthSupplyMap;
+	private SortedMap<Date, Set<BaseProduct>> nMonthSupplyMap;
 
 	/**
 	 * Date Mapping for the nMonthSupply report. The Date key represents a
 	 * month. The corresponding ProductGroups are those which will last up to
 	 * the key's month
 	 */
-	private SortedMap<Date, Set<ProductGroup>> nMonthSupplyGroupMap;
+	private SortedMap<Date, Set<IProductGroup>> nMonthSupplyGroupMap;
 
 	/**
 	 * Static reference to the one and only Inventory instance
@@ -86,10 +86,10 @@ public class Inventory extends BaseInventory implements Serializable
 	{
 		this.storageUnits = new HashSet<StorageUnit>();
 		this.persistence = new Serializer("./data.inventory");
-		this.itemExpirations = new TreeMap<Date, Set<Item>>();
-		this.removedItems = new TreeMap<Date, Set<Item>>();
-		this.nMonthSupplyMap = new TreeMap<Date, Set<Product>>();
-		this.nMonthSupplyGroupMap = new TreeMap<Date, Set<ProductGroup>>();
+		this.itemExpirations = new TreeMap<Date, Set<BaseItem>>();
+		this.removedItems = new TreeMap<Date, Set<BaseItem>>();
+		this.nMonthSupplyMap = new TreeMap<Date, Set<BaseProduct>>();
+		this.nMonthSupplyGroupMap = new TreeMap<Date, Set<IProductGroup>>();
 		this.lastGeneratedBarCode = 400000000000l;
 	}
 
@@ -131,9 +131,9 @@ public class Inventory extends BaseInventory implements Serializable
 	 * 
 	 * @see model.BaseInventory#getAllProducts()
 	 */
-	public Set<Product> getAllProducts()
+	public Set<BaseProduct> getAllProducts()
 	{
-		HashSet<Product> products = new HashSet<Product>();
+		HashSet<BaseProduct> products = new HashSet<BaseProduct>();
 		for(StorageUnit unit: this.storageUnits)
 		{
 			recurseProductContainer(unit, products);
@@ -156,9 +156,9 @@ public class Inventory extends BaseInventory implements Serializable
 	 * 
 	 * @see model.BaseInventory#getItemExpirations()
 	 */
-	public SortedMap<Date, Set<Item>> getItemExpirations()
+	public SortedMap<Date, Set<BaseItem>> getItemExpirations()
 	{
-		return new TreeMap<Date, Set<Item>>(this.itemExpirations);
+		return new TreeMap<Date, Set<BaseItem>>(this.itemExpirations);
 	}
 
 	/*
@@ -166,9 +166,9 @@ public class Inventory extends BaseInventory implements Serializable
 	 * 
 	 * @see model.BaseInventory#getNMonthSupplyGroupMap()
 	 */
-	public SortedMap<Date, Set<ProductGroup>> getNMonthSupplyGroupMap()
+	public SortedMap<Date, Set<IProductGroup>> getNMonthSupplyGroupMap()
 	{
-		return new TreeMap<Date, Set<ProductGroup>>(this.nMonthSupplyGroupMap);
+		return new TreeMap<Date, Set<IProductGroup>>(this.nMonthSupplyGroupMap);
 	}
 
 	/*
@@ -176,9 +176,9 @@ public class Inventory extends BaseInventory implements Serializable
 	 * 
 	 * @see model.BaseInventory#getNMonthSupplyMap()
 	 */
-	public SortedMap<Date, Set<Product>> getNMonthSupplyMap()
+	public SortedMap<Date, Set<BaseProduct>> getNMonthSupplyMap()
 	{
-		return new TreeMap<Date, Set<Product>>(this.nMonthSupplyMap);
+		return new TreeMap<Date, Set<BaseProduct>>(this.nMonthSupplyMap);
 	}
 
 	/*
@@ -196,9 +196,9 @@ public class Inventory extends BaseInventory implements Serializable
 	 * 
 	 * @see model.BaseInventory#getRemovedItems()
 	 */
-	public SortedMap<Date, Set<Item>> getRemovedItems()
+	public SortedMap<Date, Set<BaseItem>> getRemovedItems()
 	{
-		return new TreeMap<Date, Set<Item>>(this.removedItems);
+		return new TreeMap<Date, Set<BaseItem>>(this.removedItems);
 	}
 
 	/**
@@ -220,7 +220,7 @@ public class Inventory extends BaseInventory implements Serializable
 	 * @param workingSet The current set being built
 	 */
 	private void recurseProductContainer(BaseProductContainer container,
-			Set<Product> workingSet)
+			Set<BaseProduct> workingSet)
 	{
 		workingSet.addAll(container.getAllProducts());
 		for(BaseProductContainer subContainer: container.getAllProductGroups())
@@ -260,7 +260,7 @@ public class Inventory extends BaseInventory implements Serializable
 	 *       null, and it has been added to the map of removed items
 	 * @param item The item that has been removed
 	 */
-	protected void reportRemovedItem(Item item)
+	private void reportRemovedItem(BaseItem item)
 	{
 		Date current = new Date();
 		item.setExitTime(current);
@@ -270,11 +270,11 @@ public class Inventory extends BaseInventory implements Serializable
 				new Date(current.getYear(), current.getMonth(),
 						current.getDate());
 
-		Set<Item> itemsForMonth;
+		Set<BaseItem> itemsForMonth;
 		if(removedItems.containsKey(month))
 			itemsForMonth = removedItems.get(month);
 		else
-			itemsForMonth = new HashSet<Item>();
+			itemsForMonth = new HashSet<BaseItem>();
 		itemsForMonth.add(item);
 
 		this.removedItems.put(month, itemsForMonth);
@@ -302,7 +302,11 @@ public class Inventory extends BaseInventory implements Serializable
 	@Override
 	public void update(Observable o, Object arg)
 	{
-		this.notifyObservers(arg);
+		ObservableArgs obsArg = (ObservableArgs)arg;
+		if(obsArg.getChangedObj() instanceof BaseItem
+				&& obsArg.getUpdateType() == UpdateType.REMOVED)
+			this.reportRemovedItem((BaseItem)obsArg.getChangedObj());
+		this.notifyObservers(obsArg);
 	}
 
 }

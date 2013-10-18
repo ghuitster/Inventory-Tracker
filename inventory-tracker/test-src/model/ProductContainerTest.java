@@ -21,7 +21,7 @@ public class ProductContainerTest
 						UnitType.FLUID_OUNCES));
 
 		assertTrue(container.ableToAddItem(new Item(null, null, null, null,
-				null, unit)));
+				null)));
 	}
 
 	@Test
@@ -67,7 +67,7 @@ public class ProductContainerTest
 						UnitType.FLUID_OUNCES));
 
 		assertTrue(container.ableToRemoveItem(new Item(null, null, null, null,
-				null, unit)));
+				null)));
 	}
 
 	@Test
@@ -82,7 +82,7 @@ public class ProductContainerTest
 				new Product(new Date(), "test", new Barcode("400000000000"),
 						new CountUnitSize(3), 3, null);
 		container.addProduct(product);
-		Item item = new Item(product, null, null, null, null, unit);
+		Item item = new Item(product, null, null, null, null);
 		for(Product prod: container.getAllProducts())
 		{
 			product = prod;
@@ -108,7 +108,7 @@ public class ProductContainerTest
 				new ProductGroup("test", container, new ThreeMonthSupply(3,
 						UnitType.FLUID_OUNCES));
 		group.addItem(new Item(product, new Barcode("400000000000"),
-				new Date(), new Date(), new Date(), unit));
+				new Date(), new Date(), new Date()));
 		assertFalse(container.ableToRemoveProductGroup(group));
 	}
 
