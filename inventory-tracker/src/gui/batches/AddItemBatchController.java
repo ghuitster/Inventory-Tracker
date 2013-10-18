@@ -99,7 +99,9 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	protected void loadValues()
-	{}
+	{
+
+	}
 
 	/**
 	 * This method is called when the user clicks the "Redo" button in the add
