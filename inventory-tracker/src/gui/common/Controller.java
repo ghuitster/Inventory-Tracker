@@ -1,6 +1,8 @@
 
 package gui.common;
 
+import observer.NSA;
+
 /**
  * Controller is a base class that provides common functionality required by all
  * controllers in the program (i.e., all controller classes extend Controller).
@@ -25,6 +27,9 @@ package gui.common;
 public abstract class Controller implements IController
 {
 
+	private NSA Observer;
+	
+	
 	/**
 	 * Reference to the view for this controller.
 	 */
@@ -42,6 +47,7 @@ public abstract class Controller implements IController
 	protected Controller(IView view)
 	{
 		this._view = view;
+		this.Observer = new NSA(view);
 	}
 
 	/**

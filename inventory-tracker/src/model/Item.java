@@ -1,8 +1,6 @@
 
 package model;
 
-import gui.common.Tagable;
-
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -341,6 +339,8 @@ public class Item extends BaseItem implements Serializable, ITaggable
 	public void setBarcode(IBarcode barcode)
 	{
 		this.barcode = barcode;
+		
+		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
 	/*
@@ -357,6 +357,7 @@ public class Item extends BaseItem implements Serializable, ITaggable
 	public void setEntryDate(Date entryDate)
 	{
 		this.entryDate = entryDate;
+		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 	
 	/*
@@ -368,6 +369,7 @@ public class Item extends BaseItem implements Serializable, ITaggable
 	public void setExitTime(Date exitTime)
 	{
 		this.exitTime = exitTime;
+		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
 	/*
@@ -379,6 +381,7 @@ public class Item extends BaseItem implements Serializable, ITaggable
 	public void setExpirationDate(Date expirationDate)
 	{
 		this.expirationDate = expirationDate;
+		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
 	/*
@@ -390,6 +393,7 @@ public class Item extends BaseItem implements Serializable, ITaggable
 	public void setProduct(Product product)
 	{
 		this.product = product;
+		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
 	/*

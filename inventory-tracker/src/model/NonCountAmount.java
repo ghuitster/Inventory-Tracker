@@ -13,6 +13,10 @@ import model.exception.InvalidUnitSizeException;
  */
 public abstract class NonCountAmount extends Amount
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2175122254980347945L;
 	// Variables
 	protected float amount;
 

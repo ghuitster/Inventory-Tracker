@@ -20,6 +20,11 @@ import model.exception.InvalidNameException;
 public class Inventory extends BaseInventory implements Serializable
 {
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6708314065210008512L;
+
+	/**
 	 * Gets the static Inventory instance. Creates it if it does not exist.
 	 * @pre (none)
 	 * @post The single static instance of Inventory is not null
@@ -124,6 +129,8 @@ public class Inventory extends BaseInventory implements Serializable
 			throw new InvalidNameException();
 
 		this.storageUnits.add(storageUnit);
+		
+		this.notifyObservers(new ObservableArgs(storageUnit, UpdateType.ADDED));
 	}
 
 	/*
@@ -236,6 +243,9 @@ public class Inventory extends BaseInventory implements Serializable
 	 */
 	public void removeAllStorageUnits()
 	{
+		for(StorageUnit unit : storageUnits)
+			this.notifyObservers(new ObservableArgs(unit, UpdateType.REMOVED));
+		
 		this.storageUnits.clear();
 	}
 
@@ -251,6 +261,7 @@ public class Inventory extends BaseInventory implements Serializable
 					"Passed StorageUnit was not found");
 
 		this.storageUnits.remove(storageUnit);
+		this.notifyObservers(new ObservableArgs(storageUnit, UpdateType.REMOVED));
 	}
 
 	/**

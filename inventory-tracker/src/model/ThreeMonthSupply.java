@@ -13,6 +13,11 @@ public class ThreeMonthSupply extends NonCountAmount
 {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8151916103900443511L;
+
+	/**
 	 * @pre amount must be > 0.0f
 	 * @pre unitType must != UnitType.COUNT
 	 * @param amount

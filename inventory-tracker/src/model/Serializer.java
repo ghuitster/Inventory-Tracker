@@ -18,6 +18,10 @@ import model.exception.SerializerException;
  */
 public class Serializer implements IPersistence, Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5194089082016935560L;
 	private String filePath;
 
 	/**

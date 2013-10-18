@@ -9,6 +9,10 @@ package model;
  */
 public abstract class CountAmount extends Amount
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1871972810217980002L;
 	// Variables
 	protected int amount;
 

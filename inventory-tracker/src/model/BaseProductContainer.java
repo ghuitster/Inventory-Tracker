@@ -71,7 +71,7 @@ public abstract class BaseProductContainer extends Observable implements ITaggab
 	 * @post my.products.contains(product)
 	 * @param product the Product to add
 	 */
-	public abstract void addProduct(Product product);
+	public abstract void addProduct(BaseProduct product);
 
 	/**
 	 * @pre productGroup must be a valid ProductGroup and not null
@@ -97,7 +97,7 @@ public abstract class BaseProductContainer extends Observable implements ITaggab
 	 * @pre this.products != null
 	 * @return the Set<Product> of all Products
 	 */
-	public abstract Set<Product> getAllProducts();
+	public abstract Set<BaseProduct> getAllProducts();
 
 	/**
 	 * @return the name

@@ -10,6 +10,11 @@ public class UnitSize extends NonCountAmount
 {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7803041358588140597L;
+
+	/**
 	 * @pre size must be > 0.0f
 	 * @pre unitType must != UnitType.COUNT
 	 * @post size == passed in size

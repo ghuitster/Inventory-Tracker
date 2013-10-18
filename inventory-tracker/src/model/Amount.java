@@ -14,6 +14,10 @@ import java.io.Serializable;
  */
 public abstract class Amount implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1210537620742684006L;
 	// Variables
 	protected UnitType unitType;
 

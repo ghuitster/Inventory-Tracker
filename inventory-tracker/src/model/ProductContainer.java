@@ -14,14 +14,14 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 {
 	private static final long serialVersionUID = 9015876223451150036L;
 	protected String name;
-	protected Set<Product> products;
+	protected Set<BaseProduct> products;
 	protected Set<Item> items;
 	protected Set<ProductGroup> productGroups;
 
 	protected ProductContainer(String name)
 	{
 		this.name = name;
-		products = new HashSet<Product>();
+		products = new HashSet<BaseProduct>();
 		items = new HashSet<Item>();
 		productGroups = new HashSet<ProductGroup>();
 		this.addObserver(Inventory.getInstance());
@@ -137,7 +137,7 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	 * 
 	 * @see model.IProductContainer#addProduct(model.Product)
 	 */
-	public void addProduct(Product product)
+	public void addProduct(BaseProduct product)
 	{
 		ProductContainer container = this.findContainer(product);
 
@@ -211,9 +211,9 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	 * 
 	 * @see model.IProductContainer#getAllProducts()
 	 */
-	public Set<Product> getAllProducts()
+	public Set<BaseProduct> getAllProducts()
 	{
-		return new HashSet<Product>(this.products);
+		return new HashSet<BaseProduct>(this.products);
 	}
 
 	/*

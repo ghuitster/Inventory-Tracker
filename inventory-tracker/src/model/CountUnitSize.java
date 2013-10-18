@@ -15,6 +15,11 @@ public class CountUnitSize extends CountAmount
 	// Variables
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5858104216462427971L;
+
+	/**
 	 * @pre size must be > 0
 	 * @param size
 	 */

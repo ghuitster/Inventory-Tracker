@@ -1,11 +1,12 @@
 
 package observer;
 
+import gui.common.IView;
+
 import java.util.Observable;
 import java.util.Observer;
 
-import model.BaseInventory;
-import model.Inventory;
+import model.*;
 
 /**
  * Notification System Arbitrator Receives update notifications from the model
@@ -15,24 +16,19 @@ import model.Inventory;
  */
 public class NSA implements Observer
 {
-	private NSA()
+	public NSA(IView view)
 	{
+		this.view = view;
 		inventory = Inventory.getInstance();
 		inventory.addObserver(this);
-	}
-	
-	private NSA instance;
-	public NSA getInstance()
-	{
-		if(instance == null)
-			instance = new NSA();
-		return instance;
 	}
 	
 	/**
 	 * Reference to the inventory we're tracking
 	 */
 	private BaseInventory inventory;
+	
+	private IView view;
 
 	/**
 	 * Receiving function for then an observable in the system changes
@@ -47,7 +43,8 @@ public class NSA implements Observer
 	@Override
 	public void update(Observable o, Object arg)
 	{
-		// TODO Auto-generated method stub
+		ObservableArgs obsArgs = (ObservableArgs)arg;
+		
 
 	}
 
