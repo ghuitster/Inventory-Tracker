@@ -109,7 +109,9 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void redo()
-	{}
+	{
+
+	}
 
 	/**
 	 * This method is called when the selected product changes in the add item
