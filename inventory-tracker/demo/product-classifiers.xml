@@ -1,0 +1,5 @@
+<product-classifiers>
+	<product-classifier class="model.classifiers.UpcDatabaseClassifier" />
+	<product-classifier class="model.classifiers.SearchUpcClassifier" />
+	<product-classifier class="model.classifiers.GoogleNetGrocerClassifier" />
+</product-classifiers>

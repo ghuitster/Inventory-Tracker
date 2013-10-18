@@ -6,12 +6,12 @@ import java.util.ArrayList;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
 // import com.itextpdf.text.Image;
 // import com.itextpdf.text.Paragraph;
 // import com.itextpdf.text.pdf.PdfWriter;
 // import com.itextpdf.text.pdf.BarcodeEAN;
 // import com.itextpdf.text.pdf.BarcodeEANSUPP;
-import com.itextpdf.text.Rectangle;
 
 /**
  * class for printing out batches of Barcode labels for newly added Items.
@@ -22,8 +22,8 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 {
 	// Variables
 	private final ArrayList<Barcode> barcodes = null;
-	private final Document document = null;
-	private static String RESULT = null;
+	private Document document = null;
+	private final String RESULT = null;
 	private final int pageCount = 0;
 	private final int BARCODES_PER_PAGE = 12;
 
@@ -31,10 +31,12 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 	 * @pre barcodes must contain only valid Barcode objects
 	 * @pre pageSize must be a valid pagesize for printing
 	 * @param barcodes the list of Barcode objects to create labels for
-	 * @param pageSize the size of the page to generate the Barcode labels on
 	 */
-	public BarcodeLabelPage(ArrayList<Barcode> barcodes, Rectangle pageSize)
+	public BarcodeLabelPage(ArrayList<Barcode> barcodes)
 	{
+		// Set Document object to have American Letter standard pagesize with
+		// 0.5" left/right, and 1.0" top/bottom margins
+		this.document = new Document(PageSize.LETTER, 36f, 36f, 72f, 72f);
 
 	}
 
