@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author Michael
  * 
  */
-public class Barcode implements Serializable, IBarcode
+public abstract class Barcode implements Serializable, IBarcode
 {
 	// Variables
 	private static final long serialVersionUID = -4409370215399749663L;
@@ -18,15 +18,7 @@ public class Barcode implements Serializable, IBarcode
 	 * @param number string of the barcode number to validate
 	 * @return true if valid number
 	 */
-	public static boolean isValid(String number)
-	{
-		boolean response = false;
-
-		if(number.matches("4[0-9]{11}"))
-			response = true;
-
-		return response;
-	}
+	public abstract boolean isValid(String number);
 
 	private String number;
 
@@ -51,7 +43,7 @@ public class Barcode implements Serializable, IBarcode
 
 		if(number != null)
 		{
-			response = Barcode.isValid(number);
+			response = this.isValid(number);
 		}
 
 		return response;

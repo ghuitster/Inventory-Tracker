@@ -7,13 +7,13 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
-import com.itextpdf.text.List;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.Barcode;
@@ -32,7 +32,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 public class BarcodeLabelPage implements IBarcodeLabelPage
 {
 	// Variables
-	private ArrayList<Item> items = null;
+	private ArrayList<IItem> items = null;
 	private Document document = null;
 	private String result = "Labels" + File.separator + "labels-";
 	private int pageCount = 0;
@@ -43,7 +43,7 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 	 * @pre pageSize must be a valid page size for printing
 	 * @param items the list of Item objects to create barcode labels for
 	 */
-	public BarcodeLabelPage(ArrayList<Item> items)
+	public BarcodeLabelPage(ArrayList<IItem> items)
 	{
 		// Set Document object to have American Letter standard pagesize with
 		// 0.5" left/right, and 1.0" top/bottom margins
@@ -111,82 +111,94 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 
 		for(int index = 0; index < this.items.size(); index++)
 		{
-			Item currentItem = this.items.get(index);
-			Barcode currentBarcode = (Barcode) currentItem.getBarcode();
+			IItem currentItem = this.items.get(index);
+			IBarcode barcode = currentItem.getBarcode();
+			IProductDescription description =
+					currentItem.getProduct().getDescription();
+			Date entryDate = currentItem.getEntryDate();
+			Date expirationDate = currentItem.getExpirationDate();
+
+			codeEAN.setCode(barcode.getNumber());
+			Image currentCodeImage =
+					codeEAN.createImageWithBarcode(cb, null, null);
+			String labelDescription = description.getDescription();
+
+			if(labelDescription.length() > 0)
+			{
+				Chunk chunk = new Chunk(labelDescription, font);
+				while(chunk.getWidthPoint() > currentCodeImage.getWidth())
+				{
+					labelDescription =
+							labelDescription.substring(0,
+									labelDescription.length() - 1);
+					chunk = new Chunk(labelDescription, font);
+				}
+			}
+
+			// do
+			// {
+			// if(labelDescription.length() <= 0)
+			// {
+			// break;
+			// }
+			// Chunk chunk = new Chunk(labelDescription, font);
+			// if (chunk.getWidthPoint() < currentCodeImage.getWidth())
+			// {
+			// break;
+			// }
+			// labelDescription = labelDescription.substring(0,
+			// labelDescription.length() - 1);
+			// }
+			// while(true);
+
+			String dateString =
+					entryDate.getMonth() + "/" + entryDate.getDay() + "/"
+							+ entryDate.getYear() + " exp "
+							+ expirationDate.getMonth() + "/"
+							+ expirationDate.getDay() + "/"
+							+ expirationDate.getYear();
 		}
 
 		/* Stuff from code */
-		for(Iterator iterator = list.iterator(); iterator.hasNext();)
-		{
-			en en1 = (en) iterator.next();
-			Iterator iterator1 = ((List) map.get(en1)).iterator();
-			while(iterator1.hasNext())
-			{
-				ed ed1 = (ed) iterator1.next();
-				int j = 1;
-				int k = 0;
-				while(k < j)
-				{
-					barcodeean.setCode(ed1.d());
-					Image image1 =
-							barcodeean.createImageWithBarcode(pdfcontentbyte,
-									null, null);
-					String s = ed1.c().d();
-					do
-					{
-						if(s.length() <= 0)
-							break;
-						Chunk chunk = new Chunk(s, font);
-						if(chunk.getWidthPoint() < image1.getWidth())
-							break;
-						s = s.substring(0, s.length() - 1);
-					}
-					while(true);
-					String s1 = t.b(ed1.e());
-					if(ed1.i() != null)
-					{
-						s1 =
-								(new StringBuilder()).append(s1)
-										.append(" exp ").toString();
-						s1 =
-								(new StringBuilder()).append(s1)
-										.append(t.b(ed1.i())).toString();
-					}
-					Paragraph paragraph =
-							new Paragraph((new StringBuilder()).append(s)
-									.append("\n").append(s1).toString(), font);
-					paragraph.setLeading(0.0F, 1.1F);
-					PdfPCell pdfpcell1 = new PdfPCell();
-					pdfpcell1.addElement(paragraph);
-					image1.setSpacingBefore(2.0F);
-					pdfpcell1.addElement(image1);
-					pdfpcell1.setBorder(0);
-					pdfpcell1.setPadding(5F);
-					pdfptable.addCell(pdfpcell1);
-					k++;
-				}
-			}
-		}
-
-		pdfptable.completeRow();
-		document.add(pdfptable);
-		document.close();
-
-		/* End stuff from code */
+		/*
+		 * for(Iterator iterator = list.iterator(); iterator.hasNext();) { en
+		 * en1 = (en) iterator.next(); Iterator iterator1 = ((List)
+		 * map.get(en1)).iterator(); while(iterator1.hasNext()) { ed ed1 = (ed)
+		 * iterator1.next(); int j = 1; int k = 0; while(k < j) {
+		 * barcodeean.setCode(ed1.d()); Image image1 =
+		 * barcodeean.createImageWithBarcode(pdfcontentbyte, null, null); String
+		 * s = ed1.c().d(); do { if(s.length() <= 0) break; Chunk chunk = new
+		 * Chunk(s, font); if(chunk.getWidthPoint() < image1.getWidth()) break;
+		 * s = s.substring(0, s.length() - 1); } while(true); String s1 =
+		 * t.b(ed1.e()); if(ed1.i() != null) { s1 = (new
+		 * StringBuilder()).append(s1) .append(" exp ").toString(); s1 = (new
+		 * StringBuilder()).append(s1) .append(t.b(ed1.i())).toString(); }
+		 * Paragraph paragraph = new Paragraph((new StringBuilder()).append(s)
+		 * .append("\n").append(s1).toString(), font);
+		 * paragraph.setLeading(0.0F, 1.1F); PdfPCell pdfpcell1 = new
+		 * PdfPCell(); pdfpcell1.addElement(paragraph);
+		 * image1.setSpacingBefore(2.0F); pdfpcell1.addElement(image1);
+		 * pdfpcell1.setBorder(0); pdfpcell1.setPadding(5F);
+		 * pdfptable.addCell(pdfpcell1); k++; } } }
+		 * 
+		 * pdfptable.completeRow(); document.add(pdfptable); document.close();
+		 * 
+		 * /* End stuff from code
+		 */
 
 		// Create a Barcode label from an item
-		Item currentItem = this.items.get(0);
-		String itemDescription =
-				currentItem.getProduct().getDescription().getDescription()
-						.substring(0, 19); // Limit Item/Product Description to
-											// first 18 characters
-
-		document.add(new Paragraph(currentItem.getProduct().getDescription()
-				.getDescription().substring(0, 19)));
-		BarcodeEAN codeEAN = new BarcodeEAN();
-		codeEAN.setCodeType(com.itextpdf.text.pdf.Barcode.UPCA);
-		codeEAN.setCode(this.items.get(0).getBarcode().getNumber());
-		codeEAN.setFont(basefont);
+		// Item currentItem = this.items.get(0);
+		// String itemDescription =
+		// currentItem.getProduct().getDescription().getDescription()
+		// .substring(0, 19); // Limit Item/Product Description to
+		// // first 18 characters
+		//
+		// document.add(new Paragraph(currentItem.getProduct().getDescription()
+		// .getDescription().substring(0, 19)));
+		// BarcodeEAN codeEAN = new BarcodeEAN();
+		// codeEAN.setCodeType(com.itextpdf.text.pdf.Barcode.UPCA);
+		// codeEAN.setCode(this.items.get(0).getBarcode().getNumber());
+		// codeEAN.setFont(basefont);
 
 		Image image1 = codeEAN.createImageWithBarcode(cb, null, null);
 
