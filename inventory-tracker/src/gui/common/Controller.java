@@ -47,7 +47,6 @@ public abstract class Controller implements IController
 	protected Controller(IView view)
 	{
 		this._view = view;
-		this.Observer = new NSA();
 	}
 
 	/**

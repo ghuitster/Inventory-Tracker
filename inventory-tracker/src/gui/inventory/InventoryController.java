@@ -12,6 +12,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
 
+import observer.NSA;
 import model.*;
 
 /**
@@ -33,6 +34,8 @@ public class InventoryController extends Controller implements
 		super(view);
 
 		construct();
+		
+		NSA.init(this.getView());
 	}
 
 	/**

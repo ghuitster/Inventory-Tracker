@@ -219,7 +219,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	 * Returns a unique bar code
 	 * @return A bar code which is unique
 	 */
-	protected long getUniqueBarCode()
+	public long getUniqueBarCode()
 	{
 		return lastGeneratedBarCode++;
 	}
