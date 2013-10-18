@@ -1,7 +1,9 @@
 
 package observer;
 
-import gui.common.IView;
+import gui.inventory.ProductContainerData;
+import gui.item.ItemData;
+import gui.product.ProductData;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -16,9 +18,8 @@ import model.*;
  */
 public class NSA implements Observer
 {
-	public NSA(IView view)
+	public NSA()
 	{
-		this.view = view;
 		inventory = Inventory.getInstance();
 		inventory.addObserver(this);
 	}
@@ -27,8 +28,6 @@ public class NSA implements Observer
 	 * Reference to the inventory we're tracking
 	 */
 	private IInventory inventory;
-	
-	private IView view;
 
 	/**
 	 * Receiving function for then an observable in the system changes
@@ -45,6 +44,41 @@ public class NSA implements Observer
 	{
 		ObservableArgs obsArgs = (ObservableArgs)arg;
 		
+		if(obsArgs.getUpdateType() == UpdateType.UPDATED)
+		{
+			if (obsArgs.getChangedObj() instanceof IItem)
+			{
+				IItem item = (IItem)obsArgs.getChangedObj();
+				ItemData itemData = (ItemData)item.getTag();
+				
+				itemData.setBarcode(item.getBarcode().toString());
+				itemData.setEntryDate(item.getEntryDate());
+				itemData.setExpirationDate(item.getExpirationDate());
+				if(item.getContainer() instanceof IProductGroup)
+					itemData.setProductGroup(item.getContainer().getName());
+				itemData.setStorageUnit(item.getContainer().getStorageUnit().getName());
+				
+			}
+			else if (obsArgs.getChangedObj() instanceof IProduct)
+			{
+				IProduct product = (IProduct)obsArgs.getChangedObj();
+				ProductData productData = (ProductData)product.getTag();
+				
+				productData.setBarcode(product.getBarcode().toString());
+				productData.setDescription(product.getDescription().toString());
+				productData.setShelfLife("" + product.getShelfLife());
+				productData.setSize(product.getSize().toString());
+				productData.setSupply(product.getThreeMonthSupply().toString());
+						
+			}
+			else if (obsArgs.getChangedObj() instanceof IProductContainer)
+			{
+				IProductContainer productContainer = (IProductContainer)obsArgs.getChangedObj();
+				ProductContainerData pcData = (ProductContainerData)productContainer.getTag();
+				
+				pcData.setName(productContainer.getName());
+			}
+		}
 
 	}
 

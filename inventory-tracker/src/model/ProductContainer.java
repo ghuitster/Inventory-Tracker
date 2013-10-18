@@ -312,6 +312,16 @@ public abstract class ProductContainer extends Observable implements IProductCon
 		this.removeItem(item);
 	}
 	
+	public IStorageUnit getStorageUnit()
+	{
+		IProductContainer container = this;
+		while(container instanceof IProductGroup)
+		{
+			container = ((IProductGroup)container).getContainer();
+		}
+		return (IStorageUnit)container;
+	}
+	
 	private Object tag;
 	@Override
 	public Object getTag()

@@ -150,5 +150,7 @@ public interface IProductContainer extends IObservable, ITaggable
 	 * @return The matching product container, or null if not found
 	 */
 	public abstract IProductContainer findContainer(IProduct product);
+	
+	public abstract IStorageUnit getStorageUnit();
 
 }
