@@ -31,7 +31,9 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void addItem()
-	{}
+	{
+
+	}
 
 	/**
 	 * This method is called when the "Product Barcode" field in the add item
@@ -39,7 +41,9 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void barcodeChanged()
-	{}
+	{
+
+	}
 
 	/**
 	 * This method is called when the "Count" field in the add item batch view
@@ -47,7 +51,9 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void countChanged()
-	{}
+	{
+
+	}
 
 	/**
 	 * This method is called when the user clicks the "Done" button in the add
@@ -71,7 +77,9 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents()
-	{}
+	{
+
+	}
 
 	/**
 	 * This method is called when the "Entry Date" field in the add item batch
@@ -79,7 +87,9 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void entryDateChanged()
-	{}
+	{
+
+	}
 
 	/**
 	 * Returns a reference to the view for this controller.
@@ -119,7 +129,9 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void selectedProductChanged()
-	{}
+	{
+
+	}
 
 	/**
 	 * This method is called when the user clicks the "Undo" button in the add
@@ -127,7 +139,9 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void undo()
-	{}
+	{
+
+	}
 
 	/**
 	 * This method is called when the "Use Barcode Scanner" setting in the add
@@ -135,5 +149,7 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void useScannerChanged()
-	{}
+	{
+
+	}
 }
