@@ -3,4 +3,4 @@
 Thumbs.db
 .metadata
 .\inventory-tracker\data.inventory
-*.db
+.\inventory-tracker\demo\inventory.db
