@@ -2,8 +2,9 @@
 package model;
 
 import java.util.Date;
+import java.util.Observable;
 
-public interface IItem
+public abstract class BaseItem extends Observable implements ITaggable
 {
 
 	/**
@@ -39,7 +40,7 @@ public interface IItem
 	 * @param product the Product to attempt to set
 	 * @return whether or not the product can be set
 	 */
-	public abstract boolean ableToSetProduct(IProduct product);
+	public abstract boolean ableToSetProduct(BaseProduct product);
 
 	/**
 	 * @see java.lang.Object#equals(java.lang.Object)
@@ -55,7 +56,7 @@ public interface IItem
 	/**
 	 * @return the container
 	 */
-	public abstract IProductContainer getContainer();
+	public abstract BaseProductContainer getContainer();
 
 	/**
 	 * @return the entryDate
@@ -95,7 +96,7 @@ public interface IItem
 	 * @post container == passed in container
 	 * @param otherProductContainer the container to set
 	 */
-	public abstract void setContainer(IProductContainer otherProductContainer);
+	public abstract void setContainer(BaseProductContainer otherProductContainer);
 
 	/**
 	 * @pre exitTime != null

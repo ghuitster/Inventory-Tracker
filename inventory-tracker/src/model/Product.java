@@ -11,7 +11,7 @@ import java.util.Set;
  * A class to represent a product
  * @author David
  */
-public class Product extends Tagable implements Serializable, IProduct
+public class Product extends BaseProduct implements Serializable
 {
 	// Variables
 	private static final long serialVersionUID = 1835988277946941153L;
@@ -88,7 +88,7 @@ public class Product extends Tagable implements Serializable, IProduct
 	 * @see model.IProduct#ableToRemoveContainer(model.ProductContainer)
 	 */
 	@Override
-	public boolean ableToRemoveContainer(IProductContainer productContainer)
+	public boolean ableToRemoveContainer(BaseProductContainer productContainer)
 	{
 		boolean response = false;
 
@@ -396,7 +396,7 @@ public class Product extends Tagable implements Serializable, IProduct
 	 * @see model.IProduct#removeContainer(model.ProductContainer)
 	 */
 	@Override
-	public void removeContainer(IProductContainer productContainer)
+	public void removeContainer(BaseProductContainer productContainer)
 	{
 		this.containers.remove(productContainer);
 	}
@@ -481,4 +481,14 @@ public class Product extends Tagable implements Serializable, IProduct
 				+ ", shelfLife=" + shelfLife + ", threeMonthSupply="
 				+ threeMonthSupply + ", containers=" + containers + "]";
 	}
+
+	
+	private Object tag;
+	@Override
+	public Object getTag()
+	{ return tag; }
+
+	@Override
+	public void setTag(Object tag)
+	{ this.tag = tag; }
 }

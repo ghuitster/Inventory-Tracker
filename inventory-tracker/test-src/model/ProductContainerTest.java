@@ -16,7 +16,7 @@ public class ProductContainerTest
 	public void testAbleToAddItem()
 	{
 		StorageUnit unit = new StorageUnit("test");
-		IProductContainer container =
+		BaseProductContainer container =
 				new ProductGroup("test", unit, new ThreeMonthSupply(1,
 						UnitType.FLUID_OUNCES));
 
@@ -28,17 +28,17 @@ public class ProductContainerTest
 	public void testAbleToAddProduct()
 	{
 		StorageUnit unit = new StorageUnit("test");
-		IProductContainer container =
+		BaseProductContainer container =
 				new ProductGroup("test", unit, new ThreeMonthSupply(1,
 						UnitType.FLUID_OUNCES));
-		IProduct product =
+		BaseProduct product =
 				new Product(new Date(), "test", new Barcode("400000000000"),
 						new CountUnitSize(3), 3, null,
 						new HashSet<ProductContainer>());
 		assertTrue(container.ableToAddProduct(product));
 		Set<Product> products = container.getAllProducts();
 
-		for(IProduct prod: products)
+		for(BaseProduct prod: products)
 			assertFalse(container.ableToAddProduct(prod));
 	}
 
@@ -46,7 +46,7 @@ public class ProductContainerTest
 	public void testAbleToAddProductGroup()
 	{
 		StorageUnit unit = new StorageUnit("test");
-		IProductContainer container =
+		BaseProductContainer container =
 				new ProductGroup("test", unit, new ThreeMonthSupply(1,
 						UnitType.FLUID_OUNCES));
 		IProductGroup group =
@@ -63,7 +63,7 @@ public class ProductContainerTest
 	public void testAbleToRemoveItem()
 	{
 		StorageUnit unit = new StorageUnit("test");
-		IProductContainer container =
+		BaseProductContainer container =
 				new ProductGroup("test", unit, new ThreeMonthSupply(1,
 						UnitType.FLUID_OUNCES));
 
@@ -75,7 +75,7 @@ public class ProductContainerTest
 	public void testAbleToRemoveProduct()
 	{
 		StorageUnit unit = new StorageUnit("test");
-		IProductContainer container =
+		BaseProductContainer container =
 				new ProductGroup("test", unit, new ThreeMonthSupply(1,
 						UnitType.FLUID_OUNCES));
 
@@ -100,7 +100,7 @@ public class ProductContainerTest
 	public void testAbleToRemoveProductGroup()
 	{
 		StorageUnit unit = new StorageUnit("test");
-		IProductContainer container =
+		BaseProductContainer container =
 				new ProductGroup("test", unit, new ThreeMonthSupply(1,
 						UnitType.FLUID_OUNCES));
 		Product product =
@@ -119,7 +119,7 @@ public class ProductContainerTest
 	public void testGetAllItems()
 	{
 		StorageUnit unit = new StorageUnit("test");
-		IProductContainer container =
+		BaseProductContainer container =
 				new ProductGroup("test", unit, new ThreeMonthSupply(1,
 						UnitType.FLUID_OUNCES));
 
@@ -130,7 +130,7 @@ public class ProductContainerTest
 	public void testGetAllProductGroups()
 	{
 		StorageUnit unit = new StorageUnit("test");
-		IProductContainer container =
+		BaseProductContainer container =
 				new ProductGroup("test", unit, new ThreeMonthSupply(1,
 						UnitType.FLUID_OUNCES));
 
@@ -141,7 +141,7 @@ public class ProductContainerTest
 	public void testGetAllProducts()
 	{
 		StorageUnit unit = new StorageUnit("test");
-		IProductContainer container =
+		BaseProductContainer container =
 				new ProductGroup("test", unit, new ThreeMonthSupply(1,
 						UnitType.FLUID_OUNCES));
 

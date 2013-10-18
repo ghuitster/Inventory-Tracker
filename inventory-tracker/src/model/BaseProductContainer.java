@@ -1,9 +1,10 @@
 
 package model;
 
+import java.util.Observable;
 import java.util.Set;
 
-public interface IProductContainer
+public abstract class BaseProductContainer extends Observable implements ITaggable
 {
 
 	/**
@@ -16,7 +17,7 @@ public interface IProductContainer
 	 * @param item the Item to attempt to add
 	 * @return whether the Item can be added or not
 	 */
-	public abstract boolean ableToAddItem(IItem item);
+	public abstract boolean ableToAddItem(BaseItem item);
 
 	/**
 	 * @pre product.barcode != empty
@@ -27,7 +28,7 @@ public interface IProductContainer
 	 * @param product the Product to attempt to add
 	 * @return whether the Product can be added or not
 	 */
-	public abstract boolean ableToAddProduct(IProduct product);
+	public abstract boolean ableToAddProduct(BaseProduct product);
 
 	/**
 	 * @pre productGroup.name != empty
@@ -42,14 +43,14 @@ public interface IProductContainer
 	 * @param item the Item to attempt to remove
 	 * @return whether the Item can be removed or not
 	 */
-	public abstract boolean ableToRemoveItem(IItem item);
+	public abstract boolean ableToRemoveItem(BaseItem item);
 
 	/**
 	 * @pre this.products.contains(product)
 	 * @param product the Product to attempt to remove
 	 * @return whether the Product can be removed or not
 	 */
-	public abstract boolean ableToRemoveProduct(IProduct product);
+	public abstract boolean ableToRemoveProduct(BaseProduct product);
 
 	/**
 	 * @pre productGroup must be a valid ProductGroup and not null
@@ -116,7 +117,7 @@ public interface IProductContainer
 	 * @post my.products.doesNotContain(product)
 	 * @param product the Product to remove
 	 */
-	public abstract void removeProduct(IProduct product);
+	public abstract void removeProduct(BaseProduct product);
 
 	/**
 	 * @pre productGroup must be a valid ProductGroup and not null

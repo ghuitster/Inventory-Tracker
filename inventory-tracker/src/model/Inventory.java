@@ -16,7 +16,7 @@ import model.exception.InvalidNameException;
  * @author Brian
  * 
  */
-public class Inventory implements Serializable, IInventory
+public class Inventory extends BaseInventory implements Serializable
 {
 	/**
 	 * Gets the static Inventory instance. Creates it if it does not exist.
@@ -95,9 +95,8 @@ public class Inventory implements Serializable, IInventory
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.IInventory#ableToAddStorageUnit(model.StorageUnit)
+	 * @see model.BaseInventory#ableToAddStorageUnit(model.StorageUnit)
 	 */
-	@Override
 	public boolean ableToAddStorageUnit(StorageUnit storageUnit)
 	{
 		if(storageUnit == null)
@@ -113,9 +112,8 @@ public class Inventory implements Serializable, IInventory
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.IInventory#addStorageUnit(model.StorageUnit)
+	 * @see model.BaseInventory#addStorageUnit(model.StorageUnit)
 	 */
-	@Override
 	public void addStorageUnit(StorageUnit storageUnit)
 			throws InvalidNameException, NullPointerException
 	{
@@ -130,9 +128,8 @@ public class Inventory implements Serializable, IInventory
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.IInventory#getAllProducts()
+	 * @see model.BaseInventory#getAllProducts()
 	 */
-	@Override
 	public Set<Product> getAllProducts()
 	{
 		HashSet<Product> products = new HashSet<Product>();
@@ -146,9 +143,8 @@ public class Inventory implements Serializable, IInventory
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.IInventory#getAllStorageUnits()
+	 * @see model.BaseInventory#getAllStorageUnits()
 	 */
-	@Override
 	public Set<StorageUnit> getAllStorageUnits()
 	{
 		return new HashSet<StorageUnit>(this.storageUnits);
@@ -157,9 +153,8 @@ public class Inventory implements Serializable, IInventory
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.IInventory#getItemExpirations()
+	 * @see model.BaseInventory#getItemExpirations()
 	 */
-	@Override
 	public SortedMap<Date, Set<Item>> getItemExpirations()
 	{
 		return new TreeMap<Date, Set<Item>>(this.itemExpirations);
@@ -168,9 +163,8 @@ public class Inventory implements Serializable, IInventory
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.IInventory#getNMonthSupplyGroupMap()
+	 * @see model.BaseInventory#getNMonthSupplyGroupMap()
 	 */
-	@Override
 	public SortedMap<Date, Set<ProductGroup>> getNMonthSupplyGroupMap()
 	{
 		return new TreeMap<Date, Set<ProductGroup>>(this.nMonthSupplyGroupMap);
@@ -179,9 +173,8 @@ public class Inventory implements Serializable, IInventory
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.IInventory#getNMonthSupplyMap()
+	 * @see model.BaseInventory#getNMonthSupplyMap()
 	 */
-	@Override
 	public SortedMap<Date, Set<Product>> getNMonthSupplyMap()
 	{
 		return new TreeMap<Date, Set<Product>>(this.nMonthSupplyMap);
@@ -190,9 +183,8 @@ public class Inventory implements Serializable, IInventory
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.IInventory#getPersistence()
+	 * @see model.BaseInventory#getPersistence()
 	 */
-	@Override
 	public IPersistence getPersistence()
 	{
 		return this.persistence;
@@ -201,9 +193,8 @@ public class Inventory implements Serializable, IInventory
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.IInventory#getRemovedItems()
+	 * @see model.BaseInventory#getRemovedItems()
 	 */
-	@Override
 	public SortedMap<Date, Set<Item>> getRemovedItems()
 	{
 		return new TreeMap<Date, Set<Item>>(this.removedItems);
@@ -227,11 +218,11 @@ public class Inventory implements Serializable, IInventory
 	 * @post workingSet contains all products from container and its children
 	 * @param workingSet The current set being built
 	 */
-	private void recurseProductContainer(IProductContainer container,
+	private void recurseProductContainer(BaseProductContainer container,
 			Set<Product> workingSet)
 	{
 		workingSet.addAll(container.getAllProducts());
-		for(IProductContainer subContainer: container.getAllProductGroups())
+		for(BaseProductContainer subContainer: container.getAllProductGroups())
 		{
 			recurseProductContainer(subContainer, workingSet);
 		}
@@ -240,9 +231,8 @@ public class Inventory implements Serializable, IInventory
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.IInventory#removeAllStorageUnits()
+	 * @see model.BaseInventory#removeAllStorageUnits()
 	 */
-	@Override
 	public void removeAllStorageUnits()
 	{
 		this.storageUnits.clear();
@@ -251,9 +241,8 @@ public class Inventory implements Serializable, IInventory
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.IInventory#removeStorageUnit(model.StorageUnit)
+	 * @see model.BaseInventory#removeStorageUnit(model.StorageUnit)
 	 */
-	@Override
 	public void removeStorageUnit(IStorageUnit storageUnit)
 	{
 		if(!this.storageUnits.contains(storageUnit))

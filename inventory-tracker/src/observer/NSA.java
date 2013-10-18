@@ -1,12 +1,11 @@
 
 package observer;
 
-import gui.inventory.IInventoryController;
-
 import java.util.Observable;
 import java.util.Observer;
 
-import model.IInventory;
+import model.BaseInventory;
+import model.Inventory;
 
 /**
  * Notification System Arbitrator Receives update notifications from the model
@@ -16,14 +15,24 @@ import model.IInventory;
  */
 public class NSA implements Observer
 {
+	private NSA()
+	{
+		inventory = Inventory.getInstance();
+		inventory.addObserver(this);
+	}
+	
+	private NSA instance;
+	public NSA getInstance()
+	{
+		if(instance == null)
+			instance = new NSA();
+		return instance;
+	}
+	
 	/**
 	 * Reference to the inventory we're tracking
 	 */
-	private IInventory inventory;
-	/**
-	 * Reference to the controller we're reporting to
-	 */
-	private IInventoryController controller;
+	private BaseInventory inventory;
 
 	/**
 	 * Receiving function for then an observable in the system changes

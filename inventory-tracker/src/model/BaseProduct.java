@@ -2,9 +2,10 @@
 package model;
 
 import java.util.Date;
+import java.util.Observable;
 import java.util.Set;
 
-public interface IProduct
+public abstract class BaseProduct extends Observable implements ITaggable
 {
 
 	/**
@@ -19,7 +20,7 @@ public interface IProduct
 	 * @param productContainer the container to attempt to remove
 	 */
 	public abstract boolean ableToRemoveContainer(
-			IProductContainer productContainer);
+			BaseProductContainer productContainer);
 
 	/**
 	 * @pre barcode != null
@@ -124,7 +125,7 @@ public interface IProduct
 	 *       product
 	 * @param productContainer the container to remove
 	 */
-	public abstract void removeContainer(IProductContainer productContainer);
+	public abstract void removeContainer(BaseProductContainer productContainer);
 
 	/**
 	 * @pre barcode != null

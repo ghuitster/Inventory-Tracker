@@ -32,8 +32,8 @@ public class ProductTest
 	CountThreeMonthSupply threeMonthSupply = new CountThreeMonthSupply(1);
 	HashSet<ProductContainer> containers = new HashSet<ProductContainer>();
 
-	IProduct prod1;
-	IProduct prod2;
+	BaseProduct prod1;
+	BaseProduct prod2;
 
 	/**
 	 * @throws java.lang.Exception

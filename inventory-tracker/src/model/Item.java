@@ -12,7 +12,7 @@ import java.util.Date;
  * @author Michael
  * 
  */
-public class Item extends Tagable implements Serializable, IItem
+public class Item extends BaseItem implements Serializable, ITaggable
 {
 	// Variables
 	private static final long serialVersionUID = -5007529040849157344L;
@@ -21,7 +21,7 @@ public class Item extends Tagable implements Serializable, IItem
 	private final Date entryDate;
 	private Date expirationDate;
 	private Date exitTime;
-	private IProductContainer container;
+	private BaseProductContainer container;
 
 	/**
 	 * @pre product must != null && must exist
@@ -40,7 +40,7 @@ public class Item extends Tagable implements Serializable, IItem
 	 * @param container
 	 */
 	public Item(Product product, IBarcode barcode, Date entryDate,
-			Date expirationDate, Date exitTime, IProductContainer container)
+			Date expirationDate, Date exitTime, BaseProductContainer container)
 	{
 		this.product = product;
 		this.barcode = barcode;
@@ -132,7 +132,7 @@ public class Item extends Tagable implements Serializable, IItem
 	 * @see model.IItem#ableToSetProduct(model.Product)
 	 */
 	@Override
-	public boolean ableToSetProduct(IProduct product)
+	public boolean ableToSetProduct(BaseProduct product)
 	{
 		boolean response = false;
 
@@ -255,7 +255,7 @@ public class Item extends Tagable implements Serializable, IItem
 	 * @see model.IItem#getContainer()
 	 */
 	@Override
-	public IProductContainer getContainer()
+	public BaseProductContainer getContainer()
 	{
 		return container;
 	}
@@ -350,7 +350,7 @@ public class Item extends Tagable implements Serializable, IItem
 	 * @see model.IItem#setContainer(model.ProductContainer)
 	 */
 	@Override
-	public void setContainer(IProductContainer otherProductContainer)
+	public void setContainer(BaseProductContainer otherProductContainer)
 	{
 		this.container = otherProductContainer;
 	}
@@ -401,5 +401,14 @@ public class Item extends Tagable implements Serializable, IItem
 				+ expirationDate + ", exitTime=" + exitTime + ", container="
 				+ container + "]";
 	}
+	
+	private Object tag;
+	@Override
+	public Object getTag()
+	{ return tag; }
+
+	@Override
+	public void setTag(Object tag)
+	{ this.tag = tag; }
 
 }

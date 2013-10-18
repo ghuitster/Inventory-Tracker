@@ -1,8 +1,6 @@
 
 package model;
 
-import gui.common.Tagable;
-
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,8 +9,8 @@ import java.util.Set;
  * A class to represent a product container
  * @author David
  */
-public abstract class ProductContainer extends Tagable implements Serializable,
-		IProductContainer
+public abstract class ProductContainer extends BaseProductContainer implements Serializable
+		
 {
 	private static final long serialVersionUID = 9015876223451150036L;
 	protected String name;
@@ -33,8 +31,7 @@ public abstract class ProductContainer extends Tagable implements Serializable,
 	 * 
 	 * @see model.IProductContainer#ableToAddItem(model.IItem)
 	 */
-	@Override
-	public boolean ableToAddItem(IItem item)
+	public boolean ableToAddItem(BaseItem item)
 	{
 		return true;
 	}
@@ -44,13 +41,12 @@ public abstract class ProductContainer extends Tagable implements Serializable,
 	 * 
 	 * @see model.IProductContainer#ableToAddProduct(model.IProduct)
 	 */
-	@Override
-	public boolean ableToAddProduct(IProduct product)
+	public boolean ableToAddProduct(BaseProduct product)
 	{
 		if(this.products.contains(product))
 			return false;
 
-		for(IProductContainer container: this.productGroups)
+		for(BaseProductContainer container: this.productGroups)
 			return (container.ableToAddProduct(product));
 
 		return true;
@@ -61,7 +57,6 @@ public abstract class ProductContainer extends Tagable implements Serializable,
 	 * 
 	 * @see model.IProductContainer#ableToAddProductGroup(model.ProductGroup)
 	 */
-	@Override
 	public boolean ableToAddProductGroup(IProductGroup productGroup)
 	{
 		if(this.productGroups.contains(productGroup))
@@ -75,8 +70,7 @@ public abstract class ProductContainer extends Tagable implements Serializable,
 	 * 
 	 * @see model.IProductContainer#ableToRemoveItem(model.IItem)
 	 */
-	@Override
-	public boolean ableToRemoveItem(IItem item)
+	public boolean ableToRemoveItem(BaseItem item)
 	{
 		return true;
 	}
@@ -86,10 +80,9 @@ public abstract class ProductContainer extends Tagable implements Serializable,
 	 * 
 	 * @see model.IProductContainer#ableToRemoveProduct(model.IProduct)
 	 */
-	@Override
-	public boolean ableToRemoveProduct(IProduct product)
+	public boolean ableToRemoveProduct(BaseProduct product)
 	{
-		for(IItem item: this.items)
+		for(BaseItem item: this.items)
 			if(item.getProduct().equals(product))
 				return false;
 
@@ -101,7 +94,6 @@ public abstract class ProductContainer extends Tagable implements Serializable,
 	 * 
 	 * @see model.IProductContainer#ableToRemoveProductGroup(model.ProductGroup)
 	 */
-	@Override
 	public boolean ableToRemoveProductGroup(ProductGroup productGroup)
 	{
 		if(!productGroup.items.isEmpty())
@@ -115,7 +107,6 @@ public abstract class ProductContainer extends Tagable implements Serializable,
 	 * 
 	 * @see model.IProductContainer#addItem(model.Item)
 	 */
-	@Override
 	public void addItem(Item item)
 	{
 		Product product = item.getProduct();
@@ -141,7 +132,6 @@ public abstract class ProductContainer extends Tagable implements Serializable,
 	 * 
 	 * @see model.IProductContainer#addProduct(model.Product)
 	 */
-	@Override
 	public void addProduct(Product product)
 	{
 		ProductContainer container = this.findContainer(product);
@@ -171,13 +161,12 @@ public abstract class ProductContainer extends Tagable implements Serializable,
 	 * 
 	 * @see model.IProductContainer#addProductGroup(model.ProductGroup)
 	 */
-	@Override
 	public void addProductGroup(ProductGroup productGroup)
 	{
 		this.productGroups.add(productGroup);
 	}
 
-	private ProductContainer findContainer(IProduct product)
+	private ProductContainer findContainer(BaseProduct product)
 	{
 		for(ProductContainer con: this.productGroups)
 			return con.findContainer(product);
@@ -193,7 +182,6 @@ public abstract class ProductContainer extends Tagable implements Serializable,
 	 * 
 	 * @see model.IProductContainer#getAllItems()
 	 */
-	@Override
 	public Set<Item> getAllItems()
 	{
 		return new HashSet<Item>(this.items);
@@ -204,7 +192,6 @@ public abstract class ProductContainer extends Tagable implements Serializable,
 	 * 
 	 * @see model.IProductContainer#getAllProductGroups()
 	 */
-	@Override
 	public Set<ProductGroup> getAllProductGroups()
 	{
 		return new HashSet<ProductGroup>(this.productGroups);
@@ -215,7 +202,6 @@ public abstract class ProductContainer extends Tagable implements Serializable,
 	 * 
 	 * @see model.IProductContainer#getAllProducts()
 	 */
-	@Override
 	public Set<Product> getAllProducts()
 	{
 		return new HashSet<Product>(this.products);
@@ -226,7 +212,6 @@ public abstract class ProductContainer extends Tagable implements Serializable,
 	 * 
 	 * @see model.IProductContainer#getName()
 	 */
-	@Override
 	public String getName()
 	{
 		return this.name;
@@ -237,7 +222,6 @@ public abstract class ProductContainer extends Tagable implements Serializable,
 	 * 
 	 * @see model.IProductContainer#removeItem(model.Item)
 	 */
-	@Override
 	public void removeItem(Item item)
 	{
 		this.items.remove(item);
@@ -249,8 +233,7 @@ public abstract class ProductContainer extends Tagable implements Serializable,
 	 * 
 	 * @see model.IProductContainer#removeProduct(model.IProduct)
 	 */
-	@Override
-	public void removeProduct(IProduct product)
+	public void removeProduct(BaseProduct product)
 	{
 		this.products.remove(product);
 	}
@@ -260,7 +243,6 @@ public abstract class ProductContainer extends Tagable implements Serializable,
 	 * 
 	 * @see model.IProductContainer#removeProductGroup(model.ProductGroup)
 	 */
-	@Override
 	public void removeProductGroup(IProductGroup productGroup)
 	{
 		this.productGroups.remove(productGroup);
@@ -271,7 +253,6 @@ public abstract class ProductContainer extends Tagable implements Serializable,
 	 * 
 	 * @see model.IProductContainer#setName(java.lang.String)
 	 */
-	@Override
 	public void setName(String name)
 	{
 		this.name = name;
@@ -283,10 +264,9 @@ public abstract class ProductContainer extends Tagable implements Serializable,
 	 * @see model.IProductContainer#transferItem(model.Item,
 	 * model.ProductContainer)
 	 */
-	@Override
 	public void transferItem(Item item, ProductContainer targetContainer)
 	{
-		IProductContainer container = this.findContainer(item.getProduct());
+		BaseProductContainer container = this.findContainer(item.getProduct());
 
 		if(container == null)
 		{
@@ -313,4 +293,13 @@ public abstract class ProductContainer extends Tagable implements Serializable,
 		item.setContainer(targetContainer);
 		this.items.remove(item);
 	}
+	
+	private Object tag;
+	@Override
+	public Object getTag()
+	{ return tag; }
+
+	@Override
+	public void setTag(Object tag)
+	{ this.tag = tag; }
 }
