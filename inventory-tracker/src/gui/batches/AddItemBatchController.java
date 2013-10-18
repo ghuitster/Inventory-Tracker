@@ -7,6 +7,8 @@ import gui.inventory.ProductContainerData;
 
 import java.util.Date;
 
+import common.util.DateUtils;
+
 /**
  * Controller class for the add item batch view.
  */
@@ -14,11 +16,13 @@ public class AddItemBatchController extends Controller implements
 		IAddItemBatchController
 {
 	private final ProductContainerData target;
-	private final boolean useBarcodeScanner;
-	private final Date entryDate;
+	private boolean useBarcodeScanner;
+	private Date entryDate;
 	private int count;
 	private boolean validCount;
-	private final String barcode;
+	private String barcode;
+	private int undosEnabled;
+	private int redosEnabled;
 
 	/**
 	 * Constructor.
@@ -47,9 +51,11 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void addItem()
 	{
+		undosEnabled++;
 		// if(product doesn't exist in system) open the AddProductView;
 		// add the product to the products section
 		// add the item to some temp list to be added when the user clicks done
+		enableComponents();
 	}
 
 	/**
@@ -59,8 +65,12 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void barcodeChanged()
 	{
-		// enable the "Add Item" button
-		// If the "Use barcode scanner" checkbox is filled call addItem
+		barcode = ((IAddItemBatchView) (_view)).getBarcode();
+
+		if(useBarcodeScanner)
+			addItem();
+
+		enableComponents();
 	}
 
 	/**
@@ -113,10 +123,15 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	protected void enableComponents()
 	{
-		// only Done is enabled at the start
-		// Add Item gets enabled when the Product Barcode field is not empty
-		// Undo gets enabled when we have clicked Add Item or Redo
-		// Redo gets enabled when we have clicked Undo
+		if(validCount && !barcode.isEmpty()
+				&& !entryDate.after(DateUtils.currentDate()))
+			((IAddItemBatchView) (_view)).enableItemAction(true);
+		else
+			((IAddItemBatchView) (_view)).enableItemAction(false);
+
+		((IAddItemBatchView) (_view)).enableUndo(undosEnabled > 0);
+		((IAddItemBatchView) (_view)).enableRedo(redosEnabled > 0);
+
 	}
 
 	/**
@@ -126,7 +141,8 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void entryDateChanged()
 	{
-		// change some member entry date variable
+		entryDate = ((IAddItemBatchView) (_view)).getEntryDate();
+		enableComponents();
 	}
 
 	/**
@@ -160,7 +176,9 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void redo()
 	{
-		// don't have to implement yet
+		undosEnabled++;
+		redosEnabled--;
+		enableComponents();
 	}
 
 	/**
@@ -171,6 +189,7 @@ public class AddItemBatchController extends Controller implements
 	public void selectedProductChanged()
 	{
 		// change what items are displayed in the Items pane
+		enableComponents();
 	}
 
 	/**
@@ -180,7 +199,9 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void undo()
 	{
-		// don't have to implement yet
+		undosEnabled--;
+		redosEnabled++;
+		enableComponents();
 	}
 
 	/**
@@ -190,6 +211,7 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void useScannerChanged()
 	{
-		// change some member barcode scanner variable
+		useBarcodeScanner = ((IAddItemBatchView) (_view)).getUseScanner();
+		enableComponents();
 	}
 }
