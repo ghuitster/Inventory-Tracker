@@ -21,19 +21,20 @@ import model.*;
  */
 public class NSA implements Observer
 {
-	private NSA(IInventoryView inventoryView)
+	private NSA(IInventoryView inventoryView, ProductContainerData root)
 	{
 		inventory = Inventory.getInstance();
 		inventory.addObserver(this);
 		this.inventoryView = inventoryView;
+		this.root = root;
 	}
 	
 	private static NSA instance;
 	
-	public static void init(IInventoryView inventoryView)
+	public static void init(IInventoryView inventoryView, ProductContainerData root)
 	{
 		if(instance == null)
-			instance = new NSA(inventoryView);
+			instance = new NSA(inventoryView, root);
 	}
 	
 	public static NSA getInstance()
@@ -45,6 +46,8 @@ public class NSA implements Observer
 	 * Reference to the inventory we're tracking
 	 */
 	private IInventory inventory;
+	
+	private ProductContainerData root;
 	
 	private IInventoryView inventoryView;
 
@@ -139,7 +142,7 @@ public class NSA implements Observer
 			
 			updateProductContainerData(productContainer, pcData);
 			
-			inventoryView.renameProductContainer(renamedContainer, newName, newIndex);
+			
 		}
 	}
 
@@ -188,10 +191,4 @@ public class NSA implements Observer
 		itemData.setStorageUnit(item.getContainer().getStorageUnit().getName());
 	}
 
-	/**
-	 * Returns a unique bar code
-	 * @return A bar code which is unique
-	 */
-	public long getUniqueBarCode()
-	
 }
