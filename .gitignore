@@ -1,6 +1,2 @@
-*.class
-# Thumbnail garbage #
 Thumbs.db
 .metadata
-.\inventory-tracker\data.inventory
-.\inventory-tracker\demo\inventory.db

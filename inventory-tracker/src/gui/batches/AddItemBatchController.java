@@ -5,12 +5,20 @@ import gui.common.Controller;
 import gui.common.IView;
 import gui.inventory.ProductContainerData;
 
+import java.util.Date;
+
 /**
  * Controller class for the add item batch view.
  */
 public class AddItemBatchController extends Controller implements
 		IAddItemBatchController
 {
+	private final ProductContainerData target;
+	private final boolean useBarcodeScanner;
+	private final Date entryDate;
+	private int count;
+	private boolean validCount;
+
 	/**
 	 * Constructor.
 	 * 
@@ -21,6 +29,11 @@ public class AddItemBatchController extends Controller implements
 	public AddItemBatchController(IView view, ProductContainerData target)
 	{
 		super(view);
+		this.target = target;
+		count = Integer.parseInt(((IAddItemBatchView) (_view)).getCount());
+		entryDate = ((IAddItemBatchView) (_view)).getEntryDate();
+		useBarcodeScanner = ((IAddItemBatchView) (_view)).getUseScanner();
+		validCount = true;
 
 		construct();
 	}
@@ -32,7 +45,9 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void addItem()
 	{
-
+		// if(product doesn't exist in system) open the AddProductView;
+		// add the product to the products section
+		// add the item to some temp list to be added when the user clicks done
 	}
 
 	/**
@@ -42,7 +57,8 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void barcodeChanged()
 	{
-
+		// enable the "Add Item" button
+		// If the "Use barcode scanner" checkbox is filled call addItem
 	}
 
 	/**
@@ -52,7 +68,17 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void countChanged()
 	{
+		try
+		{
+			count = Integer.parseInt(((IAddItemBatchView) (_view)).getCount());
+			validCount = true;
 
+		}
+		catch(NumberFormatException nfe)
+		{
+			((IAddItemBatchView) (_view)).enableItemAction(false);
+			validCount = false;
+		}
 	}
 
 	/**
@@ -62,6 +88,10 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void done()
 	{
+		// if(we created a new product) add that to the system and the selected
+		// product container;
+		// add the product and items to the target product container
+		// print barcodes for all the items added
 		getView().close();
 	}
 
@@ -78,7 +108,10 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	protected void enableComponents()
 	{
-
+		// only Done is enabled at the start
+		// Add Item gets enabled when the Product Barcode field is not empty
+		// Undo gets enabled when we have clicked Add Item or Redo
+		// Redo gets enabled when we have clicked Undo
 	}
 
 	/**
@@ -88,7 +121,7 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void entryDateChanged()
 	{
-
+		// change some member entry date variable
 	}
 
 	/**
@@ -110,7 +143,9 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	protected void loadValues()
 	{
-
+		// Use barcode scanner check box is filled
+		// Entry Date field set to today
+		// Count field set to 1
 	}
 
 	/**
@@ -120,7 +155,7 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void redo()
 	{
-
+		// don't have to implement yet
 	}
 
 	/**
@@ -130,7 +165,7 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void selectedProductChanged()
 	{
-
+		// change what items are displayed in the Items pane
 	}
 
 	/**
@@ -140,7 +175,7 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void undo()
 	{
-
+		// don't have to implement yet
 	}
 
 	/**
@@ -150,6 +185,6 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void useScannerChanged()
 	{
-
+		// change some member barcode scanner variable
 	}
 }
