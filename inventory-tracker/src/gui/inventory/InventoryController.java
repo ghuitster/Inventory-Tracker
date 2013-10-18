@@ -69,8 +69,8 @@ public class InventoryController extends Controller implements
 	public void addProductToContainer(ProductData productData,
 			ProductContainerData containerData)
 	{
-		IProductContainer PC = (ProductContainer) containerData.getTag();
-		IProduct product = (IProduct) productData.getTag();
+		BaseProductContainer PC = (ProductContainer) containerData.getTag();
+		Product product = (Product) productData.getTag();
 		if(PC.ableToAddProduct(product))
 		{
 			PC.addProduct(product);
@@ -93,7 +93,10 @@ public class InventoryController extends Controller implements
 	@Override
 	public boolean canAddItems()
 	{
-		return true;
+		boolean able = false;
+		if(getView().getSelectedProductContainer() != null)
+			able = true;
+		return able;
 	}
 
 	/**
@@ -123,7 +126,13 @@ public class InventoryController extends Controller implements
 	@Override
 	public boolean canDeleteProduct()
 	{
-		return true;
+		boolean able = false;
+		if(getView().getSelectedProductContainer() != null)
+		{
+			BaseProductContainer PC = (BaseProductContainer) getView().getSelectedProductContainer().getTag();
+			able = PC.ableToRemoveProduct((BaseProduct) getView().getSelectedProduct().getTag());
+		}
+		return able;
 	}
 
 	/**
@@ -133,6 +142,7 @@ public class InventoryController extends Controller implements
 	@Override
 	public boolean canDeleteProductGroup()
 	{
+		
 		return true;
 	}
 
@@ -222,7 +232,8 @@ public class InventoryController extends Controller implements
 	@Override
 	public void deleteProduct()
 	{
-		
+		BaseProductContainer PC = (BaseProductContainer) getView().getSelectedProductContainer().getTag();
+		PC.removeProduct((BaseProduct) getView().getSelectedProduct().getTag());
 	}
 
 	/**
@@ -232,7 +243,8 @@ public class InventoryController extends Controller implements
 	@Override
 	public void deleteProductGroup()
 	{
-		
+		BaseProductContainer PC = (BaseProductContainer) getView().getSelectedProductContainer().getTag();
+		//PC.removeProductGroup(PC);
 	}
 
 	/**
