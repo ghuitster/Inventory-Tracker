@@ -35,7 +35,7 @@ public class ProductContainerTest
 				new Product(new Date(), "test", new Barcode("400000000000"),
 						new CountUnitSize(3), 3, null);
 		assertTrue(container.ableToAddProduct(product));
-		Set<Product> products = container.getAllProducts();
+		Set<BaseProduct> products = container.getAllProducts();
 
 		for(BaseProduct prod: products)
 			assertFalse(container.ableToAddProduct(prod));
@@ -78,12 +78,12 @@ public class ProductContainerTest
 				new ProductGroup("test", unit, new ThreeMonthSupply(1,
 						UnitType.FLUID_OUNCES));
 
-		Product product =
+		BaseProduct product =
 				new Product(new Date(), "test", new Barcode("400000000000"),
 						new CountUnitSize(3), 3, null);
 		container.addProduct(product);
 		Item item = new Item(product, null, null, null, null);
-		for(Product prod: container.getAllProducts())
+		for(BaseProduct prod: container.getAllProducts())
 		{
 			product = prod;
 			item.setProduct(product);

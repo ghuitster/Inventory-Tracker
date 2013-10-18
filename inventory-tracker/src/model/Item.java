@@ -14,7 +14,7 @@ public class Item extends BaseItem implements Serializable, ITaggable
 {
 	// Variables
 	private static final long serialVersionUID = -5007529040849157344L;
-	private Product product;
+	private BaseProduct product;
 	private IBarcode barcode;
 	private Date entryDate;
 	private Date expirationDate;
@@ -37,7 +37,7 @@ public class Item extends BaseItem implements Serializable, ITaggable
 	 * @param exitTime
 	 * @param container
 	 */
-	public Item(Product product, IBarcode barcode, Date entryDate,
+	public Item(BaseProduct product, IBarcode barcode, Date entryDate,
 			Date expirationDate, Date exitTime)
 	{
 		this.product = product;
@@ -296,7 +296,7 @@ public class Item extends BaseItem implements Serializable, ITaggable
 	 * @see model.IItem#getProduct()
 	 */
 	@Override
-	public Product getProduct()
+	public BaseProduct getProduct()
 	{
 		return product;
 	}
@@ -390,7 +390,7 @@ public class Item extends BaseItem implements Serializable, ITaggable
 	 * @see model.IItem#setProduct(model.Product)
 	 */
 	@Override
-	public void setProduct(Product product)
+	public void setProduct(BaseProduct product)
 	{
 		this.product = product;
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));

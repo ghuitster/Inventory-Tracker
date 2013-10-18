@@ -110,7 +110,7 @@ public abstract class ProductContainer extends BaseProductContainer implements S
 	 */
 	public void addItem(Item item)
 	{
-		Product product = item.getProduct();
+		BaseProduct product = item.getProduct();
 
 		ProductContainer container = this.findContainer(product);
 

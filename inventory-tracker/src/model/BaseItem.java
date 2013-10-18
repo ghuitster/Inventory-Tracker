@@ -76,7 +76,7 @@ public abstract class BaseItem extends Observable implements ITaggable
 	/**
 	 * @return the product
 	 */
-	public abstract Product getProduct();
+	public abstract BaseProduct getProduct();
 
 	/**
 	 * @see java.lang.Object#hashCode()
@@ -117,7 +117,7 @@ public abstract class BaseItem extends Observable implements ITaggable
 	 * @post product == product passed in
 	 * @param product the product to set
 	 */
-	public abstract void setProduct(Product product);
+	public abstract void setProduct(BaseProduct product);
 
 	/**
 	 * @see java.lang.Object#toString()
