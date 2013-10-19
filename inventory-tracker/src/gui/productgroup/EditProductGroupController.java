@@ -198,6 +198,7 @@ public class EditProductGroupController extends Controller implements
 	{
 		this.name = this.getView().getProductGroupName();
 		this.sizeUnits = this.getView().getSupplyUnit();
+		if(!getView().getSupplyValue().isEmpty() && !getView().getSupplyValue().startsWith("-"))
 		if(this.sizeUnits == SizeUnits.Count)
 			try
 			{
@@ -221,7 +222,7 @@ public class EditProductGroupController extends Controller implements
 	{
 		if(name.isEmpty())
 			submit = false;
-		else if(this.getView().getSupplyValue().isEmpty())
+		else if(this.getView().getSupplyValue().isEmpty() || getView().getSupplyValue().startsWith("-"))
 			submit = false;
 		else 
 			submit = true;

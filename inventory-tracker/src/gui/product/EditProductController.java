@@ -226,51 +226,60 @@ public class EditProductController extends Controller implements
 	@Override
 	public void valuesChanged()
 	{
-		try
+		if(!getView().getSupply().isEmpty() && !getView().getSupply().startsWith("-"))
 		{
-			this.cThreeMonthSupply = new CountThreeMonthSupply(Integer.parseInt
+			try
+			{
+				this.cThreeMonthSupply = new CountThreeMonthSupply(Integer.parseInt
 					(getView().getSupply()));
-		}
-		catch(NumberFormatException e)
-		{
-			this.getView().displayErrorMessage("The three month supply must"
+			}
+			catch(NumberFormatException e)
+			{
+				this.getView().displayErrorMessage("The three month supply must"
 					+ " be a whole number");
-			this.getView().setSupply("" + this.cThreeMonthSupply.getAmount());
+				this.getView().setSupply("" + this.cThreeMonthSupply.getAmount());
+			}
 		}
 		this.descript = getView().getDescription();
 		this.sizeUnits = getView().getSizeUnit();
-		try
+		if(!getView().getShelfLife().isEmpty() && !getView().getShelfLife().startsWith("-"))
 		{
-			this.shelflife = Integer.parseInt(getView().getShelfLife());
-		}
-		catch(NumberFormatException e)
-		{
-			this.getView().displayErrorMessage("Shelflife must be a whole number");
-			this.getView().setShelfLife("" + this.shelflife);
-		}
-		if(this.sizeUnits == SizeUnits.Count)
 			try
 			{
-				this.sizeValue = Integer.parseInt(getView().getSizeValue());
+				this.shelflife = Integer.parseInt(getView().getShelfLife());
 			}
 			catch(NumberFormatException e)
 			{
-				getView().displayErrorMessage("For unit size type Count, the "
+				this.getView().displayErrorMessage("Shelflife must be a whole number");
+				this.getView().setShelfLife("" + this.shelflife);
+			}
+		}
+		if(!getView().getSizeValue().isEmpty() && !getView().getSizeValue().startsWith("-"))
+		{
+			if(this.sizeUnits == SizeUnits.Count)
+				try
+				{
+					this.sizeValue = Integer.parseInt(getView().getSizeValue());
+				}
+				catch(NumberFormatException e)
+				{
+					getView().displayErrorMessage("For unit size type Count, the "
 						+ "value must be a whole number");
-				int temp = (int)this.sizeValue;
-				getView().setSizeValue("" + temp);
-				this.sizeValue = temp;
-			}
-		else
-		{
-			try
+					int temp = (int)this.sizeValue;
+					getView().setSizeValue("" + temp);
+					this.sizeValue = temp;
+				}
+			else
 			{
-				this.sizeValue = Float.parseFloat(getView().getSizeValue());
-			}
-			catch(NumberFormatException e)
-			{
-				this.getView().displayErrorMessage("Digits only, no characters");
-				this.getView().setSizeValue("" + this.sizeValue);
+				try
+				{
+					this.sizeValue = Float.parseFloat(getView().getSizeValue());
+				}
+				catch(NumberFormatException e)
+				{
+					this.getView().displayErrorMessage("Digits only, no characters");
+					this.getView().setSizeValue("" + this.sizeValue);
+				}
 			}
 		}
 		
@@ -282,7 +291,13 @@ public class EditProductController extends Controller implements
 	{
 		if(this.descript.isEmpty())
 			submit = false;
-		else if(this.sizeUnits != SizeUnits.Count && sizeValue == 0)
+		else if(sizeValue <= 0 || this.shelflife < 0 || this.cThreeMonthSupply.getAmount() < 0)
+			submit = false;
+		else if(getView().getSupply().isEmpty() || getView().getSupply().startsWith("-"))
+			submit = false;
+		else if(getView().getShelfLife().isEmpty() || getView().getShelfLife().startsWith("-"))
+			submit = false;
+		else if(getView().getSizeValue().isEmpty() || getView().getSizeValue().startsWith("-"))
 			submit = false;
 		else
 			submit = true;

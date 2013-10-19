@@ -168,29 +168,32 @@ public class AddProductGroupController extends Controller implements
 	{
 		this.name = this.getView().getProductGroupName();
 		this.sizeUnits = this.getView().getSupplyUnit();
-		if(this.sizeUnits == SizeUnits.Count)
-			try
-			{
-				this.value = Integer.parseInt(getView().getSupplyValue());
-			}
-			catch(NumberFormatException e)
-			{
-				getView().displayErrorMessage("For unit size type Count, the "
-						+ "value must be a whole number");
-				int temp = (int)this.value;
-				getView().setSupplyValue("" + value);
-				this.value = temp;
-			}
-		else
+		if(!getView().getSupplyValue().isEmpty() && !getView().getSupplyValue().startsWith("-"))
 		{
-			try
+			if(this.sizeUnits == SizeUnits.Count)
+				try
+				{
+					this.value = Integer.parseInt(getView().getSupplyValue());
+				}
+				catch(NumberFormatException e)
+				{
+					getView().displayErrorMessage("For unit size type Count, the "
+						+ "value must be a whole number");
+					int temp = (int)this.value;
+					getView().setSupplyValue("" + value);
+					this.value = temp;
+				}
+			else
 			{
-				this.value = Float.parseFloat(getView().getSupplyValue());
-			}
-			catch(NumberFormatException e)
-			{
-				getView().displayErrorMessage("Digits only, no characters");
-				getView().setSupplyValue("" + value);
+				try
+				{
+					this.value = Float.parseFloat(getView().getSupplyValue());
+				}
+				catch(NumberFormatException e)
+				{
+					getView().displayErrorMessage("Digits only, no characters");
+					getView().setSupplyValue("" + value);
+				}
 			}
 		}
 		
@@ -202,7 +205,7 @@ public class AddProductGroupController extends Controller implements
 	{
 		if(name.isEmpty())
 			submit = false;
-		else if(this.getView().getSupplyValue().isEmpty())
+		else if(this.getView().getSupplyValue().isEmpty() || getView().getSupplyValue().startsWith("-"))
 			submit = false;
 		else 
 			submit = true;

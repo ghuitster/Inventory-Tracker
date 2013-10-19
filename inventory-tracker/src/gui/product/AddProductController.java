@@ -122,6 +122,7 @@ public class AddProductController extends Controller implements
 		{
 			getView().enableSizeValue(false);
 			getView().setSizeValue("1");
+			this.sizeValue = 1;
 		}
 		else
 		{
@@ -174,29 +175,35 @@ public class AddProductController extends Controller implements
 	@Override
 	public void valuesChanged()
 	{
-		try
+		if(!getView().getSupply().isEmpty() && !getView().getSupply().startsWith("-"))
 		{
-			this.cThreeMonthSupply = new CountThreeMonthSupply(Integer.parseInt
+			try
+			{
+				this.cThreeMonthSupply = new CountThreeMonthSupply(Integer.parseInt
 					(getView().getSupply()));
-		}
-		catch(NumberFormatException e)
-		{
-			this.getView().displayErrorMessage("The three month supply must"
+			}
+			catch(NumberFormatException e)
+			{
+				this.getView().displayErrorMessage("The three month supply must"
 					+ " be a whole number");
-			this.getView().setSupply("" + 0);
+				this.getView().setSupply("" + 0);
+			}
 		}
 		this.descript = getView().getDescription();
 		this.sizeUnits = getView().getSizeUnit();
-		try
+		if(!getView().getShelfLife().isEmpty() && !getView().getShelfLife().startsWith("-"))
 		{
-			this.shelflife = Integer.parseInt(getView().getShelfLife());
+			try
+			{
+				this.shelflife = Integer.parseInt(getView().getShelfLife());
+			}
+			catch(NumberFormatException e)
+			{
+				this.getView().displayErrorMessage("Shelflife must be a whole number");
+				this.getView().setShelfLife("" + this.shelflife);
+			}
 		}
-		catch(NumberFormatException e)
-		{
-			this.getView().displayErrorMessage("Shelflife must be a whole number");
-			this.getView().setShelfLife("" + this.shelflife);
-		}
-		if(!getView().getSizeValue().isEmpty())
+		if(!getView().getSizeValue().isEmpty() && !getView().getSizeValue().startsWith("-"))
 		{
 			if(this.sizeUnits == SizeUnits.Count)
 				try
@@ -222,7 +229,13 @@ public class AddProductController extends Controller implements
 	{
 		if(this.descript.isEmpty())
 			this.submit = false;
-		else if(sizeValue <= 0)
+		else if(sizeValue <= 0 || this.shelflife < 0 || this.cThreeMonthSupply.getAmount() < 0)
+			this.submit = false;
+		else if(getView().getSupply().isEmpty() || getView().getSupply().startsWith("-"))
+			this.submit = false;
+		else if(getView().getShelfLife().isEmpty() || getView().getShelfLife().startsWith("-"))
+			this.submit = false;
+		else if(getView().getSizeValue().isEmpty() || getView().getSizeValue().startsWith("-"))
 			this.submit = false;
 		else
 			this.submit = true;
