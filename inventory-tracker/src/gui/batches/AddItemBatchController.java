@@ -7,10 +7,14 @@ import gui.inventory.ProductContainerData;
 import gui.item.ItemData;
 import gui.product.ProductData;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import model.BarcodeLabelPage;
 import model.CountAmount;
 import model.CountThreeMonthSupply;
 import model.IItem;
@@ -22,6 +26,7 @@ import model.ProductContainer;
 import model.ProductGroup;
 import model.StorageUnit;
 
+import com.itextpdf.text.DocumentException;
 import common.util.DateUtils;
 
 /**
@@ -36,7 +41,7 @@ public class AddItemBatchController extends Controller implements
 	private int count;
 	private boolean validCount;
 	private String barcode;
-	private final List<ItemData> displayItems;
+	private final Map<ProductData, List<ItemData>> displayItems;
 	private final List<ProductData> displayProducts;
 	private final List<IItem> items;
 	private final List<IProduct> products;
@@ -58,7 +63,7 @@ public class AddItemBatchController extends Controller implements
 		useBarcodeScanner = true;
 		validCount = true;
 		barcode = "";
-		displayItems = new ArrayList<ItemData>();
+		displayItems = new HashMap<ProductData, List<ItemData>>();
 		displayProducts = new ArrayList<ProductData>();
 		items = new ArrayList<IItem>();
 		products = new ArrayList<IProduct>();
@@ -112,11 +117,25 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void addItem()
 	{
+		if(!validCount)
+		{
+			_view.displayErrorMessage("Invalid count");
+			return;
+		}
+
+		if(entryDate.after(DateUtils.currentDate()))
+		{
+			_view.displayErrorMessage("Invalid entry date");
+			return;
+		}
+
 		boolean found = false;
 
 		for(IProduct ip: Inventory.getInstance().getAllProducts())
 			if(ip.getBarcode().getNumber().equals(barcode))
 				found = true;
+
+		ProductData adding = null;
 
 		if(!found)
 		{
@@ -124,16 +143,16 @@ public class AddItemBatchController extends Controller implements
 
 			IProduct product = createProduct();
 
-			ProductData productData = createProductData(product);
+			adding = createProductData(product);
 
-			productData.setTag(product);
+			adding.setTag(product);
 
 			products.add(product);
-			displayProducts.add(productData);
+			displayProducts.add(adding);
 		}
 		else
 		{
-			ProductData adding = null;
+			adding = null;
 
 			for(ProductData pd: displayProducts)
 				if(pd.getBarcode().equals(barcode))
@@ -155,7 +174,16 @@ public class AddItemBatchController extends Controller implements
 
 			temp.setStorageUnit(((StorageUnit) target.getTag()).getName());
 			temp.setTag(null);
-			displayItems.add(temp);
+			if(displayItems.get(adding) == null)
+			{
+				List<ItemData> tempList = new ArrayList<ItemData>();
+				tempList.add(temp);
+				displayItems.put(adding, tempList);
+			}
+			else
+			{
+
+			}
 		}
 
 		count = 1;
@@ -221,6 +249,16 @@ public class AddItemBatchController extends Controller implements
 		for(IItem ii: items)
 			if(((ProductContainer) target.getTag()).ableToAddItem(ii))
 				((ProductContainer) target.getTag()).addItem(ii);
+
+		BarcodeLabelPage printer = new BarcodeLabelPage(items);
+		try
+		{
+			printer.createPDF();
+		}
+		catch(DocumentException | IOException e)
+		{
+			_view.displayErrorMessage("There was a barcode label creation error");
+		}
 
 		getView().close();
 	}
@@ -303,9 +341,9 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void selectedProductChanged()
 	{
-		((IAddItemBatchView) _view).getSelectedProduct();
+		((IAddItemBatchView) _view).setItems((ItemData[]) displayItems.get(
+				((IAddItemBatchView) _view).getSelectedProduct()).toArray());
 
-		// change what items are displayed in the Items pane
 		enableComponents();
 	}
 
