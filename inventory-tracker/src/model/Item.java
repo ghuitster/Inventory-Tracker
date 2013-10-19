@@ -296,6 +296,12 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 		this.container = otherProductContainer;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IItem#setEntryDate(java.util.Date)
+	 */
+	@Override
 	public void setEntryDate(Date entryDate)
 	{
 		this.entryDate = entryDate;

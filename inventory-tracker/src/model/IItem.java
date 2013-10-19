@@ -2,7 +2,6 @@
 package model;
 
 import java.util.Date;
-import java.util.Observable;
 
 public interface IItem extends IObservable, ITaggable, Comparable<IItem>
 {
@@ -124,5 +123,12 @@ public interface IItem extends IObservable, ITaggable, Comparable<IItem>
 	 */
 	@Override
 	public abstract String toString();
+
+	/**
+	 * @pre entryDate must be a Date object after 1/1/2000
+	 * @post entryDate is set
+	 * @param entryDate the Date to set entryDate to
+	 */
+	public abstract void setEntryDate(Date entryDate);
 
 }
