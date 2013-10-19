@@ -4,3 +4,4 @@ data.inventory
 /Labels/*.pdf
 /build
 /dist/lib/inventory-tracker.jar
+/dist
