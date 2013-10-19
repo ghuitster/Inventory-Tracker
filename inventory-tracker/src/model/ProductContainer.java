@@ -301,7 +301,7 @@ public abstract class ProductContainer extends Observable implements
 	public void setName(String name)
 	{
 		this.name = name;
-		if(name != null && !name.equals(""))
+		if(name != null && !name.isEmpty())
 		{
 			this.setChanged();
 			this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
