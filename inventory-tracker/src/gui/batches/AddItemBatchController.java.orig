@@ -244,11 +244,10 @@ public class AddItemBatchController extends Controller implements
 		return;
 		// don't have to implement yet
 =======
-		//No comment
 		undosEnabled++;
 		redosEnabled--;
 		enableComponents();
->>>>>>> No comment
+>>>>>>> Undoing the merge conflict stuff was fun
 	}
 
 	/**
