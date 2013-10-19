@@ -139,7 +139,7 @@ public class AddItemBatchController extends Controller implements
 
 		if(!found)
 		{
-			((IAddItemBatchView) _view).displayAddProductView();
+			getView().displayAddProductView();
 
 			IProduct product = createProduct();
 
@@ -192,8 +192,7 @@ public class AddItemBatchController extends Controller implements
 		validCount = true;
 		barcode = "";
 		loadValues();
-		((IAddItemBatchView) _view).setProducts((ProductData[]) displayProducts
-				.toArray());
+		getView().setProducts((ProductData[]) displayProducts.toArray());
 		enableComponents();
 	}
 
@@ -204,7 +203,7 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void barcodeChanged()
 	{
-		barcode = ((IAddItemBatchView) _view).getBarcode();
+		barcode = getView().getBarcode();
 
 		if(useBarcodeScanner)
 			addItem();
@@ -221,7 +220,7 @@ public class AddItemBatchController extends Controller implements
 	{
 		try
 		{
-			count = Integer.parseInt(((IAddItemBatchView) _view).getCount());
+			count = Integer.parseInt(getView().getCount());
 			validCount = true;
 
 		}
@@ -278,12 +277,12 @@ public class AddItemBatchController extends Controller implements
 	{
 		if(validCount && !barcode.isEmpty()
 				&& !entryDate.after(DateUtils.currentDate()))
-			((IAddItemBatchView) _view).enableItemAction(true);
+			getView().enableItemAction(true);
 		else
-			((IAddItemBatchView) _view).enableItemAction(false);
+			getView().enableItemAction(false);
 
-		((IAddItemBatchView) _view).enableUndo(false);
-		((IAddItemBatchView) _view).enableRedo(false);
+		getView().enableUndo(false);
+		getView().enableRedo(false);
 
 	}
 
@@ -294,7 +293,7 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void entryDateChanged()
 	{
-		entryDate = ((IAddItemBatchView) _view).getEntryDate();
+		entryDate = getView().getEntryDate();
 		enableComponents();
 	}
 
@@ -317,10 +316,10 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	protected void loadValues()
 	{
-		((IAddItemBatchView) _view).setBarcode(barcode);
-		((IAddItemBatchView) _view).setCount(count + "");
-		((IAddItemBatchView) _view).setEntryDate(entryDate);
-		((IAddItemBatchView) _view).setUseScanner(useBarcodeScanner);
+		getView().setBarcode(barcode);
+		getView().setCount(count + "");
+		getView().setEntryDate(entryDate);
+		getView().setUseScanner(useBarcodeScanner);
 	}
 
 	/**
@@ -341,8 +340,9 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void selectedProductChanged()
 	{
-		((IAddItemBatchView) _view).setItems((ItemData[]) displayItems.get(
-				((IAddItemBatchView) _view).getSelectedProduct()).toArray());
+		getView().setItems(
+				(ItemData[]) displayItems.get(getView().getSelectedProduct())
+						.toArray());
 
 		enableComponents();
 	}
@@ -365,7 +365,7 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void useScannerChanged()
 	{
-		useBarcodeScanner = ((IAddItemBatchView) _view).getUseScanner();
+		useBarcodeScanner = getView().getUseScanner();
 		enableComponents();
 	}
 }

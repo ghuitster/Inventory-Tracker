@@ -4,6 +4,12 @@ package gui.batches;
 import gui.common.Controller;
 import gui.common.IView;
 import gui.inventory.ProductContainerData;
+import gui.item.ItemData;
+import gui.product.ProductData;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Controller class for the transfer item batch view.
@@ -11,6 +17,9 @@ import gui.inventory.ProductContainerData;
 public class TransferItemBatchController extends Controller implements
 		ITransferItemBatchController
 {
+	private String barcode;
+	private boolean useBarcodeScanner;
+	private final Map<ProductData, List<ItemData>> displayItems;
 
 	/**
 	 * Constructor.
@@ -22,6 +31,9 @@ public class TransferItemBatchController extends Controller implements
 	public TransferItemBatchController(IView view, ProductContainerData target)
 	{
 		super(view);
+		barcode = "";
+		useBarcodeScanner = true;
+		displayItems = new HashMap<ProductData, List<ItemData>>();
 
 		construct();
 	}
@@ -32,7 +44,10 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	public void barcodeChanged()
-	{}
+	{
+		barcode = getView().getBarcode();
+		enableComponents();
+	}
 
 	/**
 	 * This method is called when the user clicks the "Done" button in the
@@ -41,6 +56,7 @@ public class TransferItemBatchController extends Controller implements
 	@Override
 	public void done()
 	{
+		// TODO
 		getView().close();
 	}
 
@@ -56,7 +72,11 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents()
-	{}
+	{
+		getView().enableRedo(false);
+		getView().enableUndo(false);
+		getView().enableItemAction(!barcode.isEmpty());
+	}
 
 	/**
 	 * Returns a reference to the view for this controller.
@@ -76,7 +96,10 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	protected void loadValues()
-	{}
+	{
+		getView().setBarcode(barcode);
+		getView().setUseScanner(useBarcodeScanner);
+	}
 
 	/**
 	 * This method is called when the user clicks the "Redo" button in the
@@ -84,7 +107,10 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	public void redo()
-	{}
+	{
+		// not implemented yet
+		return;
+	}
 
 	/**
 	 * This method is called when the selected product changes in the transfer
@@ -92,7 +118,13 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	public void selectedProductChanged()
-	{}
+	{
+		getView().setItems(
+				(ItemData[]) displayItems.get(getView().getSelectedProduct())
+						.toArray());
+
+		enableComponents();
+	}
 
 	/**
 	 * This method is called when the user clicks the "Transfer Item" button in
@@ -100,7 +132,9 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	public void transferItem()
-	{}
+	{
+		// TODO
+	}
 
 	/**
 	 * This method is called when the user clicks the "Undo" button in the
@@ -108,7 +142,10 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	public void undo()
-	{}
+	{
+		// not implemented yet
+		return;
+	}
 
 	/**
 	 * This method is called when the "Use Barcode Scanner" setting in the
@@ -116,6 +153,8 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	public void useScannerChanged()
-	{}
-
+	{
+		useBarcodeScanner = getView().getUseScanner();
+		enableComponents();
+	}
 }

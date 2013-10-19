@@ -48,7 +48,9 @@ public class EditItemController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents()
-	{}
+	{
+
+	}
 
 	/**
 	 * Returns a reference to the view for this controller.

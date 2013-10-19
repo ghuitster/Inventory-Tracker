@@ -3,6 +3,16 @@ package gui.batches;
 
 import gui.common.Controller;
 import gui.common.IView;
+import gui.item.ItemData;
+import gui.product.ProductData;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import model.IItem;
+import model.IProduct;
 
 /**
  * Controller class for the remove item batch view.
@@ -10,6 +20,13 @@ import gui.common.IView;
 public class RemoveItemBatchController extends Controller implements
 		IRemoveItemBatchController
 {
+	private String barcode;
+	private boolean useBarcodeScanner;
+	private final Map<ProductData, List<ItemData>> displayItems;
+	private final List<ProductData> displayProducts;
+	private final List<IItem> items;
+	private final List<IProduct> products;
+
 	/**
 	 * Constructor.
 	 * 
@@ -18,6 +35,12 @@ public class RemoveItemBatchController extends Controller implements
 	public RemoveItemBatchController(IView view)
 	{
 		super(view);
+		barcode = "";
+		useBarcodeScanner = true;
+		displayItems = new HashMap<ProductData, List<ItemData>>();
+		displayProducts = new ArrayList<ProductData>();
+		items = new ArrayList<IItem>();
+		products = new ArrayList<IProduct>();
 
 		construct();
 	}
@@ -28,7 +51,10 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	public void barcodeChanged()
-	{}
+	{
+		barcode = getView().getBarcode();
+		enableComponents();
+	}
 
 	/**
 	 * This method is called when the user clicks the "Done" button in the
@@ -37,6 +63,7 @@ public class RemoveItemBatchController extends Controller implements
 	@Override
 	public void done()
 	{
+		// TODO
 		getView().close();
 	}
 
@@ -52,7 +79,11 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents()
-	{}
+	{
+		getView().enableRedo(false);
+		getView().enableUndo(false);
+		getView().enableItemAction(!barcode.isEmpty());
+	}
 
 	/**
 	 * Returns a reference to the view for this controller.
@@ -72,7 +103,10 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	protected void loadValues()
-	{}
+	{
+		getView().setUseScanner(useBarcodeScanner);
+		getView().setBarcode(barcode);
+	}
 
 	/**
 	 * This method is called when the user clicks the "Redo" button in the
@@ -80,7 +114,10 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	public void redo()
-	{}
+	{
+		// not implemented yet
+		return;
+	}
 
 	/**
 	 * This method is called when the user clicks the "Remove Item" button in
@@ -88,7 +125,9 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	public void removeItem()
-	{}
+	{
+		// TODO
+	}
 
 	/**
 	 * This method is called when the selected product changes in the remove
@@ -96,7 +135,13 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	public void selectedProductChanged()
-	{}
+	{
+		getView().setItems(
+				(ItemData[]) displayItems.get(getView().getSelectedProduct())
+						.toArray());
+
+		enableComponents();
+	}
 
 	/**
 	 * This method is called when the user clicks the "Undo" button in the
@@ -104,7 +149,10 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	public void undo()
-	{}
+	{
+		// not implemented yet
+		return;
+	}
 
 	/**
 	 * This method is called when the "Use Barcode Scanner" setting is changed
@@ -112,5 +160,8 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	public void useScannerChanged()
-	{}
+	{
+		useBarcodeScanner = getView().getUseScanner();
+		enableComponents();
+	}
 }
