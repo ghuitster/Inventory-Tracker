@@ -163,7 +163,7 @@ public interface IProduct extends ITaggable, IObservable, Comparable<IProduct>
 	 * @post size == passed in size
 	 * @param size the size to set
 	 */
-	public abstract void setSize(UnitSize size);
+	public abstract void setSize(Amount size);
 
 	/**
 	 * @pre threeMonthSupply != null

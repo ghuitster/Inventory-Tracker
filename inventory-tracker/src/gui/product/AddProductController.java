@@ -29,7 +29,7 @@ public class AddProductController extends Controller implements
 	private float sizeValue = 0;
 	private SizeUnits sizeUnits = SizeUnits.Count;
 	private int shelflife = 0;
-	private CountThreeMonthSupply cThreeMonthSupply = null;
+	private CountThreeMonthSupply cThreeMonthSupply = new CountThreeMonthSupply(0);
 	private boolean submit = false;
 	private UnitType unitType = UnitType.COUNT;
 

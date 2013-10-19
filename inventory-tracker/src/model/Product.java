@@ -474,7 +474,7 @@ public class Product extends Observable implements IProduct, Serializable
 	 * @see model.IProduct#setSize(model.UnitSize)
 	 */
 	@Override
-	public void setSize(UnitSize size)
+	public void setSize(Amount size)
 	{
 		this.size = size;
 
