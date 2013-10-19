@@ -1,8 +1,13 @@
 
 package gui.productgroup;
 
+import model.IProductContainer;
+import model.IProductGroup;
+import model.ProductGroup;
+import model.UnitType;
 import gui.common.Controller;
 import gui.common.IView;
+import gui.common.SizeUnits;
 import gui.inventory.ProductContainerData;
 
 /**
@@ -11,6 +16,14 @@ import gui.inventory.ProductContainerData;
 public class AddProductGroupController extends Controller implements
 		IAddProductGroupController
 {
+	
+	private IProductContainer PC;
+	private IProductGroup PG = new ProductGroup("");
+	private boolean submit = false;
+	private SizeUnits sizeUnits = SizeUnits.Count;
+	private String name = "";
+	private float value = 0;
+	private UnitType unitType = UnitType.COUNT;
 	/**
 	 * Constructor.
 	 * 
@@ -21,6 +34,8 @@ public class AddProductGroupController extends Controller implements
 	public AddProductGroupController(IView view, ProductContainerData container)
 	{
 		super(view);
+		
+		this.PC = (IProductContainer) container.getTag();
 
 		construct();
 	}
@@ -35,7 +50,46 @@ public class AddProductGroupController extends Controller implements
 	 */
 	@Override
 	public void addProductGroup()
-	{}
+	{
+		//TODO
+//		PG.se
+	}
+	
+	private void createUnitType()
+	{
+		switch(sizeUnits)
+		{
+			case Pounds:
+				this.unitType = UnitType.POUNDS;
+				break;
+			case Ounces:
+				this.unitType = UnitType.OUNCES;
+				break;
+			case Grams:
+				this.unitType = UnitType.GRAMS;
+				break;
+			case Kilograms:
+				this.unitType = UnitType.KILOGRAMS;
+				break;
+			case Gallons:
+				this.unitType = UnitType.GALLONS;
+				break;
+			case Quarts:
+				this.unitType = UnitType.QUARTS;
+				break;
+			case Pints:
+				this.unitType = UnitType.PINTS;
+				break;
+			case FluidOunces:
+				this.unitType = UnitType.FLUID_OUNCES;
+				break;
+			case Liters:
+				this.unitType = UnitType.LITERS;
+				break;
+			case Count:
+				this.unitType = UnitType.COUNT;
+		}
+	}
 
 	/**
 	 * Sets the enable/disable state of all components in the controller's view.
@@ -49,7 +103,9 @@ public class AddProductGroupController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents()
-	{}
+	{
+		this.getView().enableOK(submit);
+	}
 
 	/**
 	 * Returns a reference to the view for this controller.
@@ -77,7 +133,11 @@ public class AddProductGroupController extends Controller implements
 	 */
 	@Override
 	protected void loadValues()
-	{}
+	{
+		this.getView().setProductGroupName(this.name);
+		this.getView().setSupplyValue("" + value);
+		this.getView().setSupplyUnit(this.sizeUnits);
+	}
 
 	/**
 	 * This method is called when any of the fields in the add product group
@@ -85,5 +145,35 @@ public class AddProductGroupController extends Controller implements
 	 */
 	@Override
 	public void valuesChanged()
-	{}
+	{
+		this.name = this.getView().getProductGroupName();
+		this.sizeUnits = this.getView().getSupplyUnit();
+		if(this.sizeUnits == SizeUnits.Count)
+			try
+			{
+				this.value = Integer.parseInt(getView().getSupplyValue());
+			}
+			catch(NumberFormatException e)
+			{
+				getView().displayErrorMessage("For unit size type Count, the "
+						+ "value must be a whole number");
+			}
+		else
+		{
+			this.value = Float.parseFloat(getView().getSupplyValue());
+		}
+		
+		this.shouldOKBeEnabled();
+		this.enableComponents();
+	}
+
+	private void shouldOKBeEnabled()
+	{
+		if(name.isEmpty())
+			submit = false;
+		else if(this.getView().getSupplyValue().isEmpty())
+			submit = false;
+		else 
+			submit = true;
+	}
 }
