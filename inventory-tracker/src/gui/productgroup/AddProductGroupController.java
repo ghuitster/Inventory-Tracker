@@ -205,7 +205,8 @@ public class AddProductGroupController extends Controller implements
 	{
 		if(name.isEmpty())
 			submit = false;
-		else if(this.getView().getSupplyValue().isEmpty() || getView().getSupplyValue().startsWith("-"))
+		else if(this.getView().getSupplyValue().isEmpty() || 
+				getView().getSupplyValue().startsWith("-"))
 			submit = false;
 		else if(!PC.ableToAddProductGroupNamed(getView().getProductGroupName()))
 			submit = false;
