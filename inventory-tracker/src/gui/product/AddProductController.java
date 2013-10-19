@@ -183,9 +183,19 @@ public class AddProductController extends Controller implements
 		{
 			this.getView().displayErrorMessage("The three month supply must"
 					+ " be a whole number");
+			this.getView().setSupply("" + 0);
 		}
 		this.descript = getView().getDescription();
 		this.sizeUnits = getView().getSizeUnit();
+		try
+		{
+			this.shelflife = Integer.parseInt(getView().getShelfLife());
+		}
+		catch(NumberFormatException e)
+		{
+			this.getView().displayErrorMessage("Shelflife must be a whole number");
+			this.getView().setShelfLife("" + this.shelflife);
+		}
 		if(!getView().getSizeValue().isEmpty())
 		{
 			if(this.sizeUnits == SizeUnits.Count)
