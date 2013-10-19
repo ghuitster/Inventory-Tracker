@@ -176,6 +176,7 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void redo()
 	{
+		//No comment
 		undosEnabled++;
 		redosEnabled--;
 		enableComponents();
