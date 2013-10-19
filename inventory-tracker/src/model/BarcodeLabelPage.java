@@ -2,11 +2,11 @@
 package model;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import com.itextpdf.text.Chunk;
@@ -23,6 +23,7 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import common.util.DateUtils;
 
 /**
  * class for printing out batches of Barcode labels for newly added Items.
@@ -34,9 +35,11 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 	// Variables
 	private List<IItem> items = null;
 	private Document document = null;
-	private String result = "Labels" + File.separator + "labels-";
+	private String filename = "Labels" + File.separator + "labels-";
 	private int pageCount = 0;
 	private final int BARCODES_PER_PAGE = 72;
+	private final float BAR_HEIGHT_MULTIPLE = 3.0f;
+	private final float LABEL_WIDTH_PADDING = 10.0f;
 
 	/**
 	 * @pre items must contain only valid Item objects
@@ -67,67 +70,111 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 	@Override
 	public void createPDF() throws IOException, DocumentException
 	{
-		String timeStamp =
-				new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar
-						.getInstance().getTime());
-		this.result = this.result + timeStamp + ".pdf";
-		FileOutputStream pdfos = new FileOutputStream(this.result);
-
-		PdfWriter writer = PdfWriter.getInstance(this.document, pdfos);
-		writer.setPdfVersion(PdfWriter.VERSION_1_7);
-
-		this.document.open();
-
-		// Set up Barcode Label Font stuff
+		// Set up Barcode Label variables
 		float fontSize = 7.0f;
+		float labelPadding = 5.0f;
+		float codeWidth = 0.0f;
+		float labelWidth = 0.0f;
+
+		int numColumns = 0;
+		int labelBorder = 0;
+
+		Image codeImage = null;
+		BarcodeEAN codeEAN = null;
+		PdfWriter writer = null;
+
 		BaseFont basefont = BaseFont.createFont("Helvetica", "winansi", false);
 		Font font = new Font(basefont, 7F);
 
-		// step 4
+		String timeStamp =
+				new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar
+						.getInstance().getTime());
+		this.filename = this.filename + timeStamp + ".pdf";
+		File dir =
+				new File(this.filename.substring(0,
+						this.filename.lastIndexOf(File.separator)));
+		dir.mkdirs();
+		File temp =
+				new File(dir, this.filename.substring(this.filename
+						.lastIndexOf(File.separator) + 1));
+		if(!temp.exists())
+		{
+			temp.createNewFile();
+		}
+		FileOutputStream pdfos = null;
+		try
+		{
+			pdfos = new FileOutputStream(this.filename);
+		}
+		catch(FileNotFoundException fnfe)
+		{
+			fnfe.printStackTrace();
+		}
+
+		// Get the document open, and the PdfWriter ready to write to the
+		// filestream
+		writer = PdfWriter.getInstance(this.document, pdfos);
+		writer.setPdfVersion(PdfWriter.VERSION_1_7);
+		this.document.open();
+
+		// Let's write stuff
 		PdfContentByte cb = writer.getDirectContent();
 
-		BarcodeEAN codeEAN = new BarcodeEAN();
+		// Create a test label to work out columns per page
+		codeEAN = new BarcodeEAN();
 		codeEAN.setCodeType(Barcode.UPCA);
 		codeEAN.setFont(basefont);
 		codeEAN.setSize(fontSize);
 		codeEAN.setBaseline(fontSize);
-		codeEAN.setBarHeight(fontSize * 3.0f);
-		codeEAN.setCode("000000000000");
+		codeEAN.setBarHeight(fontSize * this.BAR_HEIGHT_MULTIPLE);
+		codeEAN.setCode("555555555555"); // Use fives to give uniform character
+											// spacing
 
-		Image codeImage = codeEAN.createImageWithBarcode(cb, null, null);
-		float codeWidth = codeImage.getWidth();
-		float labelPadding = 5.0f;
-		int labelBorder = 0;
-		float labelWidth = codeWidth + 10.0f; // float f2 = image.getWidth(); //
-												// float f3 = 5F; // float f4 =
-												// f2 + 10F;
-		int columns =
+		codeImage = codeEAN.createImageWithBarcode(cb, null, null);
+		codeWidth = codeImage.getWidth();;
+		labelWidth = codeWidth + this.LABEL_WIDTH_PADDING;
+		numColumns =
 				(int) (this.document.getPageSize().getWidth() / labelWidth);
-		PdfPTable pdfTable = new PdfPTable(columns);
-		pdfTable.setTotalWidth(columns * labelWidth);
+
+		// Now we create the Table based on the number of columns we've
+		// calculated.
+		PdfPTable pdfTable = new PdfPTable(numColumns);
+		pdfTable.setTotalWidth(numColumns * labelWidth);
 		pdfTable.setLockedWidth(true);
 		PdfPCell pdfTableCell = pdfTable.getDefaultCell();
 		pdfTableCell.setBorder(labelBorder);
 		pdfTableCell.setPadding(labelPadding);
 
+		// Now let's go through and create our labels
 		for(int index = 0; index < this.items.size(); index++)
 		{
+			// Variables we'll need for each Label
+
+			// Get Item data
 			IItem currentItem = this.items.get(index);
 			IBarcode barcode = currentItem.getBarcode();
 			IProductDescription description =
 					currentItem.getProduct().getDescription();
-			Date entryDate = currentItem.getEntryDate();
-			Date expirationDate = currentItem.getExpirationDate();
+
+			String dateString =
+					DateUtils.formatShortDate(currentItem.getEntryDate());
+			if(currentItem.getExpirationDate() != null)
+			{
+				dateString +=
+						" exp "
+								+ DateUtils.formatShortDate(currentItem
+										.getExpirationDate());
+			}
 
 			codeEAN.setCode(barcode.getNumber());
-			Image currentCodeImage =
-					codeEAN.createImageWithBarcode(cb, null, null);
+			// Image currentCodeImage =
+			codeImage = codeEAN.createImageWithBarcode(cb, null, null);
 			String labelDescription = description.getDescription();
 
 			if(labelDescription.length() > 0)
 			{
 				Chunk chunk = new Chunk(labelDescription, font);
-				while(chunk.getWidthPoint() > currentCodeImage.getWidth())
+				while(chunk.getWidthPoint() > codeImage.getWidth())
 				{
 					labelDescription =
 							labelDescription.substring(0,
@@ -135,118 +182,23 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 					chunk = new Chunk(labelDescription, font);
 				}
 			}
-
-			// do
-			// {
-			// if(labelDescription.length() <= 0)
-			// break;
-			//
-			// Chunk chunk = new Chunk(labelDescription, font);
-			// if(chunk.getWidthPoint() < currentCodeImage.getWidth())
-			// break;
-			//
-			// labelDescription =
-			// labelDescription.substring(0,
-			// labelDescription.length() - 1);
-			// }
-			// while(true);
-
-			String dateString =
-					entryDate.getMonth() + "/" + entryDate.getDay() + "/"
-							+ entryDate.getYear();
-			if(expirationDate != null)
-			{
-				dateString +=
-						" exp " + expirationDate.getMonth() + "/"
-								+ expirationDate.getDay() + "/"
-								+ expirationDate.getYear();
-			}
-
 			Paragraph labelParagraph =
 					new Paragraph(labelDescription + "\n" + dateString, font);
 			labelParagraph.setLeading(0.0f, 1.1f);
-			PdfPCell curCell = new PdfPCell();
-			curCell.addElement(labelParagraph);
-			currentCodeImage.setSpacingBefore(2.0f);
-			curCell.addElement(currentCodeImage);
-			curCell.setBorder(0);
-			curCell.setPadding(5.0f);
-			pdfTable.addCell(curCell);
+			pdfTableCell = new PdfPCell();
+			pdfTableCell.addElement(labelParagraph);
+			codeImage.setSpacingBefore(2.0f);
+			pdfTableCell.addElement(codeImage);
+			pdfTableCell.setBorder(0);
+			pdfTableCell.setPadding(labelPadding);
+			pdfTable.addCell(pdfTableCell);
 		}
-
-		// /* Stuff from code */
-		// for(Iterator iterator = list.iterator(); iterator.hasNext();)
-		// {
-		// en en1 = (en) iterator.next();
-		// Iterator iterator1 = ((List) map.get(en1)).iterator();
-		// while(iterator1.hasNext())
-		// {
-		// ed ed1 = (ed) iterator1.next();
-		// int j = 1;
-		// int k = 0;
-		// while(k < j)
-		// {
-		// barcodeean.setCode(ed1.d());
-		// Image image1 =
-		// barcodeean.createImageWithBarcode(pdfcontentbyte,
-		// null, null);
-		// String s = ed1.c().d();
-		//
-		// Paragraph paragraph =
-		// new Paragraph((new StringBuilder()).append(s)
-		// .append("\n").append(s1).toString(), font);
-		// paragraph.setLeading(0.0F, 1.1F);
-		// PdfPCell pdfpcell1 = new PdfPCell();
-		// pdfpcell1.addElement(paragraph);
-		// image1.setSpacingBefore(2.0F);
-		// pdfpcell1.addElement(image1);
-		// pdfpcell1.setBorder(0);
-		// pdfpcell1.setPadding(5F);
-		// pdfptable.addCell(pdfpcell1);
-		// k++;
-		// }
-		// }
-		// }
 
 		pdfTable.completeRow();
 		document.add(pdfTable);
 		document.close();
+		pdfos.close();
 
-		java.awt.Desktop.getDesktop().open(new File(this.result));
-
-		/* End stuff from code */
-
-		// // Create a Barcode label from an item
-		// Item currentItem = this.items.get(0);
-		// String itemDescription =
-		// currentItem.getProduct().getDescription().getDescription()
-		// .substring(0, 19); // Limit Item/Product Description to
-		// // first 18 characters
-		//
-		// document.add(new Paragraph(currentItem.getProduct().getDescription()
-		// .getDescription().substring(0, 19)));
-		// BarcodeEAN codeEAN = new BarcodeEAN();
-		// codeEAN.setCodeType(com.itextpdf.text.pdf.Barcode.UPCA);
-		// codeEAN.setCode(this.items.get(0).getBarcode().getNumber());
-		// codeEAN.setFont(basefont);
-		//
-		// Image image1 = codeEAN.createImageWithBarcode(cb, null, null);
-		//
-		// document.add(new Paragraph("default:"));
-		// document.add(codeEAN.createImageWithBarcode(cb, null, null));
-		// codeEAN.setGuardBars(false);
-		// document.add(new Paragraph("without guard bars:"));
-		// document.add(codeEAN.createImageWithBarcode(cb, null, null));
-		// codeEAN.setBaseline(-1f);
-		// codeEAN.setGuardBars(true);
-		// document.add(new Paragraph("text above:"));
-		// document.add(codeEAN.createImageWithBarcode(cb, null, null));
-		// codeEAN.setBaseline(codeEAN.getSize());
-		//
-		// codeEAN.setCodeType(com.itextpdf.text.pdf.Barcode.UPCA);
-		// codeEAN.setCode("785342304749");
-		// document.add(codeEAN.createImageWithBarcode(cb, null, null));
-
+		java.awt.Desktop.getDesktop().open(new File(this.filename));
 	}
-
 }
