@@ -162,36 +162,21 @@ public class NSA implements Observer
 	{
 		if (changedObj instanceof IItem)
 		{
-			IItem item = (IItem)changedObj;
-			
-			if(itemIsCurrentlyVisible(item))
+			if(inventoryView.getSelectedProductContainer() != null)
 			{
-				populateItemData(item.getContainer());
+				populateProductData((IProductContainer)inventoryView.
+						getSelectedProductContainer().getTag());
 			}
 		}
 		else if (changedObj instanceof IProduct)
 		{
-			IProduct product = (IProduct)changedObj;
-					
-			if(productIsCurrentlyVisible(product))
+			if(inventoryView.getSelectedProductContainer() != null)
 			{
 				populateProductData((IProductContainer)inventoryView.
 						getSelectedProductContainer().getTag());
 			}
 			
 		}
-	}
-
-	private boolean productIsCurrentlyVisible(IProduct product)
-	{
-		return product.getContainers().contains(inventoryView.
-				getSelectedProductContainer().getTag());
-	}
-
-	private boolean itemIsCurrentlyVisible(IItem item)
-	{
-		return item.getContainer() == inventoryView.
-				getSelectedProductContainer().getTag();
 	}
 
 	public void populateProductContainers()
@@ -231,6 +216,12 @@ public class NSA implements Observer
 		Iterator<IProduct> productIterator = products.iterator();
 		for(int i = 0; i < productDatas.length; i++)
 			productDatas[i] = (ProductData)productIterator.next().getTag();
+		
+		if(inventoryView.getSelectedProduct() != null)
+		{
+			populateItemData(container);
+		}
+		
 		inventoryView.setProducts(productDatas);
 	}
 
@@ -344,7 +335,8 @@ public class NSA implements Observer
 		itemData.setExpirationDate(item.getExpirationDate());
 		if(item.getContainer() instanceof IProductGroup)
 			itemData.setProductGroup(item.getContainer().getName());
-		itemData.setStorageUnit(item.getContainer().getStorageUnit().getName());
+		if(item.getContainer() != null)
+			itemData.setStorageUnit(item.getContainer().getStorageUnit().getName());
 		item.setTag(itemData);
 		itemData.setTag(item);
 	}

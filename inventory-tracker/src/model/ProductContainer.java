@@ -329,32 +329,20 @@ public abstract class ProductContainer extends Observable implements
 	@Override
 	public void transferItem(IItem item, IProductContainer targetContainer)
 	{
-		IProductContainer container = this.findContainer(item.getProduct());
-
-		if(container == null)
+		this.removeItem(item);
+		
+		Set<IItem> items = this.getAllItems();
+		boolean stillHere = false;
+		for(IItem containerItem : items)
 		{
-			targetContainer.addProduct(item.getProduct());
-			item.getProduct().addContainer(targetContainer);
+			stillHere = stillHere || containerItem.getProduct() == item.getProduct();
+			if(stillHere)
+				break;
 		}
-		else
-		{
-			for(IItem it: this.items)
-				if(it.getProduct().equals(item.getProduct()))
-				{
-					this.removeItem(it);
-					targetContainer.addItem(it);
-					it.setContainer(targetContainer);
-				}
-
+		if(!stillHere)
 			this.removeProduct(item.getProduct());
-			item.getProduct().removeContainer(this);
-			targetContainer.addProduct(item.getProduct());
-			item.getProduct().addContainer(targetContainer);
-		}
-
+		
 		targetContainer.addItem(item);
-		item.setContainer(targetContainer);
-		this.items.remove(item);
 	}
 
 	@Override
