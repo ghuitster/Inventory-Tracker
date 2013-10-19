@@ -7,9 +7,12 @@ import gui.inventory.ProductContainerData;
 import gui.item.ItemData;
 import gui.product.ProductData;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import model.IInventory;
 import model.IItem;
@@ -25,7 +28,7 @@ public class TransferItemBatchController extends Controller implements
 	private String barcode;
 	private boolean useBarcodeScanner;
 	private final Map<ProductData, List<ItemData>> displayItems;
-	private List<ProductData> pdList = null;
+	private Set<ProductData> pdSet = null;
 	private final IInventory inventory = Inventory.getInstance();
 	private IItem item = null;
 	private IProductContainer container = null;
@@ -43,7 +46,7 @@ public class TransferItemBatchController extends Controller implements
 		this.barcode = "";
 		this.useBarcodeScanner = true;
 		this.displayItems = new HashMap<ProductData, List<ItemData>>();
-		this.pdList = null;
+		this.pdSet = new HashSet<ProductData>();
 		this.container = (IProductContainer) target.getTag();
 
 		construct();
@@ -155,7 +158,28 @@ public class TransferItemBatchController extends Controller implements
 		}
 		else
 		{
+			ItemData id = (ItemData) this.item.getTag();
+			ProductData pd = (ProductData) this.item.getProduct().getTag();
+			this.pdSet.add(pd);
 
+			if(this.displayItems.containsKey(pd))
+			{
+				this.displayItems.get(pd).add(id);
+			}
+			else
+			{
+				ArrayList<ItemData> temp = new ArrayList<ItemData>();
+				temp.add(id);
+				this.displayItems.put(pd, temp);
+			}
+
+			this.item.getContainer().transferItem(this.item, this.container);
+
+			ProductData[] pdArray = new ProductData[this.pdSet.size()];
+
+			this.getView().setProducts(this.pdSet.toArray(pdArray));
+			this.getView().setBarcode("");
+			this.enableComponents();
 		}
 
 	}
