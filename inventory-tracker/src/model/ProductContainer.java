@@ -180,11 +180,13 @@ public abstract class ProductContainer extends Observable implements
 			product.removeContainer(container);
 
 			for(IItem item: container.getAllItems())
+			{
 				if(item.getProduct().equals(product))
 				{
 					this.items.add(item);
 					container.removeItem(item);
 				}
+			}
 		}
 
 		this.setChanged();
@@ -210,7 +212,11 @@ public abstract class ProductContainer extends Observable implements
 	public IProductContainer findContainer(IProduct product)
 	{
 		for(IProductContainer con: this.productGroups)
-			return con.findContainer(product);
+		{
+			IProductContainer result = con.findContainer(product);
+			if(result != null)
+				return result;
+		}
 		if(this.products.contains(product))
 			return this;
 		else
