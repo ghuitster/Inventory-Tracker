@@ -26,7 +26,7 @@ public class ProductTest
 	Date creDate = new Date();
 	String desc = "Test Product No. 1";
 	String desc2 = "Test Product No. 2";
-	IBarcode bc = new Barcode("400000000001");
+	IBarcode bc = new ProductBarcode("400000000001");
 	UnitSize size = new UnitSize(1.0f, UnitType.CHEVROLET);
 	int shelfLife = 5;
 	CountThreeMonthSupply threeMonthSupply = new CountThreeMonthSupply(1);
@@ -86,7 +86,7 @@ public class ProductTest
 	@Test
 	public final void testAbleToSetBarcode()
 	{
-		IBarcode bc2 = new Barcode("400000000002");
+		IBarcode bc2 = new ProductBarcode("400000000002");
 		assertFalse(prod1.getBarcode().equals(bc2));
 		prod1.setBarcode(bc2);
 		assertTrue(prod1.getBarcode().equals(bc2));

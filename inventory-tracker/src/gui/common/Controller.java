@@ -1,6 +1,7 @@
 
 package gui.common;
 
+import gui.inventory.ProductContainerData;
 import observer.NSA;
 
 /**
@@ -26,8 +27,8 @@ import observer.NSA;
  */
 public abstract class Controller implements IController
 {
-
-	private NSA Observer;
+	protected static ProductContainerData treeRoot;
+	protected static ProductContainerData selectedTreeNode;
 	
 	
 	/**

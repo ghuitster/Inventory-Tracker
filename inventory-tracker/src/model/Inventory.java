@@ -139,6 +139,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 
 		this.storageUnits.add(storageUnit);
 		
+		this.setChanged();
 		this.notifyObservers(new ObservableArgs(storageUnit, UpdateType.ADDED));
 	}
 

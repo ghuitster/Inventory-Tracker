@@ -202,7 +202,7 @@ public class NSA implements Observer
 		}
 	}
 	
-	private void addProductContainersRecursively(ProductContainerData parent,
+	public void addProductContainersRecursively(ProductContainerData parent,
 			IProductContainer unit)
 	{
 		ProductContainerData child = new ProductContainerData(unit.getName()); 
@@ -213,7 +213,7 @@ public class NSA implements Observer
 		}
 	}
 
-	private void populateProductData(IProductContainer container)
+	public void populateProductData(IProductContainer container)
 	{
 		Set<IProduct> products = container.getAllProducts();
 		ProductData[] productDatas = new ProductData[products.size()];
@@ -223,37 +223,41 @@ public class NSA implements Observer
 		inventoryView.setProducts(productDatas);
 	}
 
-	private void populateItemData(IProductContainer container)
+	public void populateItemData(IProductContainer container)
 	{
+		IProduct selectedProduct = null;
+		if(inventoryView.getSelectedProduct() != null)
+			selectedProduct = (IProduct)inventoryView.getSelectedProduct().getTag();
+
 		Set<IItem> items = container.getAllItems();
-		ItemData[] itemDatas = new ItemData[items.size()];
-		Iterator<IItem> itemIterator = items.iterator();
-		for(int i = 0; i < itemDatas.length; i++)
-			itemDatas[i] = (ItemData)itemIterator.next().getTag();
-		inventoryView.setItems(itemDatas);
+		List<ItemData> itemDatas = new ArrayList<ItemData>();
+		for(IItem item : items)
+		{
+			if(selectedProduct == null || item.getProduct() == selectedProduct)
+			itemDatas.add((ItemData)item.getTag());
+		}
+		inventoryView.setItems(itemDatas.toArray(new ItemData[0]));
 	}
 	
-	private void addProductContainer(IProductContainer container)
+	public void addProductContainer(IProductContainer container)
 	{
+		IProductGroup pg = (IProductGroup)container;
+		ProductContainerData parent;
 		if(container instanceof IStorageUnit)
-		{
-			root.addChild((ProductContainerData)container.getTag());
-		}
+			parent = root;
 		else
+			parent = (ProductContainerData)pg.getContainer().getTag();
+		
+		String name = pg.getName();
+		int i;
+		for(i = 0; i < parent.getChildCount(); i++)
 		{
-			IProductGroup pg = (IProductGroup)container;
-			ProductContainerData parent = (ProductContainerData)pg.
-					getContainer().getTag();
-			String name = pg.getName();
-			int i;
-			for(i = 0; i < parent.getChildCount(); i++)
-			{
-				if(parent.getChild(i).getName().compareTo(name) > 0)
-					break;
-			}
-			inventoryView.insertProductContainer(parent, 
-					(ProductContainerData)pg.getTag(), i);
+			if(parent.getChild(i).getName().compareTo(name) > 0)
+				break;
 		}
+		inventoryView.insertProductContainer(parent, 
+				(ProductContainerData)pg.getTag(), i);
+		
 	}
 	
 	private void removeProductContainer(IProductContainer container)

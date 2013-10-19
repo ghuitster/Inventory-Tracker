@@ -1,6 +1,12 @@
 
 package gui.storageunit;
 
+import model.IProductContainer;
+import model.IProductGroup;
+import model.IStorageUnit;
+import model.Inventory;
+import model.ProductGroup;
+import model.StorageUnit;
 import gui.common.Controller;
 import gui.common.IView;
 
@@ -10,6 +16,10 @@ import gui.common.IView;
 public class AddStorageUnitController extends Controller implements
 		IAddStorageUnitController
 {
+	
+	private IProductContainer workingContainer;
+	private IProductContainer containerParent;
+	
 	/**
 	 * Constructor.
 	 * 
@@ -20,6 +30,15 @@ public class AddStorageUnitController extends Controller implements
 		super(view);
 
 		construct();
+		
+		if(selectedTreeNode == treeRoot)
+			workingContainer = new StorageUnit("");
+		else 
+		{
+			workingContainer = new ProductGroup("");
+			containerParent = (IProductContainer)selectedTreeNode.getTag();
+		}
+		getView().enableOK(false);
 	}
 
 	//
@@ -32,7 +51,18 @@ public class AddStorageUnitController extends Controller implements
 	 */
 	@Override
 	public void addStorageUnit()
-	{}
+	{
+		try
+		{
+			if(workingContainer instanceof IStorageUnit)
+				Inventory.getInstance().addStorageUnit((IStorageUnit)workingContainer);
+			else containerParent.addProductGroup((IProductGroup)workingContainer);
+		}
+		catch (Exception e) 
+		{
+			System.out.print(e.toString());
+		}
+	}
 
 	/**
 	 * Sets the enable/disable state of all components in the controller's view.
@@ -74,6 +104,7 @@ public class AddStorageUnitController extends Controller implements
 	 */
 	@Override
 	protected void loadValues()
+	
 	{}
 
 	/**
@@ -82,5 +113,12 @@ public class AddStorageUnitController extends Controller implements
 	 */
 	@Override
 	public void valuesChanged()
-	{}
+	{
+		workingContainer.setName(getView().getStorageUnitName());
+		if(this.containerParent == null)
+			getView().enableOK(Inventory.getInstance()
+					.ableToAddStorageUnit((IStorageUnit)workingContainer));
+		else getView().enableOK(containerParent
+				.ableToAddProductGroup((ProductGroup)workingContainer));
+	}
 }

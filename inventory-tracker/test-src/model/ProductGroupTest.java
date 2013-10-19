@@ -18,8 +18,7 @@ public class ProductGroupTest
 		ProductGroup group = createTestGroup();
 		assertEquals(0, group.getAllProductGroups().size());
 		ProductGroup child =
-				new ProductGroup("Child group", group, new ThreeMonthSupply(1,
-						UnitType.STONE));
+				new ProductGroup("Child group");
 		group.addProductGroup(child);
 		assertEquals(1, group.getAllProductGroups().size());
 		assertEquals(child, group.getAllProductGroups().iterator().next());
@@ -64,19 +63,17 @@ public class ProductGroupTest
 	{
 		StorageUnit unit = new StorageUnit("Test Storage Unit");
 		ProductGroup group =
-				new ProductGroup("Test Group", unit, new ThreeMonthSupply(1,
-						UnitType.ELEPHANT_WEIGHT));
+				new ProductGroup("Test Group");
 		return group;
 	}
 
 	private Item populateTestGroup(ProductGroup group)
 	{
 		Product prod =
-				new Product(new Date(), "product", new Barcode("2"),
+				new Product(new Date(), "product", new ProductBarcode("2"),
 						new CountUnitSize(1), 1, new CountThreeMonthSupply(1));
 		Item item =
-				new Item(prod, new Barcode("3"), new Date(), new Date(),
-						new Date());
+				new Item(prod, new ProductBarcode("3"), new Date(), new Date());
 		group.addItem(item);
 		group.addProduct(prod);
 		return item;

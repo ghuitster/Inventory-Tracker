@@ -51,10 +51,9 @@ public class InventoryTest
 		Inventory.getInstance().removeAllStorageUnits();
 		unit1 = new StorageUnit("unit1");
 		ProductGroup pg1 =
-				new ProductGroup("pg1", unit1, new ThreeMonthSupply(1.0f,
-						UnitType.CHEVROLET));
+				new ProductGroup("pg1");
 		prod =
-				new Product(new Date(), "asdf", new Barcode("1"),
+				new Product(new Date(), "asdf", new ProductBarcode("1"),
 						new CountUnitSize(1), 1, new CountThreeMonthSupply(1));
 		pg1.addProduct(prod);
 		unit1.addProductGroup(pg1);

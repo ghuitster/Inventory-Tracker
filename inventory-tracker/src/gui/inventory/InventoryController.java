@@ -411,6 +411,7 @@ public class InventoryController extends Controller implements
 //
 		
 		ProductContainerData root = new ProductContainerData();
+		treeRoot = root;
 		try
 		{
 			IPersistence persistence = Inventory.getInstance().getPersistence();
@@ -447,29 +448,30 @@ public class InventoryController extends Controller implements
 	@Override
 	public void productContainerSelectionChanged()
 	{
-		List<ProductData> productDataList = new ArrayList<ProductData>();
+//		List<ProductData> productDataList = new ArrayList<ProductData>();
 		ProductContainerData selectedContainer =
 				getView().getSelectedProductContainer();
+		this.selectedTreeNode = selectedContainer;
 		if(selectedContainer != null)
 		{
-			int productCount = rand.nextInt(20) + 1;
-			for(int i = 1; i <= productCount; ++i)
-			{
-				ProductData productData = new ProductData();
-				productData.setBarcode(getRandomBarcode());
-				int itemCount = rand.nextInt(25) + 1;
-				productData.setCount(Integer.toString(itemCount));
-				productData.setDescription("Item " + i);
-				productData.setShelfLife("3 months");
-				productData.setSize("1 pounds");
-				productData.setSupply("10 count");
-
-				productDataList.add(productData);
-			}
+//			int productCount = rand.nextInt(20) + 1;
+//			for(int i = 1; i <= productCount; ++i)
+//			{
+//				ProductData productData = new ProductData();
+//				productData.setBarcode(getRandomBarcode());
+//				int itemCount = rand.nextInt(25) + 1;
+//				productData.setCount(Integer.toString(itemCount));
+//				productData.setDescription("Item " + i);
+//				productData.setShelfLife("3 months");
+//				productData.setSize("1 pounds");
+//				productData.setSupply("10 count");
+//
+//				productDataList.add(productData);
+//			}
 		}
-		getView().setProducts(productDataList.toArray(new ProductData[0]));
+//		getView().setProducts(productDataList.toArray(new ProductData[0]));
 
-		getView().setItems(new ItemData[0]);
+//		getView().setItems(new ItemData[0]);
 	}
 
 	/**

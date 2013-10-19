@@ -174,6 +174,7 @@ public abstract class ProductContainer extends Observable implements IProductCon
 	public void addProductGroup(IProductGroup productGroup)
 	{
 		this.productGroups.add(productGroup);
+		productGroup.setContainer(this);
 		
 		this.notifyObservers(new ObservableArgs(productGroup, UpdateType.ADDED));
 	}

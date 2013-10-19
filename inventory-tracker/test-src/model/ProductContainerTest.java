@@ -17,11 +17,9 @@ public class ProductContainerTest
 	{
 		StorageUnit unit = new StorageUnit("test");
 		IProductContainer container =
-				new ProductGroup("test", unit, new ThreeMonthSupply(1,
-						UnitType.FLUID_OUNCES));
+				new ProductGroup("test");
 
-		assertTrue(container.ableToAddItem(new Item(null, null, null, null,
-				null)));
+		assertTrue(container.ableToAddItem(new Item(null, null, null, null)));
 	}
 
 	@Test
@@ -29,10 +27,9 @@ public class ProductContainerTest
 	{
 		StorageUnit unit = new StorageUnit("test");
 		IProductContainer container =
-				new ProductGroup("test", unit, new ThreeMonthSupply(1,
-						UnitType.FLUID_OUNCES));
+				new ProductGroup("test");
 		IProduct product =
-				new Product(new Date(), "test", new Barcode("400000000000"),
+				new Product(new Date(), "test", new ProductBarcode("400000000000"),
 						new CountUnitSize(3), 3, null);
 		assertTrue(container.ableToAddProduct(product));
 		Set<IProduct> products = container.getAllProducts();
@@ -46,11 +43,9 @@ public class ProductContainerTest
 	{
 		StorageUnit unit = new StorageUnit("test");
 		IProductContainer container =
-				new ProductGroup("test", unit, new ThreeMonthSupply(1,
-						UnitType.FLUID_OUNCES));
+				new ProductGroup("test");
 		IProductGroup group =
-				new ProductGroup("test", container, new ThreeMonthSupply(3,
-						UnitType.FLUID_OUNCES));
+				new ProductGroup("test");
 		assertTrue(container.ableToAddProductGroup(group));
 		Set<IProductGroup> groups = container.getAllProductGroups();
 
@@ -63,11 +58,9 @@ public class ProductContainerTest
 	{
 		StorageUnit unit = new StorageUnit("test");
 		IProductContainer container =
-				new ProductGroup("test", unit, new ThreeMonthSupply(1,
-						UnitType.FLUID_OUNCES));
+				new ProductGroup("test");
 
-		assertTrue(container.ableToRemoveItem(new Item(null, null, null, null,
-				null)));
+		assertTrue(container.ableToRemoveItem(new Item(null, null, null, null)));
 	}
 
 	@Test
@@ -75,14 +68,13 @@ public class ProductContainerTest
 	{
 		StorageUnit unit = new StorageUnit("test");
 		IProductContainer container =
-				new ProductGroup("test", unit, new ThreeMonthSupply(1,
-						UnitType.FLUID_OUNCES));
+				new ProductGroup("test");
 
 		IProduct product =
-				new Product(new Date(), "test", new Barcode("400000000000"),
+				new Product(new Date(), "test", new ProductBarcode("400000000000"),
 						new CountUnitSize(3), 3, null);
 		container.addProduct(product);
-		Item item = new Item(product, null, null, null, null);
+		Item item = new Item(product, null, null, null);
 		for(IProduct prod: container.getAllProducts())
 		{
 			product = prod;
@@ -99,16 +91,14 @@ public class ProductContainerTest
 	{
 		StorageUnit unit = new StorageUnit("test");
 		IProductContainer container =
-				new ProductGroup("test", unit, new ThreeMonthSupply(1,
-						UnitType.FLUID_OUNCES));
+				new ProductGroup("test");
 		Product product =
-				new Product(new Date(), "test", new Barcode("400000000000"),
+				new Product(new Date(), "test", new ProductBarcode("400000000000"),
 						new CountUnitSize(3), 3, null);
 		ProductGroup group =
-				new ProductGroup("test", container, new ThreeMonthSupply(3,
-						UnitType.FLUID_OUNCES));
-		group.addItem(new Item(product, new Barcode("400000000000"),
-				new Date(), new Date(), new Date()));
+				new ProductGroup("test");
+		group.addItem(new Item(product, new ProductBarcode("400000000000"),
+				new Date(), new Date()));
 		assertFalse(container.ableToRemoveProductGroup(group));
 	}
 
@@ -117,8 +107,7 @@ public class ProductContainerTest
 	{
 		StorageUnit unit = new StorageUnit("test");
 		IProductContainer container =
-				new ProductGroup("test", unit, new ThreeMonthSupply(1,
-						UnitType.FLUID_OUNCES));
+				new ProductGroup("test");
 
 		assertFalse(container.getAllItems() == null);
 	}
@@ -128,8 +117,7 @@ public class ProductContainerTest
 	{
 		StorageUnit unit = new StorageUnit("test");
 		IProductContainer container =
-				new ProductGroup("test", unit, new ThreeMonthSupply(1,
-						UnitType.FLUID_OUNCES));
+				new ProductGroup("test");
 
 		assertFalse(container.getAllProductGroups() == null);
 	}
@@ -139,8 +127,7 @@ public class ProductContainerTest
 	{
 		StorageUnit unit = new StorageUnit("test");
 		IProductContainer container =
-				new ProductGroup("test", unit, new ThreeMonthSupply(1,
-						UnitType.FLUID_OUNCES));
+				new ProductGroup("test");
 
 		assertFalse(container.getAllProducts() == null);
 	}
