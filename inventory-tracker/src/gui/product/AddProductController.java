@@ -213,10 +213,7 @@ public class AddProductController extends Controller implements
 		if(this.descript.isEmpty())
 			this.submit = false;
 		else if(sizeValue <= 0)
-		{
-			System.out.println("Am I getting in while the size Value is 0");
 			this.submit = false;
-		}
 		else
 			this.submit = true;
 	}
