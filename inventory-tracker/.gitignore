@@ -5,3 +5,4 @@ data.inventory
 /build
 /dist/lib/inventory-tracker.jar
 /dist
+/style-reports
