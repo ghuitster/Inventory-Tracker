@@ -8,6 +8,7 @@ import model.ThreeMonthSupply;
 import model.UnitType;
 import gui.common.Controller;
 import gui.common.IView;
+import gui.common.SizeUnitUtils;
 import gui.common.SizeUnits;
 import gui.inventory.ProductContainerData;
 
@@ -49,40 +50,7 @@ public class EditProductGroupController extends Controller implements
 	private void createSizeUnitsFromUnitType()
 	{
 		UnitType unitType = this.PG.getThreeMonthSupply().getUnitType();
-		switch(unitType)
-		{
-			case POUNDS:
-				this.sizeUnits = SizeUnits.Pounds;
-				break;
-			case OUNCES:
-				this.sizeUnits = SizeUnits.Ounces;
-				break;
-			case GRAMS:
-				this.sizeUnits = SizeUnits.Grams;
-				break;
-			case KILOGRAMS:
-				this.sizeUnits = SizeUnits.Kilograms;
-				break;
-			case GALLONS:
-				this.sizeUnits = SizeUnits.Gallons;
-				break;
-			case QUARTS:
-				this.sizeUnits = SizeUnits.Quarts;
-				break;
-			case PINTS:
-				this.sizeUnits = SizeUnits.Pints;
-				break;
-			case FLUID_OUNCES:
-				this.sizeUnits = SizeUnits.FluidOunces;
-				break;
-			case LITERS:
-				this.sizeUnits = SizeUnits.Liters;
-				break;
-			case COUNT:
-				this.sizeUnits = SizeUnits.Count;
-			default:
-				break;
-		}
+		this.sizeUnits = SizeUnitUtils.createSizeUnitsFromUnitType(unitType);		
 	}
 
 	//
@@ -107,38 +75,7 @@ public class EditProductGroupController extends Controller implements
 	
 	private void createUnitType()
 	{
-		switch(sizeUnits)
-		{
-			case Pounds:
-				this.unitType = UnitType.POUNDS;
-				break;
-			case Ounces:
-				this.unitType = UnitType.OUNCES;
-				break;
-			case Grams:
-				this.unitType = UnitType.GRAMS;
-				break;
-			case Kilograms:
-				this.unitType = UnitType.KILOGRAMS;
-				break;
-			case Gallons:
-				this.unitType = UnitType.GALLONS;
-				break;
-			case Quarts:
-				this.unitType = UnitType.QUARTS;
-				break;
-			case Pints:
-				this.unitType = UnitType.PINTS;
-				break;
-			case FluidOunces:
-				this.unitType = UnitType.FLUID_OUNCES;
-				break;
-			case Liters:
-				this.unitType = UnitType.LITERS;
-				break;
-			case Count:
-				this.unitType = UnitType.COUNT;
-		}
+		this.unitType = SizeUnitUtils.createUnitTypeFromSizeUnits(this.sizeUnits);
 	}
 
 	/**

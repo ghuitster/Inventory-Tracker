@@ -13,8 +13,8 @@ import model.UnitType;
 import gui.batches.AddItemBatchController;
 import gui.common.Controller;
 import gui.common.IView;
+import gui.common.SizeUnitUtils;
 import gui.common.SizeUnits;
-
 import common.util.DateUtils;
 
 /**
@@ -71,38 +71,7 @@ public class AddProductController extends Controller implements
 
 	private void createUnitType()
 	{
-		switch(sizeUnits)
-		{
-			case Pounds:
-				this.unitType = UnitType.POUNDS;
-				break;
-			case Ounces:
-				this.unitType = UnitType.OUNCES;
-				break;
-			case Grams:
-				this.unitType = UnitType.GRAMS;
-				break;
-			case Kilograms:
-				this.unitType = UnitType.KILOGRAMS;
-				break;
-			case Gallons:
-				this.unitType = UnitType.GALLONS;
-				break;
-			case Quarts:
-				this.unitType = UnitType.QUARTS;
-				break;
-			case Pints:
-				this.unitType = UnitType.PINTS;
-				break;
-			case FluidOunces:
-				this.unitType = UnitType.FLUID_OUNCES;
-				break;
-			case Liters:
-				this.unitType = UnitType.LITERS;
-				break;
-			case Count:
-				this.unitType = UnitType.COUNT;
-		}
+		this.unitType = SizeUnitUtils.createUnitTypeFromSizeUnits(this.sizeUnits);
 	}
 
 	/**
