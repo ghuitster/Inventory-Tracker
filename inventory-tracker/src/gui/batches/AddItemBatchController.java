@@ -241,6 +241,9 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void done()
 	{
+		if(products.isEmpty() || items.isEmpty())
+			return;
+
 		for(IProduct ip: products)
 			if(((ProductContainer) target.getTag()).ableToAddProduct(ip))
 				((ProductContainer) target.getTag()).addProduct(ip);
