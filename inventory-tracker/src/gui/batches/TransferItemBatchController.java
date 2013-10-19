@@ -25,6 +25,7 @@ public class TransferItemBatchController extends Controller implements
 	private String barcode;
 	private boolean useBarcodeScanner;
 	private final Map<ProductData, List<ItemData>> displayItems;
+	private List<ProductData> pdList = null;
 	private final IInventory inventory = Inventory.getInstance();
 	private IItem item = null;
 	private IProductContainer container = null;
@@ -42,6 +43,7 @@ public class TransferItemBatchController extends Controller implements
 		this.barcode = "";
 		this.useBarcodeScanner = true;
 		this.displayItems = new HashMap<ProductData, List<ItemData>>();
+		this.pdList = null;
 		this.container = (IProductContainer) target.getTag();
 
 		construct();

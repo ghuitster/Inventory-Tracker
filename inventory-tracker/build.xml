@@ -255,6 +255,8 @@
 			</classpath>
 			<classpath refid="junit-classpath" />
 			<classpath refid="cobertura-classpath" />
+			<classpath refid="itext-classpath" />
+			<classpath refid="sqlite-classpath" />
 		</javac>
 	</target>
 	
