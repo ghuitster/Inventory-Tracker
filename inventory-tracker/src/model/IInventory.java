@@ -2,7 +2,6 @@
 package model;
 
 import java.util.Date;
-import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 import java.util.SortedMap;
@@ -21,9 +20,9 @@ public interface IInventory extends Observer, IObservable
 	 * @return True if the storage unit may be added. Otherwise, false
 	 */
 	public abstract boolean ableToAddStorageUnit(IStorageUnit storageUnit);
-	
+
 	public boolean ableToAddStorageUnitNamed(String name);
-	
+
 	public abstract boolean ableToRemoveStorageUnit(IStorageUnit storageUnit);
 
 	/**
@@ -118,5 +117,18 @@ public interface IInventory extends Observer, IObservable
 	 * @param storageUnit The Storage Unit to remove
 	 */
 	public abstract void removeStorageUnit(IStorageUnit storageUnit);
+
+	/**
+	 * Returns an item from the system given a barcode, or null if item does not
+	 * exist.
+	 * @pre The passed ItemBarcode is valid
+	 * @post The item referenced by the ItemBarcode is returned, or null if the
+	 *       item does not exist
+	 * @param barcodeNumber the String representing the ItemBarcode referencing
+	 *            the item.
+	 * @return result the item referenced by the passed in ItemBarcode number,
+	 *         or null if the item does not exist
+	 */
+	public abstract IItem getItem(String barcodeNumber);
 
 }
