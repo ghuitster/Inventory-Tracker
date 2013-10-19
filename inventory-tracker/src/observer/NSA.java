@@ -215,7 +215,18 @@ public class NSA implements Observer
 		ProductData[] productDatas = new ProductData[products.size()];
 		Iterator<IProduct> productIterator = products.iterator();
 		for(int i = 0; i < productDatas.length; i++)
+		{
 			productDatas[i] = (ProductData)productIterator.next().getTag();
+			productDatas[i].setCount("0");
+		}
+		
+		for(IItem item : container.getAllItems())
+		{
+			ProductData pd = (ProductData)item.getProduct().getTag();
+			int count = Integer.parseInt(pd.getCount());
+			count++;
+			pd.setCount(count + "");
+		}
 		
 		if(inventoryView.getSelectedProduct() != null)
 		{
@@ -237,7 +248,7 @@ public class NSA implements Observer
 			for(IItem item : items)
 			{
 				if(selectedProduct == null || item.getProduct() == selectedProduct)
-				itemDatas.add((ItemData)item.getTag());
+					itemDatas.add((ItemData)item.getTag());
 			}
 			inventoryView.setItems(itemDatas.toArray(new ItemData[0]));
 		}

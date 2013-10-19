@@ -331,16 +331,40 @@ public abstract class ProductContainer extends Observable implements
 	{
 		this.removeItem(item);
 		
-		Set<IItem> items = this.getAllItems();
-		boolean stillHere = false;
-		for(IItem containerItem : items)
+		if(targetContainer.getStorageUnit() == this.getStorageUnit())
 		{
-			stillHere = stillHere || containerItem.getProduct() == item.getProduct();
-			if(stillHere)
-				break;
+			Set<IItem> items = this.getAllItems();
+			boolean stillHere = false;
+			for(IItem containerItem : items)
+			{
+				stillHere = stillHere || containerItem.getProduct() == item.getProduct();
+				if(stillHere)
+					break;
+			}
+			if(!stillHere)
+				this.removeProduct(item.getProduct());
 		}
-		if(!stillHere)
-			this.removeProduct(item.getProduct());
+		else
+		{
+			IProductContainer existing = targetContainer.getStorageUnit()
+					.findContainer(item.getProduct());
+			if(existing != null)
+			{
+				Set<IItem> toMove = new HashSet<IItem>();
+				for(IItem otherItem : existing.getAllItems())
+				{
+					if(otherItem.getProduct() == item.getProduct())
+						toMove.add(otherItem);
+				}
+				for(IItem otherItem : toMove)
+				{
+					existing.removeItem(otherItem);
+					targetContainer.addItem(otherItem);
+				}
+				existing.removeProduct(item.getProduct());
+			}
+			
+		}
 		
 		targetContainer.addItem(item);
 	}

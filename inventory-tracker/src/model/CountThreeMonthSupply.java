@@ -37,6 +37,6 @@ public class CountThreeMonthSupply extends CountAmount
 	@Override
 	public String toString()
 	{
-		return "" + amount;
+		return amount + " count";
 	}
 }
