@@ -22,6 +22,8 @@ public class InventoryController extends Controller implements
 		IInventoryController
 {
 
+
+	private ProductContainerData treeRoot;
 	private Random rand = new Random();
 
 	/**
@@ -453,11 +455,10 @@ public class InventoryController extends Controller implements
 //		List<ProductData> productDataList = new ArrayList<ProductData>();
 		ProductContainerData selectedContainer =
 				getView().getSelectedProductContainer();
-		this.selectedTreeNode = selectedContainer;
-		if(selectedTreeNode != null && selectedTreeNode != this.treeRoot)
+		if(selectedContainer != null && selectedContainer != this.treeRoot)
 		{
-			NSA.getInstance().populateProductData((IProductContainer)selectedTreeNode.getTag());
-			NSA.getInstance().populateItemData((IProductContainer)selectedTreeNode.getTag());
+			NSA.getInstance().populateProductData((IProductContainer)selectedContainer.getTag());
+			NSA.getInstance().populateItemData((IProductContainer)selectedContainer.getTag());
 		}
 	}
 
@@ -491,8 +492,11 @@ public class InventoryController extends Controller implements
 //		}
 //		getView().setItems(itemDataList.toArray(new ItemData[0]));
 		
-		if(selectedTreeNode != null)
-			NSA.getInstance().populateItemData((IProductContainer)selectedTreeNode.getTag());
+		ProductContainerData selectedContainer =
+				getView().getSelectedProductContainer();
+		
+		if(selectedContainer != null)
+			NSA.getInstance().populateItemData((IProductContainer)selectedContainer.getTag());
 	}
 
 	/**

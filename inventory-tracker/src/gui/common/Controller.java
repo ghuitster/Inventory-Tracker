@@ -27,9 +27,6 @@ import observer.NSA;
  */
 public abstract class Controller implements IController
 {
-	protected static ProductContainerData treeRoot;
-	protected static ProductContainerData selectedTreeNode;
-	
 	
 	/**
 	 * Reference to the view for this controller.
