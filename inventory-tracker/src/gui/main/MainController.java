@@ -92,10 +92,10 @@ public class MainController extends Controller implements IMainController
 	@Override
 	public void exit()
 	{
-		IPersistence persistence = new Serializer("data.Inventory");
+		Inventory invent = Inventory.getInstance();
 		try
 		{
-			persistence.saveData();
+			invent.getPersistence().saveData();
 		}
 		catch(SerializerException e)
 		{
