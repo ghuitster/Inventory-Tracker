@@ -132,7 +132,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 		
 		for(IStorageUnit unit: this.storageUnits)
 		{
-			if(unit.getName().equals(name))
+			if(unit.getName().toLowerCase().equals(name.toLowerCase()))
 				return false;
 		}
 

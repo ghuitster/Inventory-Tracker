@@ -66,7 +66,7 @@ public abstract class ProductContainer extends Observable implements
 		
 		for(IProductGroup pg : this.productGroups)
 		{
-			if(pg.getName().equals(name))
+			if(pg.getName().toLowerCase().equals(name.toLowerCase()))
 				return false;
 		}
 		

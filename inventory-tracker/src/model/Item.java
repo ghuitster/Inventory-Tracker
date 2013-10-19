@@ -166,17 +166,13 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 			return false;
 		}
 		Item other = (Item) obj;
-		if(product == null)
+		if(barcode == null)
 		{
-			if(other.product != null)
-			{
+			if(other.barcode != null)
 				return false;
-			}
 		}
-		else if(!product.equals(other.product))
-		{
+		else if(!barcode.equals(other.barcode))
 			return false;
-		}
 		return true;
 	}
 

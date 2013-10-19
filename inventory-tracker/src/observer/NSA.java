@@ -238,16 +238,19 @@ public class NSA implements Observer
 	{
 		IProduct selectedProduct = null;
 		if(inventoryView.getSelectedProduct() != null)
+		{
 			selectedProduct = (IProduct)inventoryView.getSelectedProduct().getTag();
 
-		Set<IItem> items = container.getAllItems();
-		List<ItemData> itemDatas = new ArrayList<ItemData>();
-		for(IItem item : items)
-		{
-			if(selectedProduct == null || item.getProduct() == selectedProduct)
-			itemDatas.add((ItemData)item.getTag());
+			Set<IItem> items = container.getAllItems();
+			List<ItemData> itemDatas = new ArrayList<ItemData>();
+			for(IItem item : items)
+			{
+				if(selectedProduct == null || item.getProduct() == selectedProduct)
+				itemDatas.add((ItemData)item.getTag());
+			}
+			inventoryView.setItems(itemDatas.toArray(new ItemData[0]));
 		}
-		inventoryView.setItems(itemDatas.toArray(new ItemData[0]));
+		else inventoryView.setItems(new ItemData[0]);
 	}
 	
 	public void addProductContainer(IProductContainer container)
@@ -270,6 +273,10 @@ public class NSA implements Observer
 		}
 		inventoryView.insertProductContainer(parent, 
 				(ProductContainerData)container.getTag(), i);
+		
+		if(parent == root && root.getChildCount() == 1 && 
+				container.getAllProductGroups().size() == 0)
+			inventoryView.setProductContainers(root);
 		
 	}
 	
