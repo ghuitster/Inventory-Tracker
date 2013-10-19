@@ -9,6 +9,7 @@ import gui.product.ProductData;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -43,42 +44,10 @@ public class AddItemBatchController extends Controller implements
 	private int count;
 	private boolean validCount;
 	private String barcode;
-	private Map<ProductData, List<ItemData>> displayItems;
-	private List<ProductData> displayProducts;
-	private List<IItem> items;
-	private List<IProduct> products;
-
-	/**
-	 * @param displayItems the displayItems to set
-	 */
-	public void setDisplayItems(Map<ProductData, List<ItemData>> displayItems)
-	{
-		this.displayItems = displayItems;
-	}
-
-	/**
-	 * @param displayProducts the displayProducts to set
-	 */
-	public void setDisplayProducts(List<ProductData> displayProducts)
-	{
-		this.displayProducts = displayProducts;
-	}
-
-	/**
-	 * @param items the items to set
-	 */
-	public void setItems(List<IItem> items)
-	{
-		this.items = items;
-	}
-
-	/**
-	 * @param products the products to set
-	 */
-	public void setProducts(List<IProduct> products)
-	{
-		this.products = products;
-	}
+	private final Map<ProductData, List<ItemData>> displayItems;
+	private final List<ProductData> displayProducts;
+	private final List<IItem> items;
+	private final List<IProduct> products;
 
 	public static IProduct product;
 
@@ -107,39 +76,7 @@ public class AddItemBatchController extends Controller implements
 		construct();
 	}
 
-	/**
-	 * @return the displayItems
-	 */
-	public Map<ProductData, List<ItemData>> getDisplayItems()
-	{
-		return displayItems;
-	}
-
-	/**
-	 * @return the displayProducts
-	 */
-	public List<ProductData> getDisplayProducts()
-	{
-		return displayProducts;
-	}
-
-	/**
-	 * @return the items
-	 */
-	public List<IItem> getItems()
-	{
-		return items;
-	}
-
-	/**
-	 * @return the products
-	 */
-	public List<IProduct> getProducts()
-	{
-		return products;
-	}
-
-	private IProduct createProduct()
+	private IProduct createProductFromStatic()
 	{
 		return new Product(AddItemBatchController.product.getCreationDate(),
 				AddItemBatchController.product.getDescription()
@@ -172,7 +109,7 @@ public class AddItemBatchController extends Controller implements
 			result.setSupply(((NonCountAmount) product.getThreeMonthSupply())
 					.getAmount() + "");
 
-		result.setTag(null);
+		result.setTag(product);
 
 		return result;
 	}
@@ -196,71 +133,122 @@ public class AddItemBatchController extends Controller implements
 			return;
 		}
 
-		boolean found = false;
+		if(barcode.isEmpty())
+		{
+			_view.displayErrorMessage("Empty barcode");
+			return;
+		}
+
+		boolean productExistsInSystem = false;
+		ProductData addingProductData = null;
+		IProduct addingProduct = null;
+		boolean productDataExistsInDialog = false;
 
 		for(IProduct ip: Inventory.getInstance().getAllProducts())
 			if(ip.getBarcode().getNumber().equals(barcode))
-				found = true;
+			{
+				productExistsInSystem = true;
+				addingProduct = ip;
+			}
 
-		ProductData adding = null;
-		IProduct product = null;
+		for(ProductData pd: displayProducts)
+			if(pd.getBarcode().equals(barcode))
+			{
+				productDataExistsInDialog = true;
+				addingProductData = pd;
+			}
 
-		if(!found)
+		if(productExistsInSystem)
 		{
-			getView().displayAddProductView();
-			product = createProduct();
-
-			adding = createProductData(product);
-
-			adding.setTag(product);
-
-			products.add(product);
-			displayProducts.add(adding);
+			if(productDataExistsInDialog)
+			{
+				addingProductData.setCount(Integer.parseInt(addingProductData
+						.getCount()) + count + "");
+			}
+			else
+			{
+				addingProductData = createProductData(addingProduct);
+				displayProducts.add(addingProductData);
+			}
 		}
 		else
 		{
-			for(ProductData pd: displayProducts)
-				if(pd.getBarcode().equals(barcode))
-					adding = pd;
+			if(productDataExistsInDialog)
+			{
+				addingProductData.setCount(Integer.parseInt(addingProductData
+						.getCount()) + count + "");
+				addingProduct = (IProduct) addingProductData.getTag();
+			}
+			else
+			{
+				AddItemBatchController.product = null;
+				getView().displayAddProductView();
 
-			if(adding == null)
-				adding = new ProductData();
+				if(AddItemBatchController.product == null)
+					return;
 
-			adding.setCount(adding.getCount() + count);
-			products.add(product);
+				addingProduct = createProductFromStatic();
+				products.add(addingProduct);
+				addingProductData = createProductData(addingProduct);
+				displayProducts.add(addingProductData);
+			}
 		}
 
 		for(int i = 0; i < count; i++)
 		{
-			ItemData temp = new ItemData();
-			temp.setBarcode(barcode);
-			temp.setEntryDate(entryDate);
-			temp.setExpirationDate(entryDate); // FIX THIS
-			temp.setProductGroup("");
+			Calendar expiration = Calendar.getInstance();
+			expiration.set(Calendar.MONTH, entryDate.getMonth());
+			expiration.set(Calendar.DAY_OF_MONTH, entryDate.getDate());
+			expiration.set(Calendar.YEAR, entryDate.getYear());
+			expiration.add(Calendar.MONTH, addingProduct.getShelfLife());
+			IItem tempItem = null;
 
-			if(target.getTag() instanceof ProductGroup)
-				temp.setProductGroup(((ProductGroup) target.getTag()).getName());
-
-			temp.setStorageUnit(((StorageUnit) target.getTag()).getName());
-			temp.setTag(null);
-			if(displayItems.get(adding) == null)
+			if(addingProduct.getShelfLife() != 0)
 			{
-				List<ItemData> tempList = new ArrayList<ItemData>();
-				tempList.add(temp);
-				displayItems.put(adding, tempList);
+				tempItem =
+						new Item(addingProduct, new ItemBarcode(Inventory
+								.getInstance().getUniqueBarCode() + ""),
+								entryDate,
+								DateUtils.removeTimeFromDate(expiration
+										.getTime()));
 			}
 			else
 			{
-				displayItems.get(adding).add(temp);
+				tempItem =
+						new Item(addingProduct, new ItemBarcode(Inventory
+								.getInstance().getUniqueBarCode() + ""),
+								entryDate, null);
 			}
 
-			items.add(new Item(product, new ItemBarcode(Inventory.getInstance()
-					.getUniqueBarCode() + ""), entryDate, null));
+			items.add(tempItem);
+			ItemData tempItemData = new ItemData();
+			tempItemData.setBarcode(tempItem.getBarcode().getNumber());
+			tempItemData.setEntryDate(entryDate);
+			tempItemData.setExpirationDate(tempItem.getExpirationDate());
+			tempItemData.setProductGroup("");
+
+			if(target.getTag() instanceof ProductGroup)
+				tempItemData.setProductGroup(((ProductGroup) target.getTag())
+						.getName());
+
+			tempItemData.setStorageUnit(((StorageUnit) target.getTag())
+					.getName());
+
+			tempItemData.setTag(tempItem);
+			if(displayItems.get(addingProductData) == null)
+			{
+				List<ItemData> tempList = new ArrayList<ItemData>();
+				tempList.add(tempItemData);
+				displayItems.put(addingProductData, tempList);
+			}
+			else
+			{
+				displayItems.get(addingProductData).add(tempItemData);
+			}
 		}
 
 		count = 1;
 		entryDate = DateUtils.currentDate();
-		useBarcodeScanner = true;
 		validCount = true;
 		barcode = "";
 		loadValues();
@@ -324,10 +312,6 @@ public class AddItemBatchController extends Controller implements
 		for(IItem ii: items)
 			if(((ProductContainer) target.getTag()).ableToAddItem(ii))
 				((ProductContainer) target.getTag()).addItem(ii);
-
-		System.out.println(((ProductContainer) target.getTag()).getAllItems());
-		System.out.println(((ProductContainer) target.getTag())
-				.getAllProducts());
 
 		BarcodeLabelPage printer = new BarcodeLabelPage(items);
 
