@@ -167,6 +167,7 @@ public class AddItemBatchController extends Controller implements
 			{
 				addingProductData = createProductData(addingProduct);
 				displayProducts.add(addingProductData);
+				products.add(addingProduct);
 			}
 		}
 		else
