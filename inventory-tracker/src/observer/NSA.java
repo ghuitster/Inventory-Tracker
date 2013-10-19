@@ -200,11 +200,13 @@ public class NSA implements Observer
 		{
 			addProductContainersRecursively(root, unit);
 		}
+		inventoryView.setProductContainers(root);
 	}
 	
 	public void addProductContainersRecursively(ProductContainerData parent,
 			IProductContainer unit)
 	{
+		verifyObjTag(unit);
 		ProductContainerData child = new ProductContainerData(unit.getName()); 
 		parent.addChild(child);
 		for(IProductContainer container : unit.getAllProductGroups())
@@ -259,6 +261,7 @@ public class NSA implements Observer
 		}
 		inventoryView.insertProductContainer(parent, 
 				(ProductContainerData)container.getTag(), i);
+		inventoryView.setProductContainers(root);
 		
 	}
 	
@@ -266,6 +269,7 @@ public class NSA implements Observer
 	{
 		inventoryView.deleteProductContainer
 		((ProductContainerData)container.getTag());
+		inventoryView.setProductContainers(root);
 	}
 	
 	private void updateProductContainer(IProductContainer container)
@@ -298,6 +302,7 @@ public class NSA implements Observer
 		
 		inventoryView.renameProductContainer(pcData, 
 				container.getName(), index);
+		inventoryView.setProductContainers(root);
 	}
 
 	private void updateProductContainerData(IProductContainer productContainer,

@@ -340,6 +340,7 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	{
 		this.barcode = barcode;
 
+		this.setChanged();
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
@@ -357,6 +358,7 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	public void setEntryDate(Date entryDate)
 	{
 		this.entryDate = entryDate;
+		this.setChanged();
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
@@ -369,6 +371,7 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	public void setExitTime(Date exitTime)
 	{
 		this.exitTime = exitTime;
+		this.setChanged();
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
@@ -381,6 +384,7 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	public void setExpirationDate(Date expirationDate)
 	{
 		this.expirationDate = expirationDate;
+		this.setChanged();
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
@@ -393,6 +397,7 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	public void setProduct(IProduct product)
 	{
 		this.product = product;
+		this.setChanged();
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 

@@ -8,10 +8,11 @@ import java.util.HashSet;
 import java.util.Observable;
 import java.util.Set;
 import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import common.util.DateUtils;
-
 import model.exception.InvalidNameException;
 
 /**
@@ -148,9 +149,9 @@ public class Inventory extends Observable implements IInventory, Serializable
 	 * 
 	 * @see model.BaseInventory#getAllProducts()
 	 */
-	public Set<IProduct> getAllProducts()
+	public SortedSet<IProduct> getAllProducts()
 	{
-		HashSet<IProduct> products = new HashSet<IProduct>();
+		TreeSet<IProduct> products = new TreeSet<IProduct>();
 		for(IStorageUnit unit: this.storageUnits)
 		{
 			recurseProductContainer(unit, products);
@@ -163,9 +164,9 @@ public class Inventory extends Observable implements IInventory, Serializable
 	 * 
 	 * @see model.BaseInventory#getAllStorageUnits()
 	 */
-	public Set<IStorageUnit> getAllStorageUnits()
+	public SortedSet<IStorageUnit> getAllStorageUnits()
 	{
-		return new HashSet<IStorageUnit>(this.storageUnits);
+		return new TreeSet<IStorageUnit>(this.storageUnits);
 	}
 
 	/*

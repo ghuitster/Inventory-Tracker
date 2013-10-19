@@ -6,6 +6,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 import java.util.SortedMap;
+import java.util.SortedSet;
 
 import model.exception.InvalidNameException;
 
@@ -41,7 +42,7 @@ public interface IInventory extends Observer, IObservable
 	 *       may be empty
 	 * @return A list containing references to all of the products
 	 */
-	public abstract Set<IProduct> getAllProducts();
+	public abstract SortedSet<IProduct> getAllProducts();
 
 	/**
 	 * Gets a list of all Storage Units in the system
@@ -50,7 +51,7 @@ public interface IInventory extends Observer, IObservable
 	 *       list may be empty
 	 * @return A list containing references to all top level ProductContainers
 	 */
-	public abstract Set<IStorageUnit> getAllStorageUnits();
+	public abstract SortedSet<IStorageUnit> getAllStorageUnits();
 
 	/**
 	 * Gets a map of Dates to what items expire on those dates

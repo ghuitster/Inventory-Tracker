@@ -420,11 +420,13 @@ public class InventoryController extends Controller implements
 		}
 		catch(Exception e)
 		{
+			System.out.print(e.toString());
 		}
 		
 		getView().setProductContainers(root);
 		
 		NSA.init(this.getView(), root);
+		NSA.getInstance().populateProductContainers();
 	}
 
 	/**

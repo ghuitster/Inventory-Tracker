@@ -59,9 +59,7 @@ public class AddStorageUnitController extends Controller implements
 			else containerParent.addProductGroup((IProductGroup)workingContainer);
 		}
 		catch (Exception e) 
-		{
-			System.out.print(e.toString());
-		}
+		{ }
 	}
 
 	/**

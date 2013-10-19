@@ -422,6 +422,7 @@ public class Product extends Observable implements IProduct, Serializable
 		if(barcode != null && ProductBarcode.isValid(barcode.getNumber()))
 			this.barcode = barcode;
 
+		this.setChanged();
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
@@ -435,6 +436,7 @@ public class Product extends Observable implements IProduct, Serializable
 	{
 		this.creationDate = creationDate;
 
+		this.setChanged();
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
@@ -448,6 +450,7 @@ public class Product extends Observable implements IProduct, Serializable
 	{
 		this.description = description;
 
+		this.setChanged();
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
@@ -460,7 +463,8 @@ public class Product extends Observable implements IProduct, Serializable
 	public void setShelfLife(int shelfLife)
 	{
 		this.shelfLife = shelfLife;
-
+		
+		this.setChanged();
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
@@ -474,6 +478,7 @@ public class Product extends Observable implements IProduct, Serializable
 	{
 		this.size = size;
 
+		this.setChanged();
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
@@ -487,6 +492,7 @@ public class Product extends Observable implements IProduct, Serializable
 	{
 		this.threeMonthSupply = threeMonthSupply;
 
+		this.setChanged();
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
