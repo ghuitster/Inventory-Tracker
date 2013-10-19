@@ -128,13 +128,12 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 		// Create a test label to work out columns per page
 		codeEAN = new BarcodeEAN();
 		codeEAN.setCodeType(Barcode.UPCA);
-		codeEAN.setFont(basefont);
 		codeEAN.setSize(fontSize);
 		codeEAN.setBaseline(fontSize);
 		codeEAN.setBarHeight(fontSize * this.BAR_HEIGHT_MULTIPLE);
+		codeEAN.setFont(basefont);
 		codeEAN.setCode("555555555555"); // Use fives to give uniform character
 											// spacing
-
 		codeImage = codeEAN.createImageWithBarcode(cb, null, null);
 		codeWidth = codeImage.getWidth();;
 		labelWidth = codeWidth + this.LABEL_WIDTH_PADDING;
