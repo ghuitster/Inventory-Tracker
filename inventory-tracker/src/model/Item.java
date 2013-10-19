@@ -19,7 +19,7 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	private IBarcode barcode;
 	private Date entryDate;
 	private Date expirationDate;
-	private Date exitTime;
+	private Date exitTime = null;
 	private IProductContainer container;
 
 	/**
@@ -39,13 +39,12 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	 * @param container
 	 */
 	public Item(IProduct product, IBarcode barcode, Date entryDate,
-			Date expirationDate, Date exitTime)
+			Date expirationDate)
 	{
 		this.product = product;
 		this.barcode = barcode;
 		this.entryDate = entryDate;
 		this.expirationDate = expirationDate;
-		this.exitTime = exitTime;
 	}
 
 	/*

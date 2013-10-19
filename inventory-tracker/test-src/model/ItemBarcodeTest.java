@@ -10,7 +10,7 @@ import org.junit.Test;
  * @author Michael
  * 
  */
-public class BarcodeTest
+public class ItemBarcodeTest
 {
 	/**
 	 * Test method for {@link model.Barcode#ableToSetNumber(java.lang.String)}.
@@ -20,7 +20,7 @@ public class BarcodeTest
 	{
 		String goodBCNum = "400000000001";
 		String badBCNum = "012345678912";
-		IBarcode goodBC = new Barcode(goodBCNum);
+		IBarcode goodBC = new ItemBarcode(goodBCNum);
 
 		assertFalse(goodBC.ableToSetNumber(badBCNum));
 		assertTrue(goodBC.ableToSetNumber(goodBCNum));
@@ -34,7 +34,7 @@ public class BarcodeTest
 	{
 		String goodBCNum = "400000000001";
 		String goodBCNum2 = "400000000002";
-		IBarcode goodBC = new Barcode(goodBCNum);
+		IBarcode goodBC = new ItemBarcode(goodBCNum);
 
 		assertTrue(goodBCNum.equals(goodBC.getNumber()));
 		assertFalse(goodBCNum2.equals(goodBC.getNumber()));
@@ -52,8 +52,8 @@ public class BarcodeTest
 	{
 		String bcOneNum = "400000000001";
 		String bcTwoNum = "400000000002";
-		IBarcode one = new Barcode(bcOneNum);
-		IBarcode two = new Barcode(bcTwoNum);
+		IBarcode one = new ItemBarcode(bcOneNum);
+		IBarcode two = new ItemBarcode(bcTwoNum);
 
 		assertFalse(one.equals(two));
 		two.setNumber(bcOneNum);
@@ -68,7 +68,7 @@ public class BarcodeTest
 	{
 		String bcNum = "400000000001";
 		String empty = "";
-		IBarcode test = new Barcode(bcNum);
+		IBarcode test = new ItemBarcode(bcNum);
 
 		assertFalse(empty.equals(test.getNumber()));
 		assertTrue(bcNum.equals(test.getNumber()));
@@ -80,9 +80,9 @@ public class BarcodeTest
 	@Test
 	public final void testHashCode()
 	{
-		IBarcode goodBC = new Barcode("400000000001");
-		IBarcode badBC = new Barcode("012345678912");
-		IBarcode testBC = new Barcode("400000000001");
+		IBarcode goodBC = new ItemBarcode("400000000001");
+		IBarcode badBC = new ItemBarcode("012345678912");
+		IBarcode testBC = new ItemBarcode("400000000001");
 
 		assertTrue(goodBC.hashCode() == testBC.hashCode());
 		assertFalse(badBC.hashCode() == testBC.hashCode());
@@ -98,9 +98,9 @@ public class BarcodeTest
 		String badNum1 = "012345678912";
 		String badNum2 = "42345678901234567890";
 
-		assertFalse(Barcode.isValid(badNum1));
-		assertFalse(Barcode.isValid(badNum2));
-		assertTrue(Barcode.isValid(goodNum));
+		assertFalse(ItemBarcode.isValid(badNum1));
+		assertFalse(ItemBarcode.isValid(badNum2));
+		assertTrue(ItemBarcode.isValid(goodNum));
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class BarcodeTest
 	{
 		String goodBCNum1 = "400000000001";
 		String goodBCNum2 = "400000000002";
-		IBarcode goodBC = new Barcode(goodBCNum1);
+		IBarcode goodBC = new ItemBarcode(goodBCNum1);
 
 		assertFalse(goodBCNum2.equals(goodBC.getNumber()));
 		goodBC.setNumber(goodBCNum2);
@@ -126,7 +126,7 @@ public class BarcodeTest
 	{
 		String goodBCNum = "400000000001";
 		String test = "Barcode [number=400000000001]";
-		IBarcode goodBC = new Barcode(goodBCNum);
+		IBarcode goodBC = new ItemBarcode(goodBCNum);
 
 		assertFalse(goodBCNum.equals(goodBC.toString()));
 		assertTrue(test.equals(goodBC.toString()));
