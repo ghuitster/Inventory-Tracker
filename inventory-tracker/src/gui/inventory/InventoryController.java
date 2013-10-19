@@ -454,7 +454,7 @@ public class InventoryController extends Controller implements
 		ProductContainerData selectedContainer =
 				getView().getSelectedProductContainer();
 		this.selectedTreeNode = selectedContainer;
-		if(selectedContainer != null)
+		if(selectedTreeNode != null && selectedTreeNode != this.treeRoot)
 		{
 			NSA.getInstance().populateProductData((IProductContainer)selectedTreeNode.getTag());
 			NSA.getInstance().populateItemData((IProductContainer)selectedTreeNode.getTag());

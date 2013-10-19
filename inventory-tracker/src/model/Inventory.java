@@ -255,7 +255,10 @@ public class Inventory extends Observable implements IInventory, Serializable
 	public void removeAllStorageUnits()
 	{
 		for(IStorageUnit unit : storageUnits)
+		{
+			this.setChanged();
 			this.notifyObservers(new ObservableArgs(unit, UpdateType.REMOVED));
+		}
 		
 		this.storageUnits.clear();
 	}
@@ -272,6 +275,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 					"Passed StorageUnit was not found");
 
 		this.storageUnits.remove(storageUnit);
+		this.setChanged();
 		this.notifyObservers(new ObservableArgs(storageUnit, UpdateType.REMOVED));
 	}
 
@@ -328,6 +332,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 		if(obsArg.getChangedObj() instanceof IItem
 				&& obsArg.getUpdateType() == UpdateType.REMOVED)
 			this.reportRemovedItem((IItem)obsArg.getChangedObj());
+		this.setChanged();
 		this.notifyObservers(obsArg);
 	}
 
