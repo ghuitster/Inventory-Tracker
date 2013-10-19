@@ -196,22 +196,24 @@ public class NSA implements Observer
 
 	public void populateProductContainers()
 	{
+		int index = 0;
 		for(IStorageUnit unit : inventory.getAllStorageUnits())
 		{
-			addProductContainersRecursively(root, unit);
+			addProductContainersRecursively(root, unit, index++);
 		}
 		inventoryView.setProductContainers(root);
 	}
 	
 	public void addProductContainersRecursively(ProductContainerData parent,
-			IProductContainer unit)
+			IProductContainer unit, int index)
 	{
 		verifyObjTag(unit);
-		ProductContainerData child = new ProductContainerData(unit.getName()); 
-		parent.addChild(child);
+		ProductContainerData child = (ProductContainerData)unit.getTag();
+		inventoryView.insertProductContainer(parent, child, index);
+		int childIndex = 0;
 		for(IProductContainer container : unit.getAllProductGroups())
 		{
-			addProductContainersRecursively(child, container);
+			addProductContainersRecursively(child, container, childIndex++);
 		}
 	}
 
