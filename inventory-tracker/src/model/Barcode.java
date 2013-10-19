@@ -12,14 +12,6 @@ public abstract class Barcode implements Serializable, IBarcode
 {
 	// Variables
 	private static final long serialVersionUID = -4409370215399749663L;
-
-	/**
-	 * @pre number must not be null
-	 * @param number string of the barcode number to validate
-	 * @return true if valid number
-	 */
-	public abstract boolean isValid(String number);
-
 	private String number;
 
 	/**
@@ -37,17 +29,7 @@ public abstract class Barcode implements Serializable, IBarcode
 	 * @see model.IBarcode#ableToSetNumber(java.lang.String)
 	 */
 	@Override
-	public boolean ableToSetNumber(String number)
-	{
-		boolean response = false;
-
-		if(number != null)
-		{
-			response = this.isValid(number);
-		}
-
-		return response;
-	}
+	public abstract boolean ableToSetNumber(String number);
 
 	/*
 	 * (non-Javadoc)

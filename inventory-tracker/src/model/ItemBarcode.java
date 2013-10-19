@@ -28,13 +28,29 @@ public class ItemBarcode extends Barcode
 	 * @param number string of the ItemBarcode number to validate
 	 * @return true if valid number
 	 */
-	@Override
-	public boolean isValid(String number)
+	public static boolean isValid(String number)
 	{
 		boolean response = false;
 
 		if(number.matches("4[0-9]{11}"))
 			response = true;
+
+		return response;
+	}
+
+	/**
+	 * @param number the number to attempt to set
+	 * @return whether or not the number can be set
+	 */
+	@Override
+	public boolean ableToSetNumber(String number)
+	{
+		boolean response = false;
+
+		if(number != null)
+		{
+			response = ItemBarcode.isValid(number);
+		}
 
 		return response;
 	}

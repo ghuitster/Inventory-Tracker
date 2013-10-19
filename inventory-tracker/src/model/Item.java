@@ -60,7 +60,7 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 
 		if(barcode != null)
 		{
-			if(Barcode.isValid(barcode.getNumber()))
+			if(ItemBarcode.isValid(barcode.getNumber()))
 			{
 				response = true;
 			}
@@ -340,7 +340,7 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	public void setBarcode(IBarcode barcode)
 	{
 		this.barcode = barcode;
-		
+
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
@@ -360,7 +360,7 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 		this.entryDate = entryDate;
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -410,14 +410,19 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 				+ expirationDate + ", exitTime=" + exitTime + ", container="
 				+ container + "]";
 	}
-	
+
 	private Object tag;
+
 	@Override
 	public Object getTag()
-	{ return tag; }
+	{
+		return tag;
+	}
 
 	@Override
 	public void setTag(Object tag)
-	{ this.tag = tag; }
+	{
+		this.tag = tag;
+	}
 
 }

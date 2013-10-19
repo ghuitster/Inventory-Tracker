@@ -21,7 +21,7 @@ public class Product extends Observable implements IProduct, Serializable
 	private Amount size;
 	private int shelfLife;
 	private CountThreeMonthSupply threeMonthSupply;
-	private Set<IProductContainer> containers;
+	private final Set<IProductContainer> containers;
 
 	/**
 	 * @pre creationDate must be == the earliest EntryDate for any item of this
@@ -109,7 +109,7 @@ public class Product extends Observable implements IProduct, Serializable
 	{
 		boolean response = false;
 
-		if(Barcode.isValid(barcode.getNumber()))
+		if(ProductBarcode.isValid(barcode.getNumber()))
 			response = true;
 
 		return response;
@@ -210,7 +210,7 @@ public class Product extends Observable implements IProduct, Serializable
 	public void addContainer(IProductContainer productContainer)
 	{
 		this.containers.add(productContainer);
-		
+
 		if(this.countObservers() == 0)
 			this.addObserver(Inventory.getInstance());
 	}
@@ -400,7 +400,7 @@ public class Product extends Observable implements IProduct, Serializable
 	public void removeContainer(IProductContainer productContainer)
 	{
 		this.containers.remove(productContainer);
-		
+
 		if(this.getContainers().size() == 0)
 			this.deleteObservers();
 	}
@@ -413,9 +413,9 @@ public class Product extends Observable implements IProduct, Serializable
 	@Override
 	public void setBarcode(IBarcode barcode)
 	{
-		if(barcode != null && Barcode.isValid(barcode.getNumber()))
+		if(barcode != null && ProductBarcode.isValid(barcode.getNumber()))
 			this.barcode = barcode;
-		
+
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
@@ -428,7 +428,7 @@ public class Product extends Observable implements IProduct, Serializable
 	public void setCreationDate(Date creationDate)
 	{
 		this.creationDate = creationDate;
-		
+
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
@@ -441,7 +441,7 @@ public class Product extends Observable implements IProduct, Serializable
 	public void setDescription(IProductDescription description)
 	{
 		this.description = description;
-		
+
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
@@ -454,7 +454,7 @@ public class Product extends Observable implements IProduct, Serializable
 	public void setShelfLife(int shelfLife)
 	{
 		this.shelfLife = shelfLife;
-		
+
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
@@ -467,7 +467,7 @@ public class Product extends Observable implements IProduct, Serializable
 	public void setSize(UnitSize size)
 	{
 		this.size = size;
-		
+
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
@@ -480,7 +480,7 @@ public class Product extends Observable implements IProduct, Serializable
 	public void setThreeMonthSupply(CountThreeMonthSupply threeMonthSupply)
 	{
 		this.threeMonthSupply = threeMonthSupply;
-		
+
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
@@ -498,13 +498,17 @@ public class Product extends Observable implements IProduct, Serializable
 				+ threeMonthSupply + ", containers=" + containers + "]";
 	}
 
-	
 	private Object tag;
+
 	@Override
 	public Object getTag()
-	{ return tag; }
+	{
+		return tag;
+	}
 
 	@Override
 	public void setTag(Object tag)
-	{ this.tag = tag; }
+	{
+		this.tag = tag;
+	}
 }
