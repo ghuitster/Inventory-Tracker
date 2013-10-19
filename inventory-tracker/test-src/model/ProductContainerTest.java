@@ -17,7 +17,7 @@ public class ProductContainerTest
 	{
 		StorageUnit unit = new StorageUnit("test");
 		IProductContainer container =
-				new ProductGroup("test");
+				new ProductGroup("test", new ThreeMonthSupply(1.0f, UnitType.CHEVROLET));
 
 		assertTrue(container.ableToAddItem(new Item(null, null, null, null)));
 	}
@@ -27,7 +27,7 @@ public class ProductContainerTest
 	{
 		StorageUnit unit = new StorageUnit("test");
 		IProductContainer container =
-				new ProductGroup("test");
+				new ProductGroup("test", new ThreeMonthSupply(1.0f, UnitType.CHEVROLET));
 		IProduct product =
 				new Product(new Date(), "test", new ProductBarcode("400000000000"),
 						new CountUnitSize(3), 3, null);
@@ -43,9 +43,9 @@ public class ProductContainerTest
 	{
 		StorageUnit unit = new StorageUnit("test");
 		IProductContainer container =
-				new ProductGroup("test");
+				new ProductGroup("test", new ThreeMonthSupply(1.0f, UnitType.CHEVROLET));
 		IProductGroup group =
-				new ProductGroup("test");
+				new ProductGroup("test", new ThreeMonthSupply(1.0f, UnitType.CHEVROLET));
 		assertTrue(container.ableToAddProductGroup(group));
 		Set<IProductGroup> groups = container.getAllProductGroups();
 
@@ -58,7 +58,7 @@ public class ProductContainerTest
 	{
 		StorageUnit unit = new StorageUnit("test");
 		IProductContainer container =
-				new ProductGroup("test");
+				new ProductGroup("test", new ThreeMonthSupply(1.0f, UnitType.CHEVROLET));
 
 		assertTrue(container.ableToRemoveItem(new Item(null, null, null, null)));
 	}
@@ -68,7 +68,7 @@ public class ProductContainerTest
 	{
 		StorageUnit unit = new StorageUnit("test");
 		IProductContainer container =
-				new ProductGroup("test");
+				new ProductGroup("test", new ThreeMonthSupply(1.0f, UnitType.CHEVROLET));
 
 		IProduct product =
 				new Product(new Date(), "test", new ProductBarcode("400000000000"),
@@ -91,12 +91,12 @@ public class ProductContainerTest
 	{
 		StorageUnit unit = new StorageUnit("test");
 		IProductContainer container =
-				new ProductGroup("test");
+				new ProductGroup("test", new ThreeMonthSupply(1.0f, UnitType.CHEVROLET));
 		Product product =
 				new Product(new Date(), "test", new ProductBarcode("400000000000"),
 						new CountUnitSize(3), 3, null);
 		ProductGroup group =
-				new ProductGroup("test");
+				new ProductGroup("test", new ThreeMonthSupply(1.0f, UnitType.CHEVROLET));
 		group.addItem(new Item(product, new ProductBarcode("400000000000"),
 				new Date(), new Date()));
 		assertFalse(container.ableToRemoveProductGroup(group));
@@ -107,7 +107,7 @@ public class ProductContainerTest
 	{
 		StorageUnit unit = new StorageUnit("test");
 		IProductContainer container =
-				new ProductGroup("test");
+				new ProductGroup("test", new ThreeMonthSupply(1.0f, UnitType.CHEVROLET));
 
 		assertFalse(container.getAllItems() == null);
 	}
@@ -117,7 +117,7 @@ public class ProductContainerTest
 	{
 		StorageUnit unit = new StorageUnit("test");
 		IProductContainer container =
-				new ProductGroup("test");
+				new ProductGroup("test", new ThreeMonthSupply(1.0f, UnitType.CHEVROLET));
 
 		assertFalse(container.getAllProductGroups() == null);
 	}
@@ -127,7 +127,7 @@ public class ProductContainerTest
 	{
 		StorageUnit unit = new StorageUnit("test");
 		IProductContainer container =
-				new ProductGroup("test");
+				new ProductGroup("test", new ThreeMonthSupply(1.0f, UnitType.CHEVROLET));
 
 		assertFalse(container.getAllProducts() == null);
 	}

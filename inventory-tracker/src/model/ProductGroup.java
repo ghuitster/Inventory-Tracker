@@ -17,9 +17,10 @@ public class ProductGroup extends ProductContainer implements IProductGroup
 	 * @param container
 	 * @param threeMonthSupply
 	 */
-	public ProductGroup(String name)
+	public ProductGroup(String name, ThreeMonthSupply threeMonthSupply)
 	{
 		super(name);
+		this.threeMonthSupply = threeMonthSupply;
 	}
 
 	/*

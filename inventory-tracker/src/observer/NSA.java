@@ -270,7 +270,7 @@ public class NSA implements Observer
 	private void removeProductContainer(IProductContainer container)
 	{
 		inventoryView.deleteProductContainer
-		((ProductContainerData)container.getTag());
+			((ProductContainerData)container.getTag());
 		inventoryView.setProductContainers(root);
 	}
 	

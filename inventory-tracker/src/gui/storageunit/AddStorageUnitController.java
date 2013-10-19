@@ -18,7 +18,6 @@ public class AddStorageUnitController extends Controller implements
 {
 	
 	private IProductContainer workingContainer;
-	private IProductContainer containerParent;
 	
 	/**
 	 * Constructor.
@@ -31,13 +30,7 @@ public class AddStorageUnitController extends Controller implements
 
 		construct();
 		
-		if(selectedTreeNode == treeRoot)
-			workingContainer = new StorageUnit("");
-		else 
-		{
-			workingContainer = new ProductGroup("");
-			containerParent = (IProductContainer)selectedTreeNode.getTag();
-		}
+		workingContainer = new StorageUnit("");
 		getView().enableOK(false);
 	}
 
@@ -54,9 +47,7 @@ public class AddStorageUnitController extends Controller implements
 	{
 		try
 		{
-			if(workingContainer instanceof IStorageUnit)
-				Inventory.getInstance().addStorageUnit((IStorageUnit)workingContainer);
-			else containerParent.addProductGroup((IProductGroup)workingContainer);
+			Inventory.getInstance().addStorageUnit((IStorageUnit)workingContainer);
 		}
 		catch (Exception e) 
 		{ }
@@ -113,10 +104,8 @@ public class AddStorageUnitController extends Controller implements
 	public void valuesChanged()
 	{
 		workingContainer.setName(getView().getStorageUnitName());
-		if(this.containerParent == null)
-			getView().enableOK(Inventory.getInstance()
-					.ableToAddStorageUnit((IStorageUnit)workingContainer));
-		else getView().enableOK(containerParent
-				.ableToAddProductGroup((ProductGroup)workingContainer));
+		
+		getView().enableOK(Inventory.getInstance()
+				.ableToAddStorageUnit((IStorageUnit)workingContainer));
 	}
 }
