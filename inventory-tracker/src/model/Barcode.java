@@ -111,7 +111,7 @@ public abstract class Barcode implements Serializable, IBarcode
 	@Override
 	public String toString()
 	{
-		return "Barcode [number=" + number + "]";
+		return "" + this.number;
 	}
 
 }

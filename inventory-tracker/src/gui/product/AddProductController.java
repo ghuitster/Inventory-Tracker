@@ -6,11 +6,16 @@ import model.CountThreeMonthSupply;
 import model.IBarcode;
 import model.IProduct;
 import model.Product;
+import model.ProductBarcode;
+import gui.batches.AddItemBatchController;
+import gui.batches.IAddItemBatchController;
 import gui.common.Controller;
 import gui.common.IView;
 import gui.common.SizeUnits;
 
 import java.util.Date;
+
+import common.util.DateUtils;
 
 /**
  * Controller class for the add item view.
@@ -21,8 +26,11 @@ public class AddProductController extends Controller implements
 	private String descript = "";
 	private IBarcode barcode = null;
 	private Amount size = null;
+	private int sizeValue = 0;
+	private SizeUnits sizeUnits = SizeUnits.Count;
 	private int shelflife = 0;
 	private CountThreeMonthSupply cThreeMonthSupply = null;
+	private boolean submit = false;
 
 	/**
 	 * Constructor.
@@ -33,7 +41,8 @@ public class AddProductController extends Controller implements
 	public AddProductController(IView view, String barcode)
 	{
 		super(view);
-
+		
+		this.barcode = new ProductBarcode(barcode);
 		construct();
 	}
 
@@ -48,9 +57,9 @@ public class AddProductController extends Controller implements
 	@Override
 	public void addProduct()
 	{
-		//TODO
-		Date creationDate = new Date();
-		IProduct product = new Product(creationDate,this.descript, this.barcode, this.size, this.shelflife, this.cThreeMonthSupply);
+		barcode = new ProductBarcode(this.getView().getBarcode());
+		IProduct myProduct = new Product(DateUtils.currentDate(), this.descript, this.barcode, this.size, this.shelflife, this.cThreeMonthSupply);
+		AddItemBatchController.product = myParent;
 	}
 
 	/**
@@ -66,9 +75,22 @@ public class AddProductController extends Controller implements
 	@Override
 	protected void enableComponents()
 	{
-//		getView().
 		if(getView().getSizeUnit() == SizeUnits.Count)
+		{
 			getView().enableSizeValue(false);
+			getView().setSizeValue("1");
+		}
+		else
+		{
+			getView().enableSizeValue(true);
+			getView().setSizeValue("0");
+		}
+		getView().enableBarcode(false);
+		
+		if(submit)
+		{
+			getView().enableOK(submit);
+		}
 	}
 
 	/**
@@ -98,7 +120,12 @@ public class AddProductController extends Controller implements
 	@Override
 	protected void loadValues()
 	{
-		//TODO
+		this.getView().setBarcode(this.barcode.toString());
+		this.getView().setDescription(this.descript);
+		this.getView().setShelfLife("" + this.shelflife);
+		this.getView().setSizeUnit(this.sizeUnits);
+		this.getView().setSizeValue("" + this.sizeValue);
+		this.getView().setSupply("" + this.cThreeMonthSupply.getAmount());
 	}
 
 	/**
@@ -108,7 +135,22 @@ public class AddProductController extends Controller implements
 	@Override
 	public void valuesChanged()
 	{
-		//TODO
+		this.cThreeMonthSupply = new CountThreeMonthSupply(Integer.parseInt(getView().getSupply()));
+		this.descript = getView().getDescription();
+		this.sizeValue = Integer.parseInt(getView().getSizeValue());
+		this.sizeUnits = getView().getSizeUnit();
+		
+		this.shouldOKBeEnabled();
+		this.enableComponents();
 	}
 
+	private void shouldOKBeEnabled()
+	{
+		if(this.descript.isEmpty())
+			submit = false;
+		else if(this.sizeUnits != SizeUnits.Count && sizeValue == 0)
+			submit = false;
+		else
+			submit = true;
+	}
 }
