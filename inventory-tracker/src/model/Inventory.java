@@ -10,6 +10,8 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import common.util.DateUtils;
+
 import model.exception.InvalidNameException;
 
 /**
@@ -280,7 +282,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	 */
 	private void reportRemovedItem(IItem item)
 	{
-		Date current = new Date();
+		Date current = DateUtils.currentDate();
 		item.setExitTime(current);
 		item.setContainer(null);
 

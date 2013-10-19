@@ -6,11 +6,14 @@ import gui.inventory.ProductContainerData;
 import gui.item.ItemData;
 import gui.product.ProductData;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 
+import common.util.DateUtils;
 import model.*;
 
 /**
@@ -66,6 +69,8 @@ public class NSA implements Observer
 	{
 		ObservableArgs obsArgs = (ObservableArgs)arg;
 		
+		verifyObjTag(obsArgs.getChangedObj());
+		
 		switch(obsArgs.getUpdateType())
 		{
 		case ADDED:
@@ -81,40 +86,85 @@ public class NSA implements Observer
 
 	}
 
-	private void objectAdded(Object changedObj)
+	private void verifyObjTag(Object changedObj)
 	{
 		if(changedObj instanceof IItem)
 		{
-			
+			IItem item = (IItem)changedObj;
+			ItemData itemData;
+			if(item.getTag() != null)
+				itemData = (ItemData)item.getTag();
+			else itemData = new ItemData();
+			updateItemData(item, itemData);
 		}
 		else if(changedObj instanceof IProduct)
 		{
-			
+			IProduct product = (IProduct)changedObj;
+			ProductData productData;
+			if(product.getTag() != null)
+				productData = (ProductData)product.getTag();
+			else productData = new ProductData();
+			updateProductData(product, productData);
 		}
 		else if(changedObj instanceof IProductContainer)
 		{
-			
+			IProductContainer productContainer = (IProductContainer)changedObj;
+			ProductContainerData pcData = 
+					(ProductContainerData)productContainer.getTag();
+			if(productContainer.getTag() != null)
+				pcData = (ProductContainerData)productContainer.getTag();
+			else pcData = new ProductContainerData();
+			updateProductContainerData(productContainer, pcData);
+		}
+	}
+
+	private void objectAdded(Object changedObj)
+	{
+		if(changedObj instanceof IItem || changedObj instanceof IProduct)
+		{
+			itemOrProductUpdated(changedObj);
+		}
+		else if(changedObj instanceof IProductContainer)
+		{
+			IProductContainer productContainer = (IProductContainer)changedObj;
+			addProductContainer(productContainer);
 		}
 		
 	}
 
 	private void objectRemoved(Object changedObj)
 	{
-		
-		
+		if(changedObj instanceof IItem || changedObj instanceof IProduct)
+		{
+			itemOrProductUpdated(changedObj);
+		}
+		else if(changedObj instanceof IProductContainer)
+		{
+			IProductContainer productContainer = (IProductContainer)changedObj;
+			removeProductContainer(productContainer);
+		}
 	}
 
 	private void objectUpdated(Object changedObj)
 	{
+		if(changedObj instanceof IItem || changedObj instanceof IProduct)
+		{
+			itemOrProductUpdated(changedObj);
+		}
+		else if (changedObj instanceof IProductContainer)
+		{
+			IProductContainer productContainer = (IProductContainer)changedObj;
+			updateProductContainer(productContainer);
+		}
+	}
+	
+	private void itemOrProductUpdated(Object changedObj)
+	{
 		if (changedObj instanceof IItem)
 		{
 			IItem item = (IItem)changedObj;
-			ItemData itemData = (ItemData)item.getTag();
 			
-			updateItemData(item, itemData);
-			
-			if(item.getContainer() == inventoryView.
-					getSelectedProductContainer().getTag())
+			if(itemIsCurrentlyVisible(item))
 			{
 				populateItemData(item.getContainer());
 			}
@@ -122,27 +172,44 @@ public class NSA implements Observer
 		else if (changedObj instanceof IProduct)
 		{
 			IProduct product = (IProduct)changedObj;
-			ProductData productData = (ProductData)product.getTag();
-			
-			updateProductData(product, productData);
 					
-			if(product.getContainers().contains(inventoryView.
-					getSelectedProductContainer().getTag()))
+			if(productIsCurrentlyVisible(product))
 			{
 				populateProductData((IProductContainer)inventoryView.
 						getSelectedProductContainer().getTag());
 			}
 			
 		}
-		else if (changedObj instanceof IProductContainer)
+	}
+
+	private boolean productIsCurrentlyVisible(IProduct product)
+	{
+		return product.getContainers().contains(inventoryView.
+				getSelectedProductContainer().getTag());
+	}
+
+	private boolean itemIsCurrentlyVisible(IItem item)
+	{
+		return item.getContainer() == inventoryView.
+				getSelectedProductContainer().getTag();
+	}
+
+	public void populateProductContainers()
+	{
+		for(IStorageUnit unit : inventory.getAllStorageUnits())
 		{
-			IProductContainer productContainer = (IProductContainer)changedObj;
-			ProductContainerData pcData = 
-					(ProductContainerData)productContainer.getTag();
-			
-			updateProductContainerData(productContainer, pcData);
-			
-			updateProductContainer(productContainer);
+			addProductContainersRecursively(root, unit);
+		}
+	}
+	
+	private void addProductContainersRecursively(ProductContainerData parent,
+			IProductContainer unit)
+	{
+		ProductContainerData child = new ProductContainerData(unit.getName()); 
+		parent.addChild(child);
+		for(IProductContainer container : unit.getAllProductGroups())
+		{
+			addProductContainersRecursively(child, container);
 		}
 	}
 
@@ -168,23 +235,70 @@ public class NSA implements Observer
 	
 	private void addProductContainer(IProductContainer container)
 	{
-		
+		if(container instanceof IStorageUnit)
+		{
+			root.addChild((ProductContainerData)container.getTag());
+		}
+		else
+		{
+			IProductGroup pg = (IProductGroup)container;
+			ProductContainerData parent = (ProductContainerData)pg.
+					getContainer().getTag();
+			String name = pg.getName();
+			int i;
+			for(i = 0; i < parent.getChildCount(); i++)
+			{
+				if(parent.getChild(i).getName().compareTo(name) > 0)
+					break;
+			}
+			inventoryView.insertProductContainer(parent, 
+					(ProductContainerData)pg.getTag(), i);
+		}
 	}
 	
 	private void removeProductContainer(IProductContainer container)
 	{
-		
+		inventoryView.deleteProductContainer
+		((ProductContainerData)container.getTag());
 	}
 	
 	private void updateProductContainer(IProductContainer container)
 	{
+		ProductContainerData pcData = 
+				(ProductContainerData)container.getTag();
 		
+		ProductContainerData parent;
+		
+		int index = 0;
+		if(container instanceof IStorageUnit)
+			parent = root;
+		else
+			parent = (ProductContainerData)((IProductGroup)container)
+				.getContainer().getTag();
+		
+		boolean passedSelf = false;
+		for(index = 0; index < root.getChildCount(); index++)
+		{
+			if(!parent.getChild(index).getName().equals(pcData.getName()))
+			{
+				if(parent.getChild(index).getName()
+						.compareTo(pcData.getName()) > 0)
+					break;
+			}
+			else passedSelf = true;
+		}
+		if(passedSelf)
+			index--;
+		
+		inventoryView.renameProductContainer(pcData, 
+				container.getName(), index);
 	}
 
 	private void updateProductContainerData(IProductContainer productContainer,
 			ProductContainerData pcData)
 	{
 		pcData.setName(productContainer.getName());
+		productContainer.setTag(pcData);
 	}
 
 	private void updateProductData(IProduct product, ProductData productData)
@@ -194,6 +308,7 @@ public class NSA implements Observer
 		productData.setShelfLife("" + product.getShelfLife());
 		productData.setSize(product.getSize().toString());
 		productData.setSupply(product.getThreeMonthSupply().toString());
+		product.setTag(productData);
 	}
 
 	private void updateItemData(IItem item, ItemData itemData)
@@ -204,6 +319,8 @@ public class NSA implements Observer
 		if(item.getContainer() instanceof IProductGroup)
 			itemData.setProductGroup(item.getContainer().getName());
 		itemData.setStorageUnit(item.getContainer().getStorageUnit().getName());
+		item.setTag(itemData);
 	}
+
 
 }
