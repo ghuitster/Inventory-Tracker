@@ -410,7 +410,7 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 				+ container + "]";
 	}
 
-	private Object tag;
+	private transient Object tag;
 
 	@Override
 	public Object getTag()

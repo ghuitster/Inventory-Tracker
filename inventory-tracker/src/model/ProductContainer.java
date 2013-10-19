@@ -132,6 +132,7 @@ public abstract class ProductContainer extends Observable implements IProductCon
 			container.addItem(item);
 		}
 		
+		this.setChanged();
 		this.notifyObservers(new ObservableArgs(item, UpdateType.ADDED));
 	}
 
@@ -163,6 +164,7 @@ public abstract class ProductContainer extends Observable implements IProductCon
 				}
 		}
 		
+		this.setChanged();
 		this.notifyObservers(new ObservableArgs(product, UpdateType.ADDED));
 	}
 
@@ -176,6 +178,7 @@ public abstract class ProductContainer extends Observable implements IProductCon
 		this.productGroups.add(productGroup);
 		productGroup.setContainer(this);
 		
+		this.setChanged();
 		this.notifyObservers(new ObservableArgs(productGroup, UpdateType.ADDED));
 	}
 
@@ -241,6 +244,7 @@ public abstract class ProductContainer extends Observable implements IProductCon
 		item.setContainer(null);
 		this.items.remove(item);
 		
+		this.setChanged();
 		this.notifyObservers(new ObservableArgs(item, UpdateType.REMOVED));
 	}
 
@@ -254,6 +258,7 @@ public abstract class ProductContainer extends Observable implements IProductCon
 		product.removeContainer(this);
 		this.products.remove(product);
 		
+		this.setChanged();
 		this.notifyObservers(new ObservableArgs(product, UpdateType.REMOVED));
 	}
 
@@ -265,6 +270,7 @@ public abstract class ProductContainer extends Observable implements IProductCon
 	public void removeProductGroup(IProductGroup productGroup)
 	{
 		this.productGroups.remove(productGroup);
+		this.setChanged();
 		this.notifyObservers(new ObservableArgs(productGroup, UpdateType.REMOVED));
 	}
 
@@ -276,6 +282,7 @@ public abstract class ProductContainer extends Observable implements IProductCon
 	public void setName(String name)
 	{
 		this.name = name;
+		this.setChanged();
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
@@ -312,7 +319,7 @@ public abstract class ProductContainer extends Observable implements IProductCon
 
 		targetContainer.addItem(item);
 		item.setContainer(targetContainer);
-		this.removeItem(item);
+		this.items.remove(item);
 	}
 	
 	public IStorageUnit getStorageUnit()
@@ -325,7 +332,7 @@ public abstract class ProductContainer extends Observable implements IProductCon
 		return (IStorageUnit)container;
 	}
 	
-	private Object tag;
+	private transient Object tag;
 	@Override
 	public Object getTag()
 	{ return tag; }

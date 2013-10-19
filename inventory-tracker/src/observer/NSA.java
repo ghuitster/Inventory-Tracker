@@ -241,14 +241,16 @@ public class NSA implements Observer
 	
 	public void addProductContainer(IProductContainer container)
 	{
-		IProductGroup pg = (IProductGroup)container;
 		ProductContainerData parent;
 		if(container instanceof IStorageUnit)
 			parent = root;
 		else
+		{
+			IProductGroup pg = (IProductGroup)container;
 			parent = (ProductContainerData)pg.getContainer().getTag();
+		}
 		
-		String name = pg.getName();
+		String name = container.getName();
 		int i;
 		for(i = 0; i < parent.getChildCount(); i++)
 		{
@@ -256,7 +258,7 @@ public class NSA implements Observer
 				break;
 		}
 		inventoryView.insertProductContainer(parent, 
-				(ProductContainerData)pg.getTag(), i);
+				(ProductContainerData)container.getTag(), i);
 		
 	}
 	
@@ -303,6 +305,7 @@ public class NSA implements Observer
 	{
 		pcData.setName(productContainer.getName());
 		productContainer.setTag(pcData);
+		pcData.setTag(productContainer);
 	}
 
 	private void updateProductData(IProduct product, ProductData productData)
@@ -313,6 +316,7 @@ public class NSA implements Observer
 		productData.setSize(product.getSize().toString());
 		productData.setSupply(product.getThreeMonthSupply().toString());
 		product.setTag(productData);
+		productData.setTag(product);
 	}
 
 	private void updateItemData(IItem item, ItemData itemData)
@@ -324,6 +328,7 @@ public class NSA implements Observer
 			itemData.setProductGroup(item.getContainer().getName());
 		itemData.setStorageUnit(item.getContainer().getStorageUnit().getName());
 		item.setTag(itemData);
+		itemData.setTag(item);
 	}
 
 

@@ -504,7 +504,7 @@ public class Product extends Observable implements IProduct, Serializable
 				+ threeMonthSupply + ", containers=" + containers + "]";
 	}
 
-	private Object tag;
+	private transient Object tag;
 
 	@Override
 	public Object getTag()
