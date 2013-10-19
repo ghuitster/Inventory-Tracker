@@ -223,6 +223,9 @@ public class AddItemBatchController extends Controller implements
 				if(pd.getBarcode().equals(barcode))
 					adding = pd;
 
+			if(adding == null)
+				adding = new ProductData();
+
 			adding.setCount(adding.getCount() + count);
 			products.add(product);
 		}
@@ -322,7 +325,12 @@ public class AddItemBatchController extends Controller implements
 			if(((ProductContainer) target.getTag()).ableToAddItem(ii))
 				((ProductContainer) target.getTag()).addItem(ii);
 
+		System.out.println(((ProductContainer) target.getTag()).getAllItems());
+		System.out.println(((ProductContainer) target.getTag())
+				.getAllProducts());
+
 		BarcodeLabelPage printer = new BarcodeLabelPage(items);
+
 		try
 		{
 			printer.createPDF();
