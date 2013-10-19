@@ -344,9 +344,9 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void selectedProductChanged()
 	{
+		ItemData[] temp = new ItemData[displayItems.size()];
 		getView().setItems(
-				(ItemData[]) displayItems.get(getView().getSelectedProduct())
-						.toArray());
+				displayItems.get(getView().getSelectedProduct()).toArray(temp));
 
 		enableComponents();
 	}
