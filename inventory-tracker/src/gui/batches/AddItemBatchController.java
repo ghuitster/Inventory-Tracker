@@ -161,10 +161,8 @@ public class AddItemBatchController extends Controller implements
 		if(productExistsInSystem)
 		{
 			if(productDataExistsInDialog)
-			{
 				addingProductData.setCount(Integer.parseInt(addingProductData
 						.getCount()) + count + "");
-			}
 			else
 			{
 				addingProductData = createProductData(addingProduct);
@@ -242,9 +240,7 @@ public class AddItemBatchController extends Controller implements
 				displayItems.put(addingProductData, tempList);
 			}
 			else
-			{
 				displayItems.get(addingProductData).add(tempItemData);
-			}
 		}
 
 		count = 1;
@@ -319,7 +315,12 @@ public class AddItemBatchController extends Controller implements
 		{
 			printer.createPDF();
 		}
-		catch(DocumentException | IOException e)
+		catch(DocumentException e)
+		{
+			getView().displayErrorMessage(
+					"There was a barcode label creation error");
+		}
+		catch(IOException e)
 		{
 			getView().displayErrorMessage(
 					"There was a barcode label creation error");
