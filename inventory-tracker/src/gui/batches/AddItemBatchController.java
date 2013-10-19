@@ -198,7 +198,7 @@ public class AddItemBatchController extends Controller implements
 			Calendar expiration = Calendar.getInstance();
 			expiration.set(Calendar.MONTH, entryDate.getMonth());
 			expiration.set(Calendar.DAY_OF_MONTH, entryDate.getDate());
-			expiration.set(Calendar.YEAR, entryDate.getYear());
+			expiration.set(Calendar.YEAR, entryDate.getYear() + 1900);
 			expiration.add(Calendar.MONTH, addingProduct.getShelfLife());
 			IItem tempItem = null;
 

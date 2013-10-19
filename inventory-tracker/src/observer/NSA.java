@@ -164,11 +164,14 @@ public class NSA implements Observer
 		{
 			if(inventoryView.getSelectedProductContainer() != null)
 			{
-				populateProductData((IProductContainer)inventoryView.
-						getSelectedProductContainer().getTag());
+				IProductContainer container = (IProductContainer)inventoryView.
+						getSelectedProductContainer().getTag();
+				populateProductData(container);
 				
 				IItem item = (IItem)changedObj;
 				inventoryView.selectProduct((ProductData)item.getProduct().getTag());
+				
+				populateItemData(container);
 			}
 		}
 		else if (changedObj instanceof IProduct)
