@@ -4,8 +4,19 @@ package gui.batches;
 import gui.common.Controller;
 import gui.common.IView;
 import gui.inventory.ProductContainerData;
+import gui.item.ItemData;
+import gui.product.ProductData;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import model.IItem;
+import model.IProduct;
+import model.Inventory;
+import model.Product;
+import model.ProductGroup;
+import model.StorageUnit;
 
 import common.util.DateUtils;
 
@@ -21,8 +32,11 @@ public class AddItemBatchController extends Controller implements
 	private int count;
 	private boolean validCount;
 	private String barcode;
-	private int undosEnabled;
-	private int redosEnabled;
+	private final List<ItemData> displayItems;
+	private final List<ProductData> displayProducts;
+	private final List<IItem> items;
+	private final List<IProduct> products;
+	public static IProduct product;
 
 	/**
 	 * Constructor.
@@ -35,13 +49,23 @@ public class AddItemBatchController extends Controller implements
 	{
 		super(view);
 		this.target = target;
-		count = Integer.parseInt(((IAddItemBatchView) (_view)).getCount());
-		entryDate = ((IAddItemBatchView) (_view)).getEntryDate();
-		useBarcodeScanner = ((IAddItemBatchView) (_view)).getUseScanner();
+		count = 1;
+		entryDate = ((IAddItemBatchView) _view).getEntryDate();
+		useBarcodeScanner = true;
 		validCount = true;
-		barcode = ((IAddItemBatchView) (_view)).getBarcode();
+		barcode = "";
+		displayItems = new ArrayList<ItemData>();
+		displayProducts = new ArrayList<ProductData>();
+		items = new ArrayList<IItem>();
+		products = new ArrayList<IProduct>();
+		product = null;
 
 		construct();
+	}
+
+	public void setProduct(Product product)
+	{
+		this.product = product;
 	}
 
 	/**
@@ -51,10 +75,49 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void addItem()
 	{
-		undosEnabled++;
-		// if(product doesn't exist in system) open the AddProductView;
+		boolean found = false;
+
+		for(IProduct ip: Inventory.getInstance().getAllProducts())
+			if(ip.getBarcode().getNumber().equals(barcode))
+				found = true;
+
+		if(!found)
+		{
+			((IAddItemBatchView) _view).displayAddProductView();
+			// get the product from the AddProductView
+			// create the Product and the ProductData
+		}
+		else
+		{
+			ProductData adding = null;
+
+			for(ProductData pd: displayProducts)
+				if(pd.getBarcode().equals(barcode))
+					adding = pd;
+
+			adding.setCount(adding.getCount() + count);
+
+			for(int i = 0; i < count; i++)
+			{
+				ItemData temp = new ItemData();
+				temp.setBarcode(barcode);
+				temp.setEntryDate(entryDate);
+				temp.setExpirationDate(entryDate); // FIX THIS
+				temp.setProductGroup("");
+
+				if(target.getTag() instanceof ProductGroup)
+					temp.setProductGroup(((ProductGroup) target.getTag())
+							.getName());
+
+				temp.setStorageUnit(((StorageUnit) target.getTag()).getName());
+				temp.setTag(null);
+				displayItems.add(temp);
+			}
+		}
+
 		// add the product to the products section
-		// add the item to some temp list to be added when the user clicks done
+		// add the item to some temp list to be added when the user clicks
+		// done
 		enableComponents();
 	}
 
@@ -65,7 +128,7 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void barcodeChanged()
 	{
-		barcode = ((IAddItemBatchView) (_view)).getBarcode();
+		barcode = ((IAddItemBatchView) _view).getBarcode();
 
 		if(useBarcodeScanner)
 			addItem();
@@ -82,7 +145,7 @@ public class AddItemBatchController extends Controller implements
 	{
 		try
 		{
-			count = Integer.parseInt(((IAddItemBatchView) (_view)).getCount());
+			count = Integer.parseInt(((IAddItemBatchView) _view).getCount());
 			validCount = true;
 
 		}
@@ -125,12 +188,12 @@ public class AddItemBatchController extends Controller implements
 	{
 		if(validCount && !barcode.isEmpty()
 				&& !entryDate.after(DateUtils.currentDate()))
-			((IAddItemBatchView) (_view)).enableItemAction(true);
+			((IAddItemBatchView) _view).enableItemAction(true);
 		else
-			((IAddItemBatchView) (_view)).enableItemAction(false);
+			((IAddItemBatchView) _view).enableItemAction(false);
 
-		((IAddItemBatchView) (_view)).enableUndo(undosEnabled > 0);
-		((IAddItemBatchView) (_view)).enableRedo(redosEnabled > 0);
+		((IAddItemBatchView) _view).enableUndo(false);
+		((IAddItemBatchView) _view).enableRedo(false);
 
 	}
 
@@ -141,7 +204,7 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void entryDateChanged()
 	{
-		entryDate = ((IAddItemBatchView) (_view)).getEntryDate();
+		entryDate = ((IAddItemBatchView) _view).getEntryDate();
 		enableComponents();
 	}
 
@@ -164,9 +227,10 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	protected void loadValues()
 	{
-		// Use barcode scanner check box is filled
-		// Entry Date field set to today
-		// Count field set to 1
+		((IAddItemBatchView) _view).setBarcode(barcode);
+		((IAddItemBatchView) _view).setCount(count + "");
+		((IAddItemBatchView) _view).setEntryDate(entryDate);
+		((IAddItemBatchView) _view).setUseScanner(useBarcodeScanner);
 	}
 
 	/**
@@ -176,9 +240,8 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void redo()
 	{
-		undosEnabled++;
-		redosEnabled--;
-		enableComponents();
+		return;
+		// don't have to implement yet
 	}
 
 	/**
@@ -188,6 +251,8 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void selectedProductChanged()
 	{
+		((IAddItemBatchView) _view).getSelectedProduct();
+
 		// change what items are displayed in the Items pane
 		enableComponents();
 	}
@@ -199,9 +264,8 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void undo()
 	{
-		undosEnabled--;
-		redosEnabled++;
-		enableComponents();
+		return;
+		// don't have to implement yet
 	}
 
 	/**
@@ -211,7 +275,7 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void useScannerChanged()
 	{
-		useBarcodeScanner = ((IAddItemBatchView) (_view)).getUseScanner();
+		useBarcodeScanner = ((IAddItemBatchView) _view).getUseScanner();
 		enableComponents();
 	}
 }
