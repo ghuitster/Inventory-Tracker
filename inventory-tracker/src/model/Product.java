@@ -243,43 +243,6 @@ public class Product extends Observable implements IProduct, Serializable
 		}
 		else if(!barcode.equals(other.barcode))
 			return false;
-		if(containers == null)
-		{
-			if(other.containers != null)
-				return false;
-		}
-		else if(!containers.equals(other.containers))
-			return false;
-		if(creationDate == null)
-		{
-			if(other.creationDate != null)
-				return false;
-		}
-		else if(!creationDate.equals(other.creationDate))
-			return false;
-		if(description == null)
-		{
-			if(other.description != null)
-				return false;
-		}
-		else if(!description.equals(other.description))
-			return false;
-		if(shelfLife != other.shelfLife)
-			return false;
-		if(size == null)
-		{
-			if(other.size != null)
-				return false;
-		}
-		else if(!size.equals(other.size))
-			return false;
-		if(threeMonthSupply == null)
-		{
-			if(other.threeMonthSupply != null)
-				return false;
-		}
-		else if(!threeMonthSupply.equals(other.threeMonthSupply))
-			return false;
 		return true;
 	}
 	
