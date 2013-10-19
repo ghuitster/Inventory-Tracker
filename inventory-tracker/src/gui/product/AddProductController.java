@@ -11,12 +11,9 @@ import model.ProductBarcode;
 import model.UnitSize;
 import model.UnitType;
 import gui.batches.AddItemBatchController;
-import gui.batches.IAddItemBatchController;
 import gui.common.Controller;
 import gui.common.IView;
 import gui.common.SizeUnits;
-
-import java.util.Date;
 
 import common.util.DateUtils;
 
@@ -67,7 +64,8 @@ public class AddProductController extends Controller implements
 			this.size = new CountUnitSize((int) this.sizeValue);
 		else
 			this.size = new UnitSize(this.sizeValue, this.unitType);
-		IProduct myProduct = new Product(DateUtils.currentDate(), this.descript, this.barcode, this.size, this.shelflife, this.cThreeMonthSupply);
+		IProduct myProduct = new Product(DateUtils.currentDate(), this.descript
+				, this.barcode, this.size, this.shelflife, this.cThreeMonthSupply);
 		AddItemBatchController.product = myProduct;
 	}
 
@@ -182,11 +180,13 @@ public class AddProductController extends Controller implements
 	{
 		try
 		{
-			this.cThreeMonthSupply = new CountThreeMonthSupply(Integer.parseInt(getView().getSupply()));
+			this.cThreeMonthSupply = new CountThreeMonthSupply(Integer.parseInt
+					(getView().getSupply()));
 		}
 		catch(NumberFormatException e)
 		{
-			this.getView().displayErrorMessage("The three month supply must be a whole number");
+			this.getView().displayErrorMessage("The three month supply must"
+					+ " be a whole number");
 		}
 		this.descript = getView().getDescription();
 		this.sizeUnits = getView().getSizeUnit();
@@ -197,7 +197,8 @@ public class AddProductController extends Controller implements
 			}
 			catch(NumberFormatException e)
 			{
-				getView().displayErrorMessage("For unit size type Count, the value must be a whole number");
+				getView().displayErrorMessage("For unit size type Count, the "
+						+ "value must be a whole number");
 			}
 		else
 		{
