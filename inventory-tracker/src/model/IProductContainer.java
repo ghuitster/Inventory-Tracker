@@ -31,6 +31,8 @@ public interface IProductContainer extends IObservable, ITaggable, Comparable<IP
 	 */
 	public abstract boolean ableToAddProduct(IProduct product);
 
+	public boolean ableToAddProductGroupNamed(String name);
+	
 	/**
 	 * @pre productGroup.name != empty
 	 * @pre productGroup.container != empty

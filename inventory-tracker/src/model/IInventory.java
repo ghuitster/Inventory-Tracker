@@ -22,6 +22,8 @@ public interface IInventory extends Observer, IObservable
 	 */
 	public abstract boolean ableToAddStorageUnit(IStorageUnit storageUnit);
 	
+	public boolean ableToAddStorageUnitNamed(String name);
+	
 	public abstract boolean ableToRemoveStorageUnit(IStorageUnit storageUnit);
 
 	/**

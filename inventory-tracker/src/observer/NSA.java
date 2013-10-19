@@ -208,6 +208,13 @@ public class NSA implements Observer
 			IProductContainer unit, int index)
 	{
 		verifyObjTag(unit);
+		
+		for(IProduct product : unit.getAllProducts())
+			verifyObjTag(product);
+		
+		for(IItem item : unit.getAllItems())
+			verifyObjTag(item);
+		
 		ProductContainerData child = (ProductContainerData)unit.getTag();
 		inventoryView.insertProductContainer(parent, child, index);
 		int childIndex = 0;

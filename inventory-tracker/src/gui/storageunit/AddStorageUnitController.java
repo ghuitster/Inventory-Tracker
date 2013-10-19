@@ -17,8 +17,6 @@ public class AddStorageUnitController extends Controller implements
 		IAddStorageUnitController
 {
 	
-	private IProductContainer workingContainer;
-	
 	/**
 	 * Constructor.
 	 * 
@@ -29,8 +27,6 @@ public class AddStorageUnitController extends Controller implements
 		super(view);
 
 		construct();
-		
-		workingContainer = new StorageUnit("");
 		getView().enableOK(false);
 	}
 
@@ -47,7 +43,7 @@ public class AddStorageUnitController extends Controller implements
 	{
 		try
 		{
-			Inventory.getInstance().addStorageUnit((IStorageUnit)workingContainer);
+			Inventory.getInstance().addStorageUnit(new StorageUnit(getView().getStorageUnitName()));
 		}
 		catch (Exception e) 
 		{ }
@@ -103,9 +99,7 @@ public class AddStorageUnitController extends Controller implements
 	@Override
 	public void valuesChanged()
 	{
-		workingContainer.setName(getView().getStorageUnitName());
-		
 		getView().enableOK(Inventory.getInstance()
-				.ableToAddStorageUnit((IStorageUnit)workingContainer));
+				.ableToAddStorageUnitNamed(getView().getStorageUnitName()));
 	}
 }

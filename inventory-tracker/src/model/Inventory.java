@@ -111,11 +111,18 @@ public class Inventory extends Observable implements IInventory, Serializable
 		if(storageUnit == null)
 			return false;
 
-		if(storageUnitNameInUse(storageUnit.getName()))
-			return false;
-
+		return ableToAddStorageUnitNamed(storageUnit.getName());
+	}
+	
+	public boolean ableToAddStorageUnitNamed(String name)
+	{
+		for(IStorageUnit unit : this.storageUnits)
+		{
+			if(unit.getName().equals(name))
+				return false;
+		}
+		
 		return true;
-
 	}
 	
 	public boolean ableToRemoveStorageUnit(IStorageUnit storageUnit)

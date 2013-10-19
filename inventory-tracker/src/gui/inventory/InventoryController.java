@@ -421,9 +421,7 @@ public class InventoryController extends Controller implements
 				Inventory.getInstance().getPersistence().loadData();
 		}
 		catch(Exception e)
-		{
-			System.out.print(e.toString());
-		}
+		{ }
 		
 		getView().setProductContainers(root);
 		
@@ -460,6 +458,12 @@ public class InventoryController extends Controller implements
 			NSA.getInstance().populateProductData((IProductContainer)selectedContainer.getTag());
 			NSA.getInstance().populateItemData((IProductContainer)selectedContainer.getTag());
 		}
+		else
+		{
+			getView().setItems(new ItemData[0]);
+			getView().setProducts(new ProductData[0]);
+		}
+
 	}
 
 	/**

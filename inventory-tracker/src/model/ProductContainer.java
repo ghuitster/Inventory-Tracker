@@ -59,6 +59,17 @@ public abstract class ProductContainer extends Observable implements
 		return true;
 	}
 
+	public boolean ableToAddProductGroupNamed(String name)
+	{
+		for(IProductGroup pg : this.productGroups)
+		{
+			if(pg.getName().equals(name))
+				return false;
+		}
+		
+		return true;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -301,11 +312,9 @@ public abstract class ProductContainer extends Observable implements
 	public void setName(String name)
 	{
 		this.name = name;
-		if(name != null && !name.isEmpty())
-		{
-			this.setChanged();
-			this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
-		}
+
+		this.setChanged();
+		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
 	/*
