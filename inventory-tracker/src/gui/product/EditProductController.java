@@ -43,6 +43,11 @@ public class EditProductController extends Controller implements
 
 		product = (IProduct) target.getTag();
 		createSizeUnitsFromUnitType();
+		if(this.sizeUnits == SizeUnits.Count)
+			this.sizeValue = ((CountUnitSize)product.getSize()).getAmount();
+		else
+			this.sizeValue = ((UnitSize)product.getSize()).getAmount();
+		
 		construct();
 	}
 
@@ -170,10 +175,7 @@ public class EditProductController extends Controller implements
 		}
 		getView().enableBarcode(false);
 		
-		if(submit)
-		{
-			getView().enableOK(submit);
-		}
+		getView().enableOK(submit);
 	}
 
 	/**
@@ -207,7 +209,10 @@ public class EditProductController extends Controller implements
 		this.getView().setDescription(this.product.getDescription()
 				.getDescription());
 		this.getView().setShelfLife("" + this.product.getShelfLife());
-		this.getView().setSizeValue("" + this.product.getSize());
+		if(sizeUnits == SizeUnits.Count)
+			this.getView().setSizeValue("" + (int)this.sizeValue);
+		else
+			this.getView().setSizeValue("" + this.sizeValue);
 		this.getView().setSupply("" + ((CountThreeMonthSupply)
 				this.product.getThreeMonthSupply()).getAmount());
 		
@@ -242,10 +247,21 @@ public class EditProductController extends Controller implements
 			{
 				getView().displayErrorMessage("For unit size type Count, the "
 						+ "value must be a whole number");
+				int temp = (int)this.sizeValue;
+				getView().setSizeValue("" + temp);
+				this.sizeValue = temp;
 			}
 		else
 		{
-			this.sizeValue = Float.parseFloat(getView().getSizeValue());
+			try
+			{
+				this.sizeValue = Float.parseFloat(getView().getSizeValue());
+			}
+			catch(NumberFormatException e)
+			{
+				this.getView().displayErrorMessage("Digits only, no characters");
+				this.getView().setSizeValue("" + this.sizeValue);
+			}
 		}
 		
 		this.shouldOKBeEnabled();

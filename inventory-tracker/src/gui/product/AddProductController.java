@@ -126,14 +126,10 @@ public class AddProductController extends Controller implements
 		else
 		{
 			getView().enableSizeValue(true);
-			getView().setSizeValue("0");
 		}
 		getView().enableBarcode(false);
 		
-		if(submit)
-		{
-			getView().enableOK(submit);
-		}
+		getView().enableOK(submit);
 	}
 
 	/**
@@ -190,19 +186,22 @@ public class AddProductController extends Controller implements
 		}
 		this.descript = getView().getDescription();
 		this.sizeUnits = getView().getSizeUnit();
-		if(this.sizeUnits == SizeUnits.Count)
-			try
-			{
-				this.sizeValue = Integer.parseInt(getView().getSizeValue());
-			}
-			catch(NumberFormatException e)
-			{
-				getView().displayErrorMessage("For unit size type Count, the "
-						+ "value must be a whole number");
-			}
-		else
+		if(!getView().getSizeValue().isEmpty())
 		{
-			this.sizeValue = Float.parseFloat(getView().getSizeValue());
+			if(this.sizeUnits == SizeUnits.Count)
+				try
+				{
+					this.sizeValue = Integer.parseInt(getView().getSizeValue());
+				}
+				catch(NumberFormatException e)
+				{
+					getView().displayErrorMessage("For unit size type Count, the "
+							+ "value must be a whole number");
+				}
+			else
+			{
+				this.sizeValue = Float.parseFloat(getView().getSizeValue());
+			}
 		}
 		
 		this.shouldOKBeEnabled();
@@ -212,10 +211,13 @@ public class AddProductController extends Controller implements
 	private void shouldOKBeEnabled()
 	{
 		if(this.descript.isEmpty())
-			submit = false;
-		else if(this.sizeUnits != SizeUnits.Count && sizeValue == 0)
-			submit = false;
+			this.submit = false;
+		else if(sizeValue <= 0)
+		{
+			System.out.println("Am I getting in while the size Value is 0");
+			this.submit = false;
+		}
 		else
-			submit = true;
+			this.submit = true;
 	}
 }

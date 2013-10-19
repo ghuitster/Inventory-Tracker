@@ -152,7 +152,10 @@ public class AddProductGroupController extends Controller implements
 	protected void loadValues()
 	{
 		this.getView().setProductGroupName(this.name);
-		this.getView().setSupplyValue("" + value);
+		if(sizeUnits == SizeUnits.Count)
+			this.getView().setSupplyValue("" + (int)value);
+		else
+			this.getView().setSupplyValue("" + value);
 		this.getView().setSupplyUnit(this.sizeUnits);
 	}
 
@@ -174,10 +177,21 @@ public class AddProductGroupController extends Controller implements
 			{
 				getView().displayErrorMessage("For unit size type Count, the "
 						+ "value must be a whole number");
+				int temp = (int)this.value;
+				getView().setSupplyValue("" + value);
+				this.value = temp;
 			}
 		else
 		{
-			this.value = Float.parseFloat(getView().getSupplyValue());
+			try
+			{
+				this.value = Float.parseFloat(getView().getSupplyValue());
+			}
+			catch(NumberFormatException e)
+			{
+				getView().displayErrorMessage("Digits only, no characters");
+				getView().setSupplyValue("" + value);
+			}
 		}
 		
 		this.shouldOKBeEnabled();
