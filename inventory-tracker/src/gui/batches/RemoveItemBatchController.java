@@ -149,6 +149,9 @@ public class RemoveItemBatchController extends Controller implements
 		if(removingItem == null)
 		{
 			getView().displayErrorMessage("No item with that barcode");
+			barcode = "";
+			enableComponents();
+			loadValues();
 			return;
 		}
 
