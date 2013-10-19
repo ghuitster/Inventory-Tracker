@@ -325,8 +325,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 		item.setContainer(null);
 
 		Date month =
-				new Date(current.getYear(), current.getMonth(),
-						current.getDate());
+				new Date(current.getYear(), current.getMonth(), 0);
 
 		Set<IItem> itemsForMonth;
 		if(removedItems.containsKey(month))

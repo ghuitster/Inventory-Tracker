@@ -138,7 +138,8 @@ public class InventoryController extends Controller implements
 		boolean able = false;
 		if(getView().getSelectedProductContainer() != null)
 		{
-			IProductContainer PC = (IProductContainer) getView().getSelectedProductContainer().getTag();
+			IProductContainer PC = (IProductContainer) getView()
+					.getSelectedProductContainer().getTag();
 			able = PC.ableToRemoveProduct((IProduct) getView().getSelectedProduct().getTag());
 		}
 		return able;

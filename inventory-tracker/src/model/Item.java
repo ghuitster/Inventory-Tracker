@@ -166,61 +166,6 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 			return false;
 		}
 		Item other = (Item) obj;
-		if(barcode == null)
-		{
-			if(other.barcode != null)
-			{
-				return false;
-			}
-		}
-		else if(!barcode.equals(other.barcode))
-		{
-			return false;
-		}
-		if(container == null)
-		{
-			if(other.container != null)
-			{
-				return false;
-			}
-		}
-		else if(!container.equals(other.container))
-		{
-			return false;
-		}
-		if(entryDate == null)
-		{
-			if(other.entryDate != null)
-			{
-				return false;
-			}
-		}
-		else if(!entryDate.equals(other.entryDate))
-		{
-			return false;
-		}
-		if(exitTime == null)
-		{
-			if(other.exitTime != null)
-			{
-				return false;
-			}
-		}
-		else if(!exitTime.equals(other.exitTime))
-		{
-			return false;
-		}
-		if(expirationDate == null)
-		{
-			if(other.expirationDate != null)
-			{
-				return false;
-			}
-		}
-		else if(!expirationDate.equals(other.expirationDate))
-		{
-			return false;
-		}
 		if(product == null)
 		{
 			if(other.product != null)
