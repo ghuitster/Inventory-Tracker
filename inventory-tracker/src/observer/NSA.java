@@ -166,6 +166,9 @@ public class NSA implements Observer
 			{
 				populateProductData((IProductContainer)inventoryView.
 						getSelectedProductContainer().getTag());
+				
+				IItem item = (IItem)changedObj;
+				inventoryView.selectItem((ItemData)item.getTag());
 			}
 		}
 		else if (changedObj instanceof IProduct)
@@ -174,6 +177,9 @@ public class NSA implements Observer
 			{
 				populateProductData((IProductContainer)inventoryView.
 						getSelectedProductContainer().getTag());
+				
+				IProduct item = (IProduct)changedObj;
+				inventoryView.selectProduct((ProductData)item.getTag());
 			}
 			
 		}
@@ -276,9 +282,7 @@ public class NSA implements Observer
 		inventoryView.insertProductContainer(parent, 
 				(ProductContainerData)container.getTag(), i);
 		
-		if(parent == root && root.getChildCount() == 1 && 
-				container.getAllProductGroups().size() == 0)
-			inventoryView.setProductContainers(root);
+		inventoryView.selectProductContainer((ProductContainerData)container.getTag());
 		
 	}
 	
@@ -318,6 +322,8 @@ public class NSA implements Observer
 		
 		inventoryView.renameProductContainer(pcData, 
 				container.getName(), index);
+		
+		inventoryView.selectProductContainer((ProductContainerData)container.getTag());
 	}
 
 	private void updateProductContainerData(IProductContainer productContainer,

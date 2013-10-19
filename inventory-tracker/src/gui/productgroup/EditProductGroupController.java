@@ -224,6 +224,8 @@ public class EditProductGroupController extends Controller implements
 			submit = false;
 		else if(this.getView().getSupplyValue().isEmpty() || getView().getSupplyValue().startsWith("-"))
 			submit = false;
+		else if(!PG.ableToAddProductGroupNamed(getView().getProductGroupName()))
+			submit = false;
 		else 
 			submit = true;
 	}
