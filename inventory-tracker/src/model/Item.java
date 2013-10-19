@@ -379,7 +379,10 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	@Override
 	public int compareTo(IItem o)
 	{
-		return this.getEntryDate().compareTo(o.getEntryDate());
+		int ret = this.getEntryDate().compareTo(o.getEntryDate());
+		if(ret == 0)
+			return this.getBarcode().toString().compareTo(o.getBarcode().toString());
+		else return ret;
 	}
 
 }
