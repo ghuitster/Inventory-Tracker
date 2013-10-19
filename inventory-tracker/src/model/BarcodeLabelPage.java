@@ -36,10 +36,10 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 	private List<IItem> items = null;
 	private Document document = null;
 	private String filename = "Labels" + File.separator + "labels-";
-	private int pageCount = 0;
-	private final int BARCODES_PER_PAGE = 72;
 	private final float BAR_HEIGHT_MULTIPLE = 3.0f;
 	private final float LABEL_WIDTH_PADDING = 10.0f;
+	private final float TOP_BOTTOM_MARGINS = 36f;
+	private final float LEFT_RIGHT_MARGINS = 24f;
 
 	/**
 	 * @pre items must contain only valid Item objects
@@ -49,17 +49,12 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 	public BarcodeLabelPage(List<IItem> items)
 	{
 		// Set Document object to have American Letter standard pagesize with
-		// 0.5" left/right, and 1.0" top/bottom margins
-		this.document = new Document(PageSize.LETTER, 36f, 36f, 72f, 72f);
+		// 24pt left/right, and 36pt top/bottom margins
+		this.document =
+				new Document(PageSize.LETTER, LEFT_RIGHT_MARGINS,
+						LEFT_RIGHT_MARGINS, TOP_BOTTOM_MARGINS,
+						TOP_BOTTOM_MARGINS);
 		this.items = items;
-
-		// Set how many pages we are going to need to print all of the barcodes
-		this.pageCount = this.items.size() / this.BARCODES_PER_PAGE;
-		if(this.items.size() % this.BARCODES_PER_PAGE != 0)
-		{
-			this.pageCount += 1;
-		}
-
 	}
 
 	/*
@@ -70,7 +65,7 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 	@Override
 	public void createPDF() throws IOException, DocumentException
 	{
-		// Set up Barcode Label variables
+		// Set up the Barcode Label variables that we can before the loop
 		float fontSize = 7.0f;
 		float labelPadding = 5.0f;
 		float codeWidth = 0.0f;
@@ -82,6 +77,12 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 		Image codeImage = null;
 		BarcodeEAN codeEAN = null;
 		PdfWriter writer = null;
+		File file = null;
+		File directory = null;
+		FileOutputStream pdfos = null;
+		PdfContentByte cb = null;
+		PdfPTable pdfTable = null;
+		PdfPCell pdfTableCell = null;
 
 		BaseFont basefont = BaseFont.createFont("Helvetica", "winansi", false);
 		Font font = new Font(basefont, 7F);
@@ -90,18 +91,22 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 				new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar
 						.getInstance().getTime());
 		this.filename = this.filename + timeStamp + ".pdf";
-		File dir =
+
+		// Create the label directory and filename for this particular batch of
+		// labels.
+		directory =
 				new File(this.filename.substring(0,
 						this.filename.lastIndexOf(File.separator)));
-		dir.mkdirs();
-		File temp =
-				new File(dir, this.filename.substring(this.filename
+		directory.mkdirs();
+		file =
+				new File(directory, this.filename.substring(this.filename
 						.lastIndexOf(File.separator) + 1));
-		if(!temp.exists())
+		if(!file.exists())
 		{
-			temp.createNewFile();
+			file.createNewFile();
 		}
-		FileOutputStream pdfos = null;
+
+		// Create the filestream so we can write to the file.
 		try
 		{
 			pdfos = new FileOutputStream(this.filename);
@@ -111,14 +116,14 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 			fnfe.printStackTrace();
 		}
 
-		// Get the document open, and the PdfWriter ready to write to the
-		// filestream
+		// Get the PdfWriter ready to write to the filestream and get the
+		// document open
 		writer = PdfWriter.getInstance(this.document, pdfos);
 		writer.setPdfVersion(PdfWriter.VERSION_1_7);
 		this.document.open();
 
 		// Let's write stuff
-		PdfContentByte cb = writer.getDirectContent();
+		cb = writer.getDirectContent();
 
 		// Create a test label to work out columns per page
 		codeEAN = new BarcodeEAN();
@@ -137,18 +142,25 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 				(int) (this.document.getPageSize().getWidth() / labelWidth);
 
 		// Now we create the Table based on the number of columns we've
-		// calculated.
-		PdfPTable pdfTable = new PdfPTable(numColumns);
+		// calculated, and a cell to populate the table with
+		pdfTable = new PdfPTable(numColumns);
 		pdfTable.setTotalWidth(numColumns * labelWidth);
 		pdfTable.setLockedWidth(true);
-		PdfPCell pdfTableCell = pdfTable.getDefaultCell();
+		pdfTableCell = pdfTable.getDefaultCell();
 		pdfTableCell.setBorder(labelBorder);
 		pdfTableCell.setPadding(labelPadding);
 
 		// Now let's go through and create our labels
 		for(int index = 0; index < this.items.size(); index++)
 		{
-			// Variables we'll need for each Label
+			// Variables we'll need for each Label, if they created outside the
+			// loop
+			String labelDescription = "";
+			Paragraph labelParagraph = null;
+			Chunk chunk = null;
+			float fixedLeading = 0.0f;
+			float multipliedLeading = 1.25f;
+			float beforeCodeSpacing = 2.0f;
 
 			// Get Item data
 			IItem currentItem = this.items.get(index);
@@ -167,13 +179,12 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 			}
 
 			codeEAN.setCode(barcode.getNumber());
-			// Image currentCodeImage =
 			codeImage = codeEAN.createImageWithBarcode(cb, null, null);
-			String labelDescription = description.getDescription();
+			labelDescription = description.getDescription();
 
 			if(labelDescription.length() > 0)
 			{
-				Chunk chunk = new Chunk(labelDescription, font);
+				chunk = new Chunk(labelDescription, font);
 				while(chunk.getWidthPoint() > codeImage.getWidth())
 				{
 					labelDescription =
@@ -182,12 +193,12 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 					chunk = new Chunk(labelDescription, font);
 				}
 			}
-			Paragraph labelParagraph =
+			labelParagraph =
 					new Paragraph(labelDescription + "\n" + dateString, font);
-			labelParagraph.setLeading(0.0f, 1.1f);
+			labelParagraph.setLeading(fixedLeading, multipliedLeading);
 			pdfTableCell = new PdfPCell();
 			pdfTableCell.addElement(labelParagraph);
-			codeImage.setSpacingBefore(2.0f);
+			codeImage.setSpacingBefore(beforeCodeSpacing);
 			pdfTableCell.addElement(codeImage);
 			pdfTableCell.setBorder(0);
 			pdfTableCell.setPadding(labelPadding);
@@ -198,7 +209,6 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 		document.add(pdfTable);
 		document.close();
 		pdfos.close();
-
 		java.awt.Desktop.getDesktop().open(new File(this.filename));
 	}
 }
