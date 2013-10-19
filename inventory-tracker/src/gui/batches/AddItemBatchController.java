@@ -300,7 +300,7 @@ public class AddItemBatchController extends Controller implements
 	public void done()
 	{
 		if(products.isEmpty() || items.isEmpty())
-			return;
+			getView().close();
 
 		for(IProduct ip: products)
 			if(((ProductContainer) target.getTag()).ableToAddProduct(ip))

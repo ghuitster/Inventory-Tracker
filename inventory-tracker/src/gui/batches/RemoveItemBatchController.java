@@ -11,8 +11,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import model.CountAmount;
 import model.IItem;
 import model.IProduct;
+import model.Inventory;
+import model.NonCountAmount;
+import model.ProductGroup;
 
 /**
  * Controller class for the remove item batch view.
@@ -25,7 +29,6 @@ public class RemoveItemBatchController extends Controller implements
 	private final Map<ProductData, List<ItemData>> displayItems;
 	private final List<ProductData> displayProducts;
 	private final List<IItem> items;
-	private final List<IProduct> products;
 
 	/**
 	 * Constructor.
@@ -40,7 +43,6 @@ public class RemoveItemBatchController extends Controller implements
 		displayItems = new HashMap<ProductData, List<ItemData>>();
 		displayProducts = new ArrayList<ProductData>();
 		items = new ArrayList<IItem>();
-		products = new ArrayList<IProduct>();
 
 		construct();
 	}
@@ -53,6 +55,10 @@ public class RemoveItemBatchController extends Controller implements
 	public void barcodeChanged()
 	{
 		barcode = getView().getBarcode();
+
+		if(useBarcodeScanner)
+			removeItem();
+
 		enableComponents();
 	}
 
@@ -63,7 +69,13 @@ public class RemoveItemBatchController extends Controller implements
 	@Override
 	public void done()
 	{
-		// TODO
+		if(items.isEmpty())
+			getView().close();
+
+		for(IItem ii: items)
+			if(ii.getContainer().ableToRemoveItem(ii))
+				ii.getContainer().removeItem(ii);
+
 		getView().close();
 	}
 
@@ -126,7 +138,75 @@ public class RemoveItemBatchController extends Controller implements
 	@Override
 	public void removeItem()
 	{
-		// TODO
+		if(barcode.isEmpty())
+		{
+			getView().displayErrorMessage("Empty barcode");
+			return;
+		}
+
+		IItem removingItem = Inventory.getInstance().getItem(barcode);
+
+		if(removingItem == null)
+		{
+			getView().displayErrorMessage("No item with that barcode");
+			return;
+		}
+
+		ItemData removingItemData = new ItemData();
+		removingItemData.setBarcode(barcode);
+		removingItemData.setEntryDate(removingItem.getEntryDate());
+		removingItemData.setExpirationDate(removingItem.getExpirationDate());
+
+		if(removingItem.getContainer() instanceof ProductGroup)
+			removingItemData.setProductGroup(removingItem.getContainer()
+					.getName());
+		else
+			removingItemData.setStorageUnit(removingItem.getContainer()
+					.getName());
+
+		removingItemData.setTag(removingItem);
+
+		IProduct removingProduct = removingItem.getProduct();
+		ProductData removingProductData = new ProductData();
+		removingProductData
+				.setBarcode(removingProduct.getBarcode().getNumber());
+		removingProductData.setCount("1");
+		removingProductData.setDescription(removingProduct.getDescription()
+				.getDescription());
+		removingProductData.setShelfLife(removingProduct.getShelfLife() + "");
+
+		if(removingProduct.getSize() instanceof CountAmount)
+			removingProductData.setSize(((CountAmount) removingProduct
+					.getSize()).getAmount() + "");
+		else
+			removingProductData.setSize(((NonCountAmount) removingProduct
+					.getSize()).getAmount() + "");
+
+		if(removingProduct.getThreeMonthSupply() instanceof CountAmount)
+			removingProductData.setSupply(((CountAmount) removingProduct
+					.getThreeMonthSupply()).getAmount() + "");
+		else
+			removingProductData.setSupply(((NonCountAmount) removingProduct
+					.getThreeMonthSupply()).getAmount() + "");
+
+		removingProductData.setTag(removingProduct);
+		displayProducts.add(removingProductData);
+		items.add(removingItem);
+
+		if(displayItems.get(removingProductData) == null)
+		{
+			List<ItemData> tempList = new ArrayList<ItemData>();
+			tempList.add(removingItemData);
+			displayItems.put(removingProductData, tempList);
+		}
+		else
+			displayItems.get(removingProductData).add(removingItemData);
+
+		ProductData[] temp = new ProductData[displayProducts.size()];
+		getView().setProducts(displayProducts.toArray(temp));
+		barcode = "";
+		loadValues();
+		enableComponents();
 	}
 
 	/**
