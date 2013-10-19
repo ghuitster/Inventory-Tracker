@@ -103,6 +103,6 @@ public class CountUnitSize extends CountAmount
 	@Override
 	public String toString()
 	{
-		return "CountUnitSize [size=" + amount + ", unitType=" + unitType + "]";
+		return "" + amount;
 	}
 }

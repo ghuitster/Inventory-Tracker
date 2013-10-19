@@ -60,7 +60,7 @@ public class UnitSize extends NonCountAmount
 	@Override
 	public String toString()
 	{
-		return "NewUnitSize [size=" + amount + ", unitType=" + unitType + "]";
+		return amount + " " + unitType;
 	}
 
 }

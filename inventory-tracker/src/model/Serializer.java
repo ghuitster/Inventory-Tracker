@@ -66,6 +66,10 @@ public class Serializer implements IPersistence, Serializable
 			objIn = new ObjectInputStream(stream);
 			Inventory inventory = (Inventory) objIn.readObject();
 			Inventory.setInstance(inventory);
+			for(IStorageUnit unit : Inventory.getInstance().getAllStorageUnits())
+			{
+				addObserver(unit);
+			}
 
 		}
 		catch(Exception e)
@@ -84,6 +88,18 @@ public class Serializer implements IPersistence, Serializable
 			catch(IOException e)
 			{}
 		}
+	}
+	
+	private void addObserver(IProductContainer container)
+	{
+		container.addObserver(Inventory.getInstance());
+		for(IProductGroup group : container.getAllProductGroups())
+			addObserver(group);
+		
+		for(IItem item : container.getAllItems())
+			item.addObserver(Inventory.getInstance());
+		for(IProduct product : container.getAllProducts())
+			product.addObserver(Inventory.getInstance());
 	}
 
 	/**

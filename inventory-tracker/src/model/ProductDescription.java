@@ -133,7 +133,7 @@ public class ProductDescription implements Serializable, IProductDescription
 	@Override
 	public String toString()
 	{
-		return "ProductDescription [description=" + description + "]";
+		return description;
 	}
 
 }

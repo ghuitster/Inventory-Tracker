@@ -286,7 +286,8 @@ public class Product extends Observable implements IProduct, Serializable
 	@Override
 	public int compareTo(IProduct o)
 	{
-		return this.getDescription().toString().compareTo(o.getDescription().toString());
+		return this.getDescription().toString().toLowerCase()
+				.compareTo(o.getDescription().toString().toLowerCase());
 	}
 	
 	/*

@@ -117,5 +117,11 @@ public abstract class NonCountAmount extends Amount
 	{
 		this.amount = amount;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return amount + " " + this.unitType;
+	}
 
 }

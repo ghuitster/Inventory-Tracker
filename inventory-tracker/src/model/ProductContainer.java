@@ -61,6 +61,9 @@ public abstract class ProductContainer extends Observable implements
 
 	public boolean ableToAddProductGroupNamed(String name)
 	{
+		if(name == null || name.isEmpty())
+			return false;
+		
 		for(IProductGroup pg : this.productGroups)
 		{
 			if(pg.getName().equals(name))
@@ -382,6 +385,7 @@ public abstract class ProductContainer extends Observable implements
 	@Override
 	public int compareTo(IProductContainer o)
 	{
-		return this.getName().compareTo(o.getName());
+		return this.getName().toLowerCase()
+				.compareTo(o.getName().toLowerCase());
 	}
 }

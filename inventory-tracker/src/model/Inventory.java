@@ -127,6 +127,9 @@ public class Inventory extends Observable implements IInventory, Serializable
 	@Override
 	public boolean ableToAddStorageUnitNamed(String name)
 	{
+		if(name == null || name.isEmpty())
+			return false;
+		
 		for(IStorageUnit unit: this.storageUnits)
 		{
 			if(unit.getName().equals(name))

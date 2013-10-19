@@ -37,7 +37,6 @@ public class CountThreeMonthSupply extends CountAmount
 	@Override
 	public String toString()
 	{
-		return "CountThreeMonthSupply [amount=" + amount + ", unitType="
-				+ unitType + "]";
+		return "" + amount;
 	}
 }

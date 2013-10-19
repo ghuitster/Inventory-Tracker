@@ -1,6 +1,8 @@
 
 package gui.storageunit;
 
+import model.IStorageUnit;
+import model.Inventory;
 import gui.common.Controller;
 import gui.common.IView;
 import gui.inventory.ProductContainerData;
@@ -11,6 +13,9 @@ import gui.inventory.ProductContainerData;
 public class EditStorageUnitController extends Controller implements
 		IEditStorageUnitController
 {
+	
+	private IStorageUnit storageUnit;
+	
 	/**
 	 * Constructor.
 	 * 
@@ -22,6 +27,11 @@ public class EditStorageUnitController extends Controller implements
 		super(view);
 
 		construct();
+		
+		storageUnit = (IStorageUnit)target.getTag();
+		getView().setStorageUnitName(storageUnit.getName());
+		
+		getView().enableOK(false);
 	}
 
 	//
@@ -34,7 +44,9 @@ public class EditStorageUnitController extends Controller implements
 	 */
 	@Override
 	public void editStorageUnit()
-	{}
+	{
+		storageUnit.setName(getView().getStorageUnitName());
+	}
 
 	/**
 	 * Sets the enable/disable state of all components in the controller's view.
@@ -76,7 +88,8 @@ public class EditStorageUnitController extends Controller implements
 	 */
 	@Override
 	protected void loadValues()
-	{}
+	{
+	}
 
 	/**
 	 * This method is called when any of the fields in the edit storage unit
@@ -84,5 +97,8 @@ public class EditStorageUnitController extends Controller implements
 	 */
 	@Override
 	public void valuesChanged()
-	{}
+	{
+		getView().enableOK(Inventory.getInstance()
+				.ableToAddStorageUnitNamed(getView().getStorageUnitName()));
+	}
 }
