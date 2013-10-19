@@ -123,19 +123,19 @@ public class AddItemBatchController extends Controller implements
 	{
 		if(!validCount)
 		{
-			_view.displayErrorMessage("Invalid count");
+			getView().displayErrorMessage("Invalid count");
 			return;
 		}
 
 		if(entryDate.after(DateUtils.currentDate()))
 		{
-			_view.displayErrorMessage("Invalid entry date");
+			getView().displayErrorMessage("Invalid entry date");
 			return;
 		}
 
 		if(barcode.isEmpty())
 		{
-			_view.displayErrorMessage("Empty barcode");
+			getView().displayErrorMessage("Empty barcode");
 			return;
 		}
 
@@ -321,7 +321,8 @@ public class AddItemBatchController extends Controller implements
 		}
 		catch(DocumentException | IOException e)
 		{
-			_view.displayErrorMessage("There was a barcode label creation error");
+			getView().displayErrorMessage(
+					"There was a barcode label creation error");
 		}
 
 		getView().close();
