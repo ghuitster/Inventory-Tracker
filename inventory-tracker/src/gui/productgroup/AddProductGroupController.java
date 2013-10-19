@@ -1,9 +1,12 @@
 
 package gui.productgroup;
 
+import model.Amount;
+import model.CountThreeMonthSupply;
 import model.IProductContainer;
 import model.IProductGroup;
 import model.ProductGroup;
+import model.ThreeMonthSupply;
 import model.UnitType;
 import gui.common.Controller;
 import gui.common.IView;
@@ -18,12 +21,13 @@ public class AddProductGroupController extends Controller implements
 {
 	
 	private IProductContainer PC;
-	private IProductGroup PG = new ProductGroup("");
+	private IProductGroup PG = null;//new ProductGroup("");
 	private boolean submit = false;
 	private SizeUnits sizeUnits = SizeUnits.Count;
 	private String name = "";
 	private float value = 0;
 	private UnitType unitType = UnitType.COUNT;
+	private Amount threeMonthSupply = null;
 	/**
 	 * Constructor.
 	 * 
@@ -51,8 +55,21 @@ public class AddProductGroupController extends Controller implements
 	@Override
 	public void addProductGroup()
 	{
-		//TODO
-//		PG.se
+		createUnitType();
+		if(unitType == UnitType.COUNT)
+			this.threeMonthSupply = new CountThreeMonthSupply((int)this.value);
+		else
+			this.threeMonthSupply = new ThreeMonthSupply(this.value, unitType);
+		PG = new ProductGroup(this.name, this.threeMonthSupply);
+		if(PC.ableToRemoveProductGroup(PG))
+		{
+			PC.addProductGroup(PG);
+			PG.setContainer(PC);
+		}
+		else
+		{
+			this.getView().displayErrorMessage("This Product Group can not be added");
+		}
 	}
 	
 	private void createUnitType()

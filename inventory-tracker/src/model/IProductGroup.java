@@ -18,7 +18,7 @@ public interface IProductGroup extends IProductContainer
 	/**
 	 * @return the threeMonthSupply
 	 */
-	public abstract ThreeMonthSupply getThreeMonthSupply();
+	public abstract Amount getThreeMonthSupply();
 
 	/**
 	 * @see java.lang.Object#hashCode()
@@ -38,7 +38,7 @@ public interface IProductGroup extends IProductContainer
 	 * @post my.threeMonthSupply == passed in ThreeMonthSupply
 	 * @param threeMonthSupply the ThreeMonthSupply to set
 	 */
-	public abstract void setThreeMonthSupply(ThreeMonthSupply threeMonthSupply);
+	public abstract void setThreeMonthSupply(Amount threeMonthSupply);
 
 	/**
 	 * @see java.lang.Object#toString()

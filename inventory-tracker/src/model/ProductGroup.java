@@ -9,7 +9,7 @@ public class ProductGroup extends ProductContainer implements IProductGroup
 {
 	private static final long serialVersionUID = 4647265154277890697L;
 	private IProductContainer container;
-	private ThreeMonthSupply threeMonthSupply;
+	private Amount threeMonthSupply;
 
 	/**
 	 * @pre container must be a valid ProductContainer and not null
@@ -17,7 +17,7 @@ public class ProductGroup extends ProductContainer implements IProductGroup
 	 * @param container
 	 * @param threeMonthSupply
 	 */
-	public ProductGroup(String name, ThreeMonthSupply threeMonthSupply)
+	public ProductGroup(String name, Amount threeMonthSupply)
 	{
 		super(name);
 		this.threeMonthSupply = threeMonthSupply;
@@ -72,7 +72,7 @@ public class ProductGroup extends ProductContainer implements IProductGroup
 	 * @see model.IProductGroup#getThreeMonthSupply()
 	 */
 	@Override
-	public ThreeMonthSupply getThreeMonthSupply()
+	public Amount getThreeMonthSupply()
 	{
 		return this.threeMonthSupply;
 	}
@@ -115,7 +115,7 @@ public class ProductGroup extends ProductContainer implements IProductGroup
 	 * @see model.IProductGroup#setThreeMonthSupply(model.ThreeMonthSupply)
 	 */
 	@Override
-	public void setThreeMonthSupply(ThreeMonthSupply threeMonthSupply)
+	public void setThreeMonthSupply(Amount threeMonthSupply)
 	{
 		this.threeMonthSupply = threeMonthSupply;
 	}
