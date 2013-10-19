@@ -136,9 +136,11 @@ public class RemoveItemBatchController extends Controller implements
 	@Override
 	public void selectedProductChanged()
 	{
+		ItemData[] temp =
+				new ItemData[displayItems.get(getView().getSelectedProduct())
+						.size()];
 		getView().setItems(
-				(ItemData[]) displayItems.get(getView().getSelectedProduct())
-						.toArray());
+				displayItems.get(getView().getSelectedProduct()).toArray(temp));
 
 		enableComponents();
 	}
