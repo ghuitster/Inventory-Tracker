@@ -153,7 +153,8 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 		// Now let's go through and create our labels
 		for(int index = 0; index < this.items.size(); index++)
 		{
-			// Variables we'll need for each Label, if they created outside the
+			// Variables we'll need for each Label, if they weren't created
+			// outside the
 			// loop
 			String labelDescription = "";
 			Paragraph labelParagraph = null;
