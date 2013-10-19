@@ -168,7 +168,7 @@ public class NSA implements Observer
 						getSelectedProductContainer().getTag());
 				
 				IItem item = (IItem)changedObj;
-				inventoryView.selectItem((ItemData)item.getTag());
+				inventoryView.selectProduct((ProductData)item.getProduct().getTag());
 			}
 		}
 		else if (changedObj instanceof IProduct)
@@ -217,29 +217,32 @@ public class NSA implements Observer
 
 	public void populateProductData(IProductContainer container)
 	{
-		Set<IProduct> products = container.getAllProducts();
-		ProductData[] productDatas = new ProductData[products.size()];
-		Iterator<IProduct> productIterator = products.iterator();
-		for(int i = 0; i < productDatas.length; i++)
+		if(container != null)
 		{
-			productDatas[i] = (ProductData)productIterator.next().getTag();
-			productDatas[i].setCount("0");
+			Set<IProduct> products = container.getAllProducts();
+			ProductData[] productDatas = new ProductData[products.size()];
+			Iterator<IProduct> productIterator = products.iterator();
+			for(int i = 0; i < productDatas.length; i++)
+			{
+				productDatas[i] = (ProductData)productIterator.next().getTag();
+				productDatas[i].setCount("0");
+			}
+			
+			for(IItem item : container.getAllItems())
+			{
+				ProductData pd = (ProductData)item.getProduct().getTag();
+				int count = Integer.parseInt(pd.getCount());
+				count++;
+				pd.setCount(count + "");
+			}
+			
+			if(inventoryView.getSelectedProduct() != null)
+			{
+				populateItemData(container);
+			}
+			
+			inventoryView.setProducts(productDatas);
 		}
-		
-		for(IItem item : container.getAllItems())
-		{
-			ProductData pd = (ProductData)item.getProduct().getTag();
-			int count = Integer.parseInt(pd.getCount());
-			count++;
-			pd.setCount(count + "");
-		}
-		
-		if(inventoryView.getSelectedProduct() != null)
-		{
-			populateItemData(container);
-		}
-		
-		inventoryView.setProducts(productDatas);
 	}
 
 	public void populateItemData(IProductContainer container)

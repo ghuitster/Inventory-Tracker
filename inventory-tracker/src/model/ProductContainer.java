@@ -211,7 +211,6 @@ public abstract class ProductContainer extends Observable implements
 	{
 		for(IProductContainer con: this.productGroups)
 			return con.findContainer(product);
-
 		if(this.products.contains(product))
 			return this;
 		else
