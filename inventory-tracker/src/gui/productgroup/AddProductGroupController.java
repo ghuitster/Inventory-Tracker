@@ -21,7 +21,7 @@ public class AddProductGroupController extends Controller implements
 {
 	
 	private IProductContainer PC;
-	private IProductGroup PG = null;//new ProductGroup("");
+	private IProductGroup PG = null;
 	private boolean submit = false;
 	private SizeUnits sizeUnits = SizeUnits.Count;
 	private String name = "";
@@ -61,7 +61,7 @@ public class AddProductGroupController extends Controller implements
 		else
 			this.threeMonthSupply = new ThreeMonthSupply(this.value, unitType);
 		PG = new ProductGroup(this.name, this.threeMonthSupply);
-		if(PC.ableToRemoveProductGroup(PG))
+		if(PC.ableToAddProductGroup(PG))
 		{
 			PC.addProductGroup(PG);
 			PG.setContainer(PC);

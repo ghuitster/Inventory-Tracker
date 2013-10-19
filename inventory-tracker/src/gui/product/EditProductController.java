@@ -1,14 +1,11 @@
 
 package gui.product;
 
-import common.util.DateUtils;
 import model.Amount;
 import model.CountThreeMonthSupply;
 import model.CountUnitSize;
 import model.IBarcode;
 import model.IProduct;
-import model.IProductDescription;
-import model.Product;
 import model.ProductBarcode;
 import model.ProductDescription;
 import model.UnitSize;
