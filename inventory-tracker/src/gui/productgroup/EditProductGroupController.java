@@ -198,7 +198,8 @@ public class EditProductGroupController extends Controller implements
 	{
 		this.name = this.getView().getProductGroupName();
 		this.sizeUnits = this.getView().getSupplyUnit();
-		if(!getView().getSupplyValue().isEmpty() && !getView().getSupplyValue().startsWith("-"))
+		if(!getView().getSupplyValue().isEmpty() && 
+				!getView().getSupplyValue().startsWith("-"))
 		if(this.sizeUnits == SizeUnits.Count)
 			try
 			{
