@@ -192,7 +192,8 @@ public class AddItemBatchController extends Controller implements
 		validCount = true;
 		barcode = "";
 		loadValues();
-		getView().setProducts((ProductData[]) displayProducts.toArray());
+		ProductData[] temp = new ProductData[displayProducts.size()];
+		getView().setProducts(displayProducts.toArray(temp));
 		enableComponents();
 	}
 
