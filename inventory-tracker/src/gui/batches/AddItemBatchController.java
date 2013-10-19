@@ -11,10 +11,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import model.CountAmount;
+import model.CountThreeMonthSupply;
 import model.IItem;
 import model.IProduct;
 import model.Inventory;
+import model.NonCountAmount;
 import model.Product;
+import model.ProductContainer;
 import model.ProductGroup;
 import model.StorageUnit;
 
@@ -50,7 +54,7 @@ public class AddItemBatchController extends Controller implements
 		super(view);
 		this.target = target;
 		count = 1;
-		entryDate = ((IAddItemBatchView) _view).getEntryDate();
+		entryDate = DateUtils.currentDate();
 		useBarcodeScanner = true;
 		validCount = true;
 		barcode = "";
@@ -63,9 +67,42 @@ public class AddItemBatchController extends Controller implements
 		construct();
 	}
 
-	public void setProduct(Product product)
+	private IProduct createProduct()
 	{
-		this.product = product;
+		return new Product(AddItemBatchController.product.getCreationDate(),
+				AddItemBatchController.product.getDescription()
+						.getDescription(),
+				AddItemBatchController.product.getBarcode(),
+				AddItemBatchController.product.getSize(),
+				AddItemBatchController.product.getShelfLife(),
+				(CountThreeMonthSupply) AddItemBatchController.product
+						.getThreeMonthSupply());
+	}
+
+	private ProductData createProductData(IProduct product)
+	{
+		ProductData result = new ProductData();
+		result.setBarcode(product.getBarcode().getNumber());
+		result.setCount(count + "");
+		result.setDescription(product.getDescription().getDescription());
+		result.setShelfLife(product.getShelfLife() + "");
+
+		if(product.getSize() instanceof CountAmount)
+			result.setSize(((CountAmount) product.getSize()).getUnitType() + "");
+		else
+			result.setSize(((NonCountAmount) product.getSize()).getUnitType()
+					+ "");
+
+		if(product.getThreeMonthSupply() instanceof CountAmount)
+			result.setSupply(((CountAmount) product.getThreeMonthSupply())
+					.getAmount() + "");
+		else
+			result.setSupply(((NonCountAmount) product.getThreeMonthSupply())
+					.getAmount() + "");
+
+		result.setTag(null);
+
+		return result;
 	}
 
 	/**
@@ -84,8 +121,15 @@ public class AddItemBatchController extends Controller implements
 		if(!found)
 		{
 			((IAddItemBatchView) _view).displayAddProductView();
-			// get the product from the AddProductView
-			// create the Product and the ProductData
+
+			IProduct product = createProduct();
+
+			ProductData productData = createProductData(product);
+
+			productData.setTag(product);
+
+			products.add(product);
+			displayProducts.add(productData);
 		}
 		else
 		{
@@ -96,28 +140,32 @@ public class AddItemBatchController extends Controller implements
 					adding = pd;
 
 			adding.setCount(adding.getCount() + count);
-
-			for(int i = 0; i < count; i++)
-			{
-				ItemData temp = new ItemData();
-				temp.setBarcode(barcode);
-				temp.setEntryDate(entryDate);
-				temp.setExpirationDate(entryDate); // FIX THIS
-				temp.setProductGroup("");
-
-				if(target.getTag() instanceof ProductGroup)
-					temp.setProductGroup(((ProductGroup) target.getTag())
-							.getName());
-
-				temp.setStorageUnit(((StorageUnit) target.getTag()).getName());
-				temp.setTag(null);
-				displayItems.add(temp);
-			}
 		}
 
-		// add the product to the products section
-		// add the item to some temp list to be added when the user clicks
-		// done
+		for(int i = 0; i < count; i++)
+		{
+			ItemData temp = new ItemData();
+			temp.setBarcode(barcode);
+			temp.setEntryDate(entryDate);
+			temp.setExpirationDate(entryDate); // FIX THIS
+			temp.setProductGroup("");
+
+			if(target.getTag() instanceof ProductGroup)
+				temp.setProductGroup(((ProductGroup) target.getTag()).getName());
+
+			temp.setStorageUnit(((StorageUnit) target.getTag()).getName());
+			temp.setTag(null);
+			displayItems.add(temp);
+		}
+
+		count = 1;
+		entryDate = DateUtils.currentDate();
+		useBarcodeScanner = true;
+		validCount = true;
+		barcode = "";
+		loadValues();
+		((IAddItemBatchView) _view).setProducts((ProductData[]) displayProducts
+				.toArray());
 		enableComponents();
 	}
 
@@ -166,10 +214,14 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void done()
 	{
-		// if(we created a new product) add that to the system and the selected
-		// product container;
-		// add the product and items to the target product container
-		// print barcodes for all the items added
+		for(IProduct ip: products)
+			if(((ProductContainer) target.getTag()).ableToAddProduct(ip))
+				((ProductContainer) target.getTag()).addProduct(ip);
+
+		for(IItem ii: items)
+			if(((ProductContainer) target.getTag()).ableToAddItem(ii))
+				((ProductContainer) target.getTag()).addItem(ii);
+
 		getView().close();
 	}
 
