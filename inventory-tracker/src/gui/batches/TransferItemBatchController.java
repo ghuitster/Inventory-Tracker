@@ -11,6 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import model.IInventory;
+import model.IItem;
+import model.IProductContainer;
+import model.Inventory;
+
 /**
  * Controller class for the transfer item batch view.
  */
@@ -20,6 +25,9 @@ public class TransferItemBatchController extends Controller implements
 	private String barcode;
 	private boolean useBarcodeScanner;
 	private final Map<ProductData, List<ItemData>> displayItems;
+	private final IInventory inventory = Inventory.getInstance();
+	private IItem item = null;
+	private IProductContainer container = null;
 
 	/**
 	 * Constructor.
@@ -31,9 +39,10 @@ public class TransferItemBatchController extends Controller implements
 	public TransferItemBatchController(IView view, ProductContainerData target)
 	{
 		super(view);
-		barcode = "";
-		useBarcodeScanner = true;
-		displayItems = new HashMap<ProductData, List<ItemData>>();
+		this.barcode = "";
+		this.useBarcodeScanner = true;
+		this.displayItems = new HashMap<ProductData, List<ItemData>>();
+		this.container = (IProductContainer) target.getTag();
 
 		construct();
 	}
@@ -45,8 +54,8 @@ public class TransferItemBatchController extends Controller implements
 	@Override
 	public void barcodeChanged()
 	{
-		barcode = getView().getBarcode();
-		enableComponents();
+		this.barcode = getView().getBarcode();
+		this.enableComponents();
 	}
 
 	/**
@@ -56,8 +65,7 @@ public class TransferItemBatchController extends Controller implements
 	@Override
 	public void done()
 	{
-		// TODO
-		getView().close();
+		this.getView().close();
 	}
 
 	/**
@@ -73,9 +81,9 @@ public class TransferItemBatchController extends Controller implements
 	@Override
 	protected void enableComponents()
 	{
-		getView().enableRedo(false);
-		getView().enableUndo(false);
-		getView().enableItemAction(!barcode.isEmpty());
+		this.getView().enableRedo(false);
+		this.getView().enableUndo(false);
+		this.getView().enableItemAction(!barcode.isEmpty());
 	}
 
 	/**
@@ -97,8 +105,8 @@ public class TransferItemBatchController extends Controller implements
 	@Override
 	protected void loadValues()
 	{
-		getView().setBarcode(barcode);
-		getView().setUseScanner(useBarcodeScanner);
+		this.getView().setBarcode(barcode);
+		this.getView().setUseScanner(useBarcodeScanner);
 	}
 
 	/**
@@ -122,10 +130,11 @@ public class TransferItemBatchController extends Controller implements
 		ItemData[] temp =
 				new ItemData[displayItems.get(getView().getSelectedProduct())
 						.size()];
-		getView().setItems(
-				displayItems.get(getView().getSelectedProduct()).toArray(temp));
+		this.getView().setItems(
+				this.displayItems.get(getView().getSelectedProduct()).toArray(
+						temp));
 
-		enableComponents();
+		this.enableComponents();
 	}
 
 	/**
@@ -135,7 +144,18 @@ public class TransferItemBatchController extends Controller implements
 	@Override
 	public void transferItem()
 	{
-		// TODO
+		this.item = this.inventory.getItem(this.barcode);
+
+		if(this.item == null)
+		{
+			this.getView().displayErrorMessage(
+					"The specified item does not exist.");
+		}
+		else
+		{
+
+		}
+
 	}
 
 	/**
@@ -156,7 +176,7 @@ public class TransferItemBatchController extends Controller implements
 	@Override
 	public void useScannerChanged()
 	{
-		useBarcodeScanner = getView().getUseScanner();
-		enableComponents();
+		this.useBarcodeScanner = getView().getUseScanner();
+		this.enableComponents();
 	}
 }
