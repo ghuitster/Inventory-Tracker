@@ -4,7 +4,7 @@ package model;
 import java.util.Date;
 import java.util.Observable;
 
-public interface IItem extends IObservable, ITaggable
+public interface IItem extends IObservable, ITaggable, Comparable<IItem>
 {
 
 	/**

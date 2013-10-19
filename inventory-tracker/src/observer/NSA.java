@@ -142,7 +142,7 @@ public class NSA implements Observer
 			
 			updateProductContainerData(productContainer, pcData);
 			
-			
+			updateProductContainer(productContainer);
 		}
 	}
 
@@ -164,6 +164,21 @@ public class NSA implements Observer
 		for(int i = 0; i < itemDatas.length; i++)
 			itemDatas[i] = (ItemData)itemIterator.next().getTag();
 		inventoryView.setItems(itemDatas);
+	}
+	
+	private void addProductContainer(IProductContainer container)
+	{
+		
+	}
+	
+	private void removeProductContainer(IProductContainer container)
+	{
+		
+	}
+	
+	private void updateProductContainer(IProductContainer container)
+	{
+		
 	}
 
 	private void updateProductContainerData(IProductContainer productContainer,

@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Observable;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * A class to represent a product container
@@ -15,15 +17,15 @@ public abstract class ProductContainer extends Observable implements IProductCon
 {
 	private static final long serialVersionUID = 9015876223451150036L;
 	protected String name;
-	protected Set<IProduct> products;
-	protected Set<IItem> items;
+	protected SortedSet<IProduct> products;
+	protected SortedSet<IItem> items;
 	protected Set<IProductGroup> productGroups;
 
 	protected ProductContainer(String name)
 	{
 		this.name = name;
-		products = new HashSet<IProduct>();
-		items = new HashSet<IItem>();
+		products = new TreeSet<IProduct>();
+		items = new TreeSet<IItem>();
 		productGroups = new HashSet<IProductGroup>();
 		this.addObserver(Inventory.getInstance());
 	}
@@ -193,9 +195,9 @@ public abstract class ProductContainer extends Observable implements IProductCon
 	 * 
 	 * @see model.IProductContainer#getAllItems()
 	 */
-	public Set<IItem> getAllItems()
+	public SortedSet<IItem> getAllItems()
 	{
-		return new HashSet<IItem>(this.items);
+		return new TreeSet<IItem>(this.items);
 	}
 
 	/*
@@ -203,9 +205,9 @@ public abstract class ProductContainer extends Observable implements IProductCon
 	 * 
 	 * @see model.IProductContainer#getAllProductGroups()
 	 */
-	public Set<IProductGroup> getAllProductGroups()
+	public SortedSet<IProductGroup> getAllProductGroups()
 	{
-		return new HashSet<IProductGroup>(this.productGroups);
+		return new TreeSet<IProductGroup>(this.productGroups);
 	}
 
 	/*
@@ -213,9 +215,9 @@ public abstract class ProductContainer extends Observable implements IProductCon
 	 * 
 	 * @see model.IProductContainer#getAllProducts()
 	 */
-	public Set<IProduct> getAllProducts()
+	public SortedSet<IProduct> getAllProducts()
 	{
-		return new HashSet<IProduct>(this.products);
+		return new TreeSet<IProduct>(this.products);
 	}
 
 	/*
@@ -330,4 +332,10 @@ public abstract class ProductContainer extends Observable implements IProductCon
 	@Override
 	public void setTag(Object tag)
 	{ this.tag = tag; }
+
+	@Override
+	public int compareTo(IProductContainer o)
+	{
+		return this.getName().compareTo(o.getName());
+	}
 }

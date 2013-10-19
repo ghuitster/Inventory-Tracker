@@ -425,4 +425,10 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 		this.tag = tag;
 	}
 
+	@Override
+	public int compareTo(IItem o)
+	{
+		return this.getEntryDate().compareTo(o.getEntryDate());
+	}
+
 }

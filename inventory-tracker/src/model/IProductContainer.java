@@ -3,8 +3,9 @@ package model;
 
 import java.util.Observable;
 import java.util.Set;
+import java.util.SortedSet;
 
-public interface IProductContainer extends IObservable, ITaggable
+public interface IProductContainer extends IObservable, ITaggable, Comparable<IProductContainer>
 {
 
 	/**
@@ -85,19 +86,19 @@ public interface IProductContainer extends IObservable, ITaggable
 	 * @pre this.items != null
 	 * @return the Set<Item> of all Items
 	 */
-	public abstract Set<IItem> getAllItems();
+	public abstract SortedSet<IItem> getAllItems();
 
 	/**
 	 * @pre this.productGroups != null
 	 * @return the Set<ProductGroup> of all ProductGroups
 	 */
-	public abstract Set<IProductGroup> getAllProductGroups();
+	public abstract SortedSet<IProductGroup> getAllProductGroups();
 
 	/**
 	 * @pre this.products != null
 	 * @return the Set<Product> of all Products
 	 */
-	public abstract Set<IProduct> getAllProducts();
+	public abstract SortedSet<IProduct> getAllProducts();
 
 	/**
 	 * @return the name
