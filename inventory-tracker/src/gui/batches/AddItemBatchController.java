@@ -20,6 +20,8 @@ import model.CountThreeMonthSupply;
 import model.IItem;
 import model.IProduct;
 import model.Inventory;
+import model.Item;
+import model.ItemBarcode;
 import model.NonCountAmount;
 import model.Product;
 import model.ProductContainer;
@@ -41,10 +43,43 @@ public class AddItemBatchController extends Controller implements
 	private int count;
 	private boolean validCount;
 	private String barcode;
-	private final Map<ProductData, List<ItemData>> displayItems;
-	private final List<ProductData> displayProducts;
-	private final List<IItem> items;
-	private final List<IProduct> products;
+	private Map<ProductData, List<ItemData>> displayItems;
+	private List<ProductData> displayProducts;
+	private List<IItem> items;
+	private List<IProduct> products;
+
+	/**
+	 * @param displayItems the displayItems to set
+	 */
+	public void setDisplayItems(Map<ProductData, List<ItemData>> displayItems)
+	{
+		this.displayItems = displayItems;
+	}
+
+	/**
+	 * @param displayProducts the displayProducts to set
+	 */
+	public void setDisplayProducts(List<ProductData> displayProducts)
+	{
+		this.displayProducts = displayProducts;
+	}
+
+	/**
+	 * @param items the items to set
+	 */
+	public void setItems(List<IItem> items)
+	{
+		this.items = items;
+	}
+
+	/**
+	 * @param products the products to set
+	 */
+	public void setProducts(List<IProduct> products)
+	{
+		this.products = products;
+	}
+
 	public static IProduct product;
 
 	/**
@@ -70,6 +105,38 @@ public class AddItemBatchController extends Controller implements
 		product = null;
 
 		construct();
+	}
+
+	/**
+	 * @return the displayItems
+	 */
+	public Map<ProductData, List<ItemData>> getDisplayItems()
+	{
+		return displayItems;
+	}
+
+	/**
+	 * @return the displayProducts
+	 */
+	public List<ProductData> getDisplayProducts()
+	{
+		return displayProducts;
+	}
+
+	/**
+	 * @return the items
+	 */
+	public List<IItem> getItems()
+	{
+		return items;
+	}
+
+	/**
+	 * @return the products
+	 */
+	public List<IProduct> getProducts()
+	{
+		return products;
 	}
 
 	private IProduct createProduct()
@@ -136,12 +203,12 @@ public class AddItemBatchController extends Controller implements
 				found = true;
 
 		ProductData adding = null;
+		IProduct product = null;
 
 		if(!found)
 		{
 			getView().displayAddProductView();
-
-			IProduct product = createProduct();
+			product = createProduct();
 
 			adding = createProductData(product);
 
@@ -152,13 +219,12 @@ public class AddItemBatchController extends Controller implements
 		}
 		else
 		{
-			adding = null;
-
 			for(ProductData pd: displayProducts)
 				if(pd.getBarcode().equals(barcode))
 					adding = pd;
 
 			adding.setCount(adding.getCount() + count);
+			products.add(product);
 		}
 
 		for(int i = 0; i < count; i++)
@@ -182,8 +248,11 @@ public class AddItemBatchController extends Controller implements
 			}
 			else
 			{
-
+				displayItems.get(adding).add(temp);
 			}
+
+			items.add(new Item(product, new ItemBarcode(Inventory.getInstance()
+					.getUniqueBarCode() + ""), entryDate, null));
 		}
 
 		count = 1;
