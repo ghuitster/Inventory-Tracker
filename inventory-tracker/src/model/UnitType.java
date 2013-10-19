@@ -9,9 +9,9 @@ package model;
 public enum UnitType
 {
 	// Enumeration Values
-	COUNT("count"), POUNDS("lbs"), OUNCES("oz"), GRAMS("g"), KILOGRAMS("kg"),
-	GALLONS("gal"), QUARTS("qt"), PINTS("pt"), FLUID_OUNCES("fl oz"), LITERS(
-			"L"), ELEPHANT_WEIGHT("EL"), STONE("st"), CHEVROLET("chevy");
+	COUNT("count"), POUNDS("pounds"), OUNCES("ounces"), GRAMS("grams"), KILOGRAMS("kilograms"),
+	GALLONS("gallons"), QUARTS("quarts"), PINTS("pints"), FLUID_OUNCES("fluid ounces"), LITERS(
+			"liters"), ELEPHANT_WEIGHT("EL"), STONE("st"), CHEVROLET("chevy");
 
 	// Variables
 	private final String value;

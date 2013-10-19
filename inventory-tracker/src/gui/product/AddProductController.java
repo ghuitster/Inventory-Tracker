@@ -3,10 +3,13 @@ package gui.product;
 
 import model.Amount;
 import model.CountThreeMonthSupply;
+import model.CountUnitSize;
 import model.IBarcode;
 import model.IProduct;
 import model.Product;
 import model.ProductBarcode;
+import model.UnitSize;
+import model.UnitType;
 import gui.batches.AddItemBatchController;
 import gui.batches.IAddItemBatchController;
 import gui.common.Controller;
@@ -26,11 +29,12 @@ public class AddProductController extends Controller implements
 	private String descript = "";
 	private IBarcode barcode = null;
 	private Amount size = null;
-	private int sizeValue = 0;
+	private float sizeValue = 0;
 	private SizeUnits sizeUnits = SizeUnits.Count;
 	private int shelflife = 0;
 	private CountThreeMonthSupply cThreeMonthSupply = null;
 	private boolean submit = false;
+	private UnitType unitType = UnitType.COUNT;
 
 	/**
 	 * Constructor.
@@ -58,8 +62,49 @@ public class AddProductController extends Controller implements
 	public void addProduct()
 	{
 		barcode = new ProductBarcode(this.getView().getBarcode());
+		createUnitType();
+		if(this.unitType == UnitType.COUNT)
+			this.size = new CountUnitSize((int) this.sizeValue);
+		else
+			this.size = new UnitSize(this.sizeValue, this.unitType);
 		IProduct myProduct = new Product(DateUtils.currentDate(), this.descript, this.barcode, this.size, this.shelflife, this.cThreeMonthSupply);
-		AddItemBatchController.product = myParent;
+		AddItemBatchController.product = myProduct;
+	}
+
+	private void createUnitType()
+	{
+		switch(sizeUnits)
+		{
+			case Pounds:
+				this.unitType = UnitType.POUNDS;
+				break;
+			case Ounces:
+				this.unitType = UnitType.OUNCES;
+				break;
+			case Grams:
+				this.unitType = UnitType.GRAMS;
+				break;
+			case Kilograms:
+				this.unitType = UnitType.KILOGRAMS;
+				break;
+			case Gallons:
+				this.unitType = UnitType.GALLONS;
+				break;
+			case Quarts:
+				this.unitType = UnitType.QUARTS;
+				break;
+			case Pints:
+				this.unitType = UnitType.PINTS;
+				break;
+			case FluidOunces:
+				this.unitType = UnitType.FLUID_OUNCES;
+				break;
+			case Liters:
+				this.unitType = UnitType.LITERS;
+				break;
+			case Count:
+				this.unitType = UnitType.COUNT;
+		}
 	}
 
 	/**
@@ -135,10 +180,29 @@ public class AddProductController extends Controller implements
 	@Override
 	public void valuesChanged()
 	{
-		this.cThreeMonthSupply = new CountThreeMonthSupply(Integer.parseInt(getView().getSupply()));
+		try
+		{
+			this.cThreeMonthSupply = new CountThreeMonthSupply(Integer.parseInt(getView().getSupply()));
+		}
+		catch(NumberFormatException e)
+		{
+			this.getView().displayErrorMessage("The three month supply must be a whole number");
+		}
 		this.descript = getView().getDescription();
-		this.sizeValue = Integer.parseInt(getView().getSizeValue());
 		this.sizeUnits = getView().getSizeUnit();
+		if(this.sizeUnits == SizeUnits.Count)
+			try
+			{
+				this.sizeValue = Integer.parseInt(getView().getSizeValue());
+			}
+			catch(NumberFormatException e)
+			{
+				getView().displayErrorMessage("For unit size type Count, the value must be a whole number");
+			}
+		else
+		{
+			this.sizeValue = Float.parseFloat(getView().getSizeValue());
+		}
 		
 		this.shouldOKBeEnabled();
 		this.enableComponents();
