@@ -30,8 +30,6 @@ public class EditStorageUnitController extends Controller implements
 		
 		storageUnit = (IStorageUnit)target.getTag();
 		getView().setStorageUnitName(storageUnit.getName());
-		
-		getView().enableOK(false);
 	}
 
 	//
@@ -98,7 +96,10 @@ public class EditStorageUnitController extends Controller implements
 	@Override
 	public void valuesChanged()
 	{
-		getView().enableOK(Inventory.getInstance()
-				.ableToAddStorageUnitNamed(getView().getStorageUnitName()));
+		String newName = getView().getStorageUnitName();
+		if(newName.equals(storageUnit.getName()))
+			getView().enableOK(true);
+		else
+			getView().enableOK(Inventory.getInstance().ableToAddStorageUnitNamed(newName));
 	}
 }
