@@ -21,7 +21,7 @@ public class EditProductGroupController extends Controller implements
 	
 	private IProductGroup PG;
 	private SizeUnits sizeUnits = SizeUnits.Count;
-	private boolean submit = false;
+	private boolean submit = true;
 	private String name = "";
 	private float value;
 	private UnitType unitType = UnitType.COUNT;
@@ -122,7 +122,15 @@ public class EditProductGroupController extends Controller implements
 	protected void loadValues()
 	{
 		this.getView().setProductGroupName(this.name);
-		this.getView().setSupplyValue("" + value);
+		if(this.sizeUnits == SizeUnits.Count)
+		{
+			int temp = (int)value;
+			this.getView().setSupplyValue("" + temp);
+		}
+		else
+		{
+			this.getView().setSupplyValue("" + value);
+		}
 		this.getView().setSupplyUnit(this.sizeUnits);
 	}
 
@@ -146,6 +154,8 @@ public class EditProductGroupController extends Controller implements
 			{
 				getView().displayErrorMessage("For unit size type Count, the "
 						+ "value must be a whole number");
+				int temp = (int)value;
+				getView().setSupplyValue("" + temp);
 			}
 		else
 		{
