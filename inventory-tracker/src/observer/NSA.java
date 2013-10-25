@@ -313,7 +313,7 @@ public class NSA implements Observer
 				.getContainer().getTag();
 		
 		boolean passedSelf = false;
-		for(index = 0; index < root.getChildCount(); index++)
+		for(index = 0; index < parent.getChildCount(); index++)
 		{
 			if(!parent.getChild(index).getName().equals(pcData.getName()))
 			{
