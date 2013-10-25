@@ -4,10 +4,11 @@ package gui.item;
 import gui.common.Controller;
 import gui.common.IView;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import model.IItem;
+
+import common.util.DateUtils;
 
 /**
  * Controller class for the edit item view.
@@ -111,30 +112,54 @@ public class EditItemController extends Controller implements
 	{
 		if(this.getView().getEntryDate() == null)
 		{
-			this.getView().setEntryDate(this.entryDate);
+			this.submit = false;
+			return;
 		}
 		else
 		{
-			this.entryDate = this.getView().getEntryDate();
+			Date requestedDate = this.getView().getEntryDate();
+			boolean valid = this.valiDate(requestedDate);
+			this.submit = valid;
+			if(this.submit)
+			{
+				this.entryDate = requestedDate;
+			}
 		}
-		this.valiDate();
 		this.enableComponents();
 	}
 
-	private void valiDate()
+	private boolean valiDate(Date date)
 	{
-		Calendar cal = Calendar.getInstance();
-		cal.set(2000, 0, 1);
-		boolean valid = this.entryDate.after(cal.getTime());
-
-		if(valid)
+		if(date == null)
 		{
-			this.submit = true;
+			return false;
+		}
+		else if(!date.after(DateUtils.earliestDate()))
+		{
+			return false;
+		}
+		else if(!date.before(DateUtils.currentDate())
+				|| date.equals(DateUtils.formatDate(DateUtils.currentDate())))
+		{
+			return false;
 		}
 		else
 		{
-			this.submit = false;
+			return true;
 		}
+
+		//
+		// boolean afterEarliest = date.after(DateUtils.earliestDate());
+		// boolean beforeToday = date.before(DateUtils.currentDate());
+		//
+		// if(valid)
+		// {
+		// this.submit = true;
+		// }
+		// else
+		// {
+		// this.submit = false;
+		// }
 	}
 
 }
