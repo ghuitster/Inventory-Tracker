@@ -2,6 +2,7 @@
 package gui.productgroup;
 
 import model.Amount;
+import model.IProductContainer;
 import model.IProductGroup;
 import model.CountThreeMonthSupply;
 import model.ThreeMonthSupply;
@@ -26,6 +27,7 @@ public class EditProductGroupController extends Controller implements
 	private float value;
 	private UnitType unitType = UnitType.COUNT;
 	private Amount threeMonthSupply;
+	private IProductContainer container;
 	/**
 	 * Constructor.
 	 * 
@@ -37,6 +39,7 @@ public class EditProductGroupController extends Controller implements
 		super(view);
 		
 		PG = (IProductGroup) target.getTag();
+		this.container = PG.getContainer();
 		this.createSizeUnitsFromUnitType();
 		this.name = PG.getName();
 		if(this.sizeUnits == SizeUnits.Count)
@@ -173,7 +176,7 @@ public class EditProductGroupController extends Controller implements
 		else if(this.getView().getSupplyValue().isEmpty() ||
 				getView().getSupplyValue().startsWith("-"))
 			submit = false;
-		else if(!PG.ableToAddProductGroupNamed(getView().getProductGroupName()))
+		else if(!this.container.ableToAddProductGroupNamed(getView().getProductGroupName()))
 			submit = false;
 		else 
 			submit = true;

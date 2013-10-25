@@ -30,7 +30,7 @@ public class EditProductController extends Controller implements
 	private SizeUnits sizeUnits = SizeUnits.Count;
 	private int shelflife = 0;
 	private CountThreeMonthSupply cThreeMonthSupply = null;
-	private boolean submit = false;
+	private boolean submit = true;
 	private UnitType unitType = UnitType.COUNT;
 	/**
 	 * Constructor.
@@ -103,12 +103,12 @@ public class EditProductController extends Controller implements
 		if(getView().getSizeUnit() == SizeUnits.Count)
 		{
 			getView().enableSizeValue(false);
-			getView().setSizeValue("1");
+			int temp = (int)this.sizeValue;
+			getView().setSizeValue("" + temp);
 		}
 		else
 		{
 			getView().enableSizeValue(true);
-			getView().setSizeValue("0");
 		}
 		getView().enableBarcode(false);
 		
@@ -178,6 +178,12 @@ public class EditProductController extends Controller implements
 			}
 		}
 		this.descript = getView().getDescription();
+		if(this.sizeUnits != SizeUnits.Count && getView().getSizeUnit() == SizeUnits.Count)
+		{
+			this.sizeValue = 1;
+			int temp = (int)this.sizeValue;
+			this.getView().setSizeValue("" + temp);
+		}
 		this.sizeUnits = getView().getSizeUnit();
 		if(!getView().getShelfLife().isEmpty() && !getView().getShelfLife().startsWith("-"))
 		{
