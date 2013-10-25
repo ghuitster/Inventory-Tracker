@@ -226,10 +226,6 @@ public class AddItemBatchController extends Controller implements
 	public void barcodeChanged()
 	{
 		barcode = getView().getBarcode();
-
-		if(useBarcodeScanner)
-			addItem();
-
 		enableComponents();
 	}
 
