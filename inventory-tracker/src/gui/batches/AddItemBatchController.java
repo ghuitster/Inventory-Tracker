@@ -78,61 +78,6 @@ public class AddItemBatchController extends Controller implements
 		construct();
 	}
 
-	private IProduct createProductFromStatic()
-	{
-		return new Product(AddItemBatchController.product.getCreationDate(),
-				AddItemBatchController.product.getDescription()
-						.getDescription(),
-				AddItemBatchController.product.getBarcode(),
-				AddItemBatchController.product.getSize(),
-				AddItemBatchController.product.getShelfLife(),
-				(CountThreeMonthSupply) AddItemBatchController.product
-						.getThreeMonthSupply());
-	}
-
-	private ProductData createProductData(IProduct product)
-	{
-		ProductData result = new ProductData();
-		result.setBarcode(product.getBarcode().getNumber());
-		result.setCount(count + "");
-		result.setDescription(product.getDescription().getDescription());
-		result.setShelfLife(product.getShelfLife() + "");
-
-		if(product.getSize() instanceof CountAmount)
-			result.setSize(((CountAmount) product.getSize()).getUnitType() + "");
-		else
-			result.setSize(((NonCountAmount) product.getSize()).getUnitType()
-					+ "");
-
-		if(product.getThreeMonthSupply() instanceof CountAmount)
-			result.setSupply(((CountAmount) product.getThreeMonthSupply())
-					.getAmount() + "");
-		else
-			result.setSupply(((NonCountAmount) product.getThreeMonthSupply())
-					.getAmount() + "");
-
-		result.setTag(product);
-
-		return result;
-	}
-
-	private boolean valiDate(Date date)
-	{
-		date = DateUtils.removeTimeFromDate(date);
-		boolean response = false;
-
-		if((date != null)
-				&& (!date.before(DateUtils.removeTimeFromDate(DateUtils
-						.earliestDate())))
-				&& (!date.after(DateUtils.removeTimeFromDate(DateUtils
-						.currentDate()))))
-		{
-			response = true;
-		}
-
-		return response;
-	}
-
 	/**
 	 * This method is called when the user clicks the "Add Item" button in the
 	 * add item batch view.
@@ -311,6 +256,44 @@ public class AddItemBatchController extends Controller implements
 		}
 	}
 
+	private ProductData createProductData(IProduct product)
+	{
+		ProductData result = new ProductData();
+		result.setBarcode(product.getBarcode().getNumber());
+		result.setCount(count + "");
+		result.setDescription(product.getDescription().getDescription());
+		result.setShelfLife(product.getShelfLife() + "");
+
+		if(product.getSize() instanceof CountAmount)
+			result.setSize(((CountAmount) product.getSize()).getUnitType() + "");
+		else
+			result.setSize(((NonCountAmount) product.getSize()).getUnitType()
+					+ "");
+
+		if(product.getThreeMonthSupply() instanceof CountAmount)
+			result.setSupply(((CountAmount) product.getThreeMonthSupply())
+					.getAmount() + "");
+		else
+			result.setSupply(((NonCountAmount) product.getThreeMonthSupply())
+					.getAmount() + "");
+
+		result.setTag(product);
+
+		return result;
+	}
+
+	private IProduct createProductFromStatic()
+	{
+		return new Product(AddItemBatchController.product.getCreationDate(),
+				AddItemBatchController.product.getDescription()
+						.getDescription(),
+				AddItemBatchController.product.getBarcode(),
+				AddItemBatchController.product.getSize(),
+				AddItemBatchController.product.getShelfLife(),
+				(CountThreeMonthSupply) AddItemBatchController.product
+						.getThreeMonthSupply());
+	}
+
 	/**
 	 * This method is called when the user clicks the "Done" button in the add
 	 * item batch view.
@@ -475,5 +458,22 @@ public class AddItemBatchController extends Controller implements
 	{
 		useBarcodeScanner = getView().getUseScanner();
 		enableComponents();
+	}
+
+	private boolean valiDate(Date date)
+	{
+		date = DateUtils.removeTimeFromDate(date);
+		boolean response = false;
+
+		if((date != null)
+				&& (!date.before(DateUtils.removeTimeFromDate(DateUtils
+						.earliestDate())))
+				&& (!date.after(DateUtils.removeTimeFromDate(DateUtils
+						.currentDate()))))
+		{
+			response = true;
+		}
+
+		return response;
 	}
 }

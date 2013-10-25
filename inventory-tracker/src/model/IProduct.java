@@ -2,7 +2,6 @@
 package model;
 
 import java.util.Date;
-import java.util.Observable;
 import java.util.Set;
 
 public interface IProduct extends ITaggable, IObservable, Comparable<IProduct>

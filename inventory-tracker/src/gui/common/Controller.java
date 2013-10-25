@@ -1,8 +1,6 @@
 
 package gui.common;
 
-import gui.inventory.ProductContainerData;
-import observer.NSA;
 
 /**
  * Controller is a base class that provides common functionality required by all
@@ -27,7 +25,7 @@ import observer.NSA;
  */
 public abstract class Controller implements IController
 {
-	
+
 	/**
 	 * Reference to the view for this controller.
 	 */

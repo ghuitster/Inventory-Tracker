@@ -5,15 +5,18 @@ import gui.common.Controller;
 import gui.item.ItemData;
 import gui.product.ProductData;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Random;
 
+import model.IItem;
+import model.IPersistence;
+import model.IProduct;
+import model.IProductContainer;
+import model.Inventory;
+import model.Item;
+import model.ProductContainer;
+import model.ProductGroup;
+import model.StorageUnit;
 import observer.NSA;
-import model.*;
 
 /**
  * Controller class for inventory view.
@@ -21,7 +24,6 @@ import model.*;
 public class InventoryController extends Controller implements
 		IInventoryController
 {
-
 
 	private ProductContainerData treeRoot;
 	private Random rand = new Random();
@@ -130,12 +132,17 @@ public class InventoryController extends Controller implements
 		if(getView().getSelectedProductContainer() != null
 				&& getView().getSelectedProduct() != null)
 		{
-			IProductContainer PC = (IProductContainer) getView()
-					.getSelectedProductContainer().getTag();
-			IProduct selectedProduct = (IProduct) getView().getSelectedProduct().getTag();
+			IProductContainer PC =
+					(IProductContainer) getView().getSelectedProductContainer()
+							.getTag();
+			IProduct selectedProduct =
+					(IProduct) getView().getSelectedProduct().getTag();
 			if(PC != null)
 				able = PC.ableToRemoveProduct(selectedProduct);
-			else able = Inventory.getInstance().ableToRemoveProduct(selectedProduct);
+			else
+				able =
+						Inventory.getInstance().ableToRemoveProduct(
+								selectedProduct);
 		}
 		return able;
 	}
@@ -148,7 +155,8 @@ public class InventoryController extends Controller implements
 	public boolean canDeleteProductGroup()
 	{
 		boolean able = false;
-		ProductGroup PG = (ProductGroup) getView().getSelectedProductContainer().getTag();
+		ProductGroup PG =
+				(ProductGroup) getView().getSelectedProductContainer().getTag();
 		if(PG != null)
 			if(PG.getAllItems().size() == 0 && PG.getAllProducts().size() == 0)
 				able = true;
@@ -164,7 +172,8 @@ public class InventoryController extends Controller implements
 	{
 		boolean able = false;
 		Inventory invent = Inventory.getInstance();
-		StorageUnit SU = (StorageUnit) getView().getSelectedProductContainer().getTag();
+		StorageUnit SU =
+				(StorageUnit) getView().getSelectedProductContainer().getTag();
 		if(invent.ableToRemoveStorageUnit(SU))
 			able = true;
 		return able;
@@ -246,11 +255,15 @@ public class InventoryController extends Controller implements
 	@Override
 	public void deleteProduct()
 	{
-		IProduct selectedProduct = (IProduct) getView().getSelectedProduct().getTag();
-		IProductContainer PC = (IProductContainer) getView().getSelectedProductContainer().getTag();
+		IProduct selectedProduct =
+				(IProduct) getView().getSelectedProduct().getTag();
+		IProductContainer PC =
+				(IProductContainer) getView().getSelectedProductContainer()
+						.getTag();
 		if(PC != null)
 			PC.removeProduct(selectedProduct);
-		else Inventory.getInstance().removeProduct(selectedProduct);
+		else
+			Inventory.getInstance().removeProduct(selectedProduct);
 	}
 
 	/**
@@ -260,7 +273,8 @@ public class InventoryController extends Controller implements
 	@Override
 	public void deleteProductGroup()
 	{
-		ProductGroup PG = (ProductGroup) getView().getSelectedProductContainer().getTag();
+		ProductGroup PG =
+				(ProductGroup) getView().getSelectedProductContainer().getTag();
 		IProductContainer PC = PG.getContainer();
 		PC.removeProductGroup(PG);
 	}
@@ -273,7 +287,8 @@ public class InventoryController extends Controller implements
 	public void deleteStorageUnit()
 	{
 		Inventory invent = Inventory.getInstance();
-		StorageUnit SU = (StorageUnit)getView().getSelectedProductContainer().getTag();
+		StorageUnit SU =
+				(StorageUnit) getView().getSelectedProductContainer().getTag();
 		invent.removeStorageUnit(SU);
 	}
 
@@ -359,7 +374,7 @@ public class InventoryController extends Controller implements
 	@Override
 	protected void loadValues()
 	{
-		
+
 		ProductContainerData root = new ProductContainerData();
 		treeRoot = root;
 		try
@@ -369,10 +384,10 @@ public class InventoryController extends Controller implements
 				Inventory.getInstance().getPersistence().loadData();
 		}
 		catch(Exception e)
-		{ }
-		
+		{}
+
 		getView().setProductContainers(root);
-		
+
 		NSA.init(this.getView(), root);
 		NSA.getInstance().populateProductContainers();
 	}
@@ -388,8 +403,11 @@ public class InventoryController extends Controller implements
 	public void moveItemToContainer(ItemData itemData,
 			ProductContainerData containerData)
 	{
-		IProductContainer PC = (IProductContainer) getView().getSelectedProductContainer().getTag();
-		PC.transferItem((Item)itemData.getTag(), (ProductContainer)containerData.getTag());
+		IProductContainer PC =
+				(IProductContainer) getView().getSelectedProductContainer()
+						.getTag();
+		PC.transferItem((Item) itemData.getTag(),
+				(ProductContainer) containerData.getTag());
 	}
 
 	/**
@@ -402,8 +420,10 @@ public class InventoryController extends Controller implements
 				getView().getSelectedProductContainer();
 		if(selectedContainer != null)
 		{
-			NSA.getInstance().populateProductData((IProductContainer)selectedContainer.getTag());
-			NSA.getInstance().populateItemData((IProductContainer)selectedContainer.getTag());
+			NSA.getInstance().populateProductData(
+					(IProductContainer) selectedContainer.getTag());
+			NSA.getInstance().populateItemData(
+					(IProductContainer) selectedContainer.getTag());
 		}
 
 	}
@@ -414,12 +434,13 @@ public class InventoryController extends Controller implements
 	@Override
 	public void productSelectionChanged()
 	{
-		
+
 		ProductContainerData selectedContainer =
 				getView().getSelectedProductContainer();
-		
+
 		if(selectedContainer != null)
-			NSA.getInstance().populateItemData((IProductContainer)selectedContainer.getTag());
+			NSA.getInstance().populateItemData(
+					(IProductContainer) selectedContainer.getTag());
 	}
 
 	/**
@@ -428,7 +449,7 @@ public class InventoryController extends Controller implements
 	@Override
 	public void removeItem()
 	{
-		IItem selectedItem = (IItem) getView().getSelectedItem().getTag(); 
+		IItem selectedItem = (IItem) getView().getSelectedItem().getTag();
 		IProductContainer PC = selectedItem.getContainer();
 		PC.removeItem(selectedItem);
 	}

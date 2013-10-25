@@ -1,14 +1,10 @@
 
 package gui.storageunit;
 
-import model.IProductContainer;
-import model.IProductGroup;
-import model.IStorageUnit;
-import model.Inventory;
-import model.ProductGroup;
-import model.StorageUnit;
 import gui.common.Controller;
 import gui.common.IView;
+import model.Inventory;
+import model.StorageUnit;
 
 /**
  * Controller class for the add storage unit view.
@@ -16,7 +12,7 @@ import gui.common.IView;
 public class AddStorageUnitController extends Controller implements
 		IAddStorageUnitController
 {
-	
+
 	/**
 	 * Constructor.
 	 * 
@@ -43,10 +39,11 @@ public class AddStorageUnitController extends Controller implements
 	{
 		try
 		{
-			Inventory.getInstance().addStorageUnit(new StorageUnit(getView().getStorageUnitName()));
+			Inventory.getInstance().addStorageUnit(
+					new StorageUnit(getView().getStorageUnitName()));
 		}
-		catch (Exception e) 
-		{ }
+		catch(Exception e)
+		{}
 	}
 
 	/**
@@ -89,7 +86,7 @@ public class AddStorageUnitController extends Controller implements
 	 */
 	@Override
 	protected void loadValues()
-	
+
 	{}
 
 	/**
@@ -99,7 +96,8 @@ public class AddStorageUnitController extends Controller implements
 	@Override
 	public void valuesChanged()
 	{
-		getView().enableOK(Inventory.getInstance()
-				.ableToAddStorageUnitNamed(getView().getStorageUnitName()));
+		getView().enableOK(
+				Inventory.getInstance().ableToAddStorageUnitNamed(
+						getView().getStorageUnitName()));
 	}
 }

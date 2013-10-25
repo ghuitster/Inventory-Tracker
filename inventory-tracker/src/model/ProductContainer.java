@@ -24,6 +24,8 @@ public abstract class ProductContainer extends Observable implements
 	protected SortedSet<IItem> items;
 	protected SortedSet<IProductGroup> productGroups;
 
+	private transient Object tag;
+
 	protected ProductContainer(String name)
 	{
 		this.name = name;
@@ -61,20 +63,6 @@ public abstract class ProductContainer extends Observable implements
 		return true;
 	}
 
-	public boolean ableToAddProductGroupNamed(String name)
-	{
-		if(name == null || name.isEmpty())
-			return false;
-		
-		for(IProductGroup pg : this.productGroups)
-		{
-			if(pg.getName().toLowerCase().equals(name.toLowerCase()))
-				return false;
-		}
-		
-		return true;
-	}
-	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -85,6 +73,21 @@ public abstract class ProductContainer extends Observable implements
 	{
 		if(this.productGroups.contains(productGroup))
 			return false;
+
+		return true;
+	}
+
+	@Override
+	public boolean ableToAddProductGroupNamed(String name)
+	{
+		if(name == null || name.isEmpty())
+			return false;
+
+		for(IProductGroup pg: this.productGroups)
+		{
+			if(pg.getName().toLowerCase().equals(name.toLowerCase()))
+				return false;
+		}
 
 		return true;
 	}
@@ -168,7 +171,8 @@ public abstract class ProductContainer extends Observable implements
 	@Override
 	public void addProduct(IProduct product)
 	{
-		IProductContainer container = this.getStorageUnit().findContainer(product);
+		IProductContainer container =
+				this.getStorageUnit().findContainer(product);
 
 		if(container == null)
 		{
@@ -208,6 +212,13 @@ public abstract class ProductContainer extends Observable implements
 
 		this.setChanged();
 		this.notifyObservers(new ObservableArgs(productGroup, UpdateType.ADDED));
+	}
+
+	@Override
+	public int compareTo(IProductContainer o)
+	{
+		return this.getName().toLowerCase()
+				.compareTo(o.getName().toLowerCase());
 	}
 
 	@Override
@@ -269,6 +280,23 @@ public abstract class ProductContainer extends Observable implements
 		return this.name;
 	}
 
+	@Override
+	public IStorageUnit getStorageUnit()
+	{
+		IProductContainer container = this;
+		while(container instanceof IProductGroup)
+		{
+			container = ((IProductGroup) container).getContainer();
+		}
+		return (IStorageUnit) container;
+	}
+
+	@Override
+	public Object getTag()
+	{
+		return tag;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -327,6 +355,12 @@ public abstract class ProductContainer extends Observable implements
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
+	@Override
+	public void setTag(Object tag)
+	{
+		this.tag = tag;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -337,76 +371,45 @@ public abstract class ProductContainer extends Observable implements
 	public void transferItem(IItem item, IProductContainer targetContainer)
 	{
 		this.removeItem(item);
-		
+
 		List<IItem> itemsToAdd = new ArrayList<IItem>();
 		itemsToAdd.add(item);
-		
+
 		if(targetContainer.getStorageUnit() == this.getStorageUnit())
 		{
 			Set<IItem> items = this.getAllItems();
-			for(IItem containerItem : items)
+			for(IItem containerItem: items)
 			{
 				if(containerItem.getProduct() == item.getProduct())
 					itemsToAdd.add(containerItem);
 			}
-			
+
 			this.removeProduct(item.getProduct());
 		}
 		else
 		{
-			IProductContainer existing = targetContainer.getStorageUnit()
-					.findContainer(item.getProduct());
+			IProductContainer existing =
+					targetContainer.getStorageUnit().findContainer(
+							item.getProduct());
 			if(existing != null)
 			{
 				Set<IItem> toMove = new HashSet<IItem>();
-				for(IItem otherItem : existing.getAllItems())
+				for(IItem otherItem: existing.getAllItems())
 				{
 					if(otherItem.getProduct() == item.getProduct())
 						toMove.add(otherItem);
 				}
-				for(IItem otherItem : toMove)
+				for(IItem otherItem: toMove)
 				{
 					existing.removeItem(otherItem);
 					targetContainer.addItem(otherItem);
 				}
 				existing.removeProduct(item.getProduct());
 			}
-			
+
 		}
-		
-		for(IItem itemToAdd : itemsToAdd)
+
+		for(IItem itemToAdd: itemsToAdd)
 			targetContainer.addItem(itemToAdd);
-	}
-
-	@Override
-	public IStorageUnit getStorageUnit()
-	{
-		IProductContainer container = this;
-		while(container instanceof IProductGroup)
-		{
-			container = ((IProductGroup) container).getContainer();
-		}
-		return (IStorageUnit) container;
-	}
-
-	private transient Object tag;
-
-	@Override
-	public Object getTag()
-	{
-		return tag;
-	}
-
-	@Override
-	public void setTag(Object tag)
-	{
-		this.tag = tag;
-	}
-
-	@Override
-	public int compareTo(IProductContainer o)
-	{
-		return this.getName().toLowerCase()
-				.compareTo(o.getName().toLowerCase());
 	}
 }

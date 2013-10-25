@@ -111,6 +111,23 @@ public class EditItemController extends Controller implements
 		this.enableComponents();
 	}
 
+	private boolean valiDate(Date date)
+	{
+		date = DateUtils.removeTimeFromDate(date);
+		boolean response = false;
+
+		if((date != null)
+				&& (!date.before(DateUtils.removeTimeFromDate(DateUtils
+						.earliestDate())))
+				&& (!date.after(DateUtils.removeTimeFromDate(DateUtils
+						.currentDate()))))
+		{
+			response = true;
+		}
+
+		return response;
+	}
+
 	/**
 	 * This method is called when any of the fields in the edit item view is
 	 * changed by the user.
@@ -139,23 +156,6 @@ public class EditItemController extends Controller implements
 			}
 		}
 		this.enableComponents();
-	}
-
-	private boolean valiDate(Date date)
-	{
-		date = DateUtils.removeTimeFromDate(date);
-		boolean response = false;
-
-		if((date != null)
-				&& (!date.before(DateUtils.removeTimeFromDate(DateUtils
-						.earliestDate())))
-				&& (!date.after(DateUtils.removeTimeFromDate(DateUtils
-						.currentDate()))))
-		{
-			response = true;
-		}
-
-		return response;
 	}
 
 }

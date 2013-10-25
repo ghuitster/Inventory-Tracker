@@ -1,16 +1,17 @@
+
 package model;
 
 public class ObservableArgs
 {
 	private Object changedObj;
 	private UpdateType updateType;
-	
+
 	public ObservableArgs(Object changedObj, UpdateType updateType)
 	{
 		this.changedObj = changedObj;
 		this.updateType = updateType;
 	}
-	
+
 	/**
 	 * Gets the object which changed
 	 * @pre none
@@ -21,7 +22,7 @@ public class ObservableArgs
 	{
 		return this.changedObj;
 	}
-	
+
 	/**
 	 * Gets what action occurred with the changed object
 	 * @pre none

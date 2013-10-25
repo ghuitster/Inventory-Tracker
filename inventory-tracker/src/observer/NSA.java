@@ -7,15 +7,20 @@ import gui.item.ItemData;
 import gui.product.ProductData;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 
-import common.util.DateUtils;
-import model.*;
+import model.IInventory;
+import model.IItem;
+import model.IProduct;
+import model.IProductContainer;
+import model.IProductGroup;
+import model.IStorageUnit;
+import model.Inventory;
+import model.ObservableArgs;
 
 /**
  * Notification System Arbitrator Receives update notifications from the model
@@ -25,6 +30,29 @@ import model.*;
  */
 public class NSA implements Observer
 {
+	private static NSA instance;
+
+	public static NSA getInstance()
+	{
+		return instance;
+	}
+
+	public static void init(IInventoryView inventoryView,
+			ProductContainerData root)
+	{
+		if(instance == null)
+			instance = new NSA(inventoryView, root);
+	}
+
+	/**
+	 * Reference to the inventory we're tracking
+	 */
+	private IInventory inventory;
+
+	private ProductContainerData root;
+
+	private IInventoryView inventoryView;
+
 	private NSA(IInventoryView inventoryView, ProductContainerData root)
 	{
 		inventory = Inventory.getInstance();
@@ -32,28 +60,211 @@ public class NSA implements Observer
 		this.inventoryView = inventoryView;
 		this.root = root;
 	}
-	
-	private static NSA instance;
-	
-	public static void init(IInventoryView inventoryView, ProductContainerData root)
+
+	public void addProductContainer(IProductContainer container)
 	{
-		if(instance == null)
-			instance = new NSA(inventoryView, root);
+		ProductContainerData parent;
+		if(container instanceof IStorageUnit)
+			parent = root;
+		else
+		{
+			IProductGroup pg = (IProductGroup) container;
+			parent = (ProductContainerData) pg.getContainer().getTag();
+		}
+
+		String name = container.getName();
+		int i;
+		for(i = 0; i < parent.getChildCount(); i++)
+		{
+			if(parent.getChild(i).getName().compareTo(name) > 0)
+				break;
+		}
+		inventoryView.insertProductContainer(parent,
+				(ProductContainerData) container.getTag(), i);
+
+		inventoryView.selectProductContainer((ProductContainerData) container
+				.getTag());
+
+		populateProductData(container);
+
 	}
-	
-	public static NSA getInstance()
+
+	public void addProductContainersRecursively(ProductContainerData parent,
+			IProductContainer unit, int index)
 	{
-		return instance;
+		verifyObjTag(unit);
+
+		for(IProduct product: unit.getAllProducts())
+			verifyObjTag(product);
+
+		for(IItem item: unit.getAllItems())
+			verifyObjTag(item);
+
+		ProductContainerData child = (ProductContainerData) unit.getTag();
+		inventoryView.insertProductContainer(parent, child, index);
+		int childIndex = 0;
+		for(IProductContainer container: unit.getAllProductGroups())
+		{
+			addProductContainersRecursively(child, container, childIndex++);
+		}
 	}
-	
-	/**
-	 * Reference to the inventory we're tracking
-	 */
-	private IInventory inventory;
-	
-	private ProductContainerData root;
-	
-	private IInventoryView inventoryView;
+
+	private void itemOrProductUpdated(Object changedObj)
+	{
+		if(changedObj instanceof IItem)
+		{
+			if(inventoryView.getSelectedProductContainer() != null)
+			{
+				IProductContainer container =
+						(IProductContainer) inventoryView
+								.getSelectedProductContainer().getTag();
+				populateProductData(container);
+
+				IItem item = (IItem) changedObj;
+				inventoryView.selectProduct((ProductData) item.getProduct()
+						.getTag());
+
+				populateItemData(container);
+			}
+		}
+		else if(changedObj instanceof IProduct)
+		{
+			if(inventoryView.getSelectedProductContainer() != null)
+			{
+				populateProductData((IProductContainer) inventoryView
+						.getSelectedProductContainer().getTag());
+
+				IProduct item = (IProduct) changedObj;
+				inventoryView.selectProduct((ProductData) item.getTag());
+			}
+
+		}
+	}
+
+	private void objectAdded(Object changedObj)
+	{
+		if(changedObj instanceof IItem || changedObj instanceof IProduct)
+		{
+			itemOrProductUpdated(changedObj);
+		}
+		else if(changedObj instanceof IProductContainer)
+		{
+			IProductContainer productContainer = (IProductContainer) changedObj;
+			addProductContainer(productContainer);
+		}
+
+	}
+
+	private void objectRemoved(Object changedObj)
+	{
+		if(changedObj instanceof IItem || changedObj instanceof IProduct)
+		{
+			itemOrProductUpdated(changedObj);
+		}
+		else if(changedObj instanceof IProductContainer)
+		{
+			IProductContainer productContainer = (IProductContainer) changedObj;
+			removeProductContainer(productContainer);
+		}
+	}
+
+	private void objectUpdated(Object changedObj)
+	{
+		if(changedObj instanceof IItem || changedObj instanceof IProduct)
+		{
+			itemOrProductUpdated(changedObj);
+		}
+		else if(changedObj instanceof IProductContainer)
+		{
+			IProductContainer productContainer = (IProductContainer) changedObj;
+			updateProductContainer(productContainer);
+		}
+	}
+
+	public void populateItemData(IProductContainer container)
+	{
+		Set<IItem> items = container != null ? container.getAllItems() : null;
+		populateItemData(items);
+	}
+
+	private void populateItemData(Set<IItem> items)
+	{
+		if(inventoryView.getSelectedProduct() != null)
+		{
+			IProduct selectedProduct =
+					(IProduct) inventoryView.getSelectedProduct().getTag();
+			List<ItemData> itemDatas = new ArrayList<ItemData>();
+
+			Set<IItem> itemList = items;
+			if(selectedProduct != null && itemList == null)
+				itemList = inventory.getAllItems(selectedProduct);
+
+			if(selectedProduct != null)
+			{
+				for(IItem item: itemList)
+				{
+					if(item.getProduct() == selectedProduct)
+						itemDatas.add((ItemData) item.getTag());
+				}
+			}
+			inventoryView.setItems(itemDatas.toArray(new ItemData[0]));
+		}
+		else
+			inventoryView.setItems(new ItemData[0]);
+	}
+
+	public void populateProductContainers()
+	{
+		int index = 0;
+		for(IStorageUnit unit: inventory.getAllStorageUnits())
+		{
+			addProductContainersRecursively(root, unit, index++);
+		}
+		inventoryView.setProductContainers(root);
+	}
+
+	public void populateProductData(IProductContainer container)
+	{
+		Set<IProduct> products;
+		if(container != null)
+			products = container.getAllProducts();
+		else
+			products = inventory.getAllProducts();
+		ProductData[] productDatas = new ProductData[products.size()];
+		Iterator<IProduct> productIterator = products.iterator();
+		for(int i = 0; i < productDatas.length; i++)
+		{
+			productDatas[i] = (ProductData) productIterator.next().getTag();
+			productDatas[i].setCount("0");
+		}
+
+		Set<IItem> items;
+		if(container != null)
+			items = container.getAllItems();
+		else
+			items = inventory.getAllItems(null);
+
+		for(IItem item: items)
+		{
+			ProductData pd = (ProductData) item.getProduct().getTag();
+			int count = Integer.parseInt(pd.getCount());
+			count++;
+			pd.setCount(count + "");
+		}
+
+		if(inventoryView.getSelectedProduct() != null)
+		{
+			populateItemData(items);
+		}
+
+		inventoryView.setProducts(productDatas);
+	}
+
+	private void removeProductContainer(IProductContainer container)
+	{
+		inventoryView.deleteProductContainer((ProductContainerData) container
+				.getTag());
+	}
 
 	/**
 	 * Receiving function for then an observable in the system changes
@@ -68,10 +279,10 @@ public class NSA implements Observer
 	@Override
 	public void update(Observable o, Object arg)
 	{
-		ObservableArgs obsArgs = (ObservableArgs)arg;
-		
+		ObservableArgs obsArgs = (ObservableArgs) arg;
+
 		verifyObjTag(obsArgs.getChangedObj());
-		
+
 		switch(obsArgs.getUpdateType())
 		{
 		case ADDED:
@@ -87,269 +298,53 @@ public class NSA implements Observer
 
 	}
 
-	private void verifyObjTag(Object changedObj)
+	private void updateItemData(IItem item, ItemData itemData)
 	{
-		if(changedObj instanceof IItem)
-		{
-			IItem item = (IItem)changedObj;
-			ItemData itemData;
-			if(item.getTag() != null)
-				itemData = (ItemData)item.getTag();
-			else itemData = new ItemData();
-			updateItemData(item, itemData);
-		}
-		else if(changedObj instanceof IProduct)
-		{
-			IProduct product = (IProduct)changedObj;
-			ProductData productData;
-			if(product.getTag() != null)
-				productData = (ProductData)product.getTag();
-			else productData = new ProductData();
-			updateProductData(product, productData);
-		}
-		else if(changedObj instanceof IProductContainer)
-		{
-			IProductContainer productContainer = (IProductContainer)changedObj;
-			ProductContainerData pcData = 
-					(ProductContainerData)productContainer.getTag();
-			if(productContainer.getTag() != null)
-				pcData = (ProductContainerData)productContainer.getTag();
-			else pcData = new ProductContainerData();
-			updateProductContainerData(productContainer, pcData);
-		}
+		itemData.setBarcode(item.getBarcode().toString());
+		itemData.setEntryDate(item.getEntryDate());
+		itemData.setExpirationDate(item.getExpirationDate());
+		if(item.getContainer() instanceof IProductGroup)
+			itemData.setProductGroup(item.getContainer().getName());
+		if(item.getContainer() != null)
+			itemData.setStorageUnit(item.getContainer().getStorageUnit()
+					.getName());
+		item.setTag(itemData);
+		itemData.setTag(item);
 	}
 
-	private void objectAdded(Object changedObj)
-	{
-		if(changedObj instanceof IItem || changedObj instanceof IProduct)
-		{
-			itemOrProductUpdated(changedObj);
-		}
-		else if(changedObj instanceof IProductContainer)
-		{
-			IProductContainer productContainer = (IProductContainer)changedObj;
-			addProductContainer(productContainer);
-		}
-		
-	}
-
-	private void objectRemoved(Object changedObj)
-	{
-		if(changedObj instanceof IItem || changedObj instanceof IProduct)
-		{
-			itemOrProductUpdated(changedObj);
-		}
-		else if(changedObj instanceof IProductContainer)
-		{
-			IProductContainer productContainer = (IProductContainer)changedObj;
-			removeProductContainer(productContainer);
-		}
-	}
-
-	private void objectUpdated(Object changedObj)
-	{
-		if(changedObj instanceof IItem || changedObj instanceof IProduct)
-		{
-			itemOrProductUpdated(changedObj);
-		}
-		else if (changedObj instanceof IProductContainer)
-		{
-			IProductContainer productContainer = (IProductContainer)changedObj;
-			updateProductContainer(productContainer);
-		}
-	}
-	
-	private void itemOrProductUpdated(Object changedObj)
-	{
-		if (changedObj instanceof IItem)
-		{
-			if(inventoryView.getSelectedProductContainer() != null)
-			{
-				IProductContainer container = (IProductContainer)inventoryView.
-						getSelectedProductContainer().getTag();
-				populateProductData(container);
-				
-				IItem item = (IItem)changedObj;
-				inventoryView.selectProduct((ProductData)item.getProduct().getTag());
-				
-				populateItemData(container);
-			}
-		}
-		else if (changedObj instanceof IProduct)
-		{
-			if(inventoryView.getSelectedProductContainer() != null)
-			{
-				populateProductData((IProductContainer)inventoryView.
-						getSelectedProductContainer().getTag());
-				
-				IProduct item = (IProduct)changedObj;
-				inventoryView.selectProduct((ProductData)item.getTag());
-			}
-			
-		}
-	}
-
-	public void populateProductContainers()
-	{
-		int index = 0;
-		for(IStorageUnit unit : inventory.getAllStorageUnits())
-		{
-			addProductContainersRecursively(root, unit, index++);
-		}
-		inventoryView.setProductContainers(root);
-	}
-	
-	public void addProductContainersRecursively(ProductContainerData parent,
-			IProductContainer unit, int index)
-	{
-		verifyObjTag(unit);
-		
-		for(IProduct product : unit.getAllProducts())
-			verifyObjTag(product);
-		
-		for(IItem item : unit.getAllItems())
-			verifyObjTag(item);
-		
-		ProductContainerData child = (ProductContainerData)unit.getTag();
-		inventoryView.insertProductContainer(parent, child, index);
-		int childIndex = 0;
-		for(IProductContainer container : unit.getAllProductGroups())
-		{
-			addProductContainersRecursively(child, container, childIndex++);
-		}
-	}
-
-	public void populateProductData(IProductContainer container)
-	{
-		Set<IProduct> products;
-		if(container != null)
-			products = container.getAllProducts();
-		else products = inventory.getAllProducts();
-		ProductData[] productDatas = new ProductData[products.size()];
-		Iterator<IProduct> productIterator = products.iterator();
-		for(int i = 0; i < productDatas.length; i++)
-		{
-			productDatas[i] = (ProductData)productIterator.next().getTag();
-			productDatas[i].setCount("0");
-		}
-		
-		Set<IItem> items;
-		if(container != null)
-			items = container.getAllItems();
-		else items = inventory.getAllItems(null);
-		
-		for(IItem item : items)
-		{
-			ProductData pd = (ProductData)item.getProduct().getTag();
-			int count = Integer.parseInt(pd.getCount());
-			count++;
-			pd.setCount(count + "");
-		}
-		
-		if(inventoryView.getSelectedProduct() != null)
-		{
-			populateItemData(items);
-		}
-		
-		inventoryView.setProducts(productDatas);
-	}
-
-	public void populateItemData(IProductContainer container)
-	{
-		Set<IItem> items = container != null ? container.getAllItems()
-		 : null;
-		populateItemData(items);
-	}
-	
-	private void populateItemData(Set<IItem> items)
-	{
-		if(inventoryView.getSelectedProduct() != null)
-		{
-			IProduct selectedProduct = (IProduct)inventoryView.getSelectedProduct().getTag();
-			List<ItemData> itemDatas = new ArrayList<ItemData>();
-			
-			Set<IItem> itemList = items;
-			if(selectedProduct != null && itemList == null)
-				itemList = inventory.getAllItems(selectedProduct);
-			
-			if(selectedProduct != null)
-			{
-				for(IItem item : itemList)
-				{
-					if(item.getProduct() == selectedProduct)
-						itemDatas.add((ItemData)item.getTag());
-				}
-			}
-			inventoryView.setItems(itemDatas.toArray(new ItemData[0]));
-		}
-		else inventoryView.setItems(new ItemData[0]);
-	}
-	
-	public void addProductContainer(IProductContainer container)
-	{
-		ProductContainerData parent;
-		if(container instanceof IStorageUnit)
-			parent = root;
-		else
-		{
-			IProductGroup pg = (IProductGroup)container;
-			parent = (ProductContainerData)pg.getContainer().getTag();
-		}
-		
-		String name = container.getName();
-		int i;
-		for(i = 0; i < parent.getChildCount(); i++)
-		{
-			if(parent.getChild(i).getName().compareTo(name) > 0)
-				break;
-		}
-		inventoryView.insertProductContainer(parent, 
-				(ProductContainerData)container.getTag(), i);
-		
-		inventoryView.selectProductContainer((ProductContainerData)container.getTag());
-		
-		populateProductData(container);
-		
-	}
-	
-	private void removeProductContainer(IProductContainer container)
-	{
-		inventoryView.deleteProductContainer
-			((ProductContainerData)container.getTag());
-	}
-	
 	private void updateProductContainer(IProductContainer container)
 	{
-		ProductContainerData pcData = 
-				(ProductContainerData)container.getTag();
-		
+		ProductContainerData pcData = (ProductContainerData) container.getTag();
+
 		ProductContainerData parent;
-		
+
 		int index = 0;
 		if(container instanceof IStorageUnit)
 			parent = root;
 		else
-			parent = (ProductContainerData)((IProductGroup)container)
-				.getContainer().getTag();
-		
+			parent =
+					(ProductContainerData) ((IProductGroup) container)
+							.getContainer().getTag();
+
 		boolean passedSelf = false;
 		for(index = 0; index < parent.getChildCount(); index++)
 		{
 			if(!parent.getChild(index).getName().equals(pcData.getName()))
 			{
-				if(parent.getChild(index).getName()
-						.compareTo(pcData.getName()) > 0)
+				if(parent.getChild(index).getName().compareTo(pcData.getName()) > 0)
 					break;
 			}
-			else passedSelf = true;
+			else
+				passedSelf = true;
 		}
 		if(passedSelf)
 			index--;
-		
-		inventoryView.renameProductContainer(pcData, 
-				container.getName(), index);
-		
-		inventoryView.selectProductContainer((ProductContainerData)container.getTag());
+
+		inventoryView
+				.renameProductContainer(pcData, container.getName(), index);
+
+		inventoryView.selectProductContainer((ProductContainerData) container
+				.getTag());
 	}
 
 	private void updateProductContainerData(IProductContainer productContainer,
@@ -371,18 +366,39 @@ public class NSA implements Observer
 		productData.setTag(product);
 	}
 
-	private void updateItemData(IItem item, ItemData itemData)
+	private void verifyObjTag(Object changedObj)
 	{
-		itemData.setBarcode(item.getBarcode().toString());
-		itemData.setEntryDate(item.getEntryDate());
-		itemData.setExpirationDate(item.getExpirationDate());
-		if(item.getContainer() instanceof IProductGroup)
-			itemData.setProductGroup(item.getContainer().getName());
-		if(item.getContainer() != null)
-			itemData.setStorageUnit(item.getContainer().getStorageUnit().getName());
-		item.setTag(itemData);
-		itemData.setTag(item);
+		if(changedObj instanceof IItem)
+		{
+			IItem item = (IItem) changedObj;
+			ItemData itemData;
+			if(item.getTag() != null)
+				itemData = (ItemData) item.getTag();
+			else
+				itemData = new ItemData();
+			updateItemData(item, itemData);
+		}
+		else if(changedObj instanceof IProduct)
+		{
+			IProduct product = (IProduct) changedObj;
+			ProductData productData;
+			if(product.getTag() != null)
+				productData = (ProductData) product.getTag();
+			else
+				productData = new ProductData();
+			updateProductData(product, productData);
+		}
+		else if(changedObj instanceof IProductContainer)
+		{
+			IProductContainer productContainer = (IProductContainer) changedObj;
+			ProductContainerData pcData =
+					(ProductContainerData) productContainer.getTag();
+			if(productContainer.getTag() != null)
+				pcData = (ProductContainerData) productContainer.getTag();
+			else
+				pcData = new ProductContainerData();
+			updateProductContainerData(productContainer, pcData);
+		}
 	}
-
 
 }

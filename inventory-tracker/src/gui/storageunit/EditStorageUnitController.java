@@ -1,11 +1,11 @@
 
 package gui.storageunit;
 
-import model.IStorageUnit;
-import model.Inventory;
 import gui.common.Controller;
 import gui.common.IView;
 import gui.inventory.ProductContainerData;
+import model.IStorageUnit;
+import model.Inventory;
 
 /**
  * Controller class for the edit storage unit view.
@@ -13,9 +13,9 @@ import gui.inventory.ProductContainerData;
 public class EditStorageUnitController extends Controller implements
 		IEditStorageUnitController
 {
-	
+
 	private IStorageUnit storageUnit;
-	
+
 	/**
 	 * Constructor.
 	 * 
@@ -27,8 +27,8 @@ public class EditStorageUnitController extends Controller implements
 		super(view);
 
 		construct();
-		
-		storageUnit = (IStorageUnit)target.getTag();
+
+		storageUnit = (IStorageUnit) target.getTag();
 		getView().setStorageUnitName(storageUnit.getName());
 	}
 
@@ -86,8 +86,7 @@ public class EditStorageUnitController extends Controller implements
 	 */
 	@Override
 	protected void loadValues()
-	{
-	}
+	{}
 
 	/**
 	 * This method is called when any of the fields in the edit storage unit
@@ -100,6 +99,7 @@ public class EditStorageUnitController extends Controller implements
 		if(newName.equals(storageUnit.getName()))
 			getView().enableOK(true);
 		else
-			getView().enableOK(Inventory.getInstance().ableToAddStorageUnitNamed(newName));
+			getView().enableOK(
+					Inventory.getInstance().ableToAddStorageUnitNamed(newName));
 	}
 }

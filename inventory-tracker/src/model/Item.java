@@ -22,6 +22,8 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	private Date exitTime = null;
 	private IProductContainer container;
 
+	private transient Object tag;
+
 	/**
 	 * @pre product must != null && must exist
 	 * @pre barcode must != null and must be valid
@@ -146,6 +148,17 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 		return response;
 	}
 
+	@Override
+	public int compareTo(IItem o)
+	{
+		int ret = this.getEntryDate().compareTo(o.getEntryDate());
+		if(ret == 0)
+			return this.getBarcode().toString()
+					.compareTo(o.getBarcode().toString());
+		else
+			return ret;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -224,6 +237,12 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see model.IItem#hashCode()
+	 */
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see model.IItem#getExpirationDate()
 	 */
 	@Override
@@ -243,11 +262,11 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 		return product;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.IItem#hashCode()
-	 */
+	@Override
+	public Object getTag()
+	{
+		return tag;
+	}
 
 	@Override
 	public int hashCode()
@@ -349,6 +368,12 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
+	@Override
+	public void setTag(Object tag)
+	{
+		this.tag = tag;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -361,29 +386,6 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 				+ ", entryDate=" + entryDate + ", expirationDate="
 				+ expirationDate + ", exitTime=" + exitTime + ", container="
 				+ container + "]";
-	}
-
-	private transient Object tag;
-
-	@Override
-	public Object getTag()
-	{
-		return tag;
-	}
-
-	@Override
-	public void setTag(Object tag)
-	{
-		this.tag = tag;
-	}
-
-	@Override
-	public int compareTo(IItem o)
-	{
-		int ret = this.getEntryDate().compareTo(o.getEntryDate());
-		if(ret == 0)
-			return this.getBarcode().toString().compareTo(o.getBarcode().toString());
-		else return ret;
 	}
 
 }

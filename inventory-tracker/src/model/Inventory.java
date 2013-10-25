@@ -67,7 +67,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	 * Mapping of all removed Items, for easy retrieval
 	 */
 	private final SortedMap<Date, Set<IItem>> removedItems;
-	
+
 	/**
 	 * Record of orphaned products
 	 */
@@ -135,7 +135,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	{
 		if(name == null || name.isEmpty())
 			return false;
-		
+
 		for(IStorageUnit unit: this.storageUnits)
 		{
 			if(unit.getName().toLowerCase().equals(name.toLowerCase()))
@@ -143,6 +143,17 @@ public class Inventory extends Observable implements IInventory, Serializable
 		}
 
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.BaseInventory#ableToRemoveProduct(IProduct product)
+	 */
+	@Override
+	public boolean ableToRemoveProduct(IProduct product)
+	{
+		return this.removedProducts.contains(product);
 	}
 
 	@Override
@@ -176,6 +187,22 @@ public class Inventory extends Observable implements IInventory, Serializable
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see model.BaseInventory#getAllItems(IProduct product)
+	 */
+	@Override
+	public SortedSet<IItem> getAllItems(IProduct product)
+	{
+		SortedSet<IItem> items = new TreeSet<IItem>();
+		for(IStorageUnit unit: this.storageUnits)
+		{
+			recurseProductContainerForItems(unit, items, product);
+		}
+		return items;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see model.BaseInventory#getAllProducts()
 	 */
 	@Override
@@ -189,80 +216,6 @@ public class Inventory extends Observable implements IInventory, Serializable
 		products.addAll(this.removedProducts);
 		return products;
 	}
-	
-	/**
-	 * Adds all products from a container to the working set and recurses the
-	 * sub-containers
-	 * @param container The container to add the products from and recurse the
-	 *            children of
-	 * @pre workingSet is not null
-	 * @post workingSet contains all products from container and its children
-	 * @param workingSet The current set being built
-	 */
-	private void recurseProductContainerForProducts(IProductContainer container,
-			Set<IProduct> workingSet)
-	{
-		workingSet.addAll(container.getAllProducts());
-		for(IProductContainer subContainer: container.getAllProductGroups())
-		{
-			recurseProductContainerForProducts(subContainer, workingSet);
-		}
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.BaseInventory#getAllItems(IProduct product)
-	 */
-	@Override
-	public SortedSet<IItem> getAllItems(IProduct product)
-	{
-		SortedSet<IItem> items = new TreeSet<IItem>();
-		for(IStorageUnit unit: this.storageUnits)
-		{
-			recurseProductContainerForItems(unit, items, product);
-		}
-		return items;
-	}
-	
-	private void recurseProductContainerForItems(IProductContainer container,
-			Set<IItem> workingSet, IProduct filter)
-	{
-		for(IItem item : container.getAllItems())
-		{
-			if(filter == null || item.getProduct() == filter)
-				workingSet.add(item);
-		}
-		for(IProductContainer subContainer: container.getAllProductGroups())
-		{
-			recurseProductContainerForItems(subContainer, workingSet, filter);
-		}
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.BaseInventory#ableToRemoveProduct(IProduct product)
-	 */
-	@Override
-	public boolean ableToRemoveProduct(IProduct product)
-	{
-		return this.removedProducts.contains(product);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.removeProduct(IProduct product)
-	 */
-	@Override
-	public void removeProduct(IProduct product)
-	{
-		this.removedProducts.remove(product);
-		product.deleteObserver(this);
-		this.setChanged();
-		this.notifyObservers(new ObservableArgs(product, UpdateType.REMOVED));
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -273,6 +226,23 @@ public class Inventory extends Observable implements IInventory, Serializable
 	public SortedSet<IStorageUnit> getAllStorageUnits()
 	{
 		return new TreeSet<IStorageUnit>(this.storageUnits);
+	}
+
+	/**
+	 * Returns an item from the system given a barcode, or null if item does not
+	 * exist.
+	 * @pre The passed ItemBarcode is valid
+	 * @post The item referenced by the ItemBarcode is returned, or null if the
+	 *       item does not exist
+	 * @param barcodeNumber the String representing the ItemBarcode referencing
+	 *            the item.
+	 * @return result the item referenced by the passed in ItemBarcode number,
+	 *         or null if the item does not exist
+	 */
+	@Override
+	public IItem getItem(String barcodeNumber)
+	{
+		return this.barcodeItems.get(barcodeNumber);
 	}
 
 	/*
@@ -339,6 +309,39 @@ public class Inventory extends Observable implements IInventory, Serializable
 		return lastGeneratedBarCode++;
 	}
 
+	private void recurseProductContainerForItems(IProductContainer container,
+			Set<IItem> workingSet, IProduct filter)
+	{
+		for(IItem item: container.getAllItems())
+		{
+			if(filter == null || item.getProduct() == filter)
+				workingSet.add(item);
+		}
+		for(IProductContainer subContainer: container.getAllProductGroups())
+		{
+			recurseProductContainerForItems(subContainer, workingSet, filter);
+		}
+	}
+
+	/**
+	 * Adds all products from a container to the working set and recurses the
+	 * sub-containers
+	 * @param container The container to add the products from and recurse the
+	 *            children of
+	 * @pre workingSet is not null
+	 * @post workingSet contains all products from container and its children
+	 * @param workingSet The current set being built
+	 */
+	private void recurseProductContainerForProducts(
+			IProductContainer container, Set<IProduct> workingSet)
+	{
+		workingSet.addAll(container.getAllProducts());
+		for(IProductContainer subContainer: container.getAllProductGroups())
+		{
+			recurseProductContainerForProducts(subContainer, workingSet);
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -354,6 +357,20 @@ public class Inventory extends Observable implements IInventory, Serializable
 		}
 
 		this.storageUnits.clear();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.removeProduct(IProduct product)
+	 */
+	@Override
+	public void removeProduct(IProduct product)
+	{
+		this.removedProducts.remove(product);
+		product.deleteObserver(this);
+		this.setChanged();
+		this.notifyObservers(new ObservableArgs(product, UpdateType.REMOVED));
 	}
 
 	/*
@@ -386,8 +403,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 		item.setExitTime(current);
 		item.setContainer(null);
 
-		Date month =
-				new Date(current.getYear(), current.getMonth(), 0);
+		Date month = new Date(current.getYear(), current.getMonth(), 0);
 
 		Set<IItem> itemsForMonth;
 		if(removedItems.containsKey(month))
@@ -438,30 +454,13 @@ public class Inventory extends Observable implements IInventory, Serializable
 		else if(obsArg.getChangedObj() instanceof IProduct)
 		{
 			if(obsArg.getUpdateType() == UpdateType.REMOVED)
-				this.removedProducts.add((IProduct)obsArg.getChangedObj());
+				this.removedProducts.add((IProduct) obsArg.getChangedObj());
 			if(obsArg.getUpdateType() == UpdateType.ADDED)
-				this.removedProducts.remove((IProduct)obsArg.getChangedObj());
+				this.removedProducts.remove(obsArg.getChangedObj());
 		}
 
 		this.setChanged();
 		this.notifyObservers(obsArg);
-	}
-
-	/**
-	 * Returns an item from the system given a barcode, or null if item does not
-	 * exist.
-	 * @pre The passed ItemBarcode is valid
-	 * @post The item referenced by the ItemBarcode is returned, or null if the
-	 *       item does not exist
-	 * @param barcodeNumber the String representing the ItemBarcode referencing
-	 *            the item.
-	 * @return result the item referenced by the passed in ItemBarcode number,
-	 *         or null if the item does not exist
-	 */
-	@Override
-	public IItem getItem(String barcodeNumber)
-	{
-		return this.barcodeItems.get(barcodeNumber);
 	}
 
 }

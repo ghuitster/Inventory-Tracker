@@ -1,11 +1,10 @@
 
 package model;
 
-import java.util.Observable;
-import java.util.Set;
 import java.util.SortedSet;
 
-public interface IProductContainer extends IObservable, ITaggable, Comparable<IProductContainer>
+public interface IProductContainer extends IObservable, ITaggable,
+		Comparable<IProductContainer>
 {
 
 	/**
@@ -31,8 +30,6 @@ public interface IProductContainer extends IObservable, ITaggable, Comparable<IP
 	 */
 	public abstract boolean ableToAddProduct(IProduct product);
 
-	public boolean ableToAddProductGroupNamed(String name);
-	
 	/**
 	 * @pre productGroup.name != empty
 	 * @pre productGroup.container != empty
@@ -40,6 +37,8 @@ public interface IProductContainer extends IObservable, ITaggable, Comparable<IP
 	 * @return whether the ProductGroup can be added or not
 	 */
 	public abstract boolean ableToAddProductGroup(IProductGroup productGroup);
+
+	public boolean ableToAddProductGroupNamed(String name);
 
 	/**
 	 * @pre this.items.contains(item)
@@ -60,7 +59,8 @@ public interface IProductContainer extends IObservable, ITaggable, Comparable<IP
 	 * @param productGroup the ProductGroup to attempt to remove
 	 * @return whether the ProductGroup can be removed or not
 	 */
-	public abstract boolean ableToRemoveProductGroup(IProductGroup productGroup);
+	public abstract boolean
+			ableToRemoveProductGroup(IProductGroup productGroup);
 
 	/**
 	 * @pre item must be a valid Item and not null
@@ -85,6 +85,13 @@ public interface IProductContainer extends IObservable, ITaggable, Comparable<IP
 	public abstract void addProductGroup(IProductGroup productGroup);
 
 	/**
+	 * Finds the container which contains the passed product
+	 * @param product The product to search with
+	 * @return The matching product container, or null if not found
+	 */
+	public abstract IProductContainer findContainer(IProduct product);
+
+	/**
 	 * @pre this.items != null
 	 * @return the Set<Item> of all Items
 	 */
@@ -106,6 +113,8 @@ public interface IProductContainer extends IObservable, ITaggable, Comparable<IP
 	 * @return the name
 	 */
 	public abstract String getName();
+
+	public abstract IStorageUnit getStorageUnit();
 
 	/**
 	 * @pre item must be a valid Item and not null
@@ -146,14 +155,5 @@ public interface IProductContainer extends IObservable, ITaggable, Comparable<IP
 	 */
 	public abstract void transferItem(IItem item,
 			IProductContainer targetContainer);
-	
-	/**
-	 * Finds the container which contains the passed product
-	 * @param product The product to search with
-	 * @return The matching product container, or null if not found
-	 */
-	public abstract IProductContainer findContainer(IProduct product);
-	
-	public abstract IStorageUnit getStorageUnit();
 
 }

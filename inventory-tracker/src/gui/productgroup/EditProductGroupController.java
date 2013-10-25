@@ -1,17 +1,17 @@
 
 package gui.productgroup;
 
-import model.Amount;
-import model.IProductContainer;
-import model.IProductGroup;
-import model.CountThreeMonthSupply;
-import model.ThreeMonthSupply;
-import model.UnitType;
 import gui.common.Controller;
 import gui.common.IView;
 import gui.common.SizeUnitUtils;
 import gui.common.SizeUnits;
 import gui.inventory.ProductContainerData;
+import model.Amount;
+import model.CountThreeMonthSupply;
+import model.IProductContainer;
+import model.IProductGroup;
+import model.ThreeMonthSupply;
+import model.UnitType;
 
 /**
  * Controller class for the edit product group view.
@@ -19,7 +19,7 @@ import gui.inventory.ProductContainerData;
 public class EditProductGroupController extends Controller implements
 		IEditProductGroupController
 {
-	
+
 	private IProductGroup PG;
 	private SizeUnits sizeUnits = SizeUnits.Count;
 	private boolean submit = true;
@@ -29,6 +29,7 @@ public class EditProductGroupController extends Controller implements
 	private Amount threeMonthSupply;
 	private IProductContainer container;
 	private boolean PGNameChanged = false;
+
 	/**
 	 * Constructor.
 	 * 
@@ -38,28 +39,37 @@ public class EditProductGroupController extends Controller implements
 	public EditProductGroupController(IView view, ProductContainerData target)
 	{
 		super(view);
-		
+
 		PG = (IProductGroup) target.getTag();
 		this.container = PG.getContainer();
 		this.createSizeUnitsFromUnitType();
 		this.name = PG.getName();
 		if(this.sizeUnits == SizeUnits.Count)
-			this.value = ((CountThreeMonthSupply)PG.getThreeMonthSupply()).getAmount();
+			this.value =
+					((CountThreeMonthSupply) PG.getThreeMonthSupply())
+							.getAmount();
 		else
-			this.value = ((ThreeMonthSupply) PG.getThreeMonthSupply()).getAmount();
-			
+			this.value =
+					((ThreeMonthSupply) PG.getThreeMonthSupply()).getAmount();
+
 		construct();
 	}
-	
+
 	private void createSizeUnitsFromUnitType()
 	{
 		UnitType unitType = this.PG.getThreeMonthSupply().getUnitType();
-		this.sizeUnits = SizeUnitUtils.createSizeUnitsFromUnitType(unitType);		
+		this.sizeUnits = SizeUnitUtils.createSizeUnitsFromUnitType(unitType);
 	}
 
 	//
 	// Controller overrides
 	//
+
+	private void createUnitType()
+	{
+		this.unitType =
+				SizeUnitUtils.createUnitTypeFromSizeUnits(this.sizeUnits);
+	}
 
 	/**
 	 * This method is called when the user clicks the "OK" button in the edit
@@ -70,16 +80,11 @@ public class EditProductGroupController extends Controller implements
 	{
 		createUnitType();
 		if(unitType == UnitType.COUNT)
-			this.threeMonthSupply = new CountThreeMonthSupply((int)this.value);
+			this.threeMonthSupply = new CountThreeMonthSupply((int) this.value);
 		else
 			this.threeMonthSupply = new ThreeMonthSupply(this.value, unitType);
 		PG.setName(this.name);
 		PG.setThreeMonthSupply(this.threeMonthSupply);
-	}
-	
-	private void createUnitType()
-	{
-		this.unitType = SizeUnitUtils.createUnitTypeFromSizeUnits(this.sizeUnits);
 	}
 
 	/**
@@ -128,7 +133,7 @@ public class EditProductGroupController extends Controller implements
 		this.getView().setProductGroupName(this.name);
 		if(this.sizeUnits == SizeUnits.Count)
 		{
-			int temp = (int)value;
+			int temp = (int) value;
 			this.getView().setSupplyValue("" + temp);
 		}
 		else
@@ -136,6 +141,20 @@ public class EditProductGroupController extends Controller implements
 			this.getView().setSupplyValue("" + value);
 		}
 		this.getView().setSupplyUnit(this.sizeUnits);
+	}
+
+	private void shouldOKBeEnabled()
+	{
+		if(name.isEmpty())
+			submit = false;
+		else if(this.getView().getSupplyValue().isEmpty()
+				|| getView().getSupplyValue().startsWith("-"))
+			submit = false;
+		else if(!this.container.ableToAddProductGroupNamed(getView()
+				.getProductGroupName()) && this.PGNameChanged)
+			submit = false;
+		else
+			submit = true;
 	}
 
 	/**
@@ -149,40 +168,27 @@ public class EditProductGroupController extends Controller implements
 			this.PGNameChanged = true;
 		this.name = this.getView().getProductGroupName();
 		this.sizeUnits = this.getView().getSupplyUnit();
-		if(!getView().getSupplyValue().isEmpty() && 
-				!getView().getSupplyValue().startsWith("-"))
-		if(this.sizeUnits == SizeUnits.Count)
-			try
+		if(!getView().getSupplyValue().isEmpty()
+				&& !getView().getSupplyValue().startsWith("-"))
+			if(this.sizeUnits == SizeUnits.Count)
+				try
+				{
+					this.value = Integer.parseInt(getView().getSupplyValue());
+				}
+				catch(NumberFormatException e)
+				{
+					getView().displayErrorMessage(
+							"For unit size type Count, the "
+									+ "value must be a whole number");
+					int temp = (int) value;
+					getView().setSupplyValue("" + temp);
+				}
+			else
 			{
-				this.value = Integer.parseInt(getView().getSupplyValue());
+				this.value = Float.parseFloat(getView().getSupplyValue());
 			}
-			catch(NumberFormatException e)
-			{
-				getView().displayErrorMessage("For unit size type Count, the "
-						+ "value must be a whole number");
-				int temp = (int)value;
-				getView().setSupplyValue("" + temp);
-			}
-		else
-		{
-			this.value = Float.parseFloat(getView().getSupplyValue());
-		}
-		
+
 		this.shouldOKBeEnabled();
 		this.enableComponents();
-	}
-
-	private void shouldOKBeEnabled()
-	{
-		if(name.isEmpty())
-			submit = false;
-		else if(this.getView().getSupplyValue().isEmpty() ||
-				getView().getSupplyValue().startsWith("-"))
-			submit = false;
-		else if(!this.container.ableToAddProductGroupNamed(getView().getProductGroupName()) 
-				&& this.PGNameChanged)
-			submit = false;
-		else 
-			submit = true;
 	}
 }

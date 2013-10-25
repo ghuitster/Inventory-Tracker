@@ -143,6 +143,26 @@ public class AddProductController extends Controller implements
 		this.getView().setSupply("" + this.cThreeMonthSupply.getAmount());
 	}
 
+	private void shouldOKBeEnabled()
+	{
+		if(this.descript.isEmpty())
+			this.submit = false;
+		else if(sizeValue <= 0 || this.shelflife < 0
+				|| this.cThreeMonthSupply.getAmount() < 0)
+			this.submit = false;
+		else if(getView().getSupply().isEmpty()
+				|| getView().getSupply().startsWith("-"))
+			this.submit = false;
+		else if(getView().getShelfLife().isEmpty()
+				|| getView().getShelfLife().startsWith("-"))
+			this.submit = false;
+		else if(getView().getSizeValue().isEmpty()
+				|| getView().getSizeValue().startsWith("-"))
+			this.submit = false;
+		else
+			this.submit = true;
+	}
+
 	/**
 	 * This method is called when any of the fields in the add product view is
 	 * changed by the user.
@@ -219,25 +239,5 @@ public class AddProductController extends Controller implements
 
 		this.shouldOKBeEnabled();
 		this.enableComponents();
-	}
-
-	private void shouldOKBeEnabled()
-	{
-		if(this.descript.isEmpty())
-			this.submit = false;
-		else if(sizeValue <= 0 || this.shelflife < 0
-				|| this.cThreeMonthSupply.getAmount() < 0)
-			this.submit = false;
-		else if(getView().getSupply().isEmpty()
-				|| getView().getSupply().startsWith("-"))
-			this.submit = false;
-		else if(getView().getShelfLife().isEmpty()
-				|| getView().getShelfLife().startsWith("-"))
-			this.submit = false;
-		else if(getView().getSizeValue().isEmpty()
-				|| getView().getSizeValue().startsWith("-"))
-			this.submit = false;
-		else
-			this.submit = true;
 	}
 }

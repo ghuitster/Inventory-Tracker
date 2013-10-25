@@ -4,8 +4,6 @@ package model;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.junit.Test;
 
@@ -18,7 +16,8 @@ public class ProductGroupTest
 		ProductGroup group = createTestGroup();
 		assertEquals(0, group.getAllProductGroups().size());
 		ProductGroup child =
-				new ProductGroup("Child group", new ThreeMonthSupply(1.0f, UnitType.CHEVROLET));
+				new ProductGroup("Child group", new ThreeMonthSupply(1.0f,
+						UnitType.CHEVROLET));
 		group.addProductGroup(child);
 		assertEquals(1, group.getAllProductGroups().size());
 		assertEquals(child, group.getAllProductGroups().iterator().next());
@@ -63,7 +62,8 @@ public class ProductGroupTest
 	{
 		StorageUnit unit = new StorageUnit("Test Storage Unit");
 		ProductGroup group =
-				new ProductGroup("Test Group", new ThreeMonthSupply(1.0f, UnitType.CHEVROLET));
+				new ProductGroup("Test Group", new ThreeMonthSupply(1.0f,
+						UnitType.CHEVROLET));
 		return group;
 	}
 

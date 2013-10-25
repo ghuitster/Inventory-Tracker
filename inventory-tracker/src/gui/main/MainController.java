@@ -1,9 +1,9 @@
 
 package gui.main;
 
-import model.*;
-import model.exception.SerializerException;
 import gui.common.Controller;
+import model.Inventory;
+import model.exception.SerializerException;
 
 /**
  * Controller class for the main view. The main view allows the user to print

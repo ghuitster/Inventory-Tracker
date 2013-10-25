@@ -1,6 +1,11 @@
 
 package gui.productgroup;
 
+import gui.common.Controller;
+import gui.common.IView;
+import gui.common.SizeUnitUtils;
+import gui.common.SizeUnits;
+import gui.inventory.ProductContainerData;
 import model.Amount;
 import model.CountThreeMonthSupply;
 import model.IProductContainer;
@@ -8,11 +13,6 @@ import model.IProductGroup;
 import model.ProductGroup;
 import model.ThreeMonthSupply;
 import model.UnitType;
-import gui.common.Controller;
-import gui.common.IView;
-import gui.common.SizeUnitUtils;
-import gui.common.SizeUnits;
-import gui.inventory.ProductContainerData;
 
 /**
  * Controller class for the add product group view.
@@ -20,7 +20,7 @@ import gui.inventory.ProductContainerData;
 public class AddProductGroupController extends Controller implements
 		IAddProductGroupController
 {
-	
+
 	private IProductContainer PC;
 	private IProductGroup PG = null;
 	private boolean submit = false;
@@ -29,6 +29,7 @@ public class AddProductGroupController extends Controller implements
 	private float value = 0;
 	private UnitType unitType = UnitType.COUNT;
 	private Amount threeMonthSupply = null;
+
 	/**
 	 * Constructor.
 	 * 
@@ -39,7 +40,7 @@ public class AddProductGroupController extends Controller implements
 	public AddProductGroupController(IView view, ProductContainerData container)
 	{
 		super(view);
-		
+
 		this.PC = (IProductContainer) container.getTag();
 
 		construct();
@@ -58,7 +59,7 @@ public class AddProductGroupController extends Controller implements
 	{
 		createUnitType();
 		if(unitType == UnitType.COUNT)
-			this.threeMonthSupply = new CountThreeMonthSupply((int)this.value);
+			this.threeMonthSupply = new CountThreeMonthSupply((int) this.value);
 		else
 			this.threeMonthSupply = new ThreeMonthSupply(this.value, unitType);
 		PG = new ProductGroup(this.name, this.threeMonthSupply);
@@ -69,13 +70,15 @@ public class AddProductGroupController extends Controller implements
 		}
 		else
 		{
-			this.getView().displayErrorMessage("This Product Group can not be added");
+			this.getView().displayErrorMessage(
+					"This Product Group can not be added");
 		}
 	}
-	
+
 	private void createUnitType()
 	{
-		this.unitType = SizeUnitUtils.createUnitTypeFromSizeUnits(this.sizeUnits);
+		this.unitType =
+				SizeUnitUtils.createUnitTypeFromSizeUnits(this.sizeUnits);
 	}
 
 	/**
@@ -123,29 +126,10 @@ public class AddProductGroupController extends Controller implements
 	{
 		this.getView().setProductGroupName(this.name);
 		if(sizeUnits == SizeUnits.Count)
-			this.getView().setSupplyValue("" + (int)value);
+			this.getView().setSupplyValue("" + (int) value);
 		else
 			this.getView().setSupplyValue("" + value);
 		this.getView().setSupplyUnit(this.sizeUnits);
-	}
-
-	/**
-	 * This method is called when any of the fields in the add product group
-	 * view is changed by the user.
-	 */
-	@Override
-	public void valuesChanged()
-	{
-		this.name = this.getView().getProductGroupName();
-		this.sizeUnits = this.getView().getSupplyUnit();
-		if(!getView().getSupplyValue().isEmpty() && 
-				!getView().getSupplyValue().startsWith("-"))
-		{
-			this.setAmount();
-		}
-		
-		this.shouldOKBeEnabled();
-		this.enableComponents();
 	}
 
 	private void setAmount()
@@ -157,9 +141,10 @@ public class AddProductGroupController extends Controller implements
 			}
 			catch(NumberFormatException e)
 			{
-				getView().displayErrorMessage("For unit size type Count, the "
-					+ "value must be a whole number");
-				int temp = (int)this.value;
+				getView().displayErrorMessage(
+						"For unit size type Count, the "
+								+ "value must be a whole number");
+				int temp = (int) this.value;
 				getView().setSupplyValue("" + value);
 				this.value = temp;
 			}
@@ -181,12 +166,31 @@ public class AddProductGroupController extends Controller implements
 	{
 		if(name.isEmpty())
 			submit = false;
-		else if(this.getView().getSupplyValue().isEmpty() || 
-				getView().getSupplyValue().startsWith("-"))
+		else if(this.getView().getSupplyValue().isEmpty()
+				|| getView().getSupplyValue().startsWith("-"))
 			submit = false;
 		else if(!PC.ableToAddProductGroupNamed(getView().getProductGroupName()))
 			submit = false;
-		else 
+		else
 			submit = true;
+	}
+
+	/**
+	 * This method is called when any of the fields in the add product group
+	 * view is changed by the user.
+	 */
+	@Override
+	public void valuesChanged()
+	{
+		this.name = this.getView().getProductGroupName();
+		this.sizeUnits = this.getView().getSupplyUnit();
+		if(!getView().getSupplyValue().isEmpty()
+				&& !getView().getSupplyValue().startsWith("-"))
+		{
+			this.setAmount();
+		}
+
+		this.shouldOKBeEnabled();
+		this.enableComponents();
 	}
 }

@@ -23,6 +23,8 @@ public class Product extends Observable implements IProduct, Serializable
 	private CountThreeMonthSupply threeMonthSupply;
 	private final Set<IProductContainer> containers;
 
+	private transient Object tag;
+
 	/**
 	 * @pre creationDate must be == the earliest EntryDate for any item of this
 	 *      Product
@@ -205,6 +207,17 @@ public class Product extends Observable implements IProduct, Serializable
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.IProduct#equals(java.lang.Object)
+	 */
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see model.IProduct#addContainer(model.ProductContainer)
 	 */
 	@Override
@@ -213,16 +226,12 @@ public class Product extends Observable implements IProduct, Serializable
 		this.containers.add(productContainer);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.IProduct#equals(java.lang.Object)
-	 */
+	@Override
+	public int compareTo(IProduct o)
+	{
+		return this.getDescription().toString().toLowerCase()
+				.compareTo(o.getDescription().toString().toLowerCase());
+	}
 
 	@Override
 	public boolean equals(Object obj)
@@ -243,14 +252,7 @@ public class Product extends Observable implements IProduct, Serializable
 			return false;
 		return true;
 	}
-	
-	@Override
-	public int compareTo(IProduct o)
-	{
-		return this.getDescription().toString().toLowerCase()
-				.compareTo(o.getDescription().toString().toLowerCase());
-	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -315,6 +317,12 @@ public class Product extends Observable implements IProduct, Serializable
 	public Amount getSize()
 	{
 		return this.size;
+	}
+
+	@Override
+	public Object getTag()
+	{
+		return tag;
 	}
 
 	/*
@@ -422,7 +430,7 @@ public class Product extends Observable implements IProduct, Serializable
 	public void setShelfLife(int shelfLife)
 	{
 		this.shelfLife = shelfLife;
-		
+
 		this.setChanged();
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
@@ -439,6 +447,12 @@ public class Product extends Observable implements IProduct, Serializable
 
 		this.setChanged();
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
+	}
+
+	@Override
+	public void setTag(Object tag)
+	{
+		this.tag = tag;
 	}
 
 	/*
@@ -467,19 +481,5 @@ public class Product extends Observable implements IProduct, Serializable
 				+ description + ", barcode=" + barcode + ", size=" + size
 				+ ", shelfLife=" + shelfLife + ", threeMonthSupply="
 				+ threeMonthSupply + ", containers=" + containers + "]";
-	}
-
-	private transient Object tag;
-
-	@Override
-	public Object getTag()
-	{
-		return tag;
-	}
-
-	@Override
-	public void setTag(Object tag)
-	{
-		this.tag = tag;
 	}
 }
