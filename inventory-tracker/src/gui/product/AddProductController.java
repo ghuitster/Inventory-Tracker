@@ -233,7 +233,14 @@ public class AddProductController extends Controller implements
 				}
 			else
 			{
-				this.sizeValue = Float.parseFloat(getView().getSizeValue());
+				try
+				{
+					this.sizeValue = Float.parseFloat(getView().getSizeValue());
+				}
+				catch(NumberFormatException e)
+				{
+					getView().displayErrorMessage("Not a valid number");
+				}
 			}
 		}
 

@@ -90,13 +90,7 @@ public class AddItemBatchController extends Controller implements
 			getView().displayErrorMessage("Invalid count");
 			return;
 		}
-		//
-		// if(entryDate.after(DateUtils.currentDate()))
-		// {
-		// getView().displayErrorMessage("Invalid entry date");
-		// return;
-		// }
-		//
+
 		if(barcode.isEmpty())
 		{
 			getView().displayErrorMessage("Empty barcode");
@@ -164,11 +158,11 @@ public class AddItemBatchController extends Controller implements
 			expiration.set(Calendar.DAY_OF_MONTH, entryDate.getDate());
 			expiration.set(Calendar.YEAR, entryDate.getYear() + 1900);
 			expiration.add(Calendar.MONTH, addingProduct.getShelfLife());
-			IItem tempItem = null;
+			IItem addingItem = null;
 
 			if(addingProduct.getShelfLife() != 0)
 			{
-				tempItem =
+				addingItem =
 						new Item(addingProduct, new ItemBarcode(Inventory
 								.getInstance().getUniqueBarCode() + ""),
 								entryDate,
@@ -177,39 +171,39 @@ public class AddItemBatchController extends Controller implements
 			}
 			else
 			{
-				tempItem =
+				addingItem =
 						new Item(addingProduct, new ItemBarcode(Inventory
 								.getInstance().getUniqueBarCode() + ""),
 								entryDate, null);
 			}
 
-			items.add(tempItem);
-			ItemData tempItemData = new ItemData();
-			tempItemData.setBarcode(tempItem.getBarcode().getNumber());
-			tempItemData.setEntryDate(entryDate);
-			tempItemData.setExpirationDate(tempItem.getExpirationDate());
-			tempItemData.setProductGroup("");
+			items.add(addingItem);
+			ItemData addingItemData = new ItemData();
+			addingItemData.setBarcode(addingItem.getBarcode().getNumber());
+			addingItemData.setEntryDate(entryDate);
+			addingItemData.setExpirationDate(addingItem.getExpirationDate());
+			addingItemData.setProductGroup("");
 
 			if(target.getTag() instanceof ProductGroup)
-				tempItemData.setProductGroup(((ProductGroup) target.getTag())
+				addingItemData.setProductGroup(((ProductGroup) target.getTag())
 						.getName());
 
-			tempItemData.setStorageUnit(((StorageUnit) target.getTag())
+			addingItemData.setStorageUnit(((StorageUnit) target.getTag())
 					.getName());
 
-			tempItemData.setTag(tempItem);
+			addingItemData.setTag(addingItem);
 			if(displayItems.get(addingProductData) == null)
 			{
 				List<ItemData> tempList = new ArrayList<ItemData>();
-				tempList.add(tempItemData);
+				tempList.add(addingItemData);
 				displayItems.put(addingProductData, tempList);
 			}
 			else
-				displayItems.get(addingProductData).add(tempItemData);
+				displayItems.get(addingProductData).add(addingItemData);
 		}
 
 		count = 1;
-		// entryDate = DateUtils.currentDate();
+		entryDate = DateUtils.currentDate();
 		validCount = true;
 		barcode = "";
 		loadValues();
@@ -258,20 +252,17 @@ public class AddItemBatchController extends Controller implements
 		result.setBarcode(product.getBarcode().getNumber());
 		result.setCount(count + "");
 		result.setDescription(product.getDescription().getDescription());
-		result.setShelfLife(product.getShelfLife() + "");
+		result.setShelfLife(product.getShelfLife() + " months");
 
 		if(product.getSize() instanceof CountAmount)
-			result.setSize(((CountAmount) product.getSize()).getUnitType() + "");
+			result.setSize(((CountAmount) product.getSize()).getAmount() + " "
+					+ ((CountAmount) product.getSize()).getUnitType());
 		else
-			result.setSize(((NonCountAmount) product.getSize()).getUnitType()
-					+ "");
+			result.setSize(((NonCountAmount) product.getSize()).getAmount()
+					+ " " + ((NonCountAmount) product.getSize()).getUnitType());
 
-		if(product.getThreeMonthSupply() instanceof CountAmount)
-			result.setSupply(((CountAmount) product.getThreeMonthSupply())
-					.getAmount() + "");
-		else
-			result.setSupply(((NonCountAmount) product.getThreeMonthSupply())
-					.getAmount() + "");
+		result.setSupply(((CountThreeMonthSupply) product.getThreeMonthSupply())
+				.getAmount() + " " + product.getSize().getUnitType());
 
 		result.setTag(product);
 

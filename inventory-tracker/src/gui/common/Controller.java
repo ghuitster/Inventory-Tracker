@@ -1,7 +1,6 @@
 
 package gui.common;
 
-
 /**
  * Controller is a base class that provides common functionality required by all
  * controllers in the program (i.e., all controller classes extend Controller).
