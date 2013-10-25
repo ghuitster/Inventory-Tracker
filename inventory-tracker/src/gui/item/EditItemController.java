@@ -4,6 +4,7 @@ package gui.item;
 import gui.common.Controller;
 import gui.common.IView;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import model.IItem;
@@ -47,6 +48,13 @@ public class EditItemController extends Controller implements
 	public void editItem()
 	{
 		this.item.setEntryDate(this.entryDate);
+		Calendar expiration = Calendar.getInstance();
+		expiration.set(Calendar.MONTH, entryDate.getMonth());
+		expiration.set(Calendar.DAY_OF_MONTH, entryDate.getDate());
+		expiration.set(Calendar.YEAR, entryDate.getYear() + 1900);
+		expiration.add(Calendar.MONTH, this.item.getProduct().getShelfLife());
+		this.item.setExpirationDate(DateUtils.removeTimeFromDate(expiration
+				.getTime()));
 	}
 
 	/**
@@ -110,19 +118,24 @@ public class EditItemController extends Controller implements
 	@Override
 	public void valuesChanged()
 	{
-		if(this.getView().getEntryDate() == null)
+		Date requestedDate = this.getView().getEntryDate();
+
+		if(requestedDate == null)
 		{
 			this.submit = false;
-			return;
 		}
 		else
 		{
-			Date requestedDate = this.getView().getEntryDate();
+
 			boolean valid = this.valiDate(requestedDate);
-			this.submit = valid;
-			if(this.submit)
+			if(valid)
 			{
 				this.entryDate = requestedDate;
+				this.submit = true;
+			}
+			else
+			{
+				this.submit = false;
 			}
 		}
 		this.enableComponents();
@@ -130,36 +143,19 @@ public class EditItemController extends Controller implements
 
 	private boolean valiDate(Date date)
 	{
-		if(date == null)
+		date = DateUtils.removeTimeFromDate(date);
+		boolean response = false;
+
+		if((date != null)
+				&& (!date.before(DateUtils.removeTimeFromDate(DateUtils
+						.earliestDate())))
+				&& (!date.after(DateUtils.removeTimeFromDate(DateUtils
+						.currentDate()))))
 		{
-			return false;
-		}
-		else if(!date.after(DateUtils.earliestDate()))
-		{
-			return false;
-		}
-		else if(!date.before(DateUtils.currentDate())
-				|| date.equals(DateUtils.formatDate(DateUtils.currentDate())))
-		{
-			return false;
-		}
-		else
-		{
-			return true;
+			response = true;
 		}
 
-		//
-		// boolean afterEarliest = date.after(DateUtils.earliestDate());
-		// boolean beforeToday = date.before(DateUtils.currentDate());
-		//
-		// if(valid)
-		// {
-		// this.submit = true;
-		// }
-		// else
-		// {
-		// this.submit = false;
-		// }
+		return response;
 	}
 
 }

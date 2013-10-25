@@ -40,7 +40,9 @@ public class AddItemBatchController extends Controller implements
 {
 	private final ProductContainerData target;
 	private boolean useBarcodeScanner;
+	private boolean validDate;
 	private Date entryDate;
+	private final Date currentDate;
 	private int count;
 	private boolean validCount;
 	private String barcode;
@@ -63,9 +65,12 @@ public class AddItemBatchController extends Controller implements
 		super(view);
 		this.target = target;
 		count = 1;
-		entryDate = DateUtils.currentDate();
+		entryDate = DateUtils.removeTimeFromDate(DateUtils.currentDate());
+		this.currentDate =
+				DateUtils.removeTimeFromDate(DateUtils.currentDate());
 		useBarcodeScanner = true;
 		validCount = true;
+		this.validDate = false;
 		barcode = "";
 		displayItems = new HashMap<ProductData, List<ItemData>>();
 		displayProducts = new ArrayList<ProductData>();
@@ -114,6 +119,23 @@ public class AddItemBatchController extends Controller implements
 		return result;
 	}
 
+	private boolean valiDate(Date date)
+	{
+		date = DateUtils.removeTimeFromDate(date);
+		boolean response = false;
+
+		if((date != null)
+				&& (!date.before(DateUtils.removeTimeFromDate(DateUtils
+						.earliestDate())))
+				&& (!date.after(DateUtils.removeTimeFromDate(DateUtils
+						.currentDate()))))
+		{
+			response = true;
+		}
+
+		return response;
+	}
+
 	/**
 	 * This method is called when the user clicks the "Add Item" button in the
 	 * add item batch view.
@@ -126,13 +148,13 @@ public class AddItemBatchController extends Controller implements
 			getView().displayErrorMessage("Invalid count");
 			return;
 		}
-
-		if(entryDate.after(DateUtils.currentDate()))
-		{
-			getView().displayErrorMessage("Invalid entry date");
-			return;
-		}
-
+		//
+		// if(entryDate.after(DateUtils.currentDate()))
+		// {
+		// getView().displayErrorMessage("Invalid entry date");
+		// return;
+		// }
+		//
 		if(barcode.isEmpty())
 		{
 			getView().displayErrorMessage("Empty barcode");
@@ -245,7 +267,7 @@ public class AddItemBatchController extends Controller implements
 		}
 
 		count = 1;
-		entryDate = DateUtils.currentDate();
+		// entryDate = DateUtils.currentDate();
 		validCount = true;
 		barcode = "";
 		loadValues();
@@ -300,7 +322,10 @@ public class AddItemBatchController extends Controller implements
 	public void done()
 	{
 		if(products.isEmpty() || items.isEmpty())
+		{
 			getView().close();
+			return;
+		}
 
 		for(IProduct ip: products)
 			if(((ProductContainer) target.getTag()).ableToAddProduct(ip))
@@ -311,7 +336,6 @@ public class AddItemBatchController extends Controller implements
 				((ProductContainer) target.getTag()).addItem(ii);
 
 		BarcodeLabelPage printer = new BarcodeLabelPage(items);
-
 		try
 		{
 			printer.createPDF();
@@ -343,8 +367,7 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	protected void enableComponents()
 	{
-		if(validCount && !barcode.isEmpty()
-				&& !entryDate.after(DateUtils.currentDate()))
+		if(validCount && !barcode.isEmpty() && validDate)
 			getView().enableItemAction(true);
 		else
 			getView().enableItemAction(false);
@@ -361,8 +384,26 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void entryDateChanged()
 	{
-		entryDate = getView().getEntryDate();
-		enableComponents();
+		Date requestedDate = this.getView().getEntryDate();
+
+		if(requestedDate == null)
+		{
+			this.validDate = false;
+		}
+		else
+		{
+			boolean valid = this.valiDate(requestedDate);
+			if(valid)
+			{
+				this.entryDate = requestedDate;
+				this.validDate = true;
+			}
+			else
+			{
+				this.validDate = false;
+			}
+		}
+		this.enableComponents();
 	}
 
 	/**
@@ -386,7 +427,7 @@ public class AddItemBatchController extends Controller implements
 	{
 		getView().setBarcode(barcode);
 		getView().setCount(count + "");
-		getView().setEntryDate(entryDate);
+		getView().setEntryDate(this.entryDate);
 		getView().setUseScanner(useBarcodeScanner);
 	}
 
