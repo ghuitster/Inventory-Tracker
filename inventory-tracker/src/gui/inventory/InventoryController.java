@@ -7,15 +7,18 @@ import gui.product.ProductData;
 
 import java.util.Random;
 
+import model.CountThreeMonthSupply;
 import model.IItem;
 import model.IPersistence;
 import model.IProduct;
 import model.IProductContainer;
+import model.IProductGroup;
 import model.Inventory;
 import model.Item;
 import model.ProductContainer;
 import model.ProductGroup;
 import model.StorageUnit;
+import model.ThreeMonthSupply;
 import observer.NSA;
 
 /**
@@ -26,7 +29,7 @@ public class InventoryController extends Controller implements
 {
 
 	private ProductContainerData treeRoot;
-	private Random rand = new Random();
+	private final Random rand = new Random();
 
 	/**
 	 * Constructor.
@@ -424,6 +427,52 @@ public class InventoryController extends Controller implements
 					(IProductContainer) selectedContainer.getTag());
 			NSA.getInstance().populateItemData(
 					(IProductContainer) selectedContainer.getTag());
+
+			if(selectedContainer == treeRoot)
+			{
+				getView().setContextUnit("ALL");
+				getView().setContextSupply("");
+				getView().setContextGroup("");
+			}
+
+			ProductContainer tag = null;
+			if(selectedContainer.getTag() instanceof IProductGroup)
+			{
+				tag = (ProductGroup) selectedContainer.getTag();
+				getView().setContextGroup(tag.getName());
+				getView().setContextUnit(tag.getStorageUnit().getName());
+
+				if(((IProductGroup) tag).getThreeMonthSupply() instanceof CountThreeMonthSupply)
+					getView()
+							.setContextSupply(
+									((CountThreeMonthSupply) ((IProductGroup) tag)
+											.getThreeMonthSupply()).getAmount()
+											+ " "
+											+ ((CountThreeMonthSupply) ((IProductGroup) tag)
+													.getThreeMonthSupply())
+													.getUnitType());
+				else
+					getView().setContextSupply(
+							((ThreeMonthSupply) ((IProductGroup) tag)
+									.getThreeMonthSupply()).getAmount()
+									+ " "
+									+ ((ThreeMonthSupply) ((IProductGroup) tag)
+											.getThreeMonthSupply())
+											.getUnitType());
+			}
+			else if(selectedContainer.getTag() instanceof StorageUnit)
+			{
+				tag = (StorageUnit) selectedContainer.getTag();
+				getView().setContextUnit(tag.getName());
+				getView().setContextSupply("");
+				getView().setContextGroup("");
+			}
+		}
+		else
+		{
+			getView().setContextGroup("");
+			getView().setContextUnit("");
+			getView().setContextSupply("");
 		}
 
 	}
