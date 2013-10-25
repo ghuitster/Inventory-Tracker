@@ -20,14 +20,14 @@ public abstract class ProductContainer extends Observable implements
 	protected String name;
 	protected SortedSet<IProduct> products;
 	protected SortedSet<IItem> items;
-	protected Set<IProductGroup> productGroups;
+	protected SortedSet<IProductGroup> productGroups;
 
 	protected ProductContainer(String name)
 	{
 		this.name = name;
 		products = new TreeSet<IProduct>();
 		items = new TreeSet<IItem>();
-		productGroups = new HashSet<IProductGroup>();
+		productGroups = new TreeSet<IProductGroup>();
 		this.addObserver(Inventory.getInstance());
 	}
 
