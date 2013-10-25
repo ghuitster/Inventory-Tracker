@@ -138,11 +138,11 @@ public interface IProductContainer extends IObservable, ITaggable, Comparable<IP
 
 	/**
 	 * @pre item must be a valid item and not null
-	 * @pre otherProductContainer must be a valid ProductContainer and not null
-	 * @post my.items.doesNotContain(item)
-	 * @post otherProductContainer.items.contains(item)
+	 * @pre targetContainer must be a valid ProductContainer and not null
+	 * @post this.items.Contains(item)
+	 * @post targetContainer.items.contains(item)
 	 * @param item the Item to transfer
-	 * @param targetProductContainer the target ProductContainer
+	 * @param targetContainer the target ProductContainer
 	 */
 	public abstract void transferItem(IItem item,
 			IProductContainer targetContainer);

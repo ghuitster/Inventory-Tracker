@@ -59,6 +59,7 @@ public class Product extends Observable implements IProduct, Serializable
 		this.shelfLife = shelfLife;
 		this.threeMonthSupply = threeMonthSupply;
 		this.containers = new HashSet<IProductContainer>();
+		this.addObserver(Inventory.getInstance());
 	}
 
 	/*
@@ -210,9 +211,6 @@ public class Product extends Observable implements IProduct, Serializable
 	public void addContainer(IProductContainer productContainer)
 	{
 		this.containers.add(productContainer);
-
-		if(this.countObservers() == 0)
-			this.addObserver(Inventory.getInstance());
 	}
 
 	/*
@@ -370,9 +368,6 @@ public class Product extends Observable implements IProduct, Serializable
 	public void removeContainer(IProductContainer productContainer)
 	{
 		this.containers.remove(productContainer);
-
-		if(this.getContainers().size() == 0)
-			this.deleteObservers();
 	}
 
 	/*

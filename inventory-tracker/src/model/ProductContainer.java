@@ -2,7 +2,9 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Observable;
 import java.util.Set;
 import java.util.SortedSet;
@@ -166,7 +168,7 @@ public abstract class ProductContainer extends Observable implements
 	@Override
 	public void addProduct(IProduct product)
 	{
-		IProductContainer container = this.findContainer(product);
+		IProductContainer container = this.getStorageUnit().findContainer(product);
 
 		if(container == null)
 		{
@@ -177,7 +179,7 @@ public abstract class ProductContainer extends Observable implements
 		{
 			this.products.add(product);
 			product.addContainer(this);
-			product.removeContainer(container);
+			container.removeProduct(product);
 
 			for(IItem item: container.getAllItems())
 			{
@@ -336,18 +338,19 @@ public abstract class ProductContainer extends Observable implements
 	{
 		this.removeItem(item);
 		
+		List<IItem> itemsToAdd = new ArrayList<IItem>();
+		itemsToAdd.add(item);
+		
 		if(targetContainer.getStorageUnit() == this.getStorageUnit())
 		{
 			Set<IItem> items = this.getAllItems();
-			boolean stillHere = false;
 			for(IItem containerItem : items)
 			{
-				stillHere = stillHere || containerItem.getProduct() == item.getProduct();
-				if(stillHere)
-					break;
+				if(containerItem.getProduct() == item.getProduct())
+					itemsToAdd.add(containerItem);
 			}
-			if(!stillHere)
-				this.removeProduct(item.getProduct());
+			
+			this.removeProduct(item.getProduct());
 		}
 		else
 		{
@@ -371,7 +374,8 @@ public abstract class ProductContainer extends Observable implements
 			
 		}
 		
-		targetContainer.addItem(item);
+		for(IItem itemToAdd : itemsToAdd)
+			targetContainer.addItem(itemToAdd);
 	}
 
 	@Override

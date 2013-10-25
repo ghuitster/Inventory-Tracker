@@ -351,17 +351,6 @@ public class InventoryController extends Controller implements
 		return;
 	}
 
-	private String getRandomBarcode()
-	{
-		Random rand = new Random();
-		StringBuilder barcode = new StringBuilder();
-		for(int i = 0; i < 12; ++i)
-		{
-			barcode.append(((Integer) rand.nextInt(10)).toString());
-		}
-		return barcode.toString();
-	}
-
 	/**
 	 * Returns a reference to the view for this controller.
 	 */
@@ -390,28 +379,6 @@ public class InventoryController extends Controller implements
 	@Override
 	protected void loadValues()
 	{
-//		ProductContainerData basementCloset =
-//				new ProductContainerData("Basement Closet");
-//
-//		ProductContainerData toothpaste =
-//				new ProductContainerData("Toothpaste");
-//		toothpaste.addChild(new ProductContainerData("Kids"));
-//		toothpaste.addChild(new ProductContainerData("Parents"));
-//		basementCloset.addChild(toothpaste);
-//
-//		root.addChild(basementCloset);
-//
-//		ProductContainerData foodStorage =
-//				new ProductContainerData("Food Storage Room");
-//
-//		ProductContainerData soup = new ProductContainerData("Soup");
-//		soup.addChild(new ProductContainerData("Chicken Noodle"));
-//		soup.addChild(new ProductContainerData("Split Pea"));
-//		soup.addChild(new ProductContainerData("Tomato"));
-//		foodStorage.addChild(soup);
-//
-//		root.addChild(foodStorage);
-//
 		
 		ProductContainerData root = new ProductContainerData();
 		treeRoot = root;
@@ -451,7 +418,6 @@ public class InventoryController extends Controller implements
 	@Override
 	public void productContainerSelectionChanged()
 	{
-//		List<ProductData> productDataList = new ArrayList<ProductData>();
 		ProductContainerData selectedContainer =
 				getView().getSelectedProductContainer();
 		if(selectedContainer != null && selectedContainer != this.treeRoot)
@@ -473,29 +439,6 @@ public class InventoryController extends Controller implements
 	@Override
 	public void productSelectionChanged()
 	{
-//		List<ItemData> itemDataList = new ArrayList<ItemData>();
-//		ProductData selectedProduct = getView().getSelectedProduct();
-//		if(selectedProduct != null)
-//		{
-//			Date now = new Date();
-//			GregorianCalendar cal = new GregorianCalendar();
-//			int itemCount = Integer.parseInt(selectedProduct.getCount());
-//			for(int i = 1; i <= itemCount; ++i)
-//			{
-//				cal.setTime(now);
-//				ItemData itemData = new ItemData();
-//				itemData.setBarcode(getRandomBarcode());
-//				cal.add(Calendar.MONTH, -rand.nextInt(12));
-//				itemData.setEntryDate(cal.getTime());
-//				cal.add(Calendar.MONTH, 3);
-//				itemData.setExpirationDate(cal.getTime());
-//				itemData.setProductGroup("Some Group");
-//				itemData.setStorageUnit("Some Unit");
-//
-//				itemDataList.add(itemData);
-//			}
-//		}
-//		getView().setItems(itemDataList.toArray(new ItemData[0]));
 		
 		ProductContainerData selectedContainer =
 				getView().getSelectedProductContainer();
