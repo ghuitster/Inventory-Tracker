@@ -67,7 +67,7 @@ public class AddItemBatchController extends Controller implements
 		entryDate = DateUtils.removeTimeFromDate(DateUtils.currentDate());
 		useBarcodeScanner = true;
 		validCount = true;
-		this.validDate = false;
+		this.validDate = true;
 		barcode = "";
 		displayItems = new HashMap<ProductData, List<ItemData>>();
 		displayProducts = new ArrayList<ProductData>();

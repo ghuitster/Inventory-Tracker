@@ -1,6 +1,11 @@
 
 package gui.product;
 
+import gui.batches.AddItemBatchController;
+import gui.common.Controller;
+import gui.common.IView;
+import gui.common.SizeUnitUtils;
+import gui.common.SizeUnits;
 import model.Amount;
 import model.CountThreeMonthSupply;
 import model.CountUnitSize;
@@ -10,11 +15,7 @@ import model.Product;
 import model.ProductBarcode;
 import model.UnitSize;
 import model.UnitType;
-import gui.batches.AddItemBatchController;
-import gui.common.Controller;
-import gui.common.IView;
-import gui.common.SizeUnitUtils;
-import gui.common.SizeUnits;
+
 import common.util.DateUtils;
 
 /**
@@ -28,8 +29,10 @@ public class AddProductController extends Controller implements
 	private Amount size = null;
 	private float sizeValue = 0;
 	private SizeUnits sizeUnits = SizeUnits.Count;
+	private SizeUnits oldSizeUnits = sizeUnits;
 	private int shelflife = 0;
-	private CountThreeMonthSupply cThreeMonthSupply = new CountThreeMonthSupply(0);
+	private CountThreeMonthSupply cThreeMonthSupply =
+			new CountThreeMonthSupply(0);
 	private boolean submit = false;
 	private UnitType unitType = UnitType.COUNT;
 
@@ -42,7 +45,7 @@ public class AddProductController extends Controller implements
 	public AddProductController(IView view, String barcode)
 	{
 		super(view);
-		
+
 		this.barcode = new ProductBarcode(barcode);
 		construct();
 	}
@@ -64,14 +67,17 @@ public class AddProductController extends Controller implements
 			this.size = new CountUnitSize((int) this.sizeValue);
 		else
 			this.size = new UnitSize(this.sizeValue, this.unitType);
-		IProduct myProduct = new Product(DateUtils.currentDate(), this.descript
-				, this.barcode, this.size, this.shelflife, this.cThreeMonthSupply);
+		IProduct myProduct =
+				new Product(DateUtils.currentDate(), this.descript,
+						this.barcode, this.size, this.shelflife,
+						this.cThreeMonthSupply);
 		AddItemBatchController.product = myProduct;
 	}
 
 	private void createUnitType()
 	{
-		this.unitType = SizeUnitUtils.createUnitTypeFromSizeUnits(this.sizeUnits);
+		this.unitType =
+				SizeUnitUtils.createUnitTypeFromSizeUnits(this.sizeUnits);
 	}
 
 	/**
@@ -98,7 +104,7 @@ public class AddProductController extends Controller implements
 			getView().enableSizeValue(true);
 		}
 		getView().enableBarcode(false);
-		
+
 		getView().enableOK(submit);
 	}
 
@@ -144,23 +150,41 @@ public class AddProductController extends Controller implements
 	@Override
 	public void valuesChanged()
 	{
-		if(!getView().getSupply().isEmpty() && !getView().getSupply().startsWith("-"))
+		if(!getView().getSupply().isEmpty()
+				&& !getView().getSupply().startsWith("-"))
 		{
 			try
 			{
-				this.cThreeMonthSupply = new CountThreeMonthSupply(Integer.parseInt
-					(getView().getSupply()));
+				this.cThreeMonthSupply =
+						new CountThreeMonthSupply(Integer.parseInt(getView()
+								.getSupply()));
 			}
 			catch(NumberFormatException e)
 			{
-				this.getView().displayErrorMessage("The three month supply must"
-					+ " be a whole number");
+				this.getView().displayErrorMessage(
+						"The three month supply must" + " be a whole number");
 				this.getView().setSupply("" + 0);
 			}
 		}
 		this.descript = getView().getDescription();
+		this.oldSizeUnits = this.sizeUnits;
 		this.sizeUnits = getView().getSizeUnit();
-		if(!getView().getShelfLife().isEmpty() && !getView().getShelfLife().startsWith("-"))
+
+		if(this.sizeUnits == SizeUnits.Count
+				&& this.oldSizeUnits != SizeUnits.Count)
+		{
+			this.sizeValue = 1;
+			getView().setSizeValue("1");
+		}
+		else if(this.sizeUnits != SizeUnits.Count
+				&& this.oldSizeUnits == SizeUnits.Count)
+		{
+			this.sizeValue = 0;
+			getView().setSizeValue("0");
+		}
+
+		if(!getView().getShelfLife().isEmpty()
+				&& !getView().getShelfLife().startsWith("-"))
 		{
 			try
 			{
@@ -168,11 +192,13 @@ public class AddProductController extends Controller implements
 			}
 			catch(NumberFormatException e)
 			{
-				this.getView().displayErrorMessage("Shelflife must be a whole number");
+				this.getView().displayErrorMessage(
+						"Shelflife must be a whole number");
 				this.getView().setShelfLife("" + this.shelflife);
 			}
 		}
-		if(!getView().getSizeValue().isEmpty() && !getView().getSizeValue().startsWith("-"))
+		if(!getView().getSizeValue().isEmpty()
+				&& !getView().getSizeValue().startsWith("-"))
 		{
 			if(this.sizeUnits == SizeUnits.Count)
 				try
@@ -181,15 +207,16 @@ public class AddProductController extends Controller implements
 				}
 				catch(NumberFormatException e)
 				{
-					getView().displayErrorMessage("For unit size type Count, the "
-							+ "value must be a whole number");
+					getView().displayErrorMessage(
+							"For unit size type Count, the "
+									+ "value must be a whole number");
 				}
 			else
 			{
 				this.sizeValue = Float.parseFloat(getView().getSizeValue());
 			}
 		}
-		
+
 		this.shouldOKBeEnabled();
 		this.enableComponents();
 	}
@@ -198,13 +225,17 @@ public class AddProductController extends Controller implements
 	{
 		if(this.descript.isEmpty())
 			this.submit = false;
-		else if(sizeValue <= 0 || this.shelflife < 0 || this.cThreeMonthSupply.getAmount() < 0)
+		else if(sizeValue <= 0 || this.shelflife < 0
+				|| this.cThreeMonthSupply.getAmount() < 0)
 			this.submit = false;
-		else if(getView().getSupply().isEmpty() || getView().getSupply().startsWith("-"))
+		else if(getView().getSupply().isEmpty()
+				|| getView().getSupply().startsWith("-"))
 			this.submit = false;
-		else if(getView().getShelfLife().isEmpty() || getView().getShelfLife().startsWith("-"))
+		else if(getView().getShelfLife().isEmpty()
+				|| getView().getShelfLife().startsWith("-"))
 			this.submit = false;
-		else if(getView().getSizeValue().isEmpty() || getView().getSizeValue().startsWith("-"))
+		else if(getView().getSizeValue().isEmpty()
+				|| getView().getSizeValue().startsWith("-"))
 			this.submit = false;
 		else
 			this.submit = true;
