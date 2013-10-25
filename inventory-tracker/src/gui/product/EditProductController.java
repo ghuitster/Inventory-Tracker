@@ -44,11 +44,12 @@ public class EditProductController extends Controller implements
 
 		product = (IProduct) target.getTag();
 		createSizeUnitsFromUnitType();
+		this.cThreeMonthSupply = (CountThreeMonthSupply) this.product.getThreeMonthSupply();
 		if(this.sizeUnits == SizeUnits.Count)
 			this.sizeValue = ((CountUnitSize)product.getSize()).getAmount();
 		else
 			this.sizeValue = ((UnitSize)product.getSize()).getAmount();
-		
+		this.descript = this.product.getDescription().getDescription();
 		construct();
 	}
 

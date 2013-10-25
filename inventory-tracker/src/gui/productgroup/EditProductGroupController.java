@@ -28,6 +28,7 @@ public class EditProductGroupController extends Controller implements
 	private UnitType unitType = UnitType.COUNT;
 	private Amount threeMonthSupply;
 	private IProductContainer container;
+	private boolean PGNameChanged = false;
 	/**
 	 * Constructor.
 	 * 
@@ -144,6 +145,8 @@ public class EditProductGroupController extends Controller implements
 	@Override
 	public void valuesChanged()
 	{
+		if(!this.name.equals(this.getView().getProductGroupName()))
+			this.PGNameChanged = true;
 		this.name = this.getView().getProductGroupName();
 		this.sizeUnits = this.getView().getSupplyUnit();
 		if(!getView().getSupplyValue().isEmpty() && 
@@ -176,7 +179,8 @@ public class EditProductGroupController extends Controller implements
 		else if(this.getView().getSupplyValue().isEmpty() ||
 				getView().getSupplyValue().startsWith("-"))
 			submit = false;
-		else if(!this.container.ableToAddProductGroupNamed(getView().getProductGroupName()))
+		else if(!this.container.ableToAddProductGroupNamed(getView().getProductGroupName()) 
+				&& this.PGNameChanged)
 			submit = false;
 		else 
 			submit = true;
