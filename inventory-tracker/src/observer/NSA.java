@@ -7,6 +7,7 @@ import gui.item.ItemData;
 import gui.product.ProductData;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
@@ -220,47 +221,64 @@ public class NSA implements Observer
 
 	public void populateProductData(IProductContainer container)
 	{
+		Set<IProduct> products;
 		if(container != null)
+			products = container.getAllProducts();
+		else products = inventory.getAllProducts();
+		ProductData[] productDatas = new ProductData[products.size()];
+		Iterator<IProduct> productIterator = products.iterator();
+		for(int i = 0; i < productDatas.length; i++)
 		{
-			Set<IProduct> products = container.getAllProducts();
-			ProductData[] productDatas = new ProductData[products.size()];
-			Iterator<IProduct> productIterator = products.iterator();
-			for(int i = 0; i < productDatas.length; i++)
-			{
-				productDatas[i] = (ProductData)productIterator.next().getTag();
-				productDatas[i].setCount("0");
-			}
-			
-			for(IItem item : container.getAllItems())
-			{
-				ProductData pd = (ProductData)item.getProduct().getTag();
-				int count = Integer.parseInt(pd.getCount());
-				count++;
-				pd.setCount(count + "");
-			}
-			
-			if(inventoryView.getSelectedProduct() != null)
-			{
-				populateItemData(container);
-			}
-			
-			inventoryView.setProducts(productDatas);
+			productDatas[i] = (ProductData)productIterator.next().getTag();
+			productDatas[i].setCount("0");
 		}
+		
+		Set<IItem> items;
+		if(container != null)
+			items = container.getAllItems();
+		else items = inventory.getAllItems(null);
+		
+		for(IItem item : items)
+		{
+			ProductData pd = (ProductData)item.getProduct().getTag();
+			int count = Integer.parseInt(pd.getCount());
+			count++;
+			pd.setCount(count + "");
+		}
+		
+		if(inventoryView.getSelectedProduct() != null)
+		{
+			populateItemData(items);
+		}
+		
+		inventoryView.setProducts(productDatas);
 	}
 
 	public void populateItemData(IProductContainer container)
 	{
-		IProduct selectedProduct = null;
+		Set<IItem> items = container != null ? container.getAllItems()
+		 : null;
+		populateItemData(items);
+	}
+	
+	private void populateItemData(Set<IItem> items)
+	{
 		if(inventoryView.getSelectedProduct() != null)
 		{
-			selectedProduct = (IProduct)inventoryView.getSelectedProduct().getTag();
-
-			Set<IItem> items = container.getAllItems();
+			IProduct selectedProduct = (IProduct)inventoryView.getSelectedProduct().getTag();
 			List<ItemData> itemDatas = new ArrayList<ItemData>();
-			for(IItem item : items)
+			
+			Set<IItem> itemList = items;
+			if(selectedProduct != null && itemList == null)
+				itemList = inventory.getAllItems(selectedProduct);
+			
+			if(selectedProduct != null)
 			{
-				if(selectedProduct == null || item.getProduct() == selectedProduct)
-					itemDatas.add((ItemData)item.getTag());
+				for(IItem item : itemList)
+				{
+					if(item.getProduct() == selectedProduct)
+						itemDatas.add((ItemData)item.getTag());
+				}
 			}
 			inventoryView.setItems(itemDatas.toArray(new ItemData[0]));
 		}

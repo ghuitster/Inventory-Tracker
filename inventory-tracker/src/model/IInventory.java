@@ -44,6 +44,15 @@ public interface IInventory extends Observer, IObservable
 	 * @return A list containing references to all of the products
 	 */
 	public abstract SortedSet<IProduct> getAllProducts();
+	
+	/**
+	 * Gets all items of a certain product type
+	 * @pre none
+	 * @post none
+	 * @param product The product to filter by. If null, gets all items.
+	 * @return All items of type product
+	 */
+	public abstract SortedSet<IItem> getAllItems(IProduct product);
 
 	/**
 	 * Gets a list of all Storage Units in the system
@@ -52,6 +61,24 @@ public interface IInventory extends Observer, IObservable
 	 *       list may be empty
 	 * @return A list containing references to all top level ProductContainers
 	 */
+	
+	/**
+	 * Returns whether attempting to remove a product is valid
+	 * @pre none
+	 * @post none
+	 * @param product The product to check
+	 * @return True if the product is orphaned. Otherwise, false
+	 */
+	public abstract boolean ableToRemoveProduct(IProduct product);
+	
+	/**
+	 * Removes a product from the system
+	 * @pre ableToRemoveProduct(product)
+	 * @post product is removed from the system
+	 * @param product The product to remove
+	 */
+	public abstract void removeProduct(IProduct product);
+	
 	public abstract SortedSet<IStorageUnit> getAllStorageUnits();
 
 	/**

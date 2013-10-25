@@ -149,7 +149,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	public boolean ableToRemoveStorageUnit(IStorageUnit storageUnit)
 	{
 		HashSet<IProduct> products = new HashSet<IProduct>();
-		recurseProductContainer(storageUnit, products);
+		recurseProductContainerForProducts(storageUnit, products);
 		return products.size() == 0;
 	}
 
@@ -181,13 +181,87 @@ public class Inventory extends Observable implements IInventory, Serializable
 	@Override
 	public SortedSet<IProduct> getAllProducts()
 	{
-		TreeSet<IProduct> products = new TreeSet<IProduct>();
+		SortedSet<IProduct> products = new TreeSet<IProduct>();
 		for(IStorageUnit unit: this.storageUnits)
 		{
-			recurseProductContainer(unit, products);
+			recurseProductContainerForProducts(unit, products);
 		}
 		products.addAll(this.removedProducts);
 		return products;
+	}
+	
+	/**
+	 * Adds all products from a container to the working set and recurses the
+	 * sub-containers
+	 * @param container The container to add the products from and recurse the
+	 *            children of
+	 * @pre workingSet is not null
+	 * @post workingSet contains all products from container and its children
+	 * @param workingSet The current set being built
+	 */
+	private void recurseProductContainerForProducts(IProductContainer container,
+			Set<IProduct> workingSet)
+	{
+		workingSet.addAll(container.getAllProducts());
+		for(IProductContainer subContainer: container.getAllProductGroups())
+		{
+			recurseProductContainerForProducts(subContainer, workingSet);
+		}
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.BaseInventory#getAllItems(IProduct product)
+	 */
+	@Override
+	public SortedSet<IItem> getAllItems(IProduct product)
+	{
+		SortedSet<IItem> items = new TreeSet<IItem>();
+		for(IStorageUnit unit: this.storageUnits)
+		{
+			recurseProductContainerForItems(unit, items, product);
+		}
+		return items;
+	}
+	
+	private void recurseProductContainerForItems(IProductContainer container,
+			Set<IItem> workingSet, IProduct filter)
+	{
+		for(IItem item : container.getAllItems())
+		{
+			if(filter == null || item.getProduct() == filter)
+				workingSet.add(item);
+		}
+		for(IProductContainer subContainer: container.getAllProductGroups())
+		{
+			recurseProductContainerForItems(subContainer, workingSet, filter);
+		}
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.BaseInventory#ableToRemoveProduct(IProduct product)
+	 */
+	@Override
+	public boolean ableToRemoveProduct(IProduct product)
+	{
+		return this.removedProducts.contains(product);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.removeProduct(IProduct product)
+	 */
+	@Override
+	public void removeProduct(IProduct product)
+	{
+		this.removedProducts.remove(product);
+		product.deleteObserver(this);
+		this.setChanged();
+		this.notifyObservers(new ObservableArgs(product, UpdateType.REMOVED));
 	}
 
 	/*
@@ -263,25 +337,6 @@ public class Inventory extends Observable implements IInventory, Serializable
 	public long getUniqueBarCode()
 	{
 		return lastGeneratedBarCode++;
-	}
-
-	/**
-	 * Adds all products from a container to the working set and recurses the
-	 * sub-containers
-	 * @param container The container to add the products from and recurse the
-	 *            children of
-	 * @pre workingSet is not null
-	 * @post workingSet contains all products from container and its children
-	 * @param workingSet The current set being built
-	 */
-	private void recurseProductContainer(IProductContainer container,
-			Set<IProduct> workingSet)
-	{
-		workingSet.addAll(container.getAllProducts());
-		for(IProductContainer subContainer: container.getAllProductGroups())
-		{
-			recurseProductContainer(subContainer, workingSet);
-		}
 	}
 
 	/*
