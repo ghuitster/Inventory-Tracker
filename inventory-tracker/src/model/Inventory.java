@@ -67,6 +67,11 @@ public class Inventory extends Observable implements IInventory, Serializable
 	 * Mapping of all removed Items, for easy retrieval
 	 */
 	private final SortedMap<Date, Set<IItem>> removedItems;
+	
+	/**
+	 * Record of orphaned products
+	 */
+	private final SortedSet<IProduct> removedProducts;
 	/**
 	 * Mapping for the nMonthSupply report. The Date key represents a month. The
 	 * corresponding products are those which will last up to the key's month
@@ -104,6 +109,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 		this.persistence = new Serializer("./data.inventory");
 		this.itemExpirations = new TreeMap<Date, Set<IItem>>();
 		this.removedItems = new TreeMap<Date, Set<IItem>>();
+		this.removedProducts = new TreeSet<IProduct>();
 		this.nMonthSupplyMap = new TreeMap<Date, Set<IProduct>>();
 		this.nMonthSupplyGroupMap = new TreeMap<Date, Set<IProductGroup>>();
 		this.barcodeItems = new HashMap<String, IItem>();
@@ -180,6 +186,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 		{
 			recurseProductContainer(unit, products);
 		}
+		products.addAll(this.removedProducts);
 		return products;
 	}
 
@@ -372,6 +379,13 @@ public class Inventory extends Observable implements IInventory, Serializable
 			{
 				this.barcodeItems.put(item.getBarcode().toString(), item);
 			}
+		}
+		else if(obsArg.getChangedObj() instanceof IProduct)
+		{
+			if(obsArg.getUpdateType() == UpdateType.REMOVED)
+				this.removedProducts.add((IProduct)obsArg.getChangedObj());
+			if(obsArg.getUpdateType() == UpdateType.ADDED)
+				this.removedProducts.remove((IProduct)obsArg.getChangedObj());
 		}
 
 		this.setChanged();
