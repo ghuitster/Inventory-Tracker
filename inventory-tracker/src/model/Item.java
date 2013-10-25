@@ -45,6 +45,7 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 		this.barcode = barcode;
 		this.entryDate = entryDate;
 		this.expirationDate = expirationDate;
+		this.addObserver(Inventory.getInstance());
 	}
 
 	/*
