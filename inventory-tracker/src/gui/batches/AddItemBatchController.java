@@ -42,7 +42,6 @@ public class AddItemBatchController extends Controller implements
 	private boolean useBarcodeScanner;
 	private boolean validDate;
 	private Date entryDate;
-	private final Date currentDate;
 	private int count;
 	private boolean validCount;
 	private String barcode;
@@ -66,8 +65,6 @@ public class AddItemBatchController extends Controller implements
 		this.target = target;
 		count = 1;
 		entryDate = DateUtils.removeTimeFromDate(DateUtils.currentDate());
-		this.currentDate =
-				DateUtils.removeTimeFromDate(DateUtils.currentDate());
 		useBarcodeScanner = true;
 		validCount = true;
 		this.validDate = false;
