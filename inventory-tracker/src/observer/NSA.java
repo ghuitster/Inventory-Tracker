@@ -3,22 +3,15 @@ package observer;
 
 import gui.inventory.IInventoryView;
 import gui.inventory.ProductContainerData;
-import gui.item.ItemData;
-import gui.product.ProductData;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Set;
 
 import model.IInventory;
 import model.IItem;
 import model.IProduct;
 import model.IProductContainer;
-import model.IProductGroup;
-import model.IStorageUnit;
+import model.ITaggable;
 import model.Inventory;
 import model.ObservableArgs;
 
@@ -113,8 +106,8 @@ public class NSA implements Observer
 	public void update(Observable o, Object arg)
 	{
 		ObservableArgs obsArgs = (ObservableArgs) arg;
-
-		DataUpdater.verifyObjTag(obsArgs.getChangedObj());
+		
+		DataUpdater.verifyObjTag((ITaggable)obsArgs.getChangedObj());
 
 		switch(obsArgs.getUpdateType())
 		{

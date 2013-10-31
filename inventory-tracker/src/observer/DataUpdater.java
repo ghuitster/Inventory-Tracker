@@ -7,10 +7,11 @@ import model.IItem;
 import model.IProduct;
 import model.IProductContainer;
 import model.IProductGroup;
+import model.ITaggable;
 
 public class DataUpdater
 {
-	public static void verifyObjTag(Object changedObj)
+	public static void verifyObjTag(ITaggable changedObj)
 	{
 		if(changedObj instanceof IItem)
 		{
