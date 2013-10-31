@@ -11,47 +11,33 @@ import model.ITaggable;
 
 public class DataUpdater
 {
-	public static void verifyTagData(IItem item)
+	public static void resetTagData(IItem item)
 	{
-		ItemData itemData;
-		if(item.getTag() != null)
-			itemData = (ItemData) item.getTag();
-		else
-			itemData = new ItemData();
-		updateItemData(item, itemData);
+		item.setTag(createItemData(item));
 	}
 	
-	public static void verifyTagData(IProduct product)
+	public static void resetTagData(IProduct product)
 	{
-		ProductData productData;
-		if(product.getTag() != null)
-			productData = (ProductData) product.getTag();
-		else
-			productData = new ProductData();
-		updateProductData(product, productData);
+		product.setTag(createProductData(product));
 	}
 	
-	public static void verifyTagData(IProductContainer productContainer)
+	public static void resetTagData(IProductContainer productContainer)
 	{
-		ProductContainerData pcData =
-				(ProductContainerData) productContainer.getTag();
-		if(productContainer.getTag() != null)
-			pcData = (ProductContainerData) productContainer.getTag();
-		else
-			pcData = new ProductContainerData();
-		updateProductContainerData(productContainer, pcData);
+		productContainer.setTag(createProductContainerData(productContainer));
 	}
 	
-	private static void updateProductContainerData(IProductContainer productContainer,
-			ProductContainerData pcData)
+	public static ProductContainerData createProductContainerData(IProductContainer productContainer)
 	{
+		ProductContainerData pcData = new ProductContainerData();
 		pcData.setName(productContainer.getName());
 		productContainer.setTag(pcData);
 		pcData.setTag(productContainer);
+		return pcData;
 	}
 
-	private static void updateProductData(IProduct product, ProductData productData)
+	public static ProductData createProductData(IProduct product)
 	{
+		ProductData productData = new ProductData();
 		productData.setBarcode(product.getBarcode().toString());
 		productData.setDescription(product.getDescription().toString());
 		productData.setShelfLife("" + product.getShelfLife());
@@ -59,10 +45,12 @@ public class DataUpdater
 		productData.setSupply(product.getThreeMonthSupply().toString());
 		product.setTag(productData);
 		productData.setTag(product);
+		return productData;
 	}
 	
-	private static void updateItemData(IItem item, ItemData itemData)
+	public static ItemData createItemData(IItem item)
 	{
+		ItemData itemData = new ItemData();
 		itemData.setBarcode(item.getBarcode().toString());
 		itemData.setEntryDate(item.getEntryDate());
 		itemData.setExpirationDate(item.getExpirationDate());
@@ -73,6 +61,7 @@ public class DataUpdater
 					.getName());
 		item.setTag(itemData);
 		itemData.setTag(item);
+		return itemData;
 	}
 	
 }

@@ -70,13 +70,13 @@ public class InventoryViewUpdater
 	public void addProductContainersRecursively(ProductContainerData parent,
 			IProductContainer unit, int index)
 	{
-		DataUpdater.verifyTagData(unit);
+		DataUpdater.resetTagData(unit);
 
 		for(IProduct product: unit.getAllProducts())
-			DataUpdater.verifyTagData(product);
+			DataUpdater.resetTagData(product);
 
 		for(IItem item: unit.getAllItems())
-			DataUpdater.verifyTagData(item);
+			DataUpdater.resetTagData(item);
 
 		ProductContainerData child = (ProductContainerData) unit.getTag();
 		inventoryView.insertProductContainer(parent, child, index);

@@ -108,11 +108,11 @@ public class NSA implements Observer
 		ObservableArgs obsArgs = (ObservableArgs) arg;
 		
 		if(obsArgs.getChangedObj() instanceof IItem)
-			DataUpdater.verifyTagData((IItem)obsArgs.getChangedObj());
+			DataUpdater.resetTagData((IItem)obsArgs.getChangedObj());
 		else if(obsArgs.getChangedObj() instanceof IProduct)
-			DataUpdater.verifyTagData((IProduct)obsArgs.getChangedObj());
+			DataUpdater.resetTagData((IProduct)obsArgs.getChangedObj());
 		else if(obsArgs.getChangedObj() instanceof IProductContainer)
-			DataUpdater.verifyTagData((IProductContainer)obsArgs.getChangedObj());
+			DataUpdater.resetTagData((IProductContainer)obsArgs.getChangedObj());
 
 		switch(obsArgs.getUpdateType())
 		{
