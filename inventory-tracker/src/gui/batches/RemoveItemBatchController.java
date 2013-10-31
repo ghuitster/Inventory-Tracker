@@ -11,12 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import model.CountAmount;
 import model.IItem;
 import model.IProduct;
 import model.Inventory;
-import model.NonCountAmount;
-import model.ProductGroup;
+import observer.DataUpdater;
 
 /**
  * Controller class for the remove item batch view.
@@ -131,50 +129,6 @@ public class RemoveItemBatchController extends Controller implements
 		return;
 	}
 
-	private ItemData constructItemData(IItem item)
-	{
-		ItemData itemData = new ItemData();
-		itemData.setBarcode(barcode);
-		itemData.setEntryDate(item.getEntryDate());
-		itemData.setExpirationDate(item.getExpirationDate());
-
-		if(item.getContainer() instanceof ProductGroup)
-			itemData.setProductGroup(item.getContainer().getName());
-		else
-			itemData.setStorageUnit(item.getContainer().getName());
-
-		itemData.setTag(item);
-
-		return itemData;
-	}
-
-	private ProductData constructProductData(IProduct product)
-	{
-		ProductData productData = new ProductData();
-		productData.setBarcode(product.getBarcode().getNumber());
-		productData.setCount("1");
-		productData.setDescription(product.getDescription().getDescription());
-		productData.setShelfLife(product.getShelfLife() + "");
-
-		if(product.getSize() instanceof CountAmount)
-			productData.setSize(((CountAmount) product.getSize()).getAmount()
-					+ "");
-		else
-			productData.setSize(((NonCountAmount) product.getSize())
-					.getAmount() + "");
-
-		if(product.getThreeMonthSupply() instanceof CountAmount)
-			productData.setSupply(((CountAmount) product.getThreeMonthSupply())
-					.getAmount() + "");
-		else
-			productData.setSupply(((NonCountAmount) product
-					.getThreeMonthSupply()).getAmount() + "");
-
-		productData.setTag(product);
-
-		return productData;
-	}
-
 	/**
 	 * This method is called when the user clicks the "Remove Item" button in
 	 * the remove item batch view.
@@ -199,9 +153,11 @@ public class RemoveItemBatchController extends Controller implements
 			return;
 		}
 
-		ItemData removingItemData = constructItemData(removingItem);
+		ItemData removingItemData = DataUpdater.createItemData(removingItem);
 		IProduct removingProduct = removingItem.getProduct();
-		ProductData removingProductData = constructProductData(removingProduct);
+		ProductData removingProductData =
+				DataUpdater.createProductData(removingProduct);
+		removingProductData.setCount("1");
 		displayProducts.add(removingProductData);
 		items.add(removingItem);
 		addItems(removingProductData, removingItemData);

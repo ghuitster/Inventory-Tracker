@@ -15,22 +15,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import observer.DataUpdater;
 import model.BarcodeLabelPage;
-import model.CountAmount;
-import model.CountThreeMonthSupply;
 import model.IItem;
 import model.IProduct;
 import model.Inventory;
 import model.Item;
 import model.ItemBarcode;
-import model.NonCountAmount;
 import model.ProductContainer;
-import model.ProductGroup;
-import model.StorageUnit;
+import observer.DataUpdater;
 
 import com.itextpdf.text.DocumentException;
-
 import common.util.DateUtils;
 
 /**
@@ -113,7 +107,9 @@ public class AddItemBatchController extends Controller implements
 				updateProductDataCount(addingProductData);
 			else
 			{
-				addingProductData = createProductData(addingProduct);
+				addingProductData =
+						DataUpdater.createProductData(addingProduct);
+				addingProductData.setCount(count + "");
 				addProductAndProductData(addingProduct, addingProductData);
 			}
 		}
@@ -133,7 +129,9 @@ public class AddItemBatchController extends Controller implements
 					return;
 
 				addingProduct = AddItemBatchController.product;
-				addingProductData = createProductData(addingProduct);
+				addingProductData =
+						DataUpdater.createProductData(addingProduct);
+				addingProductData.setCount(count + "");
 				addProductAndProductData(addingProduct, addingProductData);
 			}
 		}
@@ -170,7 +168,7 @@ public class AddItemBatchController extends Controller implements
 				addingItem.setExpirationDate(null);
 
 			items.add(addingItem);
-			ItemData addingItemData = constructItemData(addingItem);
+			ItemData addingItemData = DataUpdater.createItemData(addingItem);
 
 			addItemData(productData, addingItemData);
 		}
@@ -205,24 +203,6 @@ public class AddItemBatchController extends Controller implements
 		return expiration;
 	}
 
-	private ItemData constructItemData(IItem item)
-	{
-		ItemData itemData = new ItemData();
-		itemData.setBarcode(item.getBarcode().getNumber());
-		itemData.setEntryDate(entryDate);
-		itemData.setExpirationDate(item.getExpirationDate());
-		itemData.setProductGroup("");
-
-		if(target.getTag() instanceof ProductGroup)
-			itemData.setProductGroup(((ProductGroup) target.getTag()).getName());
-
-		itemData.setStorageUnit(((StorageUnit) target.getTag()).getName());
-
-		itemData.setTag(item);
-
-		return itemData;
-	}
-
 	/**
 	 * This method is called when the "Count" field in the add item batch view
 	 * is changed by the user.
@@ -251,29 +231,6 @@ public class AddItemBatchController extends Controller implements
 		return new Item(addingProduct, new ItemBarcode(Inventory.getInstance()
 				.getUniqueBarCode() + ""), entryDate,
 				DateUtils.removeTimeFromDate(expiration.getTime()));
-	}
-
-	private ProductData createProductData(IProduct product)
-	{
-		ProductData result = new ProductData();
-		result.setBarcode(product.getBarcode().getNumber());
-		result.setCount(count + "");
-		result.setDescription(product.getDescription().getDescription());
-		result.setShelfLife(product.getShelfLife() + " months");
-
-		if(product.getSize() instanceof CountAmount)
-			result.setSize(((CountAmount) product.getSize()).getAmount() + " "
-					+ ((CountAmount) product.getSize()).getUnitType());
-		else
-			result.setSize(((NonCountAmount) product.getSize()).getAmount()
-					+ " " + ((NonCountAmount) product.getSize()).getUnitType());
-
-		result.setSupply(((CountThreeMonthSupply) product.getThreeMonthSupply())
-				.getAmount() + " " + product.getSize().getUnitType());
-
-		result.setTag(product);
-
-		return result;
 	}
 
 	/**
