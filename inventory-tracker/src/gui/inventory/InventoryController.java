@@ -19,6 +19,7 @@ import model.ProductContainer;
 import model.ProductGroup;
 import model.StorageUnit;
 import model.ThreeMonthSupply;
+import observer.InventoryViewUpdater;
 import observer.NSA;
 
 /**
@@ -367,6 +368,9 @@ public class InventoryController extends Controller implements
 		return;
 	}
 
+	
+	private InventoryViewUpdater viewUpdater;
+	
 	/**
 	 * Loads data into the controller's view.
 	 * 
@@ -392,7 +396,8 @@ public class InventoryController extends Controller implements
 		getView().setProductContainers(root);
 
 		NSA.init(this.getView(), root);
-		NSA.getInstance().populateProductContainers();
+		viewUpdater = new InventoryViewUpdater(this.getView(), root);
+		viewUpdater.populateProductContainers();
 	}
 
 	/**
@@ -423,9 +428,9 @@ public class InventoryController extends Controller implements
 				getView().getSelectedProductContainer();
 		if(selectedContainer != null)
 		{
-			NSA.getInstance().populateProductData(
+			viewUpdater.populateProductData(
 					(IProductContainer) selectedContainer.getTag());
-			NSA.getInstance().populateItemData(
+			viewUpdater.populateItemData(
 					(IProductContainer) selectedContainer.getTag());
 
 			if(selectedContainer == treeRoot)
@@ -488,8 +493,7 @@ public class InventoryController extends Controller implements
 				getView().getSelectedProductContainer();
 
 		if(selectedContainer != null)
-			NSA.getInstance().populateItemData(
-					(IProductContainer) selectedContainer.getTag());
+			viewUpdater.populateItemData((IProductContainer) selectedContainer.getTag());
 	}
 
 	/**
