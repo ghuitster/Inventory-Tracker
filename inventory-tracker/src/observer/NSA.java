@@ -114,7 +114,7 @@ public class NSA implements Observer
 	{
 		ObservableArgs obsArgs = (ObservableArgs) arg;
 
-		this.inventoryViewUpdater.verifyObjTag(obsArgs.getChangedObj());
+		DataUpdater.verifyObjTag(obsArgs.getChangedObj());
 
 		switch(obsArgs.getUpdateType())
 		{
