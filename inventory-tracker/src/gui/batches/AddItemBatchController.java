@@ -212,11 +212,9 @@ public class AddItemBatchController extends Controller implements
 		itemData.setProductGroup("");
 
 		if(target.getTag() instanceof ProductGroup)
-			itemData.setProductGroup(((ProductGroup) target.getTag())
-					.getName());
+			itemData.setProductGroup(((ProductGroup) target.getTag()).getName());
 
-		itemData
-				.setStorageUnit(((StorageUnit) target.getTag()).getName());
+		itemData.setStorageUnit(((StorageUnit) target.getTag()).getName());
 
 		itemData.setTag(item);
 
