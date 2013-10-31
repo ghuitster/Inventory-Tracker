@@ -84,10 +84,8 @@ public abstract class ProductContainer extends Observable implements
 			return false;
 
 		for(IProductGroup pg: this.productGroups)
-		{
 			if(pg.getName().toLowerCase().equals(name.toLowerCase()))
 				return false;
-		}
 
 		return true;
 	}
@@ -186,13 +184,11 @@ public abstract class ProductContainer extends Observable implements
 			container.removeProduct(product);
 
 			for(IItem item: container.getAllItems())
-			{
 				if(item.getProduct().equals(product))
 				{
 					this.items.add(item);
 					container.removeItem(item);
 				}
-			}
 		}
 
 		this.setChanged();
@@ -227,9 +223,11 @@ public abstract class ProductContainer extends Observable implements
 		for(IProductContainer con: this.productGroups)
 		{
 			IProductContainer result = con.findContainer(product);
+
 			if(result != null)
 				return result;
 		}
+
 		if(this.products.contains(product))
 			return this;
 		else
@@ -284,10 +282,10 @@ public abstract class ProductContainer extends Observable implements
 	public IStorageUnit getStorageUnit()
 	{
 		IProductContainer container = this;
+
 		while(container instanceof IProductGroup)
-		{
 			container = ((IProductGroup) container).getContainer();
-		}
+
 		return (IStorageUnit) container;
 	}
 
@@ -378,11 +376,10 @@ public abstract class ProductContainer extends Observable implements
 		if(targetContainer.getStorageUnit() == this.getStorageUnit())
 		{
 			Set<IItem> items = this.getAllItems();
+
 			for(IItem containerItem: items)
-			{
 				if(containerItem.getProduct() == item.getProduct())
 					itemsToAdd.add(containerItem);
-			}
 
 			this.removeProduct(item.getProduct());
 		}
@@ -394,16 +391,17 @@ public abstract class ProductContainer extends Observable implements
 			if(existing != null)
 			{
 				Set<IItem> toMove = new HashSet<IItem>();
+
 				for(IItem otherItem: existing.getAllItems())
-				{
 					if(otherItem.getProduct() == item.getProduct())
 						toMove.add(otherItem);
-				}
+
 				for(IItem otherItem: toMove)
 				{
 					existing.removeItem(otherItem);
 					targetContainer.addItem(otherItem);
 				}
+
 				existing.removeProduct(item.getProduct());
 			}
 

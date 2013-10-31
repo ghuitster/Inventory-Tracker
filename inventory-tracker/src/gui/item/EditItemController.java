@@ -143,7 +143,6 @@ public class EditItemController extends Controller implements
 		}
 		else
 		{
-
 			boolean valid = this.valiDate(requestedDate);
 			if(valid)
 			{
