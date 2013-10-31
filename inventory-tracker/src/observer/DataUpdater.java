@@ -1,3 +1,4 @@
+
 package observer;
 
 import gui.inventory.ProductContainerData;
@@ -10,42 +11,19 @@ import model.IProductGroup;
 
 public class DataUpdater
 {
-	public static void verifyTagData(IItem item)
+	public static ItemData createItemData(IItem item)
 	{
-		if(item.getTag() == null)
-			item.setTag(createItemData(item));
-		else
-			updateItemDataFields(item, (ItemData)item.getTag());
+		ItemData itemData = new ItemData();
+		updateItemDataFields(item, itemData);
+		return itemData;
 	}
-	
-	public static void verifyTagData(IProduct product)
-	{
-		if(product.getTag() == null)
-			product.setTag(createProductData(product));
-		else
-			updateProductDataFields(product, (ProductData)product.getTag());
-	}
-	
-	public static void verifyTagData(IProductContainer productContainer)
-	{
-		if(productContainer.getTag() == null)
-			productContainer.setTag(createProductContainerData(productContainer));
-		else
-			updatePcDataFields(productContainer, (ProductContainerData)productContainer.getTag());
-	}
-	
-	public static ProductContainerData createProductContainerData(IProductContainer productContainer)
+
+	public static ProductContainerData createProductContainerData(
+			IProductContainer productContainer)
 	{
 		ProductContainerData pcData = new ProductContainerData();
 		updatePcDataFields(productContainer, pcData);
 		return pcData;
-	}
-	
-	private static void updatePcDataFields(IProductContainer productContainer, ProductContainerData pcData)
-	{
-		pcData.setName(productContainer.getName());
-		productContainer.setTag(pcData);
-		pcData.setTag(productContainer);
 	}
 
 	public static ProductData createProductData(IProduct product)
@@ -53,25 +31,6 @@ public class DataUpdater
 		ProductData productData = new ProductData();
 		updateProductDataFields(product, productData);
 		return productData;
-	}
-
-	private static void updateProductDataFields(IProduct product,
-			ProductData productData)
-	{
-		productData.setBarcode(product.getBarcode().toString());
-		productData.setDescription(product.getDescription().toString());
-		productData.setShelfLife("" + product.getShelfLife());
-		productData.setSize(product.getSize().toString());
-		productData.setSupply(product.getThreeMonthSupply().toString());
-		product.setTag(productData);
-		productData.setTag(product);
-	}
-	
-	public static ItemData createItemData(IItem item)
-	{
-		ItemData itemData = new ItemData();
-		updateItemDataFields(item, itemData);
-		return itemData;
 	}
 
 	private static void updateItemDataFields(IItem item, ItemData itemData)
@@ -87,5 +46,51 @@ public class DataUpdater
 		item.setTag(itemData);
 		itemData.setTag(item);
 	}
-	
+
+	private static void updatePcDataFields(IProductContainer productContainer,
+			ProductContainerData pcData)
+	{
+		pcData.setName(productContainer.getName());
+		productContainer.setTag(pcData);
+		pcData.setTag(productContainer);
+	}
+
+	private static void updateProductDataFields(IProduct product,
+			ProductData productData)
+	{
+		productData.setBarcode(product.getBarcode().toString());
+		productData.setDescription(product.getDescription().toString());
+		productData.setShelfLife("" + product.getShelfLife());
+		productData.setSize(product.getSize().toString());
+		productData.setSupply(product.getThreeMonthSupply().toString());
+		product.setTag(productData);
+		productData.setTag(product);
+	}
+
+	public static void verifyTagData(IItem item)
+	{
+		if(item.getTag() == null)
+			item.setTag(createItemData(item));
+		else
+			updateItemDataFields(item, (ItemData) item.getTag());
+	}
+
+	public static void verifyTagData(IProduct product)
+	{
+		if(product.getTag() == null)
+			product.setTag(createProductData(product));
+		else
+			updateProductDataFields(product, (ProductData) product.getTag());
+	}
+
+	public static void verifyTagData(IProductContainer productContainer)
+	{
+		if(productContainer.getTag() == null)
+			productContainer
+					.setTag(createProductContainerData(productContainer));
+		else
+			updatePcDataFields(productContainer,
+					(ProductContainerData) productContainer.getTag());
+	}
+
 }

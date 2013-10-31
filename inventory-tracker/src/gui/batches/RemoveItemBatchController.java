@@ -45,6 +45,18 @@ public class RemoveItemBatchController extends Controller implements
 		construct();
 	}
 
+	private void addItems(ProductData productData, ItemData itemData)
+	{
+		if(displayItems.get(productData) == null)
+		{
+			List<ItemData> tempList = new ArrayList<ItemData>();
+			tempList.add(itemData);
+			displayItems.put(productData, tempList);
+		}
+		else
+			displayItems.get(productData).add(itemData);
+	}
+
 	/**
 	 * This method is called when the "Item Barcode" field is changed in the
 	 * remove item batch view by the user.
@@ -167,18 +179,6 @@ public class RemoveItemBatchController extends Controller implements
 		barcode = "";
 		loadValues();
 		enableComponents();
-	}
-
-	private void addItems(ProductData productData, ItemData itemData)
-	{
-		if(displayItems.get(productData) == null)
-		{
-			List<ItemData> tempList = new ArrayList<ItemData>();
-			tempList.add(itemData);
-			displayItems.put(productData, tempList);
-		}
-		else
-			displayItems.get(productData).add(itemData);
 	}
 
 	/**

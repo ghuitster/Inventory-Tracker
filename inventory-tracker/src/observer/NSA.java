@@ -11,7 +11,6 @@ import model.IInventory;
 import model.IItem;
 import model.IProduct;
 import model.IProductContainer;
-import model.ITaggable;
 import model.Inventory;
 import model.ObservableArgs;
 
@@ -41,15 +40,16 @@ public class NSA implements Observer
 	 * Reference to the inventory we're tracking
 	 */
 	private IInventory inventory;
-	
+
 	private InventoryViewUpdater inventoryViewUpdater;
 
 	private NSA(IInventoryView inventoryView, ProductContainerData root)
 	{
 		inventory = Inventory.getInstance();
 		inventory.addObserver(this);
-		
-		this.inventoryViewUpdater = new InventoryViewUpdater(inventoryView, root);
+
+		this.inventoryViewUpdater =
+				new InventoryViewUpdater(inventoryView, root);
 	}
 
 	private void objectAdded(Object changedObj)
@@ -106,13 +106,14 @@ public class NSA implements Observer
 	public void update(Observable o, Object arg)
 	{
 		ObservableArgs obsArgs = (ObservableArgs) arg;
-		
+
 		if(obsArgs.getChangedObj() instanceof IItem)
-			DataUpdater.verifyTagData((IItem)obsArgs.getChangedObj());
+			DataUpdater.verifyTagData((IItem) obsArgs.getChangedObj());
 		else if(obsArgs.getChangedObj() instanceof IProduct)
-			DataUpdater.verifyTagData((IProduct)obsArgs.getChangedObj());
+			DataUpdater.verifyTagData((IProduct) obsArgs.getChangedObj());
 		else if(obsArgs.getChangedObj() instanceof IProductContainer)
-			DataUpdater.verifyTagData((IProductContainer)obsArgs.getChangedObj());
+			DataUpdater.verifyTagData((IProductContainer) obsArgs
+					.getChangedObj());
 
 		switch(obsArgs.getUpdateType())
 		{
@@ -128,7 +129,5 @@ public class NSA implements Observer
 		}
 
 	}
-
-	
 
 }

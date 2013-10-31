@@ -32,6 +32,8 @@ public class InventoryController extends Controller implements
 	private ProductContainerData treeRoot;
 	private final Random rand = new Random();
 
+	private InventoryViewUpdater viewUpdater;
+
 	/**
 	 * Constructor.
 	 * 
@@ -53,6 +55,10 @@ public class InventoryController extends Controller implements
 		getView().displayAddItemBatchView();
 	}
 
+	//
+	// IInventoryController overrides
+	//
+
 	/**
 	 * This method is called when the user selects the "Add Product Group" menu
 	 * item.
@@ -62,10 +68,6 @@ public class InventoryController extends Controller implements
 	{
 		getView().displayAddProductGroupView();
 	}
-
-	//
-	// IInventoryController overrides
-	//
 
 	/**
 	 * This method is called when the user drags a product into a product
@@ -368,9 +370,6 @@ public class InventoryController extends Controller implements
 		return;
 	}
 
-	
-	private InventoryViewUpdater viewUpdater;
-	
 	/**
 	 * Loads data into the controller's view.
 	 * 
@@ -428,10 +427,11 @@ public class InventoryController extends Controller implements
 				getView().getSelectedProductContainer();
 		if(selectedContainer != null)
 		{
-			viewUpdater.populateProductData(
-					(IProductContainer) selectedContainer.getTag());
-			viewUpdater.populateItemData(
-					(IProductContainer) selectedContainer.getTag());
+			viewUpdater
+					.populateProductData((IProductContainer) selectedContainer
+							.getTag());
+			viewUpdater.populateItemData((IProductContainer) selectedContainer
+					.getTag());
 
 			if(selectedContainer == treeRoot)
 			{
@@ -493,7 +493,8 @@ public class InventoryController extends Controller implements
 				getView().getSelectedProductContainer();
 
 		if(selectedContainer != null)
-			viewUpdater.populateItemData((IProductContainer) selectedContainer.getTag());
+			viewUpdater.populateItemData((IProductContainer) selectedContainer
+					.getTag());
 	}
 
 	/**

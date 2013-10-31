@@ -1,4 +1,10 @@
+
 package observer;
+
+import gui.inventory.IInventoryView;
+import gui.inventory.ProductContainerData;
+import gui.item.ItemData;
+import gui.product.ProductData;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,29 +17,106 @@ import model.IProductContainer;
 import model.IProductGroup;
 import model.IStorageUnit;
 import model.Inventory;
-import gui.inventory.IInventoryView;
-import gui.inventory.ProductContainerData;
-import gui.item.ItemData;
-import gui.product.ProductData;
 
-public class InventoryViewUpdater 
+public class InventoryViewUpdater
 {
 	/**
 	 * Reference to the inventoryView we're updating
 	 */
 	private IInventoryView inventoryView;
-	
+
 	private ProductContainerData root;
-	
+
 	private Inventory inventory;
-	
-	public InventoryViewUpdater(IInventoryView inventoryView, ProductContainerData root)
+
+	public InventoryViewUpdater(IInventoryView inventoryView,
+			ProductContainerData root)
 	{
 		this.inventoryView = inventoryView;
 		this.root = root;
 		this.inventory = Inventory.getInstance();
 	}
-	
+
+	void addProductContainer(IProductContainer container)
+	{
+		ProductContainerData parent;
+		if(container instanceof IStorageUnit)
+			parent = root;
+		else
+		{
+			IProductGroup pg = (IProductGroup) container;
+			parent = (ProductContainerData) pg.getContainer().getTag();
+		}
+
+		String name = container.getName();
+		int i;
+		for(i = 0; i < parent.getChildCount(); i++)
+		{
+			if(parent.getChild(i).getName().compareTo(name) > 0)
+				break;
+		}
+		inventoryView.insertProductContainer(parent,
+				(ProductContainerData) container.getTag(), i);
+
+		inventoryView.selectProductContainer((ProductContainerData) container
+				.getTag());
+
+		populateProductData(container);
+
+	}
+
+	public void addProductContainersRecursively(ProductContainerData parent,
+			IProductContainer unit, int index)
+	{
+		DataUpdater.verifyTagData(unit);
+
+		for(IProduct product: unit.getAllProducts())
+			DataUpdater.verifyTagData(product);
+
+		for(IItem item: unit.getAllItems())
+			DataUpdater.verifyTagData(item);
+
+		ProductContainerData child = (ProductContainerData) unit.getTag();
+		inventoryView.insertProductContainer(parent, child, index);
+		int childIndex = 0;
+		for(IProductContainer container: unit.getAllProductGroups())
+		{
+			addProductContainersRecursively(child, container, childIndex++);
+		}
+	}
+
+	void itemOrProductUpdated(Object changedObj)
+	{
+		if(changedObj instanceof IItem)
+		{
+			if(inventoryView.getSelectedProductContainer() != null)
+			{
+				IProductContainer container =
+						(IProductContainer) inventoryView
+								.getSelectedProductContainer().getTag();
+				populateProductData(container);
+
+				IItem item = (IItem) changedObj;
+				inventoryView.selectProduct((ProductData) item.getProduct()
+						.getTag());
+
+				populateItemData(container);
+			}
+		}
+		else if(changedObj instanceof IProduct)
+		{
+			if(inventoryView.getSelectedProductContainer() != null)
+			{
+				populateProductData((IProductContainer) inventoryView
+						.getSelectedProductContainer().getTag());
+
+				IProduct item = (IProduct) changedObj;
+				inventoryView.selectProduct((ProductData) item.getTag());
+			}
+
+		}
+	}
+
 	public void populateItemData(IProductContainer container)
 	{
 		Set<IItem> items = container != null ? container.getAllItems() : null;
@@ -66,27 +149,6 @@ public class InventoryViewUpdater
 			inventoryView.setItems(new ItemData[0]);
 	}
 
-	
-	public void addProductContainersRecursively(ProductContainerData parent,
-			IProductContainer unit, int index)
-	{
-		DataUpdater.verifyTagData(unit);
-
-		for(IProduct product: unit.getAllProducts())
-			DataUpdater.verifyTagData(product);
-
-		for(IItem item: unit.getAllItems())
-			DataUpdater.verifyTagData(item);
-
-		ProductContainerData child = (ProductContainerData) unit.getTag();
-		inventoryView.insertProductContainer(parent, child, index);
-		int childIndex = 0;
-		for(IProductContainer container: unit.getAllProductGroups())
-		{
-			addProductContainersRecursively(child, container, childIndex++);
-		}
-	}
-	
 	public void populateProductContainers()
 	{
 		int index = 0;
@@ -134,34 +196,12 @@ public class InventoryViewUpdater
 		inventoryView.setProducts(productDatas);
 	}
 
-	void addProductContainer(IProductContainer container)
+	void removeProductContainer(IProductContainer container)
 	{
-		ProductContainerData parent;
-		if(container instanceof IStorageUnit)
-			parent = root;
-		else
-		{
-			IProductGroup pg = (IProductGroup) container;
-			parent = (ProductContainerData) pg.getContainer().getTag();
-		}
-
-		String name = container.getName();
-		int i;
-		for(i = 0; i < parent.getChildCount(); i++)
-		{
-			if(parent.getChild(i).getName().compareTo(name) > 0)
-				break;
-		}
-		inventoryView.insertProductContainer(parent,
-				(ProductContainerData) container.getTag(), i);
-
-		inventoryView.selectProductContainer((ProductContainerData) container
+		inventoryView.deleteProductContainer((ProductContainerData) container
 				.getTag());
-
-		populateProductData(container);
-
 	}
-	
+
 	void updateProductContainer(IProductContainer container)
 	{
 		ProductContainerData pcData = (ProductContainerData) container.getTag();
@@ -195,43 +235,5 @@ public class InventoryViewUpdater
 
 		inventoryView.selectProductContainer((ProductContainerData) container
 				.getTag());
-	}
-	
-	void removeProductContainer(IProductContainer container)
-	{
-		inventoryView.deleteProductContainer((ProductContainerData) container
-				.getTag());
-	}
-	
-	void itemOrProductUpdated(Object changedObj)
-	{
-		if(changedObj instanceof IItem)
-		{
-			if(inventoryView.getSelectedProductContainer() != null)
-			{
-				IProductContainer container =
-						(IProductContainer) inventoryView
-								.getSelectedProductContainer().getTag();
-				populateProductData(container);
-
-				IItem item = (IItem) changedObj;
-				inventoryView.selectProduct((ProductData) item.getProduct()
-						.getTag());
-
-				populateItemData(container);
-			}
-		}
-		else if(changedObj instanceof IProduct)
-		{
-			if(inventoryView.getSelectedProductContainer() != null)
-			{
-				populateProductData((IProductContainer) inventoryView
-						.getSelectedProductContainer().getTag());
-
-				IProduct item = (IProduct) changedObj;
-				inventoryView.selectProduct((ProductData) item.getTag());
-			}
-
-		}
 	}
 }
