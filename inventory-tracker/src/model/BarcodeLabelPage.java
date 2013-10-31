@@ -40,6 +40,11 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 	private final float LABEL_WIDTH_PADDING = 10.0f;
 	private final float TOP_BOTTOM_MARGINS = 36f;
 	private final float LEFT_RIGHT_MARGINS = 24f;
+	private final float fontSize = 7.0f;
+	private final float labelPadding = 5.0f;
+	private final int labelBorder = 0;
+	private BaseFont basefont;
+	private Font font;
 
 	/**
 	 * @pre items must contain only valid Item objects
@@ -65,15 +70,10 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 	@Override
 	public void createPDF() throws IOException, DocumentException
 	{
-		// Set up the Barcode Label variables that we can before the loop
-		float fontSize = 7.0f;
-		float labelPadding = 5.0f;
 		float codeWidth = 0.0f;
 		float labelWidth = 0.0f;
 
 		int numColumns = 0;
-		int labelBorder = 0;
-
 		Image codeImage = null;
 		BarcodeEAN codeEAN = null;
 		PdfWriter writer = null;
@@ -84,8 +84,8 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 		PdfPTable pdfTable = null;
 		PdfPCell pdfTableCell = null;
 
-		BaseFont basefont = BaseFont.createFont("Helvetica", "winansi", false);
-		Font font = new Font(basefont, 7F);
+		this.basefont = BaseFont.createFont("Helvetica", "winansi", false);
+		this.font = new Font(this.basefont, this.fontSize);
 
 		String timeStamp =
 				new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar
@@ -128,10 +128,10 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 		// Create a test label to work out columns per page
 		codeEAN = new BarcodeEAN();
 		codeEAN.setCodeType(Barcode.UPCA);
-		codeEAN.setSize(fontSize);
-		codeEAN.setBaseline(fontSize);
-		codeEAN.setBarHeight(fontSize * this.BAR_HEIGHT_MULTIPLE);
-		codeEAN.setFont(basefont);
+		codeEAN.setSize(this.fontSize);
+		codeEAN.setBaseline(this.fontSize);
+		codeEAN.setBarHeight(this.fontSize * this.BAR_HEIGHT_MULTIPLE);
+		codeEAN.setFont(this.basefont);
 		codeEAN.setCode("555555555555"); // Use fives to give uniform character
 											// spacing
 		codeImage = codeEAN.createImageWithBarcode(cb, null, null);
@@ -146,8 +146,8 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 		pdfTable.setTotalWidth(numColumns * labelWidth);
 		pdfTable.setLockedWidth(true);
 		pdfTableCell = pdfTable.getDefaultCell();
-		pdfTableCell.setBorder(labelBorder);
-		pdfTableCell.setPadding(labelPadding);
+		pdfTableCell.setBorder(this.labelBorder);
+		pdfTableCell.setPadding(this.labelPadding);
 
 		// Now let's go through and create our labels
 		for(int index = 0; index < this.items.size(); index++)
@@ -184,30 +184,31 @@ public class BarcodeLabelPage implements IBarcodeLabelPage
 
 			if(labelDescription.length() > 0)
 			{
-				chunk = new Chunk(labelDescription, font);
+				chunk = new Chunk(labelDescription, this.font);
 				while(chunk.getWidthPoint() > codeImage.getWidth())
 				{
 					labelDescription =
 							labelDescription.substring(0,
 									labelDescription.length() - 1);
-					chunk = new Chunk(labelDescription, font);
+					chunk = new Chunk(labelDescription, this.font);
 				}
 			}
 			labelParagraph =
-					new Paragraph(labelDescription + "\n" + dateString, font);
+					new Paragraph(labelDescription + "\n" + dateString,
+							this.font);
 			labelParagraph.setLeading(fixedLeading, multipliedLeading);
 			pdfTableCell = new PdfPCell();
 			pdfTableCell.addElement(labelParagraph);
 			codeImage.setSpacingBefore(beforeCodeSpacing);
 			pdfTableCell.addElement(codeImage);
 			pdfTableCell.setBorder(0);
-			pdfTableCell.setPadding(labelPadding);
+			pdfTableCell.setPadding(this.labelPadding);
 			pdfTable.addCell(pdfTableCell);
 		}
 
 		pdfTable.completeRow();
-		document.add(pdfTable);
-		document.close();
+		this.document.add(pdfTable);
+		this.document.close();
 		pdfos.close();
 		java.awt.Desktop.getDesktop().open(new File(this.filename));
 	}
