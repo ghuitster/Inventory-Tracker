@@ -13,16 +13,18 @@ public class ProductBarcode extends Barcode
 	private static final long serialVersionUID = -1451440044816950946L;
 
 	/**
-	 * @pre number must not be null
+	 * @pre number must not be null or empty
 	 * @param number string of the ProductBarcode number to validate
-	 * @return true if valid number
+	 * @return true if valid number, ie not empty
 	 */
 	public static boolean isValid(String number)
 	{
 		boolean response = false;
 
-		if(number.matches("[0-9]{12}"))
+		if(number != null && !number.isEmpty())
+		{
 			response = true;
+		}
 
 		return response;
 	}
