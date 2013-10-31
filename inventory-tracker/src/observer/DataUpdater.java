@@ -11,39 +11,35 @@ import model.ITaggable;
 
 public class DataUpdater
 {
-	public static void verifyObjTag(ITaggable changedObj)
+	public static void verifyTagData(IItem item)
 	{
-		if(changedObj instanceof IItem)
-		{
-			IItem item = (IItem) changedObj;
-			ItemData itemData;
-			if(item.getTag() != null)
-				itemData = (ItemData) item.getTag();
-			else
-				itemData = new ItemData();
-			updateItemData(item, itemData);
-		}
-		else if(changedObj instanceof IProduct)
-		{
-			IProduct product = (IProduct) changedObj;
-			ProductData productData;
-			if(product.getTag() != null)
-				productData = (ProductData) product.getTag();
-			else
-				productData = new ProductData();
-			updateProductData(product, productData);
-		}
-		else if(changedObj instanceof IProductContainer)
-		{
-			IProductContainer productContainer = (IProductContainer) changedObj;
-			ProductContainerData pcData =
-					(ProductContainerData) productContainer.getTag();
-			if(productContainer.getTag() != null)
-				pcData = (ProductContainerData) productContainer.getTag();
-			else
-				pcData = new ProductContainerData();
-			updateProductContainerData(productContainer, pcData);
-		}
+		ItemData itemData;
+		if(item.getTag() != null)
+			itemData = (ItemData) item.getTag();
+		else
+			itemData = new ItemData();
+		updateItemData(item, itemData);
+	}
+	
+	public static void verifyTagData(IProduct product)
+	{
+		ProductData productData;
+		if(product.getTag() != null)
+			productData = (ProductData) product.getTag();
+		else
+			productData = new ProductData();
+		updateProductData(product, productData);
+	}
+	
+	public static void verifyTagData(IProductContainer productContainer)
+	{
+		ProductContainerData pcData =
+				(ProductContainerData) productContainer.getTag();
+		if(productContainer.getTag() != null)
+			pcData = (ProductContainerData) productContainer.getTag();
+		else
+			pcData = new ProductContainerData();
+		updateProductContainerData(productContainer, pcData);
 	}
 	
 	private static void updateProductContainerData(IProductContainer productContainer,
