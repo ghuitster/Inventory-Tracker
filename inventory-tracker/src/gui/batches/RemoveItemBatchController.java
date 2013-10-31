@@ -131,6 +131,50 @@ public class RemoveItemBatchController extends Controller implements
 		return;
 	}
 
+	private ItemData constructItemData(IItem item)
+	{
+		ItemData itemData = new ItemData();
+		itemData.setBarcode(barcode);
+		itemData.setEntryDate(item.getEntryDate());
+		itemData.setExpirationDate(item.getExpirationDate());
+
+		if(item.getContainer() instanceof ProductGroup)
+			itemData.setProductGroup(item.getContainer().getName());
+		else
+			itemData.setStorageUnit(item.getContainer().getName());
+
+		itemData.setTag(item);
+
+		return itemData;
+	}
+
+	private ProductData constructProductData(IProduct product)
+	{
+		ProductData productData = new ProductData();
+		productData.setBarcode(product.getBarcode().getNumber());
+		productData.setCount("1");
+		productData.setDescription(product.getDescription().getDescription());
+		productData.setShelfLife(product.getShelfLife() + "");
+
+		if(product.getSize() instanceof CountAmount)
+			productData.setSize(((CountAmount) product.getSize()).getAmount()
+					+ "");
+		else
+			productData.setSize(((NonCountAmount) product.getSize())
+					.getAmount() + "");
+
+		if(product.getThreeMonthSupply() instanceof CountAmount)
+			productData.setSupply(((CountAmount) product.getThreeMonthSupply())
+					.getAmount() + "");
+		else
+			productData.setSupply(((NonCountAmount) product
+					.getThreeMonthSupply()).getAmount() + "");
+
+		productData.setTag(product);
+
+		return productData;
+	}
+
 	/**
 	 * This method is called when the user clicks the "Remove Item" button in
 	 * the remove item batch view.
@@ -155,61 +199,30 @@ public class RemoveItemBatchController extends Controller implements
 			return;
 		}
 
-		ItemData removingItemData = new ItemData();
-		removingItemData.setBarcode(barcode);
-		removingItemData.setEntryDate(removingItem.getEntryDate());
-		removingItemData.setExpirationDate(removingItem.getExpirationDate());
-
-		if(removingItem.getContainer() instanceof ProductGroup)
-			removingItemData.setProductGroup(removingItem.getContainer()
-					.getName());
-		else
-			removingItemData.setStorageUnit(removingItem.getContainer()
-					.getName());
-
-		removingItemData.setTag(removingItem);
-
+		ItemData removingItemData = constructItemData(removingItem);
 		IProduct removingProduct = removingItem.getProduct();
-		ProductData removingProductData = new ProductData();
-		removingProductData
-				.setBarcode(removingProduct.getBarcode().getNumber());
-		removingProductData.setCount("1");
-		removingProductData.setDescription(removingProduct.getDescription()
-				.getDescription());
-		removingProductData.setShelfLife(removingProduct.getShelfLife() + "");
-
-		if(removingProduct.getSize() instanceof CountAmount)
-			removingProductData.setSize(((CountAmount) removingProduct
-					.getSize()).getAmount() + "");
-		else
-			removingProductData.setSize(((NonCountAmount) removingProduct
-					.getSize()).getAmount() + "");
-
-		if(removingProduct.getThreeMonthSupply() instanceof CountAmount)
-			removingProductData.setSupply(((CountAmount) removingProduct
-					.getThreeMonthSupply()).getAmount() + "");
-		else
-			removingProductData.setSupply(((NonCountAmount) removingProduct
-					.getThreeMonthSupply()).getAmount() + "");
-
-		removingProductData.setTag(removingProduct);
+		ProductData removingProductData = constructProductData(removingProduct);
 		displayProducts.add(removingProductData);
 		items.add(removingItem);
-
-		if(displayItems.get(removingProductData) == null)
-		{
-			List<ItemData> tempList = new ArrayList<ItemData>();
-			tempList.add(removingItemData);
-			displayItems.put(removingProductData, tempList);
-		}
-		else
-			displayItems.get(removingProductData).add(removingItemData);
+		addItems(removingProductData, removingItemData);
 
 		ProductData[] temp = new ProductData[displayProducts.size()];
 		getView().setProducts(displayProducts.toArray(temp));
 		barcode = "";
 		loadValues();
 		enableComponents();
+	}
+
+	private void addItems(ProductData productData, ItemData itemData)
+	{
+		if(displayItems.get(productData) == null)
+		{
+			List<ItemData> tempList = new ArrayList<ItemData>();
+			tempList.add(itemData);
+			displayItems.put(productData, tempList);
+		}
+		else
+			displayItems.get(productData).add(itemData);
 	}
 
 	/**
