@@ -28,6 +28,11 @@ public class ExpiredItemVisitor implements IVisitor
 		
 	}
 
+	/**
+	 * Does nothing
+	 * @pre none
+	 * @post none
+	 */
 	@Override
 	public void visitStorageUnit(IStorageUnit unit)
 	{
@@ -35,6 +40,11 @@ public class ExpiredItemVisitor implements IVisitor
 		
 	}
 
+	/**
+	 * Does nothing
+	 * @pre none
+	 * @post none
+	 */
 	@Override
 	public void visitProductGroup(IProductGroup group)
 	{
@@ -42,6 +52,11 @@ public class ExpiredItemVisitor implements IVisitor
 		
 	}
 
+	/**
+	 * Does nothing
+	 * @pre none
+	 * @post none
+	 */
 	@Override
 	public void visitProduct(IProduct product)
 	{
@@ -49,6 +64,12 @@ public class ExpiredItemVisitor implements IVisitor
 		
 	}
 
+	/**
+	 * Checks if the passed item is expired. If so, adds it to the results
+	 * @pre item is not null
+	 * @post none
+	 * @param item The item to check
+	 */
 	@Override
 	public void visitItem(IItem item)
 	{

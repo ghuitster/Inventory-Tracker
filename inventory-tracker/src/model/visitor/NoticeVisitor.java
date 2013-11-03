@@ -29,6 +29,11 @@ public class NoticeVisitor implements IVisitor
 		
 	}
 	
+	/**
+	 * Does nothing
+	 * @pre none
+	 * @post none
+	 */
 	@Override
 	public void visitStorageUnit(IStorageUnit unit)
 	{
@@ -36,6 +41,12 @@ public class NoticeVisitor implements IVisitor
 		
 	}
 
+	/**
+	 * Checks if the product group's three month supply is consisten with its products
+	 * @pre group is not null
+	 * @post none
+	 * @param group The group to check
+	 */
 	@Override
 	public void visitProductGroup(IProductGroup group)
 	{
@@ -43,6 +54,11 @@ public class NoticeVisitor implements IVisitor
 		
 	}
 
+	/**
+	 * Does nothing
+	 * @pre none
+	 * @post none
+	 */
 	@Override
 	public void visitProduct(IProduct product)
 	{
@@ -50,6 +66,11 @@ public class NoticeVisitor implements IVisitor
 		
 	}
 
+	/**
+	 * Does nothing
+	 * @pre none
+	 * @post none
+	 */
 	@Override
 	public void visitItem(IItem item)
 	{
