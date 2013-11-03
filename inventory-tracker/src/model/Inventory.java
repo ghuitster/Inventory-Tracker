@@ -6,6 +6,7 @@ import java.security.InvalidParameterException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Set;
@@ -15,7 +16,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import model.exception.InvalidNameException;
-
+import model.visitor.IVisitor;
 import common.util.DateUtils;
 
 /**
@@ -57,11 +58,6 @@ public class Inventory extends Observable implements IInventory, Serializable
 	 * Persistence object for saving and loading data
 	 */
 	private final IPersistence persistence;
-
-	/**
-	 * Mapping of all Item expirations, for easy retrieval
-	 */
-	private final SortedMap<Date, Set<IItem>> itemExpirations;
 
 	/**
 	 * Mapping of all removed Items, for easy retrieval
@@ -107,7 +103,6 @@ public class Inventory extends Observable implements IInventory, Serializable
 	{
 		this.storageUnits = new HashSet<IStorageUnit>();
 		this.persistence = new Serializer("./data.inventory");
-		this.itemExpirations = new TreeMap<Date, Set<IItem>>();
 		this.removedItems = new TreeMap<Date, Set<IItem>>();
 		this.removedProducts = new TreeSet<IProduct>();
 		this.nMonthSupplyMap = new TreeMap<Date, Set<IProduct>>();
@@ -119,7 +114,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.BaseInventory#ableToAddStorageUnit(model.StorageUnit)
+	 * @see model.IInventory#ableToAddStorageUnit(model.StorageUnit)
 	 */
 	@Override
 	public boolean ableToAddStorageUnit(IStorageUnit storageUnit)
@@ -148,7 +143,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.BaseInventory#ableToRemoveProduct(IProduct product)
+	 * @see model.IInventory#ableToRemoveProduct(IProduct product)
 	 */
 	@Override
 	public boolean ableToRemoveProduct(IProduct product)
@@ -167,7 +162,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.BaseInventory#addStorageUnit(model.StorageUnit)
+	 * @see model.IInventory#addStorageUnit(model.StorageUnit)
 	 */
 	@Override
 	public void addStorageUnit(IStorageUnit storageUnit)
@@ -187,7 +182,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.BaseInventory#getAllItems(IProduct product)
+	 * @see model.IInventory#getAllItems(IProduct product)
 	 */
 	@Override
 	public SortedSet<IItem> getAllItems(IProduct product)
@@ -203,7 +198,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.BaseInventory#getAllProducts()
+	 * @see model.IInventory#getAllProducts()
 	 */
 	@Override
 	public SortedSet<IProduct> getAllProducts()
@@ -220,7 +215,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.BaseInventory#getAllStorageUnits()
+	 * @see model.IInventory#getAllStorageUnits()
 	 */
 	@Override
 	public SortedSet<IStorageUnit> getAllStorageUnits()
@@ -248,18 +243,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.BaseInventory#getItemExpirations()
-	 */
-	@Override
-	public SortedMap<Date, Set<IItem>> getItemExpirations()
-	{
-		return new TreeMap<Date, Set<IItem>>(this.itemExpirations);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.BaseInventory#getNMonthSupplyGroupMap()
+	 * @see model.IInventory#getNMonthSupplyGroupMap()
 	 */
 	@Override
 	public SortedMap<Date, Set<IProductGroup>> getNMonthSupplyGroupMap()
@@ -270,7 +254,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.BaseInventory#getNMonthSupplyMap()
+	 * @see model.IInventory#getNMonthSupplyMap()
 	 */
 	@Override
 	public SortedMap<Date, Set<IProduct>> getNMonthSupplyMap()
@@ -281,7 +265,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.BaseInventory#getPersistence()
+	 * @see model.IInventory#getPersistence()
 	 */
 	@Override
 	public IPersistence getPersistence()
@@ -292,7 +276,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.BaseInventory#getRemovedItems()
+	 * @see model.IInventory#getRemovedItems()
 	 */
 	@Override
 	public SortedMap<Date, Set<IItem>> getRemovedItems()
@@ -345,7 +329,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.BaseInventory#removeAllStorageUnits()
+	 * @see model.IInventory#removeAllStorageUnits()
 	 */
 	@Override
 	public void removeAllStorageUnits()
@@ -376,7 +360,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.BaseInventory#removeStorageUnit(model.StorageUnit)
+	 * @see model.IInventory#removeStorageUnit(model.StorageUnit)
 	 */
 	@Override
 	public void removeStorageUnit(IStorageUnit storageUnit)
@@ -461,6 +445,54 @@ public class Inventory extends Observable implements IInventory, Serializable
 
 		this.setChanged();
 		this.notifyObservers(obsArg);
+	}
+
+	@Override
+	public Map<IProductGroup, List<IProduct>> getInconsistencies()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<IItem> getExpiredItems()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<RemovedItems> getRemovedItems(Date since)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ProductSupply> getLowProductSupplies(int months)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ProductGroupSupply> getLowProductGroupSupplies(int months)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public List<ProductStats> getProductStats(Date since)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public void traverse(IVisitor visitor)
+	{
+		
 	}
 
 }

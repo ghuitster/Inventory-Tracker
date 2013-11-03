@@ -8,21 +8,16 @@ package model.report;
  * @author Michael
  * 
  */
-public class ExpItemsHTMLReportBuilder implements ReportBuilder
+public class ExpItemsHTMLReportBuilder extends ExpItemsReport implements ReportBuilder
 {
-	// Variables
-	private Visitor visitor = null;
 
 	/**
 	 * Constructor for ExpItemsHTMLReportBuilder
-	 * @pre visitor passed in must not be == null
+	 * @pre none
 	 * @post none
-	 * @param visitor the visitor that will contain the data on the expired
-	 *            items for this report
 	 */
-	public ExpItemsHTMLReportBuilder(Visitor visitor)
+	public ExpItemsHTMLReportBuilder()
 	{
-		this.visitor = visitor;
 	}
 
 	/*

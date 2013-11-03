@@ -8,22 +8,16 @@ package model.report;
  * @author Michael
  * 
  */
-public class RemovedItemsPDFReportBuilder implements ReportBuilder
+public class RemovedItemsPDFReportBuilder extends RemovedItemsReport implements ReportBuilder
 {
-
-	// Variables
-	private Visitor visitor = null;
 
 	/**
 	 * Constructor for RemovedItemsPDFReportBuilder
-	 * @pre visitor passed in must not be == null
+	 * @pre none
 	 * @post none
-	 * @param visitor the visitor that will contain the data on the removed
-	 *            items for this report
 	 */
-	public RemovedItemsPDFReportBuilder(Visitor visitor)
+	public RemovedItemsPDFReportBuilder()
 	{
-		this.visitor = visitor;
 	}
 
 	/*

@@ -10,19 +10,14 @@ package model.report;
  */
 public class ExpItemsPDFReportBuilder implements ReportBuilder
 {
-	// Variables
-	private Visitor visitor = null;
 
 	/**
 	 * Constructor for ExpItemsPDFReportBuilder
-	 * @pre visitor passed in must not be == null
+	 * @pre none
 	 * @post none
-	 * @param visitor the visitor that will contain the data on the expired
-	 *            items for this report
 	 */
-	public ExpItemsPDFReportBuilder(Visitor visitor)
+	public ExpItemsPDFReportBuilder()
 	{
-		this.visitor = visitor;
 	}
 
 	/*

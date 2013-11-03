@@ -8,21 +8,15 @@ package model.report;
  * @author Michael
  * 
  */
-public class ProdStatHTMLReportBuilder implements ReportBuilder
+public class ProdStatHTMLReportBuilder extends ProdStatReport implements ReportBuilder
 {
-	// Variables
-	private Visitor visitor = null;
-
 	/**
 	 * Constructor for ProdStatHTMLReportBuilder
-	 * @pre visitor passed in must not be == null
+	 * @pre none
 	 * @post none
-	 * @param visitor the visitor that will contain the data on the products and
-	 *            items for this report
 	 */
-	public ProdStatHTMLReportBuilder(Visitor visitor)
+	public ProdStatHTMLReportBuilder()
 	{
-		this.visitor = visitor;
 	}
 
 	/*

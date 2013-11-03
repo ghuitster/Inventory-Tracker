@@ -2,12 +2,15 @@
 package model;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.Observer;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 
 import model.exception.InvalidNameException;
+import model.visitor.IVisitor;
 
 public interface IInventory extends Observer, IObservable
 {
@@ -19,9 +22,9 @@ public interface IInventory extends Observer, IObservable
 	 * @post A boolean value is generated
 	 * @return True if the storage unit may be added. Otherwise, false
 	 */
-	public abstract boolean ableToAddStorageUnit(IStorageUnit storageUnit);
+	boolean ableToAddStorageUnit(IStorageUnit storageUnit);
 
-	public boolean ableToAddStorageUnitNamed(String name);
+	boolean ableToAddStorageUnitNamed(String name);
 
 	/**
 	 * Returns whether attempting to remove a product is valid
@@ -30,9 +33,9 @@ public interface IInventory extends Observer, IObservable
 	 * @param product The product to check
 	 * @return True if the product is orphaned. Otherwise, false
 	 */
-	public abstract boolean ableToRemoveProduct(IProduct product);
+	boolean ableToRemoveProduct(IProduct product);
 
-	public abstract boolean ableToRemoveStorageUnit(IStorageUnit storageUnit);
+	boolean ableToRemoveStorageUnit(IStorageUnit storageUnit);
 
 	/**
 	 * Adds a new Storage Unit to the system
@@ -41,7 +44,7 @@ public interface IInventory extends Observer, IObservable
 	 * @param storageUnit The new storage unit
 	 * @throws InvalidNameException, NullPointerException
 	 */
-	public abstract void addStorageUnit(IStorageUnit storageUnit)
+	void addStorageUnit(IStorageUnit storageUnit)
 			throws InvalidNameException, NullPointerException;
 
 	/**
@@ -51,7 +54,7 @@ public interface IInventory extends Observer, IObservable
 	 * @param product The product to filter by. If null, gets all items.
 	 * @return All items of type product
 	 */
-	public abstract SortedSet<IItem> getAllItems(IProduct product);
+	SortedSet<IItem> getAllItems(IProduct product);
 
 	/**
 	 * Gets a list of all Storage Units in the system
@@ -69,9 +72,9 @@ public interface IInventory extends Observer, IObservable
 	 *       may be empty
 	 * @return A list containing references to all of the products
 	 */
-	public abstract SortedSet<IProduct> getAllProducts();
+	SortedSet<IProduct> getAllProducts();
 
-	public abstract SortedSet<IStorageUnit> getAllStorageUnits();
+	SortedSet<IStorageUnit> getAllStorageUnits();
 
 	/**
 	 * Returns an item from the system given a barcode, or null if item does not
@@ -84,17 +87,7 @@ public interface IInventory extends Observer, IObservable
 	 * @return result the item referenced by the passed in ItemBarcode number,
 	 *         or null if the item does not exist
 	 */
-	public abstract IItem getItem(String barcodeNumber);
-
-	/**
-	 * Gets a map of Dates to what items expire on those dates
-	 * @pre (none)
-	 * @post A Map has been created with the aforementioned expiration dates.
-	 *       This map may be empty.
-	 * @return A copy of the map containing all known expiration dates mapped to
-	 *         which items are expiring
-	 */
-	public abstract SortedMap<Date, Set<IItem>> getItemExpirations();
+	IItem getItem(String barcodeNumber);
 
 	/**
 	 * Gets a map of Dates (each of which represents a specific month) mapped to
@@ -105,8 +98,7 @@ public interface IInventory extends Observer, IObservable
 	 * @return A copy of the map containing months correlated to what
 	 *         ProductGroups' three month supplies expire on that month
 	 */
-	public abstract SortedMap<Date, Set<IProductGroup>>
-			getNMonthSupplyGroupMap();
+	SortedMap<Date, Set<IProductGroup>> getNMonthSupplyGroupMap();
 
 	/**
 	 * Gets a map of Dates (each of which represents a specific month) mapped to
@@ -117,13 +109,13 @@ public interface IInventory extends Observer, IObservable
 	 * @return A copy of the map containing months correlated to what products'
 	 *         three month supplies expire on that month
 	 */
-	public abstract SortedMap<Date, Set<IProduct>> getNMonthSupplyMap();
+	SortedMap<Date, Set<IProduct>> getNMonthSupplyMap();
 
 	/**
 	 * Gets the persistence object for saving and loading data to this object
 	 * @return An object capable of saving and loading this object's state
 	 */
-	public abstract IPersistence getPersistence();
+	IPersistence getPersistence();
 
 	/**
 	 * Gets a map of Dates to what items were removed on each date
@@ -133,14 +125,14 @@ public interface IInventory extends Observer, IObservable
 	 * @return A copy of the map containing all item removal dates mapped to the
 	 *         items removed.
 	 */
-	public abstract SortedMap<Date, Set<IItem>> getRemovedItems();
+	SortedMap<Date, Set<IItem>> getRemovedItems();
 
 	/**
 	 * Clears all Storage Units from the system
 	 * @pre (none)
 	 * @post No storage units exist in the system
 	 */
-	public abstract void removeAllStorageUnits();
+	void removeAllStorageUnits();
 
 	/**
 	 * Removes a product from the system
@@ -148,7 +140,7 @@ public interface IInventory extends Observer, IObservable
 	 * @post product is removed from the system
 	 * @param product The product to remove
 	 */
-	public abstract void removeProduct(IProduct product);
+	void removeProduct(IProduct product);
 
 	/**
 	 * Removes a storage unit from the system
@@ -156,6 +148,69 @@ public interface IInventory extends Observer, IObservable
 	 * @post The passed storage unit is no longer in the system
 	 * @param storageUnit The Storage Unit to remove
 	 */
-	public abstract void removeStorageUnit(IStorageUnit storageUnit);
+	void removeStorageUnit(IStorageUnit storageUnit);
+	
+	/**
+	 * Gets a list of ProductGroups which have mismatched 3-month supplies
+	 * @pre (none)
+	 * @post (none)
+	 * @return A map. The keys are the inconsistent product groups, the 
+	 * corresponding products are the offending products
+	 */
+	Map<IProductGroup, List<IProduct>> getInconsistencies(); 
+	
+	/**
+	 * Gets a list of items in the system which have expired
+	 * @pre none
+	 * @post none
+	 * @return A list of items
+	 */
+	List<IItem> getExpiredItems();
+	
+	/**
+	 * Gets all items which were removed since the passed date
+	 * @param since The cutoff date
+	 * @pre none
+	 * @post none
+	 * @return A list which describes which items were removed and how many
+	 */
+	List<RemovedItems> getRemovedItems(Date since);
+	
+	/**
+	 * Gets a list of products which will run out in the passed time span
+	 * @param months The number of months ahead to check
+	 * @pre none
+	 * @post none
+	 * @return A list describing the product supplies which will expire
+	 */
+	List<ProductSupply> getLowProductSupplies(int months);
+	
+	/**
+	 * Gets a list of productGroups which will run out in the passed time span
+	 * @param months The number of months ahead to check
+	 * @pre none
+	 * @post none
+	 * @return A list describing the productGroup supplies which will expire
+	 */
+	List<ProductGroupSupply> getLowProductGroupSupplies(int months);
+
+	/**
+	 * Gets statistics for products since for a period of time
+	 * @pre none
+	 * @post none
+	 * @param since The cutoff date
+	 * @return A list describing statistics for all products changed in the timespan
+	 */
+	List<ProductStats> getProductStats(Date since);
+	
+	/**
+	 * Traverses the passed visitor across the inventory
+	 * Calls the appropriate visitor methods once for each
+	 * Product Container, Product, and Item
+	 * @pre none
+	 * @post none
+	 * @param visitor The visitor to use
+	 */
+	void traverse(IVisitor visitor);
 
 }

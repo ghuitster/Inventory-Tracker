@@ -8,21 +8,16 @@ package model.report;
  * @author Michael
  * 
  */
-public class NMonthSupplyPDFReportBuilder implements ReportBuilder
+public class NMonthSupplyPDFReportBuilder extends NMonthSupplyReport implements ReportBuilder
 {
-	// Variables
-	private Visitor visitor = null;
 
 	/**
 	 * Constructor for NMonthSupplyPDFReportBuilder
-	 * @pre visitor passed in must not be == null
+	 * @pre none
 	 * @post none
-	 * @param visitor the visitor that will contain the data on the n-month's
-	 *            supply for the items for this report
 	 */
-	public NMonthSupplyPDFReportBuilder(Visitor visitor)
+	public NMonthSupplyPDFReportBuilder()
 	{
-		this.visitor = visitor;
 	}
 
 	/*

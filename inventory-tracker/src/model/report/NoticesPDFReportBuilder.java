@@ -8,21 +8,15 @@ package model.report;
  * @author Michael
  * 
  */
-public class NoticesPDFReportBuilder implements ReportBuilder
+public class NoticesPDFReportBuilder extends NoticesReport implements ReportBuilder
 {
-	// Variables
-	private Visitor visitor = null;
-
 	/**
 	 * Constructor for NoticesPDFReportBuilder
-	 * @pre visitor passed in must not be == null
+	 * @pre none
 	 * @post none
-	 * @param visitor the visitor that will contain the data on the notices for
-	 *            this report
 	 */
-	public NoticesPDFReportBuilder(Visitor visitor)
+	public NoticesPDFReportBuilder()
 	{
-		this.visitor = visitor
 	}
 
 	/*
