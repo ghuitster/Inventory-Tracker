@@ -1,24 +1,15 @@
+
 package model;
 
 /**
  * Describes various statistics for a product
  * @author Brian
- *
+ * 
  */
 public class ProductStats
 {
-	/**
-	 * Creates a new instance of this class
-	 * @pre none
-	 * @post none
-	 * @param product The product being described
-	 */
-	public ProductStats(IProduct product)
-	{
-		this.product = product;
-	}
-	
 	private IProduct product;
+
 	private int currentSupply;
 	private double averageSupply;
 	private int minSupply;
@@ -29,108 +20,17 @@ public class ProductStats
 	private int maxUsedAge;
 	private double avgCurrentAge;
 	private int maxCurrentAge;
-	
-	
 	/**
-	 * Gets the current supply variable
+	 * Creates a new instance of this class
 	 * @pre none
 	 * @post none
-	 * @return The current supply variable
+	 * @param product The product being described
 	 */
-	public int getCurrentSupply()
+	public ProductStats(IProduct product)
 	{
-		return currentSupply;
+		this.product = product;
 	}
-	/**
-	 * sets the current supply variable
-	 * @param currentSupply New value
-	 * @pre none
-	 * @post currentSupply has been set
-	 */
-	public void setCurrentSupply(int currentSupply)
-	{
-		this.currentSupply = currentSupply;
-	}
-	/**
-	 * Gets the average supply variable
-	 * @pre none
-	 * @post none
-	 * @return The average supply variable
-	 */
-	public double getAverageSupply()
-	{
-		return averageSupply;
-	}
-	/**
-	 * Sets the average supply variable
-	 * @param averageSupply The new value
-	 * @pre none
-	 * @post averageSupply has been set
-	 */
-	public void setAverageSupply(double averageSupply)
-	{
-		this.averageSupply = averageSupply;
-	}
-	/**
-	 * Gets the minimum supply variable
-	 * @pre none
-	 * @post none
-	 * @return The minimum supply variable
-	 */
-	public int getMinSupply()
-	{
-		return minSupply;
-	}
-	/**
-	 * Sets the minimum supply variable
-	 * @param minSupply The new value
-	 * @pre none
-	 * @post The minimum supply variable has been set
-	 */
-	public void setMinSupply(int minSupply)
-	{
-		this.minSupply = minSupply;
-	}
-	/**
-	 * Gets the max supply variable
-	 * @pre none
-	 * @post none
-	 * @return The max supply variable
-	 */
-	public int getMaxSupply()
-	{
-		return maxSupply;
-	}
-	/**
-	 * Sets the max supply variable
-	 * @param maxSupply The new value
-	 * @pre none
-	 * @post The max supply variable has been set
-	 */
-	public void setMaxSupply(int maxSupply)
-	{
-		this.maxSupply = maxSupply;
-	}
-	/**
-	 * Gets the used supply variable
-	 * @pre none
-	 * @post none
-	 * @return The used supply variable
-	 */
-	public int getUsedSupply()
-	{
-		return usedSupply;
-	}
-	/**
-	 * Sets the used supply variable
-	 * @pre none
-	 * @post used supply have been set
-	 * @param usedSupply The new value
-	 */
-	public void setUsedSupply(int usedSupply)
-	{
-		this.usedSupply = usedSupply;
-	}
+
 	/**
 	 * Gets the added supply variable
 	 * @pre none
@@ -141,56 +41,18 @@ public class ProductStats
 	{
 		return addedSupply;
 	}
+
 	/**
-	 * Sets the added supply variable
-	 * @pre none
-	 * @post The added supply variable has been set
-	 * @param addedSupply The new value
-	 */
-	public void setAddedSupply(int addedSupply)
-	{
-		this.addedSupply = addedSupply;
-	}
-	/**
-	 * Gets the average used age variable
+	 * Gets the average supply variable
 	 * @pre none
 	 * @post none
-	 * @return The average used age variable
+	 * @return The average supply variable
 	 */
-	public double getAvgUsedAge()
+	public double getAverageSupply()
 	{
-		return avgUsedAge;
+		return averageSupply;
 	}
-	/**
-	 * Sets the average used age variable
-	 * @pre none
-	 * @post The average used age variable has been set
-	 * @param avgUsedAge The new value
-	 */
-	public void setAvgUsedAge(double avgUsedAge)
-	{
-		this.avgUsedAge = avgUsedAge;
-	}
-	/**
-	 * Gets the max used age variable
-	 * @pre none
-	 * @post none
-	 * @return The max used age variable
-	 */
-	public int getMaxUsedAge()
-	{
-		return maxUsedAge;
-	}
-	/**
-	 * Sets the max used age variable
-	 * @pre none
-	 * @post The max used age variable has been set
-	 * @param maxUsedAge The new value
-	 */
-	public void setMaxUsedAge(int maxUsedAge)
-	{
-		this.maxUsedAge = maxUsedAge;
-	}
+
 	/**
 	 * Gets the average current age variable
 	 * @pre none
@@ -201,16 +63,29 @@ public class ProductStats
 	{
 		return avgCurrentAge;
 	}
+
 	/**
-	 * Sets the average current age variable
+	 * Gets the average used age variable
 	 * @pre none
-	 * @post The average current age variable has been changed
-	 * @param avgCurrentAge The new value
+	 * @post none
+	 * @return The average used age variable
 	 */
-	public void setAvgCurrentAge(double avgCurrentAge)
+	public double getAvgUsedAge()
 	{
-		this.avgCurrentAge = avgCurrentAge;
+		return avgUsedAge;
 	}
+
+	/**
+	 * Gets the current supply variable
+	 * @pre none
+	 * @post none
+	 * @return The current supply variable
+	 */
+	public int getCurrentSupply()
+	{
+		return currentSupply;
+	}
+
 	/**
 	 * Gets the max current age
 	 * @pre none
@@ -221,6 +96,115 @@ public class ProductStats
 	{
 		return maxCurrentAge;
 	}
+
+	/**
+	 * Gets the max supply variable
+	 * @pre none
+	 * @post none
+	 * @return The max supply variable
+	 */
+	public int getMaxSupply()
+	{
+		return maxSupply;
+	}
+
+	/**
+	 * Gets the max used age variable
+	 * @pre none
+	 * @post none
+	 * @return The max used age variable
+	 */
+	public int getMaxUsedAge()
+	{
+		return maxUsedAge;
+	}
+
+	/**
+	 * Gets the minimum supply variable
+	 * @pre none
+	 * @post none
+	 * @return The minimum supply variable
+	 */
+	public int getMinSupply()
+	{
+		return minSupply;
+	}
+
+	/**
+	 * Gets the product these stats are referring to
+	 * @return The product these stats are referring to
+	 */
+	public IProduct getProduct()
+	{
+		return product;
+	}
+
+	/**
+	 * Gets the used supply variable
+	 * @pre none
+	 * @post none
+	 * @return The used supply variable
+	 */
+	public int getUsedSupply()
+	{
+		return usedSupply;
+	}
+
+	/**
+	 * Sets the added supply variable
+	 * @pre none
+	 * @post The added supply variable has been set
+	 * @param addedSupply The new value
+	 */
+	public void setAddedSupply(int addedSupply)
+	{
+		this.addedSupply = addedSupply;
+	}
+
+	/**
+	 * Sets the average supply variable
+	 * @param averageSupply The new value
+	 * @pre none
+	 * @post averageSupply has been set
+	 */
+	public void setAverageSupply(double averageSupply)
+	{
+		this.averageSupply = averageSupply;
+	}
+
+	/**
+	 * Sets the average current age variable
+	 * @pre none
+	 * @post The average current age variable has been changed
+	 * @param avgCurrentAge The new value
+	 */
+	public void setAvgCurrentAge(double avgCurrentAge)
+	{
+		this.avgCurrentAge = avgCurrentAge;
+	}
+
+	/**
+	 * Sets the average used age variable
+	 * @pre none
+	 * @post The average used age variable has been set
+	 * @param avgUsedAge The new value
+	 */
+	public void setAvgUsedAge(double avgUsedAge)
+	{
+		this.avgUsedAge = avgUsedAge;
+	}
+
+	/**
+	 * sets the current supply variable
+	 * @param currentSupply New value
+	 * @pre none
+	 * @post currentSupply has been set
+	 */
+	public void setCurrentSupply(int currentSupply)
+	{
+		this.currentSupply = currentSupply;
+	}
+
 	/**
 	 * Sets the max current age
 	 * @pre none
@@ -231,12 +215,48 @@ public class ProductStats
 	{
 		this.maxCurrentAge = maxCurrentAge;
 	}
+
 	/**
-	 * Gets the product these stats are referring to 
-	 * @return The product these stats are referring to
+	 * Sets the max supply variable
+	 * @param maxSupply The new value
+	 * @pre none
+	 * @post The max supply variable has been set
 	 */
-	public IProduct getProduct()
+	public void setMaxSupply(int maxSupply)
 	{
-		return product;
+		this.maxSupply = maxSupply;
+	}
+
+	/**
+	 * Sets the max used age variable
+	 * @pre none
+	 * @post The max used age variable has been set
+	 * @param maxUsedAge The new value
+	 */
+	public void setMaxUsedAge(int maxUsedAge)
+	{
+		this.maxUsedAge = maxUsedAge;
+	}
+
+	/**
+	 * Sets the minimum supply variable
+	 * @param minSupply The new value
+	 * @pre none
+	 * @post The minimum supply variable has been set
+	 */
+	public void setMinSupply(int minSupply)
+	{
+		this.minSupply = minSupply;
+	}
+
+	/**
+	 * Sets the used supply variable
+	 * @pre none
+	 * @post used supply have been set
+	 * @param usedSupply The new value
+	 */
+	public void setUsedSupply(int usedSupply)
+	{
+		this.usedSupply = usedSupply;
 	}
 }

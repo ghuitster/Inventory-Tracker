@@ -8,7 +8,8 @@ package model.report;
  * @author Michael
  * 
  */
-public class NMonthSupplyPDFReportBuilder extends NMonthSupplyReport implements ReportBuilder
+public class NMonthSupplyPDFReportBuilder extends NMonthSupplyReport implements
+		ReportBuilder
 {
 
 	/**
@@ -17,8 +18,7 @@ public class NMonthSupplyPDFReportBuilder extends NMonthSupplyReport implements 
 	 * @post none
 	 */
 	public NMonthSupplyPDFReportBuilder()
-	{
-	}
+	{}
 
 	/*
 	 * (non-Javadoc)

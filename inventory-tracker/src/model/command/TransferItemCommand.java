@@ -1,22 +1,8 @@
 
 package model.command;
 
-import java.util.List;
-
-import model.IItem;
-import model.IProduct;
-
-public class TransferItemCommand implements Command
+public class TransferItemCommand implements ICommand
 {
-	private final List<IItem> items;
-	private final List<IProduct> products;
-
-	public TransferItemCommand(List<IItem> items, List<IProduct> products)
-	{
-		this.items = items;
-		this.products = products;
-	}
-
 	/**
 	 * Transfer the item(s) in this object's Set of Items
 	 */
@@ -36,5 +22,4 @@ public class TransferItemCommand implements Command
 		// TODO Auto-generated method stub
 
 	}
-
 }

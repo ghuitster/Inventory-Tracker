@@ -8,7 +8,8 @@ package model.report;
  * @author Michael
  * 
  */
-public class NoticesPDFReportBuilder extends NoticesReport implements ReportBuilder
+public class NoticesPDFReportBuilder extends NoticesReport implements
+		ReportBuilder
 {
 	/**
 	 * Constructor for NoticesPDFReportBuilder
@@ -16,8 +17,7 @@ public class NoticesPDFReportBuilder extends NoticesReport implements ReportBuil
 	 * @post none
 	 */
 	public NoticesPDFReportBuilder()
-	{
-	}
+	{}
 
 	/*
 	 * (non-Javadoc)

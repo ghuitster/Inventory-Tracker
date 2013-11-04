@@ -1,3 +1,4 @@
+
 package model.visitor;
 
 import java.util.List;
@@ -10,13 +11,13 @@ import model.IStorageUnit;
 /**
  * Visitor which searches for expired items
  * @author Brian
- *
+ * 
  */
 public class ExpiredItemVisitor implements IVisitor
 {
-	
+
 	private List<IItem> result;
-	
+
 	/**
 	 * Returns the result of the traversal
 	 * @pre The traversal has been run
@@ -25,43 +26,7 @@ public class ExpiredItemVisitor implements IVisitor
 	 */
 	public List<IItem> getResult()
 	{
-		
-	}
 
-	/**
-	 * Does nothing
-	 * @pre none
-	 * @post none
-	 */
-	@Override
-	public void visitStorageUnit(IStorageUnit unit)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	/**
-	 * Does nothing
-	 * @pre none
-	 * @post none
-	 */
-	@Override
-	public void visitProductGroup(IProductGroup group)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	/**
-	 * Does nothing
-	 * @pre none
-	 * @post none
-	 */
-	@Override
-	public void visitProduct(IProduct product)
-	{
-		// TODO Auto-generated method stub
-		
 	}
 
 	/**
@@ -74,7 +39,43 @@ public class ExpiredItemVisitor implements IVisitor
 	public void visitItem(IItem item)
 	{
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	/**
+	 * Does nothing
+	 * @pre none
+	 * @post none
+	 */
+	@Override
+	public void visitProduct(IProduct product)
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Does nothing
+	 * @pre none
+	 * @post none
+	 */
+	@Override
+	public void visitProductGroup(IProductGroup group)
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Does nothing
+	 * @pre none
+	 * @post none
+	 */
+	@Override
+	public void visitStorageUnit(IStorageUnit unit)
+	{
+		// TODO Auto-generated method stub
+
 	}
 
 }

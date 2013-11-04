@@ -8,7 +8,8 @@ package model.report;
  * @author Michael
  * 
  */
-public class NMonthSupplyHTMLReportBuilder extends NMonthSupplyReport implements ReportBuilder
+public class NMonthSupplyHTMLReportBuilder extends NMonthSupplyReport implements
+		ReportBuilder
 {
 	/**
 	 * Constructor for NMonthSupplyHTMLReportBuilder
@@ -16,18 +17,17 @@ public class NMonthSupplyHTMLReportBuilder extends NMonthSupplyReport implements
 	 * @post none
 	 */
 	public NMonthSupplyHTMLReportBuilder()
-	{
-	}
+	{}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.report.ReportBuilder#buildReport()
+	/**
+	 * Method to construct HTML body for this report. Called from buildReport().
+	 * @pre this.visitor must not be == null
+	 * @post Valid HTML string containing HTML body info is returned to
+	 *       buildReport method
 	 */
-	@Override
-	public void buildReport()
+	private String buildHTMLBody()
 	{
-
+		return "";
 	}
 
 	/**
@@ -42,15 +42,15 @@ public class NMonthSupplyHTMLReportBuilder extends NMonthSupplyReport implements
 		return "";
 	}
 
-	/**
-	 * Method to construct HTML body for this report. Called from buildReport().
-	 * @pre this.visitor must not be == null
-	 * @post Valid HTML string containing HTML body info is returned to
-	 *       buildReport method
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.report.ReportBuilder#buildReport()
 	 */
-	private String buildHTMLBody()
+	@Override
+	public void buildReport()
 	{
-		return "";
+
 	}
 
 }

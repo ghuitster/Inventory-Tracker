@@ -1,22 +1,8 @@
 
 package model.command;
 
-import java.util.List;
-
-import model.IItem;
-import model.IProduct;
-
-public class RemoveItemCommand implements Command
+public class RemoveItemCommand implements ICommand
 {
-	private final List<IItem> items;
-	private final List<IProduct> products;
-
-	public RemoveItemCommand(List<IItem> items, List<IProduct> products)
-	{
-		this.items = items;
-		this.products = products;
-	}
-
 	/**
 	 * Remove the item(s) in this object's Set of Items
 	 */
@@ -36,5 +22,4 @@ public class RemoveItemCommand implements Command
 		// TODO Auto-generated method stub
 
 	}
-
 }

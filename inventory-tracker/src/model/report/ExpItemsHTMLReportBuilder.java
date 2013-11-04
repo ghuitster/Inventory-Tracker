@@ -8,7 +8,8 @@ package model.report;
  * @author Michael
  * 
  */
-public class ExpItemsHTMLReportBuilder extends ExpItemsReport implements ReportBuilder
+public class ExpItemsHTMLReportBuilder extends ExpItemsReport implements
+		ReportBuilder
 {
 
 	/**
@@ -17,16 +18,15 @@ public class ExpItemsHTMLReportBuilder extends ExpItemsReport implements ReportB
 	 * @post none
 	 */
 	public ExpItemsHTMLReportBuilder()
-	{
-	}
+	{}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.report.ReportBuilder#buildReport()
+	/**
+	 * Method to construct HTML body for this report. Called from buildReport().
+	 * @pre this.visitor must not be == null
+	 * @post Valid HTML string containing HTML body info is returned to
+	 *       buildReport method
 	 */
-	@Override
-	public void buildReport()
+	private String buildHTMLBody()
 	{
 
 	}
@@ -43,13 +43,13 @@ public class ExpItemsHTMLReportBuilder extends ExpItemsReport implements ReportB
 
 	}
 
-	/**
-	 * Method to construct HTML body for this report. Called from buildReport().
-	 * @pre this.visitor must not be == null
-	 * @post Valid HTML string containing HTML body info is returned to
-	 *       buildReport method
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.report.ReportBuilder#buildReport()
 	 */
-	private String buildHTMLBody()
+	@Override
+	public void buildReport()
 	{
 
 	}

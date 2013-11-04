@@ -17,6 +17,7 @@ import java.util.TreeSet;
 
 import model.exception.InvalidNameException;
 import model.visitor.IVisitor;
+
 import common.util.DateUtils;
 
 /**
@@ -223,6 +224,20 @@ public class Inventory extends Observable implements IInventory, Serializable
 		return new TreeSet<IStorageUnit>(this.storageUnits);
 	}
 
+	@Override
+	public List<IItem> getExpiredItems()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<IProductGroup, List<IProduct>> getInconsistencies()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	/**
 	 * Returns an item from the system given a barcode, or null if item does not
 	 * exist.
@@ -238,6 +253,20 @@ public class Inventory extends Observable implements IInventory, Serializable
 	public IItem getItem(String barcodeNumber)
 	{
 		return this.barcodeItems.get(barcodeNumber);
+	}
+
+	@Override
+	public List<ProductGroupSupply> getLowProductGroupSupplies(int months)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ProductSupply> getLowProductSupplies(int months)
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/*
@@ -273,6 +302,13 @@ public class Inventory extends Observable implements IInventory, Serializable
 		return this.persistence;
 	}
 
+	@Override
+	public List<ProductStats> getProductStats(Date since)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -282,6 +318,13 @@ public class Inventory extends Observable implements IInventory, Serializable
 	public SortedMap<Date, Set<IItem>> getRemovedItems()
 	{
 		return new TreeMap<Date, Set<IItem>>(this.removedItems);
+	}
+
+	@Override
+	public List<RemovedItems> getRemovedItems(Date since)
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/**
@@ -419,6 +462,12 @@ public class Inventory extends Observable implements IInventory, Serializable
 	}
 
 	@Override
+	public void traverse(IVisitor visitor)
+	{
+
+	}
+
+	@Override
 	public void update(Observable o, Object arg)
 	{
 		ObservableArgs obsArg = (ObservableArgs) arg;
@@ -445,54 +494,6 @@ public class Inventory extends Observable implements IInventory, Serializable
 
 		this.setChanged();
 		this.notifyObservers(obsArg);
-	}
-
-	@Override
-	public Map<IProductGroup, List<IProduct>> getInconsistencies()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<IItem> getExpiredItems()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<RemovedItems> getRemovedItems(Date since)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<ProductSupply> getLowProductSupplies(int months)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<ProductGroupSupply> getLowProductGroupSupplies(int months)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public List<ProductStats> getProductStats(Date since)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public void traverse(IVisitor visitor)
-	{
-		
 	}
 
 }

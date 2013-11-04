@@ -17,8 +17,7 @@ public class ExpItemsPDFReportBuilder implements ReportBuilder
 	 * @post none
 	 */
 	public ExpItemsPDFReportBuilder()
-	{
-	}
+	{}
 
 	/*
 	 * (non-Javadoc)

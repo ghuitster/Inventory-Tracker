@@ -8,7 +8,8 @@ package model.report;
  * @author Michael
  * 
  */
-public class RemovedItemsPDFReportBuilder extends RemovedItemsReport implements ReportBuilder
+public class RemovedItemsPDFReportBuilder extends RemovedItemsReport implements
+		ReportBuilder
 {
 
 	/**
@@ -17,8 +18,7 @@ public class RemovedItemsPDFReportBuilder extends RemovedItemsReport implements 
 	 * @post none
 	 */
 	public RemovedItemsPDFReportBuilder()
-	{
-	}
+	{}
 
 	/*
 	 * (non-Javadoc)
