@@ -1,7 +1,7 @@
 
 package model.command;
 
-public class TransferItemCommand implements ICommand
+public class TransferItemCommand extends Command
 {
 	/**
 	 * Transfer the item(s) in this object's Set of Items

@@ -1,7 +1,7 @@
 
 package model.command;
 
-public class RemoveItemCommand implements ICommand
+public class RemoveItemCommand extends Command
 {
 	/**
 	 * Remove the item(s) in this object's Set of Items

@@ -1,7 +1,7 @@
 
 package model.command;
 
-public class AddItemCommand implements ICommand
+public class AddItemCommand extends Command
 {
 	/**
 	 * Add the item(s) in this object's Set of Items

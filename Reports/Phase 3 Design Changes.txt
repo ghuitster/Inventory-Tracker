@@ -1,2 +1,3 @@
 -Moved the list of Items and Products to the ICommand interface rather than in each Command object.
 -Added the executed and undone stacks to the AddItemBatchController, TransferItemBatchController and RemoveItemBatchController.
+-Changed the ICommand interface to the abstract class Command.
