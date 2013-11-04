@@ -12,6 +12,7 @@ public class RemovedItems
 
 	private int count;
 	private int supply;
+
 	public RemovedItems(IProduct product)
 	{
 		this.product = product;

@@ -10,7 +10,7 @@ import model.IItem;
 import model.IProduct;
 
 /**
- * An Interface to represent a Command
+ * An abstract public class to represent a Command
  * @author David
  */
 public abstract class Command

@@ -20,6 +20,7 @@ public class ProductStats
 	private int maxUsedAge;
 	private double avgCurrentAge;
 	private int maxCurrentAge;
+
 	/**
 	 * Creates a new instance of this class
 	 * @pre none
