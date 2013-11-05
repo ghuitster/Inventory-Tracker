@@ -62,4 +62,3 @@ c. Input other alphabet characters
 14) Test report to output correct file type
 a. Request report in PDF 
 b. Request report in HTML
-c. 
