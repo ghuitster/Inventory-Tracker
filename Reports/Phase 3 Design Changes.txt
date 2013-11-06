@@ -1,3 +1,5 @@
 -Moved the list of Items and Products to the ICommand interface rather than in each Command object.
 -Added the executed and undone stacks to the AddItemBatchController, TransferItemBatchController and RemoveItemBatchController.
 -Changed the ICommand interface to the abstract class Command.
+-Reworked the reports. Now, all report classes are of an abstract Report type, which accepts a builder
+-Reworked the builders. There are now two builders: HTML and PDF. A Builder is passed to a Report. The Report then uses the builder to make either an HTML or PDF report. (There is no test builder because the reports can be verified through their object representations)
