@@ -13,11 +13,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 import model.IInventory;
 import model.IItem;
 import model.IProductContainer;
 import model.Inventory;
+import model.command.Command;
+import model.command.TransferItemCommand;
 
 /**
  * Controller class for the transfer item batch view.
@@ -32,6 +35,8 @@ public class TransferItemBatchController extends Controller implements
 	private final IInventory inventory = Inventory.getInstance();
 	private IItem item = null;
 	private IProductContainer container = null;
+	private Stack<Command> done = new Stack<Command>();
+	private Stack<Command> undone = new Stack<Command>();
 
 	/**
 	 * Constructor.
@@ -90,8 +95,8 @@ public class TransferItemBatchController extends Controller implements
 	@Override
 	protected void enableComponents()
 	{
-		this.getView().enableRedo(false);
-		this.getView().enableUndo(false);
+		this.getView().enableRedo(!undone.isEmpty());
+		this.getView().enableUndo(!done.isEmpty());
 		this.getView().enableItemAction(!barcode.isEmpty());
 	}
 
@@ -154,6 +159,9 @@ public class TransferItemBatchController extends Controller implements
 	public void transferItem()
 	{
 		this.item = this.inventory.getItem(this.barcode);
+		
+		TransferItemCommand command = new TransferItemCommand();
+		command.setItem(this.item);
 
 		if(this.item == null)
 		{

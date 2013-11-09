@@ -1,6 +1,8 @@
 
 package model.command;
 
+import model.IItem;
+
 public class TransferItemCommand extends Command
 {
 	/**
@@ -21,5 +23,10 @@ public class TransferItemCommand extends Command
 	{
 		// TODO Auto-generated method stub
 
+	}
+	
+	public void setItem(IItem item)
+	{
+		this.items.add(item);
 	}
 }
