@@ -16,7 +16,8 @@ public class NMonthSupplyReport
 	 */
 	public List<ProductGroupSupply> getProductGroupSupplyInfo()
 	{
-
+		//TODO
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -24,6 +25,7 @@ public class NMonthSupplyReport
 	 */
 	public List<ProductSupply> getProductSupplyInfo()
 	{
-
+		//TODO
+		throw new UnsupportedOperationException();
 	}
 }

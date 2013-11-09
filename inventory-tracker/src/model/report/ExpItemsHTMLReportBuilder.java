@@ -28,7 +28,8 @@ public class ExpItemsHTMLReportBuilder extends ExpItemsReport implements
 	 */
 	private String buildHTMLBody()
 	{
-
+		//TODO
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -40,7 +41,8 @@ public class ExpItemsHTMLReportBuilder extends ExpItemsReport implements
 	 */
 	private String buildHTMLHead()
 	{
-
+		//TODO
+		throw new UnsupportedOperationException();
 	}
 
 	/*

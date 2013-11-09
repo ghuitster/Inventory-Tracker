@@ -14,6 +14,7 @@ public class ProdStatReport
 	 */
 	public List<ProductStats> getProductStats()
 	{
-
+		//TODO
+		throw new UnsupportedOperationException();
 	}
 }

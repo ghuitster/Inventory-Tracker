@@ -17,6 +17,7 @@ public class ExpItemsReport
 	 */
 	public List<IItem> getExpItems()
 	{
-
+		//TODO
+		throw new UnsupportedOperationException();
 	}
 }

@@ -17,6 +17,7 @@ public class NoticesReport
 	 */
 	public Map<IProductContainer, List<IProduct>> getInconsistentGroups()
 	{
-
+		//TODO
+		throw new UnsupportedOperationException();
 	}
 }

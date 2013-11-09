@@ -28,7 +28,8 @@ public class RemovedItemsHTMLReportBuilder extends RemovedItemsReport implements
 	 */
 	private String buildHTMLBody()
 	{
-
+		//TODO
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -40,7 +41,8 @@ public class RemovedItemsHTMLReportBuilder extends RemovedItemsReport implements
 	 */
 	private String buildHTMLHead()
 	{
-
+		//TODO
+		throw new UnsupportedOperationException();
 	}
 
 	/*

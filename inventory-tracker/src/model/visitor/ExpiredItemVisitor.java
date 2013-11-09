@@ -26,7 +26,8 @@ public class ExpiredItemVisitor implements IVisitor
 	 */
 	public List<IItem> getResult()
 	{
-
+		//TODO
+		throw new UnsupportedOperationException();
 	}
 
 	/**

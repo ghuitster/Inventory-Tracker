@@ -189,9 +189,9 @@ public class EditProductController extends Controller implements
 	@Override
 	public void valuesChanged()
 	{
-		if(!getView().getSupply().isEmpty()
+		/*if(!getView().getSupply().isEmpty()
 				&& !getView().getSupply().startsWith("-"))
-		{
+		{*/
 			try
 			{
 				this.cThreeMonthSupply =
@@ -200,12 +200,9 @@ public class EditProductController extends Controller implements
 			}
 			catch(NumberFormatException e)
 			{
-				this.getView().displayErrorMessage(
-						"The three month supply must" + " be a whole number");
-				this.getView().setSupply(
-						"" + this.cThreeMonthSupply.getAmount());
+				getView().enableOK(false);
 			}
-		}
+		//}
 		this.descript = getView().getDescription();
 		if(this.sizeUnits != SizeUnits.Count
 				&& getView().getSizeUnit() == SizeUnits.Count)
@@ -215,23 +212,21 @@ public class EditProductController extends Controller implements
 			this.getView().setSizeValue("" + temp);
 		}
 		this.sizeUnits = getView().getSizeUnit();
-		if(!getView().getShelfLife().isEmpty()
+		/*if(!getView().getShelfLife().isEmpty()
 				&& !getView().getShelfLife().startsWith("-"))
-		{
+		{*/
 			try
 			{
 				this.shelflife = Integer.parseInt(getView().getShelfLife());
 			}
 			catch(NumberFormatException e)
 			{
-				this.getView().displayErrorMessage(
-						"Shelflife must be a whole number");
-				this.getView().setShelfLife("" + this.shelflife);
+				getView().enableOK(false);
 			}
-		}
-		if(!getView().getSizeValue().isEmpty()
+		//}
+		/*if(!getView().getSizeValue().isEmpty()
 				&& !getView().getSizeValue().startsWith("-"))
-		{
+		{*/
 			if(this.sizeUnits == SizeUnits.Count)
 				try
 				{
@@ -239,12 +234,7 @@ public class EditProductController extends Controller implements
 				}
 				catch(NumberFormatException e)
 				{
-					getView().displayErrorMessage(
-							"For unit size type Count, the "
-									+ "value must be a whole number");
-					int temp = (int) this.sizeValue;
-					getView().setSizeValue("" + temp);
-					this.sizeValue = temp;
+					getView().enableOK(false);
 				}
 			else
 			{
@@ -254,14 +244,12 @@ public class EditProductController extends Controller implements
 				}
 				catch(NumberFormatException e)
 				{
-					this.getView().displayErrorMessage(
-							"Digits only, no characters");
-					this.getView().setSizeValue("" + this.sizeValue);
+					getView().enableOK(false);
 				}
 			}
-		}
+		//}
 
-		this.shouldOKBeEnabled();
+		//this.shouldOKBeEnabled();
 		this.enableComponents();
 	}
 }

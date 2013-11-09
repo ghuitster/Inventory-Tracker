@@ -14,6 +14,7 @@ public class RemovedItemsReport
 	 */
 	public List<RemovedItems> getremovedItems()
 	{
-
+		//TODO
+		throw new UnsupportedOperationException();
 	}
 }
