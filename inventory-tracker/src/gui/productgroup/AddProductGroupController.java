@@ -23,7 +23,8 @@ public class AddProductGroupController extends Controller implements
 
 	private IProductContainer PC;
 	private IProductGroup PG = null;
-	private boolean submit = false;
+	private boolean amount = false;
+	private boolean descriptNotEmpty = false;
 	private SizeUnits sizeUnits = SizeUnits.Count;
 	private String name = "";
 	private float value = 0;
@@ -94,7 +95,7 @@ public class AddProductGroupController extends Controller implements
 	@Override
 	protected void enableComponents()
 	{
-		this.getView().enableOK(submit);
+		this.getView().enableOK(this.shouldOKBeEnabled());
 	}
 
 	/**
@@ -137,42 +138,38 @@ public class AddProductGroupController extends Controller implements
 		if(this.sizeUnits == SizeUnits.Count)
 			try
 			{
-				this.value = Integer.parseInt(getView().getSupplyValue());
+				float temp = Float.parseFloat(getView().getSupplyValue());
+				if(temp % 1 == 0)
+				{
+					this.value = (int)temp;
+					this.amount = true;
+				}
+				else
+				{
+					this.amount = false;
+				}
 			}
 			catch(NumberFormatException e)
 			{
-				getView().displayErrorMessage(
-						"For unit size type Count, the "
-								+ "value must be a whole number");
-				int temp = (int) this.value;
-				getView().setSupplyValue("" + value);
-				this.value = temp;
+				this.amount = false;
 			}
 		else
 		{
 			try
 			{
 				this.value = Float.parseFloat(getView().getSupplyValue());
+				this.amount = true;
 			}
 			catch(NumberFormatException e)
 			{
-				getView().displayErrorMessage("Digits only, no characters");
-				getView().setSupplyValue("" + value);
+				this.amount = false;
 			}
 		}
 	}
 
-	private void shouldOKBeEnabled()
+	private boolean shouldOKBeEnabled()
 	{
-		if(name.isEmpty())
-			submit = false;
-		else if(this.getView().getSupplyValue().isEmpty()
-				|| getView().getSupplyValue().startsWith("-"))
-			submit = false;
-		else if(!PC.ableToAddProductGroupNamed(getView().getProductGroupName()))
-			submit = false;
-		else
-			submit = true;
+		return this.descriptNotEmpty && this.amount;
 	}
 
 	/**
@@ -183,14 +180,21 @@ public class AddProductGroupController extends Controller implements
 	public void valuesChanged()
 	{
 		this.name = this.getView().getProductGroupName();
+		if(this.name.isEmpty())
+			this.descriptNotEmpty = false;
+		else
+			this.descriptNotEmpty = true;
 		this.sizeUnits = this.getView().getSupplyUnit();
 		if(!getView().getSupplyValue().isEmpty()
 				&& !getView().getSupplyValue().startsWith("-"))
 		{
 			this.setAmount();
 		}
+		else
+		{
+			this.amount = false;
+		}
 
-		this.shouldOKBeEnabled();
 		this.enableComponents();
 	}
 }

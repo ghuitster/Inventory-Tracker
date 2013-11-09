@@ -30,7 +30,10 @@ public class EditProductController extends Controller implements
 	private SizeUnits sizeUnits = SizeUnits.Count;
 	private int shelflife = 0;
 	private CountThreeMonthSupply cThreeMonthSupply = null;
-	private boolean submit = true;
+	private boolean amount = true;
+	private boolean threeMonthSupply = true;
+	private boolean shelfLife = true;
+	private boolean descriptNotEmpty = true;
 	private UnitType unitType = UnitType.COUNT;
 
 	/**
@@ -116,7 +119,7 @@ public class EditProductController extends Controller implements
 		}
 		getView().enableBarcode(false);
 
-		getView().enableOK(submit);
+		getView().enableOK(this.shouldOKBeEnabled());
 	}
 
 	/**
@@ -162,24 +165,9 @@ public class EditProductController extends Controller implements
 		this.getView().setSizeUnit(this.sizeUnits);
 	}
 
-	private void shouldOKBeEnabled()
+	private boolean shouldOKBeEnabled()
 	{
-		if(this.descript.isEmpty())
-			submit = false;
-		else if(sizeValue <= 0 || this.shelflife < 0
-				|| this.cThreeMonthSupply.getAmount() < 0)
-			submit = false;
-		else if(getView().getSupply().isEmpty()
-				|| getView().getSupply().startsWith("-"))
-			submit = false;
-		else if(getView().getShelfLife().isEmpty()
-				|| getView().getShelfLife().startsWith("-"))
-			submit = false;
-		else if(getView().getSizeValue().isEmpty()
-				|| getView().getSizeValue().startsWith("-"))
-			submit = false;
-		else
-			submit = true;
+		return this.amount && this.shelfLife && this.threeMonthSupply && this.descriptNotEmpty;
 	}
 
 	/**
@@ -189,21 +177,8 @@ public class EditProductController extends Controller implements
 	@Override
 	public void valuesChanged()
 	{
-		/*if(!getView().getSupply().isEmpty()
-				&& !getView().getSupply().startsWith("-"))
-		{*/
-			try
-			{
-				this.cThreeMonthSupply =
-						new CountThreeMonthSupply(Integer.parseInt(getView()
-								.getSupply()));
-			}
-			catch(NumberFormatException e)
-			{
-				getView().enableOK(false);
-			}
-		//}
-		this.descript = getView().getDescription();
+		this.setThreeMonthSupply();
+		this.setDescript();
 		if(this.sizeUnits != SizeUnits.Count
 				&& getView().getSizeUnit() == SizeUnits.Count)
 		{
@@ -212,44 +187,120 @@ public class EditProductController extends Controller implements
 			this.getView().setSizeValue("" + temp);
 		}
 		this.sizeUnits = getView().getSizeUnit();
-		/*if(!getView().getShelfLife().isEmpty()
-				&& !getView().getShelfLife().startsWith("-"))
-		{*/
-			try
-			{
-				this.shelflife = Integer.parseInt(getView().getShelfLife());
-			}
-			catch(NumberFormatException e)
-			{
-				getView().enableOK(false);
-			}
-		//}
-		/*if(!getView().getSizeValue().isEmpty()
+		this.setShelfLife();
+		this.setAmount();
+		
+		this.enableComponents();
+	}
+
+	private void setAmount()
+	{
+		if(!getView().getSizeValue().isEmpty()
 				&& !getView().getSizeValue().startsWith("-"))
-		{*/
+		{
 			if(this.sizeUnits == SizeUnits.Count)
 				try
 				{
-					this.sizeValue = Integer.parseInt(getView().getSizeValue());
+					this.sizeValue = Float.parseFloat(getView().getSizeValue());
+					if(this.sizeValue % 1 == 0)
+					{
+						int temp = (int) this.sizeValue;
+						this.sizeValue = temp;
+						this.amount = true;
+					}
+					else
+					{
+						this.amount = false;
+					}
 				}
 				catch(NumberFormatException e)
 				{
-					getView().enableOK(false);
+					this.amount = false;
 				}
 			else
 			{
 				try
 				{
 					this.sizeValue = Float.parseFloat(getView().getSizeValue());
+					this.amount = true;
 				}
 				catch(NumberFormatException e)
 				{
-					getView().enableOK(false);
+					this.amount = false;
 				}
 			}
-		//}
+		}
+		else
+		{
+			this.amount = false;
+		}
+	}
 
-		//this.shouldOKBeEnabled();
-		this.enableComponents();
+	private void setShelfLife()
+	{
+		if(!getView().getShelfLife().isEmpty()
+				&& !getView().getShelfLife().startsWith("-"))
+		{
+			try
+			{
+				float temp = Float.parseFloat(getView().getShelfLife());
+				if(temp % 1 == 0)
+				{
+					this.sizeValue = temp;
+					this.shelfLife = true;
+				}
+				else
+				{
+					this.shelfLife = false;
+				}
+			}
+			catch(NumberFormatException e)
+			{
+				this.shelfLife = false;
+			}
+		}
+		else
+		{
+			this.shelfLife = false;
+		}
+	}
+
+	private void setDescript()
+	{
+		this.descript = getView().getDescription();
+		if(this.descript.isEmpty())
+			this.descriptNotEmpty = false;
+		else
+			this.descriptNotEmpty = true;
+	}
+
+	private void setThreeMonthSupply()
+	{
+		if(!getView().getSupply().isEmpty()
+				&& !getView().getSupply().startsWith("-"))
+		{
+			try
+			{
+				float temp = Float.parseFloat(getView().getSupply());
+				if(temp % 1 == 0)
+				{
+					this.cThreeMonthSupply =
+						new CountThreeMonthSupply((int)temp);
+					this.threeMonthSupply = true;
+				}
+				else
+				{
+					this.threeMonthSupply = false;
+				}
+			}
+			catch(NumberFormatException e)
+			{
+				this.threeMonthSupply = false;
+			}
+		}
+		else
+		{
+			this.threeMonthSupply = false;
+		}
 	}
 }

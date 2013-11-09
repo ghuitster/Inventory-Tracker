@@ -15,7 +15,6 @@ import model.Product;
 import model.ProductBarcode;
 import model.UnitSize;
 import model.UnitType;
-
 import common.util.DateUtils;
 
 /**
@@ -33,7 +32,10 @@ public class AddProductController extends Controller implements
 	private int shelflife = 0;
 	private CountThreeMonthSupply cThreeMonthSupply =
 			new CountThreeMonthSupply(0);
-	private boolean submit = false;
+	private boolean amount = false;
+	private boolean threeMonthSupply = false;
+	private boolean shelfLife = false;
+	private boolean descriptNotEmpty = false;
 	private UnitType unitType = UnitType.COUNT;
 
 	/**
@@ -105,7 +107,7 @@ public class AddProductController extends Controller implements
 		}
 		getView().enableBarcode(false);
 
-		getView().enableOK(submit);
+		getView().enableOK(this.shouldOKBeEnabled());
 	}
 
 	/**
@@ -143,24 +145,9 @@ public class AddProductController extends Controller implements
 		this.getView().setSupply("" + this.cThreeMonthSupply.getAmount());
 	}
 
-	private void shouldOKBeEnabled()
+	private boolean shouldOKBeEnabled()
 	{
-		if(this.descript.isEmpty())
-			this.submit = false;
-		else if(sizeValue <= 0 || this.shelflife < 0
-				|| this.cThreeMonthSupply.getAmount() < 0)
-			this.submit = false;
-		else if(getView().getSupply().isEmpty()
-				|| getView().getSupply().startsWith("-"))
-			this.submit = false;
-		else if(getView().getShelfLife().isEmpty()
-				|| getView().getShelfLife().startsWith("-"))
-			this.submit = false;
-		else if(getView().getSizeValue().isEmpty()
-				|| getView().getSizeValue().startsWith("-"))
-			this.submit = false;
-		else
-			this.submit = true;
+		return this.amount && this.shelfLife && this.threeMonthSupply && this.descriptNotEmpty;
 	}
 
 	/**
@@ -170,22 +157,8 @@ public class AddProductController extends Controller implements
 	@Override
 	public void valuesChanged()
 	{
-		if(!getView().getSupply().isEmpty()
-				&& !getView().getSupply().startsWith("-"))
-		{
-			try
-			{
-				this.cThreeMonthSupply =
-						new CountThreeMonthSupply(Integer.parseInt(getView()
-								.getSupply()));
-			}
-			catch(NumberFormatException e)
-			{
-				this.getView().displayErrorMessage(
-						"The three month supply must" + " be a whole number");
-				this.getView().setSupply("" + 0);
-			}
-		}
+		this.setThreeMonthSupply();
+		this.setDescript();
 		this.descript = getView().getDescription();
 		this.oldSizeUnits = this.sizeUnits;
 		this.sizeUnits = getView().getSizeUnit();
@@ -202,49 +175,121 @@ public class AddProductController extends Controller implements
 			this.sizeValue = 0;
 			getView().setSizeValue("0");
 		}
+		
+		this.setShelfLife();
+		this.setAmount();
 
-		if(!getView().getShelfLife().isEmpty()
-				&& !getView().getShelfLife().startsWith("-"))
-		{
-			try
-			{
-				this.shelflife = Integer.parseInt(getView().getShelfLife());
-			}
-			catch(NumberFormatException e)
-			{
-				this.getView().displayErrorMessage(
-						"Shelflife must be a whole number");
-				this.getView().setShelfLife("" + this.shelflife);
-			}
-		}
+		this.enableComponents();
+	}
+	
+	private void setAmount()
+	{
 		if(!getView().getSizeValue().isEmpty()
 				&& !getView().getSizeValue().startsWith("-"))
 		{
 			if(this.sizeUnits == SizeUnits.Count)
 				try
 				{
-					this.sizeValue = Integer.parseInt(getView().getSizeValue());
+					this.sizeValue = Float.parseFloat(getView().getSizeValue());
+					if(this.sizeValue % 1 == 0)
+					{
+						int temp = (int) this.sizeValue;
+						this.sizeValue = temp;
+						this.amount = true;
+					}
+					else
+					{
+						this.amount = false;
+					}
 				}
 				catch(NumberFormatException e)
 				{
-					getView().displayErrorMessage(
-							"For unit size type Count, the "
-									+ "value must be a whole number");
+					this.amount = false;
 				}
 			else
 			{
 				try
 				{
 					this.sizeValue = Float.parseFloat(getView().getSizeValue());
+					this.amount = true;
 				}
 				catch(NumberFormatException e)
 				{
-					getView().displayErrorMessage("Not a valid number");
+					this.amount = false;
 				}
 			}
 		}
+		else
+		{
+			this.amount = false;
+		}
+	}
 
-		this.shouldOKBeEnabled();
-		this.enableComponents();
+	private void setShelfLife()
+	{
+		if(!getView().getShelfLife().isEmpty()
+				&& !getView().getShelfLife().startsWith("-"))
+		{
+			try
+			{
+				float temp = Float.parseFloat(getView().getShelfLife());
+				if(temp % 1 == 0)
+				{
+					this.sizeValue = temp;
+					this.shelfLife = true;
+				}
+				else
+				{
+					this.shelfLife = false;
+				}
+			}
+			catch(NumberFormatException e)
+			{
+				this.shelfLife = false;
+			}
+		}
+		else
+		{
+			this.shelfLife = false;
+		}
+	}
+
+	private void setDescript()
+	{
+		this.descript = getView().getDescription();
+		if(this.descript.isEmpty())
+			this.descriptNotEmpty = false;
+		else
+			this.descriptNotEmpty = true;
+	}
+
+	private void setThreeMonthSupply()
+	{
+		if(!getView().getSupply().isEmpty()
+				&& !getView().getSupply().startsWith("-"))
+		{
+			try
+			{
+				float temp = Float.parseFloat(getView().getSupply());
+				if(temp % 1 == 0)
+				{
+					this.cThreeMonthSupply =
+						new CountThreeMonthSupply((int)temp);
+					this.threeMonthSupply = true;
+				}
+				else
+				{
+					this.threeMonthSupply = false;
+				}
+			}
+			catch(NumberFormatException e)
+			{
+				this.threeMonthSupply = false;
+			}
+		}
+		else
+		{
+			this.threeMonthSupply = false;
+		}
 	}
 }

@@ -22,13 +22,14 @@ public class EditProductGroupController extends Controller implements
 
 	private IProductGroup PG;
 	private SizeUnits sizeUnits = SizeUnits.Count;
-	private boolean submit = true;
+	private boolean amount = true;
+	private boolean descriptNotEmpty = true;
 	private String name = "";
 	private float value;
 	private UnitType unitType = UnitType.COUNT;
 	private Amount threeMonthSupply;
 	private IProductContainer container;
-	private boolean PGNameChanged = false;
+	private String originalName;
 
 	/**
 	 * Constructor.
@@ -44,6 +45,7 @@ public class EditProductGroupController extends Controller implements
 		this.container = PG.getContainer();
 		this.createSizeUnitsFromUnitType();
 		this.name = PG.getName();
+		this.originalName = PG.getName();
 		if(this.sizeUnits == SizeUnits.Count)
 			this.value =
 					((CountThreeMonthSupply) PG.getThreeMonthSupply())
@@ -100,7 +102,7 @@ public class EditProductGroupController extends Controller implements
 	@Override
 	protected void enableComponents()
 	{
-		this.getView().enableOK(submit);
+		this.getView().enableOK(this.shouldOKBeEnabled());
 	}
 
 	/**
@@ -143,18 +145,12 @@ public class EditProductGroupController extends Controller implements
 		this.getView().setSupplyUnit(this.sizeUnits);
 	}
 
-	private void shouldOKBeEnabled()
+	private boolean shouldOKBeEnabled()
 	{
-		if(name.isEmpty())
-			submit = false;
-		else if(this.getView().getSupplyValue().isEmpty()
-				|| getView().getSupplyValue().startsWith("-"))
-			submit = false;
-		else if(!this.container.ableToAddProductGroupNamed(getView()
-				.getProductGroupName()) && this.PGNameChanged)
-			submit = false;
-		else
-			submit = true;
+		boolean temp = true;
+		if(!this.name.equals(this.originalName))
+			temp = this.container.ableToAddProductGroupNamed(this.name);
+		return this.amount && this.descriptNotEmpty && temp;
 	}
 
 	/**
@@ -164,31 +160,56 @@ public class EditProductGroupController extends Controller implements
 	@Override
 	public void valuesChanged()
 	{
-		if(!this.name.equals(this.getView().getProductGroupName()))
-			this.PGNameChanged = true;
 		this.name = this.getView().getProductGroupName();
+		if(this.name.isEmpty())
+			this.descriptNotEmpty = false;
+		else
+			this.descriptNotEmpty = true;
 		this.sizeUnits = this.getView().getSupplyUnit();
+		this.setAmount();
+		
+		this.enableComponents();
+	}
+
+	private void setAmount()
+	{
 		if(!getView().getSupplyValue().isEmpty()
 				&& !getView().getSupplyValue().startsWith("-"))
+		{
 			if(this.sizeUnits == SizeUnits.Count)
 				try
 				{
-					this.value = Integer.parseInt(getView().getSupplyValue());
+					float temp = Float.parseFloat(getView().getSupplyValue());
+					if(temp % 1 == 0)
+					{
+						this.value = (int)temp;
+						this.amount = true;
+					}
+					else
+					{
+						this.amount = false;
+					}
 				}
 				catch(NumberFormatException e)
 				{
-					getView().displayErrorMessage(
-							"For unit size type Count, the "
-									+ "value must be a whole number");
-					int temp = (int) value;
-					getView().setSupplyValue("" + temp);
+					this.amount = false;
 				}
 			else
 			{
-				this.value = Float.parseFloat(getView().getSupplyValue());
+				try
+				{
+					this.value = Float.parseFloat(getView().getSupplyValue());
+					this.amount = true;
+				}
+				catch(NumberFormatException e)
+				{
+					this.amount = false;
+				}
 			}
-
-		this.shouldOKBeEnabled();
-		this.enableComponents();
+		}
+		else
+		{
+			this.amount = false;
+		}
 	}
 }
