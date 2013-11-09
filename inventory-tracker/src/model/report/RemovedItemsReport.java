@@ -5,16 +5,33 @@ import java.util.List;
 
 import model.RemovedItems;
 
-public class RemovedItemsReport
+public class RemovedItemsReport extends Report
 {
-	private List<RemovedItems> removedItems;
+	// Variables
+	private List<RemovedItems> removedItems = null;
+
+	// Constructor
+	public RemovedItemsReport(List<RemovedItems> items, IReportBuilder builder)
+	{
+		super(builder);
+		this.removedItems = items;;
+	}
+
+	// Methods
 
 	/**
 	 * Gets the removed items for this report
 	 */
 	public List<RemovedItems> getremovedItems()
 	{
-		//TODO
+		// TODO
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void createReport(String path)
+	{
+		// TODO Auto-generated method stub
+
 	}
 }

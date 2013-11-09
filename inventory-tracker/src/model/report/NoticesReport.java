@@ -7,9 +7,20 @@ import java.util.Map;
 import model.IProduct;
 import model.IProductContainer;
 
-public class NoticesReport
+public class NoticesReport extends Report
 {
-	private Map<IProductContainer, List<IProduct>> inconsistentGroups;
+	// Variables
+	private Map<IProductContainer, List<IProduct>> inconsistentGroups = null;
+
+	public NoticesReport(
+			Map<IProductContainer, List<IProduct>> inconsistentGroups,
+			IReportBuilder builder)
+	{
+		super(builder);
+		this.inconsistentGroups = inconsistentGroups;
+
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * Gets the inconsistent groups for this report, mapped to the offending
@@ -17,7 +28,14 @@ public class NoticesReport
 	 */
 	public Map<IProductContainer, List<IProduct>> getInconsistentGroups()
 	{
-		//TODO
+		// TODO
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void createReport(String path)
+	{
+		// TODO Auto-generated method stub
+
 	}
 }

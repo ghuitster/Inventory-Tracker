@@ -5,19 +5,21 @@ import java.util.List;
 
 import model.IItem;
 
-public class ExpItemsReport
+public class ExpItemsReport extends Report
 {
-	private List<IItem> expItems;
+	// Variables
+	private List<IItem> items = null;
 
-	/**
-	 * Gets the list of expired items represented in this report
-	 * @pre (none)
-	 * @post (none)
-	 * @return The aforementioned list
-	 */
-	public List<IItem> getExpItems()
+	// Constructor
+	public ExpItemsReport(List<IItem> items, IReportBuilder builder)
 	{
-		//TODO
-		throw new UnsupportedOperationException();
+		super(builder);
+		this.items = items;
+	}
+
+	@Override
+	public void createReport(String path)
+	{
+		// TODO Auto-generated method stub
 	}
 }
