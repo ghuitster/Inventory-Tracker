@@ -130,8 +130,14 @@ public class TransferItemBatchController extends Controller implements
 	@Override
 	public void redo()
 	{
-		// not implemented yet
-		return;
+		TransferItemCommand command = (TransferItemCommand) this.undone.pop();
+		command.execute();
+		this.done.push(command);
+		
+		ProductData[] pdArray = new ProductData[this.pdSet.size()];
+		this.getView().setProducts(this.pdSet.toArray(pdArray));
+		this.getView().setBarcode("");
+		this.enableComponents();
 	}
 
 	/**
@@ -160,8 +166,7 @@ public class TransferItemBatchController extends Controller implements
 	{
 		this.item = this.inventory.getItem(this.barcode);
 		
-		TransferItemCommand command = new TransferItemCommand();
-		command.setItem(this.item);
+		TransferItemCommand command = new TransferItemCommand(this.item, this.container, this.displayItems, this.pdSet);
 
 		if(this.item == null)
 		{
@@ -170,25 +175,10 @@ public class TransferItemBatchController extends Controller implements
 		}
 		else
 		{
-			ItemData id = (ItemData) this.item.getTag();
-			ProductData pd = (ProductData) this.item.getProduct().getTag();
-			this.pdSet.add(pd);
-
-			if(this.displayItems.containsKey(pd))
-			{
-				this.displayItems.get(pd).add(id);
-			}
-			else
-			{
-				ArrayList<ItemData> temp = new ArrayList<ItemData>();
-				temp.add(id);
-				this.displayItems.put(pd, temp);
-			}
-
-			this.item.getContainer().transferItem(this.item, this.container);
-
+			command.execute();
+			this.done.push(command);
+			
 			ProductData[] pdArray = new ProductData[this.pdSet.size()];
-
 			this.getView().setProducts(this.pdSet.toArray(pdArray));
 			this.getView().setBarcode("");
 			this.enableComponents();
@@ -203,8 +193,14 @@ public class TransferItemBatchController extends Controller implements
 	@Override
 	public void undo()
 	{
-		// not implemented yet
-		return;
+		TransferItemCommand command = (TransferItemCommand) this.done.pop();
+		command.execute();
+		this.undone.push(command);
+		
+		ProductData[] pdArray = new ProductData[this.pdSet.size()];
+		this.getView().setProducts(this.pdSet.toArray(pdArray));
+		this.getView().setBarcode("");
+		this.enableComponents();
 	}
 
 	/**

@@ -8,6 +8,7 @@ import java.util.List;
 
 import model.IItem;
 import model.IProduct;
+import model.IProductContainer;
 import model.ProductContainer;
 
 /**
@@ -18,7 +19,7 @@ public abstract class Command
 {
 	protected List<IItem> items;
 	protected List<IProduct> products;
-	protected ProductContainer target;
+	protected IProductContainer target;
 	/**
 	 * Perform the action for this command object
 	 */
