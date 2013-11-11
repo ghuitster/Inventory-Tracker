@@ -165,8 +165,6 @@ public class TransferItemBatchController extends Controller implements
 	public void transferItem()
 	{
 		this.item = this.inventory.getItem(this.barcode);
-		
-		TransferItemCommand command = new TransferItemCommand(this.item, this.container, this.displayItems, this.pdSet);
 
 		if(this.item == null)
 		{
@@ -175,6 +173,7 @@ public class TransferItemBatchController extends Controller implements
 		}
 		else
 		{
+			TransferItemCommand command = new TransferItemCommand(this.item, this.container, this.displayItems, this.pdSet);
 			command.execute();
 			this.done.push(command);
 			

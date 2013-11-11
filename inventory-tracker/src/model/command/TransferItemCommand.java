@@ -12,20 +12,21 @@ import java.util.Set;
 import model.IItem;
 import model.IProductContainer;
 
-public class TransferItemCommand extends Command
+public class TransferItemCommand extends SingleItemCommand
 {
 	private Map<ProductData, List<ItemData>> displayItems;
 	private Set<ProductData> pdSet;
-	private boolean ProductExist = false;
+	private IProductContainer ProductExistInContainer = null;
 	private IProductContainer originalContainer;
 	
 	public TransferItemCommand(IItem item, IProductContainer target, Map<ProductData, List<ItemData>> displayItems, Set<ProductData> pdSet)
 	{
-		this.items.add(item);
-		this.originalContainer = this.items.get(0).getContainer();
+		this.item = item;
+		this.originalContainer = this.item.getContainer();
 		this.target = target;
 		this.displayItems = displayItems;
 		this.pdSet = pdSet;
+		this.ProductExistInContainer = this.target.findContainer(this.item.getProduct());
 	}
 	/**
 	 * Transfer the item(s) in this object's Set of Items
@@ -33,8 +34,8 @@ public class TransferItemCommand extends Command
 	@Override
 	public void execute()
 	{
-		ItemData id = (ItemData) this.items.get(0).getTag();
-		ProductData pd = (ProductData) this.items.get(0).getProduct().getTag();
+		ItemData id = (ItemData) this.item.getTag();
+		ProductData pd = (ProductData) this.item.getProduct().getTag();
 		this.pdSet.add(pd);
 
 		if(this.displayItems.containsKey(pd))
@@ -48,7 +49,7 @@ public class TransferItemCommand extends Command
 			this.displayItems.put(pd, temp);
 		}
 
-		this.originalContainer.transferItem(this.items.get(0), this.target);
+		this.originalContainer.transferItem(this.item, this.target);
 
 	}
 
@@ -58,17 +59,17 @@ public class TransferItemCommand extends Command
 	@Override
 	public void undo()
 	{
-		ItemData id = (ItemData) this.items.get(0).getTag();
-		ProductData pd = (ProductData) this.items.get(0).getProduct().getTag();
+		ItemData id = (ItemData) this.item.getTag();
+		ProductData pd = (ProductData) this.item.getProduct().getTag();
 		this.pdSet.remove(pd);
 
 //		if(this.displayItems.containsKey(pd))
 //		{
 			this.displayItems.get(pd).remove(id);
-			if(!this.ProductExist)
+			if(this.ProductExistInContainer != null)
 			{
 				this.displayItems.remove(pd);
-				this.target.removeProduct(this.items.get(0).getProduct());
+				this.ProductExistInContainer.removeProduct(this.item.getProduct());
 			}
 //		}
 //		else
@@ -78,6 +79,6 @@ public class TransferItemCommand extends Command
 //			this.displayItems.put(pd, temp);
 //		}
 
-		this.target.transferItem(this.items.get(0), this.originalContainer);
+		this.target.transferItem(this.item, this.originalContainer);
 	}
 }
