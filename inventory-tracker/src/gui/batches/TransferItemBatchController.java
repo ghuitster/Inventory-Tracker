@@ -176,7 +176,8 @@ public class TransferItemBatchController extends Controller implements
 			TransferItemCommand command = new TransferItemCommand(this.item, this.container, this.displayItems, this.pdSet);
 			command.execute();
 			this.done.push(command);
-			
+			if(this.pdSet.size() == 0)
+				System.out.println("Well the didn't add anything");
 			ProductData[] pdArray = new ProductData[this.pdSet.size()];
 			this.getView().setProducts(this.pdSet.toArray(pdArray));
 			this.getView().setBarcode("");
