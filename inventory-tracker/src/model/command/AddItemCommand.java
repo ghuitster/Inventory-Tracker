@@ -1,9 +1,21 @@
 
 package model.command;
 
+import java.util.List;
+
+import model.IItem;
+import model.IProductContainer;
+
 public class AddItemCommand extends MultipleItemCommand
 {
-	private boolean createdProduct;
+	private final boolean productCreated;
+
+	public AddItemCommand(IProductContainer target, List<IItem> items,
+			boolean productCreated)
+	{
+		super(target, items);
+		this.productCreated = productCreated;
+	}
 
 	/**
 	 * Add the item(s) in this object's Set of Items

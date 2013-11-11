@@ -4,10 +4,6 @@
 
 package model.command;
 
-import java.util.List;
-
-import model.IItem;
-import model.IProduct;
 import model.IProductContainer;
 
 /**
@@ -16,9 +12,14 @@ import model.IProductContainer;
  */
 public abstract class Command
 {
-	protected List<IItem> items;
-	protected List<IProduct> products;
+	public Command(IProductContainer target)
+	{
+		super();
+		this.target = target;
+	}
+
 	protected IProductContainer target;
+
 	/**
 	 * Perform the action for this command object
 	 */
