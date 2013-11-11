@@ -19,10 +19,11 @@ import java.util.Stack;
 import model.BarcodeLabelPage;
 import model.IItem;
 import model.IProduct;
+import model.IProductContainer;
 import model.Inventory;
 import model.Item;
 import model.ItemBarcode;
-import model.ProductContainer;
+import model.command.AddItemCommand;
 import model.command.Command;
 import observer.DataUpdater;
 
@@ -44,7 +45,7 @@ public class AddItemBatchController extends Controller implements
 	private String barcode;
 	private final Map<ProductData, List<ItemData>> displayItems;
 	private final List<ProductData> displayProducts;
-	private final List<IItem> items;
+	private List<IItem> items;
 	private final Stack<Command> executedActions;
 	private final Stack<Command> undoneActions;
 
@@ -144,16 +145,14 @@ public class AddItemBatchController extends Controller implements
 
 		addItems(addingProduct, addingProductData);
 
-		if(((ProductContainer) target.getTag())
-				.ableToAddProduct(AddItemBatchController.product))
-			((ProductContainer) target.getTag())
-					.addProduct(AddItemBatchController.product);
+		Command command =
+				new AddItemCommand((IProductContainer) target.getTag(), items,
+						productExistsInSystem);
+		((AddItemCommand) command).execute();
 
-		for(IItem ii: items)
-			if(((ProductContainer) target.getTag()).ableToAddItem(ii))
-				((ProductContainer) target.getTag()).addItem(ii);
+		executedActions.push(command);
 
-		items.clear();
+		items = new ArrayList<IItem>();
 
 		initializeValues();
 		loadValues();
@@ -304,8 +303,8 @@ public class AddItemBatchController extends Controller implements
 		else
 			getView().enableItemAction(false);
 
-		getView().enableUndo(false);
-		getView().enableRedo(false);
+		getView().enableUndo(!executedActions.isEmpty());
+		getView().enableRedo(!undoneActions.isEmpty());
 
 	}
 

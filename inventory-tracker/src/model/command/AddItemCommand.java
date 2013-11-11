@@ -1,6 +1,8 @@
 
 package model.command;
 
+import gui.batches.AddItemBatchController;
+
 import java.util.List;
 
 import model.IItem;
@@ -23,8 +25,12 @@ public class AddItemCommand extends MultipleItemCommand
 	@Override
 	public void execute()
 	{
-		// TODO Auto-generated method stub
+		if(target.ableToAddProduct(AddItemBatchController.product))
+			target.addProduct(AddItemBatchController.product);
 
+		for(IItem ii: items)
+			if(target.ableToAddItem(ii))
+				target.addItem(ii);
 	}
 
 	/**
