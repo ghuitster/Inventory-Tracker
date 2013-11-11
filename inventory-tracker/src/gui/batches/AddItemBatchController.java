@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import model.BarcodeLabelPage;
 import model.IItem;
@@ -22,6 +23,7 @@ import model.Inventory;
 import model.Item;
 import model.ItemBarcode;
 import model.ProductContainer;
+import model.command.Command;
 import observer.DataUpdater;
 
 import com.itextpdf.text.DocumentException;
@@ -44,6 +46,8 @@ public class AddItemBatchController extends Controller implements
 	private final List<ProductData> displayProducts;
 	private final List<IItem> items;
 	private final List<IProduct> products;
+	private final Stack<Command> executedActions;
+	private final Stack<Command> undoneActions;
 
 	public static IProduct product;
 
@@ -66,6 +70,8 @@ public class AddItemBatchController extends Controller implements
 		items = new ArrayList<IItem>();
 		products = new ArrayList<IProduct>();
 		product = null;
+		executedActions = new Stack<Command>();
+		undoneActions = new Stack<Command>();
 
 		construct();
 	}
@@ -137,6 +143,17 @@ public class AddItemBatchController extends Controller implements
 		}
 
 		addItems(addingProduct, addingProductData);
+
+		for(IProduct ip: products)
+			if(((ProductContainer) target.getTag()).ableToAddProduct(ip))
+				((ProductContainer) target.getTag()).addProduct(ip);
+
+		for(IItem ii: items)
+			if(((ProductContainer) target.getTag()).ableToAddItem(ii))
+				((ProductContainer) target.getTag()).addItem(ii);
+
+		products.clear();
+		items.clear();
 
 		initializeValues();
 		loadValues();
@@ -240,19 +257,17 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void done()
 	{
-		if(products.isEmpty() || items.isEmpty())
+		if(displayProducts.isEmpty() || displayProducts.isEmpty())
 		{
 			getView().close();
 			return;
 		}
 
-		for(IProduct ip: products)
-			if(((ProductContainer) target.getTag()).ableToAddProduct(ip))
-				((ProductContainer) target.getTag()).addProduct(ip);
+		List<IItem> items = new ArrayList<IItem>();
 
-		for(IItem ii: items)
-			if(((ProductContainer) target.getTag()).ableToAddItem(ii))
-				((ProductContainer) target.getTag()).addItem(ii);
+		for(ProductData productData: displayProducts)
+			for(ItemData itemData: displayItems.get(productData))
+				items.add((IItem) itemData.getTag());
 
 		BarcodeLabelPage printer = new BarcodeLabelPage(items);
 		try
