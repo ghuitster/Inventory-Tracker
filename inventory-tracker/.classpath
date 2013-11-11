@@ -13,5 +13,10 @@
 	<classpathentry kind="lib" path="lib/sqlitejdbc-v056/sqlitejdbc-v056.jar"/>
 	<classpathentry kind="lib" path="lib/cobertura-1.9.4.1/cobertura.jar"/>
 	<classpathentry kind="lib" path="lib/tools.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Michael/repositories/Inventory-Tracker/inventory-tracker/lib/commons-lang3-3.1/commons-lang3-3.1.jar" sourcepath="lib/commons-lang3-3.1/commons-lang3-3.1-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/Users/Michael/repositories/Inventory-Tracker/inventory-tracker/lib/commons-lang3-3.1/commons-lang3-3.1-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
