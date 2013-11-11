@@ -9,7 +9,6 @@ import java.util.List;
 import model.IItem;
 import model.IProduct;
 import model.IProductContainer;
-import model.ProductContainer;
 
 /**
  * An abstract public class to represent a Command
