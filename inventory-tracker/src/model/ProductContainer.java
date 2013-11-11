@@ -10,6 +10,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import model.visitor.IVisitor;
+
 /**
  * A class to represent a product container
  * @author David
@@ -409,5 +411,23 @@ public abstract class ProductContainer extends Observable implements
 
 		for(IItem itemToAdd: itemsToAdd)
 			targetContainer.addItem(itemToAdd);
+	}
+	
+	void visitChildren(IVisitor visitor)
+	{
+		for(IProduct product : this.products)
+		{
+			visitor.visitProduct(product);
+		}
+		
+		for(IItem item : this.items)
+		{
+			visitor.visitItem(item);
+		}
+		
+		for(IProductGroup group : this.productGroups)
+		{
+			group.traverse(visitor);
+		}
 	}
 }

@@ -1,6 +1,8 @@
 
 package model;
 
+import model.visitor.IVisitor;
+
 /**
  * A class to represent a ProductGroup
  * @author David
@@ -130,5 +132,13 @@ public class ProductGroup extends ProductContainer implements IProductGroup
 	{
 		return "ProductGroup [container=" + this.container
 				+ ", threeMonthSupply=" + this.threeMonthSupply + "]";
+	}
+
+	@Override
+	public void traverse(IVisitor visitor)
+	{
+		visitor.visitProductGroup(this);
+		super.visitChildren(visitor);
+		
 	}
 }

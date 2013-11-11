@@ -3,6 +3,8 @@ package model;
 
 import java.util.SortedSet;
 
+import model.visitor.IVisitor;
+
 public interface IProductContainer extends IObservable, ITaggable,
 		Comparable<IProductContainer>
 {
@@ -155,5 +157,7 @@ public interface IProductContainer extends IObservable, ITaggable,
 	 */
 	public abstract void transferItem(IItem item,
 			IProductContainer targetContainer);
+	
+	public void traverse(IVisitor visitor);
 
 }

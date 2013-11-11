@@ -3,6 +3,7 @@ package model;
 
 import java.io.Serializable;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,8 +17,10 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import model.exception.InvalidNameException;
+import model.visitor.ExpiredItemVisitor;
 import model.visitor.IVisitor;
-
+import model.visitor.ItemVisitor;
+import model.visitor.ProductVisitor;
 import common.util.DateUtils;
 
 /**
@@ -63,7 +66,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	/**
 	 * Mapping of all removed Items, for easy retrieval
 	 */
-	private final SortedMap<Date, Set<IItem>> removedItems;
+	private final SortedSet<IItem> removedItems;
 
 	/**
 	 * Record of orphaned products
@@ -104,7 +107,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	{
 		this.storageUnits = new HashSet<IStorageUnit>();
 		this.persistence = new Serializer("./data.inventory");
-		this.removedItems = new TreeMap<Date, Set<IItem>>();
+		this.removedItems = new TreeSet<IItem>(new RemovedItemComparator());
 		this.removedProducts = new TreeSet<IProduct>();
 		this.nMonthSupplyMap = new TreeMap<Date, Set<IProduct>>();
 		this.nMonthSupplyGroupMap = new TreeMap<Date, Set<IProductGroup>>();
@@ -155,9 +158,9 @@ public class Inventory extends Observable implements IInventory, Serializable
 	@Override
 	public boolean ableToRemoveStorageUnit(IStorageUnit storageUnit)
 	{
-		HashSet<IProduct> products = new HashSet<IProduct>();
-		recurseProductContainerForProducts(storageUnit, products);
-		return products.size() == 0;
+		ProductVisitor visitor = new ProductVisitor();
+		storageUnit.traverse(visitor);
+		return visitor.getResults().size() == 0;
 	}
 
 	/*
@@ -188,12 +191,9 @@ public class Inventory extends Observable implements IInventory, Serializable
 	@Override
 	public SortedSet<IItem> getAllItems(IProduct product)
 	{
-		SortedSet<IItem> items = new TreeSet<IItem>();
-		for(IStorageUnit unit: this.storageUnits)
-		{
-			recurseProductContainerForItems(unit, items, product);
-		}
-		return items;
+		ItemVisitor visitor = new ItemVisitor(product);
+		this.traverse(visitor);
+		return visitor.getResults();
 	}
 
 	/*
@@ -204,13 +204,9 @@ public class Inventory extends Observable implements IInventory, Serializable
 	@Override
 	public SortedSet<IProduct> getAllProducts()
 	{
-		SortedSet<IProduct> products = new TreeSet<IProduct>();
-		for(IStorageUnit unit: this.storageUnits)
-		{
-			recurseProductContainerForProducts(unit, products);
-		}
-		products.addAll(this.removedProducts);
-		return products;
+		ProductVisitor visitor = new ProductVisitor();
+		this.traverse(visitor);
+		return visitor.getResults(); 
 	}
 
 	/*
@@ -227,8 +223,9 @@ public class Inventory extends Observable implements IInventory, Serializable
 	@Override
 	public List<IItem> getExpiredItems()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		ExpiredItemVisitor visitor = new ExpiredItemVisitor();
+		this.traverse(visitor);
+		return visitor.getResult();
 	}
 
 	@Override
@@ -272,28 +269,6 @@ public class Inventory extends Observable implements IInventory, Serializable
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.IInventory#getNMonthSupplyGroupMap()
-	 */
-	@Override
-	public SortedMap<Date, Set<IProductGroup>> getNMonthSupplyGroupMap()
-	{
-		return new TreeMap<Date, Set<IProductGroup>>(this.nMonthSupplyGroupMap);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.IInventory#getNMonthSupplyMap()
-	 */
-	@Override
-	public SortedMap<Date, Set<IProduct>> getNMonthSupplyMap()
-	{
-		return new TreeMap<Date, Set<IProduct>>(this.nMonthSupplyMap);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see model.IInventory#getPersistence()
 	 */
 	@Override
@@ -309,22 +284,44 @@ public class Inventory extends Observable implements IInventory, Serializable
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.IInventory#getRemovedItems()
-	 */
-	@Override
-	public SortedMap<Date, Set<IItem>> getRemovedItems()
-	{
-		return new TreeMap<Date, Set<IItem>>(this.removedItems);
-	}
 
 	@Override
-	public List<RemovedItems> getRemovedItems(Date since)
+	public SortedSet<RemovedItems> getRemovedItems(Date since)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		SortedSet<RemovedItems> results = new TreeSet<RemovedItems>();
+		
+		for(IItem item : this.removedItems)
+		{
+			if(item.getExitTime().compareTo(since) < 0)
+				break;
+			
+			RemovedItems result = null;
+			boolean found = false;
+			for(RemovedItems existingResult : results)
+			{
+				if(existingResult.getProduct() == item.getProduct())
+				{
+					result = existingResult;
+					found = true;
+					break;
+				}
+			}
+			
+			if(!found)
+			{
+				result = new RemovedItems(item.getProduct());
+				
+				ItemVisitor currentFinder = new ItemVisitor(item.getProduct());
+				this.traverse(currentFinder);
+				result.setSupply(currentFinder.getResults().size());
+				
+			}
+			
+			result.setCount(result.getCount() + 1);
+			
+		}
+		
+		return results;
 	}
 
 	/**
@@ -334,39 +331,6 @@ public class Inventory extends Observable implements IInventory, Serializable
 	public long getUniqueBarCode()
 	{
 		return lastGeneratedBarCode++;
-	}
-
-	private void recurseProductContainerForItems(IProductContainer container,
-			Set<IItem> workingSet, IProduct filter)
-	{
-		for(IItem item: container.getAllItems())
-		{
-			if(filter == null || item.getProduct() == filter)
-				workingSet.add(item);
-		}
-		for(IProductContainer subContainer: container.getAllProductGroups())
-		{
-			recurseProductContainerForItems(subContainer, workingSet, filter);
-		}
-	}
-
-	/**
-	 * Adds all products from a container to the working set and recurses the
-	 * sub-containers
-	 * @param container The container to add the products from and recurse the
-	 *            children of
-	 * @pre workingSet is not null
-	 * @post workingSet contains all products from container and its children
-	 * @param workingSet The current set being built
-	 */
-	private void recurseProductContainerForProducts(
-			IProductContainer container, Set<IProduct> workingSet)
-	{
-		workingSet.addAll(container.getAllProducts());
-		for(IProductContainer subContainer: container.getAllProductGroups())
-		{
-			recurseProductContainerForProducts(subContainer, workingSet);
-		}
 	}
 
 	/*
@@ -426,20 +390,10 @@ public class Inventory extends Observable implements IInventory, Serializable
 	 */
 	private void reportRemovedItem(IItem item)
 	{
-		Date current = DateUtils.currentDate();
-		item.setExitTime(current);
+		item.setExitTime(DateUtils.currentDate());
 		item.setContainer(null);
-
-		Date month = new Date(current.getYear(), current.getMonth(), 0);
-
-		Set<IItem> itemsForMonth;
-		if(removedItems.containsKey(month))
-			itemsForMonth = removedItems.get(month);
-		else
-			itemsForMonth = new HashSet<IItem>();
-		itemsForMonth.add(item);
-
-		this.removedItems.put(month, itemsForMonth);
+		
+		this.removedItems.add(item);
 	}
 
 	/**
@@ -464,7 +418,10 @@ public class Inventory extends Observable implements IInventory, Serializable
 	@Override
 	public void traverse(IVisitor visitor)
 	{
-
+		for(IStorageUnit unit : this.storageUnits)
+		{
+			unit.traverse(visitor);
+		}
 	}
 
 	@Override

@@ -6,7 +6,7 @@ package model;
  * @author Brian
  * 
  */
-public class RemovedItems
+public class RemovedItems implements Comparable<RemovedItems>
 {
 	private IProduct product;
 
@@ -41,5 +41,11 @@ public class RemovedItems
 	public void setSupply(int supply)
 	{
 		this.supply = supply;
+	}
+	
+	public int compareTo(RemovedItems other)
+	{
+		return this.getProduct().getDescription().getDescription()
+				.compareTo(other.getProduct().getDescription().getDescription());
 	}
 }

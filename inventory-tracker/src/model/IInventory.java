@@ -125,28 +125,6 @@ public interface IInventory extends Observer, IObservable
 	List<ProductSupply> getLowProductSupplies(int months);
 
 	/**
-	 * Gets a map of Dates (each of which represents a specific month) mapped to
-	 * what ProductGroups' three month supplies expire in the key's month
-	 * @pre (none)
-	 * @post A map has been created with the aforementioned properties. This map
-	 *       may be empty.
-	 * @return A copy of the map containing months correlated to what
-	 *         ProductGroups' three month supplies expire on that month
-	 */
-	SortedMap<Date, Set<IProductGroup>> getNMonthSupplyGroupMap();
-
-	/**
-	 * Gets a map of Dates (each of which represents a specific month) mapped to
-	 * what Products' three month supplies expire in the key's month
-	 * @pre (none)
-	 * @post A map has been created with the aforementioned properties. This map
-	 *       may be empty.
-	 * @return A copy of the map containing months correlated to what products'
-	 *         three month supplies expire on that month
-	 */
-	SortedMap<Date, Set<IProduct>> getNMonthSupplyMap();
-
-	/**
 	 * Gets the persistence object for saving and loading data to this object
 	 * @return An object capable of saving and loading this object's state
 	 */
@@ -163,23 +141,13 @@ public interface IInventory extends Observer, IObservable
 	List<ProductStats> getProductStats(Date since);
 
 	/**
-	 * Gets a map of Dates to what items were removed on each date
-	 * @pre (none)
-	 * @post A map has been created with the aforementioned properties. This map
-	 *       may be empty.
-	 * @return A copy of the map containing all item removal dates mapped to the
-	 *         items removed.
-	 */
-	SortedMap<Date, Set<IItem>> getRemovedItems();
-
-	/**
 	 * Gets all items which were removed since the passed date
 	 * @param since The cutoff date
 	 * @pre none
 	 * @post none
 	 * @return A list which describes which items were removed and how many
 	 */
-	List<RemovedItems> getRemovedItems(Date since);
+	SortedSet<RemovedItems> getRemovedItems(Date since);
 
 	/**
 	 * Clears all Storage Units from the system
