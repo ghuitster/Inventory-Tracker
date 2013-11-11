@@ -1,7 +1,7 @@
 
 package model.command;
 
-public class AddItemCommand extends MultiplyItemCommand
+public class AddItemCommand extends MultipleItemCommand
 {
 	/**
 	 * Add the item(s) in this object's Set of Items
