@@ -392,8 +392,15 @@ public class Inventory extends Observable implements IInventory, Serializable
 	{
 		item.setExitTime(DateUtils.currentDate());
 		item.setContainer(null);
-		
 		this.removedItems.add(item);
+		this.barcodeItems.remove(item.getBarcode().toString());
+	}
+	
+	private void reportAddedItem(IItem item)
+	{
+		item.setExitTime(null);
+		this.removedItems.remove(item);
+		this.barcodeItems.put(item.getBarcode().toString(), item);
 	}
 
 	/**
@@ -434,11 +441,10 @@ public class Inventory extends Observable implements IInventory, Serializable
 			if(obsArg.getUpdateType() == UpdateType.REMOVED)
 			{
 				this.reportRemovedItem(item);
-				this.barcodeItems.remove(item.getBarcode().toString());
 			}
 			else if(obsArg.getUpdateType() == UpdateType.ADDED)
 			{
-				this.barcodeItems.put(item.getBarcode().toString(), item);
+				this.reportAddedItem(item);
 			}
 		}
 		else if(obsArg.getChangedObj() instanceof IProduct)
