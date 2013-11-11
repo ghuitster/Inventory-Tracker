@@ -21,9 +21,8 @@ public class TransferItemCommand extends SingleItemCommand
 	
 	public TransferItemCommand(IItem item, IProductContainer target, Map<ProductData, List<ItemData>> displayItems, Set<ProductData> pdSet)
 	{
-		this.item = item;
+		super(target, item);
 		this.originalContainer = this.item.getContainer();
-		this.target = target;
 		this.displayItems = displayItems;
 		this.pdSet = pdSet;
 		this.ProductExistInContainer = this.target.findContainer(this.item.getProduct());
@@ -66,10 +65,10 @@ public class TransferItemCommand extends SingleItemCommand
 //		if(this.displayItems.containsKey(pd))
 //		{
 			this.displayItems.get(pd).remove(id);
-			if(this.ProductExistInContainer != null)
+			if(this.ProductExistInContainer == null)
 			{
 				this.displayItems.remove(pd);
-				this.ProductExistInContainer.removeProduct(this.item.getProduct());
+				this.target.removeProduct(this.item.getProduct());
 			}
 //		}
 //		else

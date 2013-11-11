@@ -197,13 +197,17 @@ public class TransferItemBatchController extends Controller implements
 	public void undo()
 	{
 		TransferItemCommand command = (TransferItemCommand) this.done.pop();
-		command.execute();
+		command.undo();
 		this.undone.push(command);
 		
 		ProductData[] pdArray = new ProductData[this.pdSet.size()];
 		this.getView().setProducts(this.pdSet.toArray(pdArray));
 		this.getView().setBarcode("");
 		this.enableComponents();
+		if(getView().getSelectedProduct() == null)
+			this.getView().setItems(new ItemData[0]);
+		else
+			this.selectedProductChanged();
 	}
 
 	/**
