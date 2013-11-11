@@ -388,7 +388,7 @@ public abstract class ProductContainer extends Observable implements
 			IProductContainer existing =
 					targetContainer.getStorageUnit().findContainer(
 							item.getProduct());
-			if(existing != null)
+			if(existing != null && existing != targetContainer)
 			{
 				Set<IItem> toMove = new HashSet<IItem>();
 
@@ -397,10 +397,10 @@ public abstract class ProductContainer extends Observable implements
 						toMove.add(otherItem);
 
 				for(IItem otherItem: toMove)
-				{
 					existing.removeItem(otherItem);
+				
+				for(IItem otherItem: toMove)
 					targetContainer.addItem(otherItem);
-				}
 
 				existing.removeProduct(item.getProduct());
 			}
