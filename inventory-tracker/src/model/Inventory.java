@@ -73,19 +73,6 @@ public class Inventory extends Observable implements IInventory, Serializable
 	 */
 	private final SortedSet<IProduct> removedProducts;
 	/**
-	 * Mapping for the nMonthSupply report. The Date key represents a month. The
-	 * corresponding products are those which will last up to the key's month
-	 */
-	private final SortedMap<Date, Set<IProduct>> nMonthSupplyMap;
-
-	/**
-	 * Date Mapping for the nMonthSupply report. The Date key represents a
-	 * month. The corresponding ProductGroups are those which will last up to
-	 * the key's month
-	 */
-	private final SortedMap<Date, Set<IProductGroup>> nMonthSupplyGroupMap;
-
-	/**
 	 * Static reference to the one and only Inventory instance
 	 */
 	private static Inventory instance;
@@ -109,8 +96,6 @@ public class Inventory extends Observable implements IInventory, Serializable
 		this.persistence = new Serializer("./data.inventory");
 		this.removedItems = new TreeSet<IItem>(new RemovedItemComparator());
 		this.removedProducts = new TreeSet<IProduct>();
-		this.nMonthSupplyMap = new TreeMap<Date, Set<IProduct>>();
-		this.nMonthSupplyGroupMap = new TreeMap<Date, Set<IProductGroup>>();
 		this.barcodeItems = new HashMap<String, IItem>();
 		this.lastGeneratedBarCode = 400000000000l;
 	}
