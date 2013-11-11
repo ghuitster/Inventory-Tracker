@@ -45,7 +45,6 @@ public class AddItemBatchController extends Controller implements
 	private final Map<ProductData, List<ItemData>> displayItems;
 	private final List<ProductData> displayProducts;
 	private final List<IItem> items;
-	private final List<IProduct> products;
 	private final Stack<Command> executedActions;
 	private final Stack<Command> undoneActions;
 
@@ -68,7 +67,6 @@ public class AddItemBatchController extends Controller implements
 		displayItems = new HashMap<ProductData, List<ItemData>>();
 		displayProducts = new ArrayList<ProductData>();
 		items = new ArrayList<IItem>();
-		products = new ArrayList<IProduct>();
 		product = null;
 		executedActions = new Stack<Command>();
 		undoneActions = new Stack<Command>();
@@ -116,7 +114,8 @@ public class AddItemBatchController extends Controller implements
 				addingProductData =
 						DataUpdater.createProductData(addingProduct);
 				addingProductData.setCount(count + "");
-				addProductAndProductData(addingProduct, addingProductData);
+				displayProducts.add(addingProductData);
+				AddItemBatchController.product = addingProduct;
 			}
 		}
 		else
@@ -138,21 +137,22 @@ public class AddItemBatchController extends Controller implements
 				addingProductData =
 						DataUpdater.createProductData(addingProduct);
 				addingProductData.setCount(count + "");
-				addProductAndProductData(addingProduct, addingProductData);
+				displayProducts.add(addingProductData);
+				AddItemBatchController.product = addingProduct;
 			}
 		}
 
 		addItems(addingProduct, addingProductData);
 
-		for(IProduct ip: products)
-			if(((ProductContainer) target.getTag()).ableToAddProduct(ip))
-				((ProductContainer) target.getTag()).addProduct(ip);
+		if(((ProductContainer) target.getTag())
+				.ableToAddProduct(AddItemBatchController.product))
+			((ProductContainer) target.getTag())
+					.addProduct(AddItemBatchController.product);
 
 		for(IItem ii: items)
 			if(((ProductContainer) target.getTag()).ableToAddItem(ii))
 				((ProductContainer) target.getTag()).addItem(ii);
 
-		products.clear();
 		items.clear();
 
 		initializeValues();
@@ -189,13 +189,6 @@ public class AddItemBatchController extends Controller implements
 
 			addItemData(productData, addingItemData);
 		}
-	}
-
-	private void addProductAndProductData(IProduct addingProduct,
-			ProductData addingProductData)
-	{
-		displayProducts.add(addingProductData);
-		products.add(addingProduct);
 	}
 
 	/**
@@ -257,12 +250,19 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void done()
 	{
-		if(displayProducts.isEmpty() || displayProducts.isEmpty())
+		if(displayProducts.isEmpty() || displayItems.isEmpty())
 		{
 			getView().close();
 			return;
 		}
 
+		printBarcodes();
+
+		getView().close();
+	}
+
+	private void printBarcodes()
+	{
 		List<IItem> items = new ArrayList<IItem>();
 
 		for(ProductData productData: displayProducts)
@@ -284,8 +284,6 @@ public class AddItemBatchController extends Controller implements
 			getView().displayErrorMessage(
 					"There was a barcode label creation error");
 		}
-
-		getView().close();
 	}
 
 	/**

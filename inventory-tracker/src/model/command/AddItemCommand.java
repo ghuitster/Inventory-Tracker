@@ -3,6 +3,8 @@ package model.command;
 
 public class AddItemCommand extends MultipleItemCommand
 {
+	private boolean createdProduct;
+
 	/**
 	 * Add the item(s) in this object's Set of Items
 	 */
