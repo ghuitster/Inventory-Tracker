@@ -22,4 +22,9 @@ public abstract class MultipleItemCommand extends Command
 	@Override
 	protected abstract void undo();
 
+	public List<IItem> getItems()
+	{
+		return items;
+	}
+
 }

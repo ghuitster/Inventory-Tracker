@@ -25,6 +25,7 @@ import model.Item;
 import model.ItemBarcode;
 import model.command.AddItemCommand;
 import model.command.Command;
+import model.command.MultipleItemCommand;
 import observer.DataUpdater;
 
 import com.itextpdf.text.DocumentException;
@@ -264,9 +265,9 @@ public class AddItemBatchController extends Controller implements
 	{
 		List<IItem> items = new ArrayList<IItem>();
 
-		for(ProductData productData: displayProducts)
-			for(ItemData itemData: displayItems.get(productData))
-				items.add((IItem) itemData.getTag());
+		for(Command command: executedActions)
+			for(IItem item: ((MultipleItemCommand) command).getItems())
+				items.add(item);
 
 		BarcodeLabelPage printer = new BarcodeLabelPage(items);
 		try
