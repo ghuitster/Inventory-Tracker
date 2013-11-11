@@ -35,8 +35,8 @@ public class TransferItemBatchController extends Controller implements
 	private final IInventory inventory = Inventory.getInstance();
 	private IItem item = null;
 	private IProductContainer container = null;
-	private Stack<Command> done = new Stack<Command>();
-	private Stack<Command> undone = new Stack<Command>();
+	private Stack<Command> done;
+	private Stack<Command> undone;
 
 	/**
 	 * Constructor.
@@ -53,6 +53,9 @@ public class TransferItemBatchController extends Controller implements
 		this.displayItems = new HashMap<ProductData, List<ItemData>>();
 		this.pdSet = new HashSet<ProductData>();
 		this.container = (IProductContainer) target.getTag();
+		
+		done = new Stack<Command>();
+		undone = new Stack<Command>();
 
 		construct();
 	}

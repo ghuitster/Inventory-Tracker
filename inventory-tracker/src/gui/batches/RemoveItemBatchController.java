@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import model.IItem;
 import model.IProduct;
 import model.Inventory;
+import model.command.Command;
 import observer.DataUpdater;
 
 /**
@@ -27,6 +29,8 @@ public class RemoveItemBatchController extends Controller implements
 	private final Map<ProductData, List<ItemData>> displayItems;
 	private final List<ProductData> displayProducts;
 	private final List<IItem> items;
+	private Stack<Command> done;
+	private Stack<Command> undone;
 
 	/**
 	 * Constructor.
@@ -41,6 +45,9 @@ public class RemoveItemBatchController extends Controller implements
 		displayItems = new HashMap<ProductData, List<ItemData>>();
 		displayProducts = new ArrayList<ProductData>();
 		items = new ArrayList<IItem>();
+		
+		this.done = new Stack<Command>();
+		this.undone = new Stack<Command>();
 
 		construct();
 	}
@@ -79,13 +86,6 @@ public class RemoveItemBatchController extends Controller implements
 	@Override
 	public void done()
 	{
-		if(items.isEmpty())
-			getView().close();
-
-		for(IItem ii: items)
-			if(ii.getContainer().ableToRemoveItem(ii))
-				ii.getContainer().removeItem(ii);
-
 		getView().close();
 	}
 
@@ -102,8 +102,8 @@ public class RemoveItemBatchController extends Controller implements
 	@Override
 	protected void enableComponents()
 	{
-		getView().enableRedo(false);
-		getView().enableUndo(false);
+		getView().enableRedo(!this.undone.isEmpty());
+		getView().enableUndo(!this.done.isEmpty());
 		getView().enableItemAction(!barcode.isEmpty());
 	}
 
@@ -173,7 +173,12 @@ public class RemoveItemBatchController extends Controller implements
 		displayProducts.add(removingProductData);
 		items.add(removingItem);
 		addItems(removingProductData, removingItemData);
-
+		
+		for(IItem ii: items)
+			if(ii.getContainer().ableToRemoveItem(ii))
+				ii.getContainer().removeItem(ii);
+		items.clear();
+		
 		ProductData[] temp = new ProductData[displayProducts.size()];
 		getView().setProducts(displayProducts.toArray(temp));
 		barcode = "";
