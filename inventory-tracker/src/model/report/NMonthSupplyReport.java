@@ -28,7 +28,6 @@ public class NMonthSupplyReport extends Report
 	 */
 	public List<ProductGroupSupply> getProductGroupSupplyInfo()
 	{
-		// TODO
 		throw new UnsupportedOperationException();
 	}
 
@@ -37,14 +36,13 @@ public class NMonthSupplyReport extends Report
 	 */
 	public List<ProductSupply> getProductSupplyInfo()
 	{
-		// TODO
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void createReport()
 	{
-		// TODO Auto-generated method stub
-
+		String title = "-Month Supply Report";
+		this.builder.buildHead(title);
 	}
 }
