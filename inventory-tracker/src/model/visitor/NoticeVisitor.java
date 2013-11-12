@@ -6,11 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import common.UnitUtils;
+
 import model.IItem;
 import model.IProduct;
 import model.IProductContainer;
 import model.IProductGroup;
 import model.IStorageUnit;
+import model.UnitType;
 
 /**
  * Visitor which searches for product groups with inconsistent products
@@ -68,8 +71,14 @@ public class NoticeVisitor implements IVisitor
 	{
 		 for(IProduct product : group.getAllProducts())
 		 {
-			 if(product.getThreeMonthSupply().getUnitType() != 
-					 group.getThreeMonthSupply().getUnitType())
+			 UnitType productUnit = product.getThreeMonthSupply().getUnitType();
+			 UnitType groupUnit = group.getThreeMonthSupply().getUnitType();
+			 
+			 if((productUnit == UnitType.COUNT && groupUnit != UnitType.COUNT) ||
+					 (UnitUtils.UnitTypeIsVolume(productUnit) &&
+					 !UnitUtils.UnitTypeIsVolume(groupUnit)) ||
+					 (UnitUtils.UnitTypeIsWeight(productUnit) &&
+					 !UnitUtils.UnitTypeIsWeight(groupUnit)))
 			 {
 				 List<IProduct> productList;
 				 if(result.containsKey(group))

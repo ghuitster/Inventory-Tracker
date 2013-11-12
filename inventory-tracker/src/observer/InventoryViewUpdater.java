@@ -116,8 +116,8 @@ public class InventoryViewUpdater
 				
 				for(IItem item : this.inventory.getAllItems(product))
 				{
-					Date expiration = item.getExpirationDate();
-					expiration.setMonth(item.getExpirationDate().getMonth() + 
+					Date expiration = (Date)item.getEntryDate().clone();
+					expiration.setMonth(expiration.getMonth() + 
 							item.getProduct().getShelfLife());
 							
 					item.setExpirationDate(expiration);
