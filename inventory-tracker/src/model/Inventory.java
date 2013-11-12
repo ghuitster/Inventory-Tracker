@@ -264,13 +264,12 @@ public class Inventory extends Observable implements IInventory, Serializable
 		List<ProductStats> stats = new ArrayList<ProductStats>();
 		for(IProduct product : this.getAllProducts())
 		{
-			Set<IItem> items = this.getAllItems(product);
+			SortedSet<IItem> items = this.getAllItems(product);
 			for(IItem item : this.removedItems)
 			{
 				if(item.getProduct() == product)
 					items.add(item);
 			}
-			
 			
 			
 		}
@@ -308,6 +307,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 				ItemVisitor currentFinder = new ItemVisitor(item.getProduct());
 				this.traverse(currentFinder);
 				result.setSupply(currentFinder.getResults().size());
+				results.add(result);
 				
 			}
 			
