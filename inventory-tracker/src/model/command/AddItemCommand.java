@@ -39,7 +39,7 @@ public class AddItemCommand extends MultipleItemCommand
 	@Override
 	public void undo()
 	{
-		// TODO Auto-generated method stub
-
+		for(IItem ii: items)
+			target.removeItem(ii);
 	}
 }
