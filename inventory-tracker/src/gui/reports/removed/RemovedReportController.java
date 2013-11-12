@@ -1,6 +1,10 @@
 
 package gui.reports.removed;
 
+import gui.common.Controller;
+import gui.common.FileFormat;
+import gui.common.IView;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,7 +13,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import model.IItem;
 import model.Inventory;
 import model.RemovedItems;
 import model.report.HTMLReportBuilder;
@@ -17,9 +20,6 @@ import model.report.IReportBuilder;
 import model.report.PDFReportBuilder;
 import model.report.RemovedItemsReport;
 import model.report.Report;
-import gui.common.Controller;
-import gui.common.FileFormat;
-import gui.common.IView;
 
 /**
  * Controller class for the removed items report view.
@@ -31,10 +31,10 @@ public class RemovedReportController extends Controller implements
 	private boolean sinceLastReport;
 	private boolean sinceDate;
 	private boolean sinceDateValue;
-	private boolean submit;
-	private Date reportFromLastdate;
+	private boolean submit = false;
+	private Date reportFromLastdate = null;
 	private Date date;
-	
+
 	/**
 	 * Constructor.
 	 * 
@@ -43,9 +43,10 @@ public class RemovedReportController extends Controller implements
 	public RemovedReportController(IView view)
 	{
 		super(view);
-		
-		this.reportFromLastdate = Inventory.getInstance().getLastRemovedItemReportTime();
-		
+
+		this.reportFromLastdate =
+				Inventory.getInstance().getLastRemovedItemReportTime();
+
 		if(this.reportFromLastdate == null)
 		{
 			this.sinceLastReport = false;
@@ -58,7 +59,7 @@ public class RemovedReportController extends Controller implements
 			this.sinceDate = true;
 			this.sinceDateValue = false;
 		}
-		
+
 		this.submit = true;
 
 		construct();
@@ -75,7 +76,10 @@ public class RemovedReportController extends Controller implements
 	@Override
 	public void display()
 	{
-		Set<RemovedItems> removedItems = Inventory.getInstance().getRemovedItems(date);
+		System.out.println(date);
+		Set<RemovedItems> removedItems =
+				Inventory.getInstance().getRemovedItems(date);
+		System.out.println("removed Items set: " + removedItems);
 		IReportBuilder builder = null;
 		String fileType = "";
 		if(this.getView().getFormat() == FileFormat.PDF)
@@ -90,18 +94,18 @@ public class RemovedReportController extends Controller implements
 		}
 		List<RemovedItems> temp = new ArrayList<RemovedItems>(removedItems);
 		Report report = new RemovedItemsReport(temp, this.date, builder);
-		
+
 		report.createReport(this.makePath(fileType));
 	}
-	
+
 	private String makePath(String fileType)
 	{
-		  String timeStamp =
-				  new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar
-				  .getInstance().getTime());
-		  String filename =
-				  "Reports" + File.separator + "RemovedItemsReport-" + timeStamp
-				  + fileType;
+		String timeStamp =
+				new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar
+						.getInstance().getTime());
+		String filename =
+				"Reports" + File.separator + "RemovedItemsReport-" + timeStamp
+						+ fileType;
 		return filename;
 	}
 
@@ -184,7 +188,7 @@ public class RemovedReportController extends Controller implements
 		{
 			this.date = this.getView().getSinceDateValue();
 		}
-		
+
 		this.enableComponents();
 	}
 

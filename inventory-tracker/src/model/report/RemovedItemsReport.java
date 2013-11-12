@@ -43,9 +43,12 @@ public class RemovedItemsReport extends Report
 						"Current Supply"};
 		this.builder.startTable(columns);
 
+		System.out.println("About to add rows to table.");
 		for(RemovedItems items: this.removedItems)
 		{
-			this.builder.addTableRow(this.createRow(items));
+			String[] row = this.createRow(items);
+			System.out.println("Trying to add row: " + row);
+			this.builder.addTableRow(row);
 		}
 
 		this.builder.finishTable();
