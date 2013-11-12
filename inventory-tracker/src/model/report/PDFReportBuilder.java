@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import com.itextpdf.text.Document;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 
@@ -50,7 +51,7 @@ public class PDFReportBuilder extends HTMLReportBuilder
 							path.substring(0, path.lastIndexOf(File.separator)));
 			directory.mkdirs();
 			file = new FileOutputStream(new File(path));
-			Document pdfDocument = new Document();
+			Document pdfDocument = new Document(PageSize.LETTER_LANDSCAPE);
 			PdfWriter writer = PdfWriter.getInstance(pdfDocument, file);
 			pdfDocument.open();
 			InputStream is = new ByteArrayInputStream(this.document.getBytes());

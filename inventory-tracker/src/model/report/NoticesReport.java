@@ -34,33 +34,43 @@ public class NoticesReport extends Report
 	public void createReport(String path)
 	{
 		this.builder.buildHead("Notices");
-		this.builder.addSectionHeader("3-Month Supply Warnings");
 
-		IProductGroup[] keys =
-				(IProductGroup[]) this.inconsistentGroups.keySet().toArray();
-
-		for(IProductGroup prodGroup: keys)
+		if(!this.inconsistentGroups.isEmpty())
 		{
-			String paragraph =
-					"Product group "
-							+ prodGroup.getName()
-							+ " has a 3-month supply ("
-							+ prodGroup.getThreeMonthSupply().toString()
-							+ ") that is inconsistent with the following products:";
+			this.builder.addSectionHeader("3-Month Supply Warnings");
+			IProductGroup[] keys =
+					(IProductGroup[]) this.inconsistentGroups.keySet()
+							.toArray();
 
-			this.builder.addText(paragraph);
-
-			List<IProduct> products = this.inconsistentGroups.get(prodGroup);
-			ArrayList<String> prodStrings = new ArrayList<String>();
-			for(IProduct product: products)
+			for(IProductGroup prodGroup: keys)
 			{
-				String prodString =
-						product.getDescription().getDescription() + " (size: "
-								+ product.getSize().toString() + ")";
-				prodStrings.add(prodString);
-			}
+				String paragraph =
+						"Product group "
+								+ prodGroup.getName()
+								+ " has a 3-month supply ("
+								+ prodGroup.getThreeMonthSupply().toString()
+								+ ") that is inconsistent with the following products:";
 
-			this.builder.addBulletedList((String[]) prodStrings.toArray());
+				this.builder.addText(paragraph);
+
+				List<IProduct> products =
+						this.inconsistentGroups.get(prodGroup);
+				ArrayList<String> prodStrings = new ArrayList<String>();
+				for(IProduct product: products)
+				{
+					String prodString =
+							product.getDescription().getDescription()
+									+ " (size: " + product.getSize().toString()
+									+ ")";
+					prodStrings.add(prodString);
+				}
+
+				this.builder.addBulletedList((String[]) prodStrings.toArray());
+			}
+		}
+		else
+		{
+			this.builder.addText("There are no notices at this time.");
 		}
 
 		this.builder.finishAndSave(path);
