@@ -150,13 +150,12 @@ public class HTMLReportBuilder implements IReportBuilder
 			bw = new BufferedWriter(new FileWriter(path));
 			bw.write(this.document);
 			bw.close();
+			java.awt.Desktop.getDesktop().open(new File(path));
 		}
 		catch(IOException ie)
 		{
 			ie.printStackTrace();
 			return;
 		}
-
 	}
-
 }

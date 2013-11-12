@@ -53,11 +53,13 @@ public class PDFReportBuilder extends HTMLReportBuilder
 			XMLWorkerHelper.getInstance().parseXHtml(writer, pdfDocument, is);
 			pdfDocument.close();
 			file.close();
+			java.awt.Desktop.getDesktop().open(new File(path));
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
+
 	}
 
 }
