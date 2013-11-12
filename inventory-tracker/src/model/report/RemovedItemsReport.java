@@ -1,20 +1,26 @@
 
 package model.report;
 
+import java.util.Date;
 import java.util.List;
 
 import model.RemovedItems;
+
+import common.util.DateUtils;
 
 public class RemovedItemsReport extends Report
 {
 	// Variables
 	private List<RemovedItems> removedItems = null;
+	private String dateString = null;
 
 	// Constructor
-	public RemovedItemsReport(List<RemovedItems> items, IReportBuilder builder)
+	public RemovedItemsReport(List<RemovedItems> items, Date reportDate,
+			IReportBuilder builder)
 	{
 		super(builder);
-		this.removedItems = items;;
+		this.dateString = DateUtils.formatDateTime(reportDate);
+		this.removedItems = items;
 	}
 
 	// Methods
@@ -24,14 +30,12 @@ public class RemovedItemsReport extends Report
 	 */
 	public List<RemovedItems> getremovedItems()
 	{
-		// TODO
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void createReport(String path)
 	{
-		// TODO Auto-generated method stub
 
 	}
 }
