@@ -139,8 +139,7 @@ public class HTMLReportBuilder implements IReportBuilder
 				new File(path.substring(0, path.lastIndexOf(File.separator)));
 		directory.mkdirs();
 
-		File file =
-				new File(path.substring(path.lastIndexOf(File.separator) + 1));
+		File file = new File(path);
 		BufferedWriter bw = null;
 		try
 		{

@@ -45,6 +45,10 @@ public class PDFReportBuilder extends HTMLReportBuilder
 
 		try
 		{
+			File directory =
+					new File(
+							path.substring(0, path.lastIndexOf(File.separator)));
+			directory.mkdirs();
 			file = new FileOutputStream(new File(path));
 			Document pdfDocument = new Document();
 			PdfWriter writer = PdfWriter.getInstance(pdfDocument, file);
