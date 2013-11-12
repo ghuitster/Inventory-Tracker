@@ -63,8 +63,8 @@ public class ExpiredReportController extends Controller implements
 		List<IItem> expired = Inventory.getInstance().getExpiredItems();
 		
 		Report report = new ExpItemsReport(expired, builder);
-		this.makePath(fileType);
-		report.createReport();
+		
+		report.createReport(this.makePath(fileType));
 	}
 	
 	private String makePath(String fileType)

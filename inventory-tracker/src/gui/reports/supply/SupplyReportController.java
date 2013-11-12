@@ -67,8 +67,8 @@ public class SupplyReportController extends Controller implements
 		ProductSupplyReport productSupplyReport = Inventory.getInstance().getLowSupplies(this.month);
 		
 		Report report = new NMonthSupplyReport(productSupplyReport, builder);
-		this.makePath(fileType);
-		report.createReport();
+		
+		report.createReport(this.makePath(fileType));
 	}
 	
 	private String makePath(String fileType)

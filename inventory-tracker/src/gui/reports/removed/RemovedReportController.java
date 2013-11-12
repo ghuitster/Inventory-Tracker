@@ -90,8 +90,8 @@ public class RemovedReportController extends Controller implements
 		}
 		List<RemovedItems> temp = new ArrayList<RemovedItems>(removedItems);
 		Report report = new RemovedItemsReport(temp, this.date, builder);
-		this.makePath(fileType);
-		report.createReport();
+		
+		report.createReport(this.makePath(fileType));
 	}
 	
 	private String makePath(String fileType)

@@ -66,8 +66,8 @@ public class NoticesReportController extends Controller implements
 				Inventory.getInstance().getInconsistencies();
 		
 		Report report = new NoticesReport(inconsistentGroups, builder);
-		this.makePath(fileType);
-		report.createReport();
+		
+		report.createReport(this.makePath(fileType));
 	}
 	
 	private String makePath(String fileType)
