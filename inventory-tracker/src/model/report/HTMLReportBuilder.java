@@ -38,8 +38,8 @@ public class HTMLReportBuilder implements IReportBuilder
 	{
 		this.document +=
 				"<!DOCTYPE html><html><head><title>" + title
-						+ "</title></head><body><h1 align=\"center\"><bold>"
-						+ title + "</bold></h1>";
+						+ "</title></head><body><h1 align=\"center\"><b>"
+						+ title + "</b></h1>";
 	}
 
 	/*
