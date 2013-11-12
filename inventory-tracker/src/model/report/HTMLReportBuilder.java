@@ -92,7 +92,8 @@ public class HTMLReportBuilder implements IReportBuilder
 		this.document += "<tr>";
 		for(String cell: cells)
 		{
-			this.document += "<td>" + cell + "</td>";
+			this.document +=
+					"<td>" + StringEscapeUtils.escapeHtml4(cell) + "</td>";
 		}
 		this.document += "</tr>";
 	}
@@ -108,7 +109,8 @@ public class HTMLReportBuilder implements IReportBuilder
 		this.document += "<br><ul>";
 		for(String item: items)
 		{
-			this.document += "<li>" + item + "</li>";
+			this.document +=
+					"<li>" + StringEscapeUtils.escapeHtml4(item) + "</li>";
 		}
 		this.document += "</ul>";
 	}
@@ -133,7 +135,6 @@ public class HTMLReportBuilder implements IReportBuilder
 	public void finishAndSave(String path)
 	{
 		this.document += "</body></html>";
-		this.document = StringEscapeUtils.escapeHtml4(this.document);
 		File directory =
 				new File(path.substring(0, path.lastIndexOf(File.separator)));
 		directory.mkdirs();
