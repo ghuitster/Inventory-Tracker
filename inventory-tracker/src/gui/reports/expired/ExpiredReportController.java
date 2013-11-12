@@ -1,7 +1,17 @@
 
 package gui.reports.expired;
 
+import java.util.List;
+
+import model.IItem;
+import model.Inventory;
+import model.report.ExpItemsReport;
+import model.report.HTMLReportBuilder;
+import model.report.IReportBuilder;
+import model.report.PDFReportBuilder;
+import model.report.Report;
 import gui.common.Controller;
+import gui.common.FileFormat;
 import gui.common.IView;
 
 /**
@@ -33,7 +43,23 @@ public class ExpiredReportController extends Controller implements
 	 */
 	@Override
 	public void display()
-	{}
+	{
+		IReportBuilder builder = null;
+		if(this.getView().getFormat() == FileFormat.PDF)
+		{
+			builder = new PDFReportBuilder();
+		}
+		else
+		{
+			builder = new HTMLReportBuilder();
+		}
+		
+		List<IItem> expired = Inventory.getInstance().getExpiredItems();
+		
+		Report report = new ExpItemsReport(expired, builder);
+		
+		report.createReport();
+	}
 
 	/**
 	 * Sets the enable/disable state of all components in the controller's view.
