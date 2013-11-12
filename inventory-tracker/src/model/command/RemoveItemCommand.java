@@ -3,6 +3,7 @@ package model.command;
 
 import model.IItem;
 import model.IProductContainer;
+import model.Inventory;
 
 public class RemoveItemCommand extends SingleItemCommand
 {
@@ -16,8 +17,8 @@ public class RemoveItemCommand extends SingleItemCommand
 	@Override
 	public void execute()
 	{
-		// TODO Auto-generated method stub
-
+		if(this.target.ableToRemoveItem(this.item))
+			this.target.removeItem(this.item);
 	}
 
 	/**
@@ -26,7 +27,6 @@ public class RemoveItemCommand extends SingleItemCommand
 	@Override
 	public void undo()
 	{
-		// TODO Auto-generated method stub
-
+		this.target.addItem(this.item);
 	}
 }

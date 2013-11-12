@@ -141,7 +141,17 @@ public class RemoveItemBatchController extends Controller implements
 		RemoveItemCommand command = (RemoveItemCommand) this.undone.pop();
 		command.execute();
 		this.done.push(command);
+		this.updateCurrentView();
 		return;
+	}
+	
+	private void updateCurrentView()
+	{
+		ProductData[] temp = new ProductData[displayProducts.size()];
+		getView().setProducts(displayProducts.toArray(temp));
+		barcode = "";
+		loadValues();
+		enableComponents();
 	}
 
 	/**
@@ -176,20 +186,15 @@ public class RemoveItemBatchController extends Controller implements
 				DataUpdater.createProductData(removingProduct);
 		removingProductData.setCount("1");
 		displayProducts.add(removingProductData);
-		items.add(removingItem);
+		//items.add(removingItem);
 		addItems(removingProductData, removingItemData);
 		
-		for(IItem ii: items)
-			if(ii.getContainer().ableToRemoveItem(ii))
-				ii.getContainer().removeItem(ii);
-		items.clear();
+		//for(IItem ii: items)
+		command.execute();
+		//items.clear();
 		
 		done.push(command);
-		ProductData[] temp = new ProductData[displayProducts.size()];
-		getView().setProducts(displayProducts.toArray(temp));
-		barcode = "";
-		loadValues();
-		enableComponents();
+		this.updateCurrentView();
 	}
 
 	/**
@@ -219,6 +224,7 @@ public class RemoveItemBatchController extends Controller implements
 		RemoveItemCommand command = (RemoveItemCommand) done.pop();
 		command.undo();
 		undone.push(command);
+		this.updateCurrentView();
 		return;
 	}
 
