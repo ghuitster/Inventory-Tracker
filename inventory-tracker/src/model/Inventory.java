@@ -239,8 +239,12 @@ public class Inventory extends Observable implements IInventory, Serializable
 	@Override
 	public ProductSupplyReport getLowSupplies(int months)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		NMonthSupplyVisitor visitor = new NMonthSupplyVisitor(months);
+		this.traverse(visitor);
+		ProductSupplyReport report = new ProductSupplyReport(months);
+		report.setGroupSupplies(visitor.getGroupSupplies());
+		report.setProductSupplies(visitor.getProductSupplies());
+		return report;
 	}
 
 	/*
