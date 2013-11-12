@@ -19,7 +19,8 @@ public class TransferItemCommand extends SingleItemCommand
 	private IProductContainer ProductExistInContainer = null;
 	private IProductContainer originalContainer;
 	
-	public TransferItemCommand(IItem item, IProductContainer target, Map<ProductData, List<ItemData>> displayItems, Set<ProductData> pdSet)
+	public TransferItemCommand(IItem item, IProductContainer target, 
+			Map<ProductData, List<ItemData>> displayItems, Set<ProductData> pdSet)
 	{
 		super(target, item);
 		this.originalContainer = this.item.getContainer();

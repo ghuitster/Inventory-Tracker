@@ -19,7 +19,9 @@ public class RemoveItemCommand extends SingleItemCommand
 	private ProductData removingProductData;
 	private boolean productDataDidNotExist = false;
 	
-	public RemoveItemCommand(IProductContainer target, IItem item, List<ProductData> displayProducts, Map<ProductData, List<ItemData>> displayItems)
+	public RemoveItemCommand(IProductContainer target, IItem item,
+			List<ProductData> displayProducts, Map<ProductData, 
+			List<ItemData>> displayItems)
 	{
 		super(target, item);
 		this.displayProducts = displayProducts;

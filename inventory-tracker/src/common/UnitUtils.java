@@ -24,7 +24,8 @@ public class UnitUtils
 			unitType == UnitType.QUARTS;
 	}
 	
-	public static float convertFromGallons(float gallons, UnitType unitType) throws InvalidUnitTypeException
+	public static float convertFromGallons(float gallons, UnitType unitType)
+			throws InvalidUnitTypeException
 	{
 		switch(unitType)
 		{
@@ -44,7 +45,8 @@ public class UnitUtils
 		}
 	}
 	
-	public static float convertFromPounds(float pounds, UnitType unitType) throws InvalidUnitTypeException
+	public static float convertFromPounds(float pounds, UnitType unitType)
+			throws InvalidUnitTypeException
 	{
 		switch(unitType)
 		{

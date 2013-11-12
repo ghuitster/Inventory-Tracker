@@ -97,8 +97,10 @@ public class NMonthSupplyVisitor implements IVisitor
 			float nMonthSupply = amount.getAmount() * (months / 3.0f);
 			try
 			{
-				if((UnitUtils.UnitTypeIsWeight(unitType) && nMonthSupply > visitor.getWeight(unitType)) ||
-					(UnitUtils.UnitTypeIsVolume(unitType) && nMonthSupply > visitor.getVolume(unitType)))
+				if((UnitUtils.UnitTypeIsWeight(unitType) && 
+						nMonthSupply > visitor.getWeight(unitType)) ||
+					(UnitUtils.UnitTypeIsVolume(unitType) && 
+							nMonthSupply > visitor.getVolume(unitType)))
 				{
 					ProductGroupSupply supply = new ProductGroupSupply(group);
 					supply.setSupply(amount);
