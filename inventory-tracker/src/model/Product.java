@@ -331,7 +331,7 @@ public class Product extends Observable implements IProduct, Serializable
 	 * @see model.IProduct#getThreeMonthSupply()
 	 */
 	@Override
-	public Amount getThreeMonthSupply()
+	public CountThreeMonthSupply getThreeMonthSupply()
 	{
 		return threeMonthSupply;
 	}

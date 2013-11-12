@@ -108,7 +108,7 @@ public interface IProduct extends ITaggable, IObservable, Comparable<IProduct>
 	/**
 	 * @return the threeMonthSupply
 	 */
-	public abstract Amount getThreeMonthSupply();
+	public abstract CountThreeMonthSupply getThreeMonthSupply();
 
 	/**
 	 * @see java.lang.Object#hashCode()

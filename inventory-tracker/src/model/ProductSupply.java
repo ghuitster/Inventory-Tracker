@@ -10,7 +10,7 @@ public class ProductSupply
 {
 	private IProduct product;
 
-	private Amount supply;
+	private CountAmount supply;
 
 	public ProductSupply(IProduct product)
 	{
@@ -22,12 +22,12 @@ public class ProductSupply
 		return product;
 	}
 
-	public Amount getSupply()
+	public CountAmount getSupply()
 	{
 		return supply;
 	}
 
-	public void setSupply(Amount supply)
+	public void setSupply(CountAmount supply)
 	{
 		this.supply = supply;
 	}
