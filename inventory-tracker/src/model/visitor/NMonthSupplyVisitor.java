@@ -5,16 +5,18 @@ import java.util.List;
 import java.util.SortedSet;
 
 import common.UnitUtils;
-
+import model.CountAmount;
 import model.CountThreeMonthSupply;
 import model.IItem;
 import model.IProduct;
 import model.IProductGroup;
 import model.IStorageUnit;
 import model.Inventory;
+import model.NonCountAmount;
 import model.ProductGroupSupply;
 import model.ProductSupply;
 import model.UnitType;
+import model.exception.InvalidUnitTypeException;
 
 public class NMonthSupplyVisitor implements IVisitor
 {
@@ -39,11 +41,6 @@ public class NMonthSupplyVisitor implements IVisitor
 	}
 	
 	private int months;
-	
-	public int getMonths()
-	{
-		return months;
-	}
 	
 	@Override
 	public void visitItem(IItem item)
@@ -85,14 +82,31 @@ public class NMonthSupplyVisitor implements IVisitor
 		UnitType unitType = group.getThreeMonthSupply().getUnitType();
 		if(unitType == UnitType.COUNT)
 		{
-			
+			CountAmount count = (CountAmount)group.getThreeMonthSupply();
+			float nMonthSupply = count.getAmount() * (months * .33333f);
+			if(nMonthSupply > visitor.getTotalCount())
+			{
+				ProductGroupSupply supply = new ProductGroupSupply(group);
+				supply.setSupply(count);
+				groupSupplies.add(supply);
+			}
 		}
-		else if(UnitUtils.UnitTypeIsWeight(unitType))
+		else
 		{
-			
-		}
-		else if(UnitUtils.UnitTypeIsVolume(unitType))
-		{
+			NonCountAmount amount = (NonCountAmount)group.getThreeMonthSupply();
+			float nMonthSupply = amount.getAmount() * (months * .33333f);
+			try
+			{
+				if((UnitUtils.UnitTypeIsWeight(unitType) && nMonthSupply > visitor.getWeight(unitType)) ||
+					(UnitUtils.UnitTypeIsVolume(unitType) && nMonthSupply > visitor.getVolume(unitType)))
+				{
+					ProductGroupSupply supply = new ProductGroupSupply(group);
+					supply.setSupply(amount);
+					groupSupplies.add(supply);
+				}
+			}
+			catch (InvalidUnitTypeException e)
+			{ }
 			
 		}
 	}
