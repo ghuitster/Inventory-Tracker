@@ -1,9 +1,6 @@
 
 package model.report;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -37,7 +34,7 @@ public class RemovedItemsReport extends Report
 	}
 
 	@Override
-	public void createReport()
+	public void createReport(String path)
 	{
 		this.builder.buildHead("Items Removed Since " + this.dateString);
 		String[] columns =
@@ -51,14 +48,8 @@ public class RemovedItemsReport extends Report
 		}
 
 		this.builder.finishTable();
-		String timeStamp =
-				new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar
-						.getInstance().getTime());
-		String filename =
-				"Reports" + File.separator + "RemovedItemsReport-" + timeStamp
-						+ ".pdf";
 
-		this.builder.finishAndSave(filename);
+		this.builder.finishAndSave(path);
 	}
 
 	private String[] createRow(RemovedItems items)

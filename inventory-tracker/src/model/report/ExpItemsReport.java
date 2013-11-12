@@ -1,9 +1,6 @@
 
 package model.report;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 
 import model.IItem;
@@ -24,7 +21,7 @@ public class ExpItemsReport extends Report
 	}
 
 	@Override
-	public void createReport()
+	public void createReport(String path)
 	{
 		this.builder.buildHead("Expired Items");
 		String[] temp =
@@ -38,14 +35,8 @@ public class ExpItemsReport extends Report
 		}
 
 		this.builder.finishTable();
-		String timeStamp =
-				new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar
-						.getInstance().getTime());
-		String filename =
-				"Reports" + File.separator + "ExpiredItemsReport-" + timeStamp
-						+ ".pdf";
 
-		this.builder.finishAndSave(filename);
+		this.builder.finishAndSave(path);
 	}
 
 	/**

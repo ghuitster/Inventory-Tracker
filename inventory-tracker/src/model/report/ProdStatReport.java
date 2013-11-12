@@ -1,9 +1,6 @@
 
 package model.report;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 
 import model.ProductStats;
@@ -33,7 +30,7 @@ public class ProdStatReport extends Report
 	}
 
 	@Override
-	public void createReport()
+	public void createReport(String path)
 	{
 		builder.buildHead("Product Report (" + monthsToShow + " Months)");
 		String[] columns =
@@ -48,14 +45,8 @@ public class ProdStatReport extends Report
 			builder.addTableRow(createRow(stats));
 
 		builder.finishTable();
-		String timeStamp =
-				new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar
-						.getInstance().getTime());
-		String filename =
-				"Reports" + File.separator + "ProductStatisticsReport-"
-						+ timeStamp + ".pdf";
 
-		builder.finishAndSave(filename);
+		this.builder.finishAndSave(path);
 	}
 
 	private String[] createRow(ProductStats stats)

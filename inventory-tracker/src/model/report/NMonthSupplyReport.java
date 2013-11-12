@@ -43,7 +43,7 @@ public class NMonthSupplyReport extends Report
 	}
 
 	@Override
-	public void createReport()
+	public void createReport(String path)
 	{
 		String title =
 				this.productSupplyReport.getMonths() + "-Month Supply Report";

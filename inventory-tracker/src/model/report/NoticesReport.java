@@ -1,10 +1,7 @@
 
 package model.report;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +31,7 @@ public class NoticesReport extends Report
 	}
 
 	@Override
-	public void createReport()
+	public void createReport(String path)
 	{
 		this.builder.buildHead("Notices");
 		this.builder.addSectionHeader("3-Month Supply Warnings");
@@ -66,13 +63,6 @@ public class NoticesReport extends Report
 			this.builder.addBulletedList((String[]) prodStrings.toArray());
 		}
 
-		String timeStamp =
-				new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar
-						.getInstance().getTime());
-		String filename =
-				"Reports" + File.separator + "NoticesReport-" + timeStamp
-						+ ".pdf";
-
-		this.builder.finishAndSave(filename);
+		this.builder.finishAndSave(path);
 	}
 }

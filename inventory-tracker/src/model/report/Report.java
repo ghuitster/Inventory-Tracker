@@ -20,6 +20,6 @@ public abstract class Report
 		this.builder = builder;
 	}
 
-	public abstract void createReport();
+	public abstract void createReport(String path);
 
 }
