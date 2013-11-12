@@ -10,10 +10,9 @@ import model.ProductStats;
 
 public class ProdStatReport extends Report
 {
-	private final int monthsToShow;
-
 	// Variables
 	private final List<ProductStats> productStats;
+	private final int monthsToShow;
 
 	// Constructor
 	public ProdStatReport(List<ProductStats> productStats,
@@ -30,7 +29,7 @@ public class ProdStatReport extends Report
 	 */
 	public List<ProductStats> getProductStats()
 	{
-		throw new UnsupportedOperationException();
+		return productStats;
 	}
 
 	@Override
@@ -56,7 +55,7 @@ public class ProdStatReport extends Report
 				"Reports" + File.separator + "ProductStatisticsReport-"
 						+ timeStamp + ".pdf";
 
-		this.builder.finishAndSave(filename);
+		builder.finishAndSave(filename);
 	}
 
 	private String[] createRow(ProductStats stats)
