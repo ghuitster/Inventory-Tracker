@@ -150,6 +150,11 @@ public interface IInventory extends Observer, IObservable
 	SortedSet<RemovedItems> getRemovedItems(Date since);
 
 	/**
+	 * The last time the Removed Items Report was run
+	 */
+	Date getLastRemovedItemReportTime();
+	
+	/**
 	 * Clears all Storage Units from the system
 	 * @pre (none)
 	 * @post No storage units exist in the system

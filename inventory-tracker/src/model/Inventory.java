@@ -98,6 +98,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 		this.removedProducts = new TreeSet<IProduct>();
 		this.barcodeItems = new HashMap<String, IItem>();
 		this.lastGeneratedBarCode = 400000000000l;
+		this.lastRemovedItemReportTime = null;
 	}
 
 	/*
@@ -273,6 +274,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	@Override
 	public SortedSet<RemovedItems> getRemovedItems(Date since)
 	{
+		
 		SortedSet<RemovedItems> results = new TreeSet<RemovedItems>();
 		
 		for(IItem item : this.removedItems)
@@ -306,7 +308,15 @@ public class Inventory extends Observable implements IInventory, Serializable
 			
 		}
 		
+		this.lastRemovedItemReportTime = DateUtils.currentDate();
 		return results;
+	}
+	
+	private Date lastRemovedItemReportTime;
+	
+	public Date getLastRemovedItemReportTime()
+	{
+		return this.lastRemovedItemReportTime;
 	}
 
 	/**
