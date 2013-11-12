@@ -4,6 +4,13 @@
 
 package model.report;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import org.apache.commons.lang3.StringEscapeUtils;
+
 /**
  * @author Michael
  * 
@@ -29,8 +36,10 @@ public class HTMLReportBuilder implements IReportBuilder
 	@Override
 	public void buildHead(String title)
 	{
-		// TODO Auto-generated method stub
-
+		this.document +=
+				"<!DOCTYPE html><html><head><title>" + title
+						+ "</title></head><body><h1 align=\"center\"><bold>"
+						+ title + "</bold></h1>";
 	}
 
 	/*
@@ -41,8 +50,7 @@ public class HTMLReportBuilder implements IReportBuilder
 	@Override
 	public void addSectionHeader(String title)
 	{
-		// TODO Auto-generated method stub
-
+		this.document += "<h2>" + title + "</h2>";
 	}
 
 	/*
@@ -53,8 +61,7 @@ public class HTMLReportBuilder implements IReportBuilder
 	@Override
 	public void addText(String text)
 	{
-		// TODO Auto-generated method stub
-
+		this.document += "<p>" + text + "</p>";
 	}
 
 	/*
@@ -65,8 +72,13 @@ public class HTMLReportBuilder implements IReportBuilder
 	@Override
 	public void startTable(String[] columnHeaders)
 	{
-		// TODO Auto-generated method stub
-
+		this.document +=
+				"<table cellspacing=\"0\" style=\"text-align: left;\"><thead>";
+		for(String str: columnHeaders)
+		{
+			this.document += "<th>" + str + "</th>";
+		}
+		this.document += "</thead><tbody>";
 	}
 
 	/*
@@ -77,8 +89,12 @@ public class HTMLReportBuilder implements IReportBuilder
 	@Override
 	public void addTableRow(String[] cells)
 	{
-		// TODO Auto-generated method stub
-
+		this.document += "<tr>";
+		for(String cell: cells)
+		{
+			this.document += "<td>" + cell + "</td>";
+		}
+		this.document += "</tr>";
 	}
 
 	/*
@@ -89,8 +105,12 @@ public class HTMLReportBuilder implements IReportBuilder
 	@Override
 	public void addBulletedList(String[] items)
 	{
-		// TODO Auto-generated method stub
-
+		this.document += "<ul>";
+		for(String item: items)
+		{
+			this.document += "<li>" + item + "</li>";
+		}
+		this.document += "</ul>";
 	}
 
 	/*
@@ -101,8 +121,7 @@ public class HTMLReportBuilder implements IReportBuilder
 	@Override
 	public void finishTable()
 	{
-		// TODO Auto-generated method stub
-
+		this.document += "</tbody><tfoot></tfoot></table>";
 	}
 
 	/*
@@ -113,7 +132,30 @@ public class HTMLReportBuilder implements IReportBuilder
 	@Override
 	public void finishAndSave(String path)
 	{
-		// TODO Auto-generated method stub
+		this.document += "</body></html>";
+		this.document = StringEscapeUtils.escapeHtml4(this.document);
+		File directory =
+				new File(path.substring(0, path.lastIndexOf(File.separator)));
+		directory.mkdirs();
+
+		File file =
+				new File(path.substring(path.lastIndexOf(File.separator) + 1));
+		BufferedWriter bw = null;
+		try
+		{
+			if(!file.exists())
+			{
+				file.createNewFile();
+			}
+			bw = new BufferedWriter(new FileWriter(path));
+			bw.write(this.document);
+			bw.close();
+		}
+		catch(IOException ie)
+		{
+			ie.printStackTrace();
+			return;
+		}
 
 	}
 
