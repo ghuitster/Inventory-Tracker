@@ -1,6 +1,7 @@
 
 package model.report;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -61,6 +62,8 @@ public class RemovedItemsReport extends Report
 		String supply = items.getSupply() + "";
 
 		String[] row = {desc, size, barcode, numRemoved, supply};
+		System.out.println("About to add " + Arrays.toString(row)
+				+ " to the table");
 		return row;
 	}
 }
