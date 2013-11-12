@@ -148,7 +148,7 @@ public class AddItemBatchController extends Controller implements
 
 		Command command =
 				new AddItemCommand((IProductContainer) target.getTag(), items,
-						productExistsInSystem);
+						!productExistsInSystem);
 		((AddItemCommand) command).execute();
 
 		executedActions.push(command);
@@ -224,7 +224,6 @@ public class AddItemBatchController extends Controller implements
 		{
 			count = Integer.parseInt(getView().getCount());
 			validCount = true;
-
 		}
 		catch(NumberFormatException nfe)
 		{
@@ -250,7 +249,7 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void done()
 	{
-		if(displayProducts.isEmpty() || displayItems.isEmpty())
+		if(executedActions.isEmpty())
 		{
 			getView().close();
 			return;
@@ -394,8 +393,41 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void redo()
 	{
-		return;
-		// don't have to implement yet
+		Command command = undoneActions.pop();
+		command.execute();
+
+		ProductData productData =
+				(ProductData) ((MultipleItemCommand) command).getItems().get(0)
+						.getProduct().getTag();
+
+		boolean found = false;
+
+		for(ProductData data: displayProducts)
+			if(data.equals(productData))
+			{
+				data.setCount((Integer.parseInt(data.getCount()) + Integer
+						.parseInt(productData.getCount())) + "");
+				found = true;
+			}
+
+		if(!found)
+			displayProducts.add(productData);
+
+		for(IItem item: ((MultipleItemCommand) command).getItems())
+			if(displayItems.get(productData) == null)
+			{
+				List<ItemData> tempList = new ArrayList<ItemData>();
+				tempList.add((ItemData) item.getTag());
+				displayItems.put(productData, tempList);
+			}
+			else
+				displayItems.get(productData).add((ItemData) item.getTag());
+
+		ProductData[] temp = new ProductData[displayProducts.size()];
+		getView().setProducts(displayProducts.toArray(temp));
+		selectedProductChanged();
+		executedActions.push(command);
+		enableComponents();
 	}
 
 	/**
@@ -405,6 +437,12 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void selectedProductChanged()
 	{
+		if(getView().getSelectedProduct() == null)
+		{
+			getView().setItems(new ItemData[0]);
+			return;
+		}
+
 		ItemData[] temp =
 				new ItemData[displayItems.get(getView().getSelectedProduct())
 						.size()];
@@ -421,8 +459,25 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void undo()
 	{
-		return;
-		// don't have to implement yet
+		Command command = executedActions.pop();
+		command.undo();
+		ProductData data =
+				(ProductData) ((AddItemCommand) command).getItems().get(0)
+						.getProduct().getTag();
+		displayProducts.remove(data);
+
+		for(IItem item: ((AddItemCommand) command).getItems())
+			displayItems.get(data).remove(item.getTag());
+
+		ProductData[] temp = new ProductData[displayProducts.size()];
+		getView().setProducts(displayProducts.toArray(temp));
+
+		if(displayItems.get(data).isEmpty())
+			displayItems.remove(data);
+
+		selectedProductChanged();
+		undoneActions.push(command);
+		enableComponents();
 	}
 
 	private void updateProductDataCount(ProductData addingProductData)

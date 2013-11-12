@@ -40,6 +40,9 @@ public class AddItemCommand extends MultipleItemCommand
 	public void undo()
 	{
 		for(IItem ii: items)
-			target.removeItem(ii);
+			target.removeItemTemporary(ii);
+
+		if(productCreated)
+			target.removeProductTemporary(items.get(0).getProduct());
 	}
 }
