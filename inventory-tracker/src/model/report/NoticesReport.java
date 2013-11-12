@@ -9,16 +9,14 @@ import java.util.List;
 import java.util.Map;
 
 import model.IProduct;
-import model.IProductContainer;
 import model.IProductGroup;
 
 public class NoticesReport extends Report
 {
 	// Variables
-	private Map<IProductContainer, List<IProduct>> inconsistentGroups = null;
+	private Map<IProductGroup, List<IProduct>> inconsistentGroups = null;
 
-	public NoticesReport(
-			Map<IProductContainer, List<IProduct>> inconsistentGroups,
+	public NoticesReport(Map<IProductGroup, List<IProduct>> inconsistentGroups,
 			IReportBuilder builder)
 	{
 		super(builder);
@@ -30,7 +28,7 @@ public class NoticesReport extends Report
 	 * Gets the inconsistent groups for this report, mapped to the offending
 	 * products
 	 */
-	public Map<IProductContainer, List<IProduct>> getInconsistentGroups()
+	public Map<IProductGroup, List<IProduct>> getInconsistentGroups()
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -41,20 +39,11 @@ public class NoticesReport extends Report
 		this.builder.buildHead("Notices");
 		this.builder.addSectionHeader("3-Month Supply Warnings");
 
-		IProductContainer[] keys =
-				(IProductContainer[]) this.inconsistentGroups.keySet()
-						.toArray();
+		IProductGroup[] keys =
+				(IProductGroup[]) this.inconsistentGroups.keySet().toArray();
 
-		for(IProductContainer key: keys)
+		for(IProductGroup prodGroup: keys)
 		{
-			IProductGroup prodGroup = null;
-			if(key instanceof IProductGroup)
-			{
-				prodGroup = (IProductGroup) key;
-			}
-			else
-				continue;
-
 			String paragraph =
 					"Product group "
 							+ prodGroup.getName()
