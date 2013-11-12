@@ -73,7 +73,7 @@ public class HTMLReportBuilder implements IReportBuilder
 	public void startTable(String[] columnHeaders)
 	{
 		this.document +=
-				"<table cellspacing=\"0\" style=\"text-align: left;\"><thead>";
+				"<table cellspacing=\"0\" align=\"center\" style=\"text-align: left; border: 1px solid;\"><thead>";
 		for(String str: columnHeaders)
 		{
 			this.document += "<th>" + str + "</th>";
