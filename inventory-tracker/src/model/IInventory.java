@@ -129,7 +129,7 @@ public interface IInventory extends Observer, IObservable
 	 * @return A list describing statistics for all products changed in the
 	 *         timespan
 	 */
-	List<ProductStats> getProductStats(Date since);
+	List<ProductStats> getProductStats(int months);
 
 	/**
 	 * Gets all items which were removed since the passed date

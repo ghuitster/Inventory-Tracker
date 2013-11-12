@@ -259,10 +259,22 @@ public class Inventory extends Observable implements IInventory, Serializable
 	}
 
 	@Override
-	public List<ProductStats> getProductStats(Date since)
+	public List<ProductStats> getProductStats(int months)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		List<ProductStats> stats = new ArrayList<ProductStats>();
+		for(IProduct product : this.getAllProducts())
+		{
+			Set<IItem> items = this.getAllItems(product);
+			for(IItem item : this.removedItems)
+			{
+				if(item.getProduct() == product)
+					items.add(item);
+			}
+			
+			
+			
+		}
+		return stats;
 	}
 
 
