@@ -18,7 +18,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 public class HTMLReportBuilder implements IReportBuilder
 {
 	// Variables
-	private String document = null;
+	protected String document = null;
 
 	/**
 	 * 
