@@ -4,6 +4,11 @@ import java.util.List;
 
 public class ProductSupplyReport
 {
+	private int months;
+	public ProductSupplyReport(int months)
+	{
+		this.months = months;
+	}
 	
 	public List<ProductGroupSupply> getGroupSupplies()
 	{
@@ -24,4 +29,9 @@ public class ProductSupplyReport
 	List<ProductGroupSupply> groupSupplies;
 	List<ProductSupply> productSupplies;
 
+	
+	public int getMonths()
+	{
+		return months;
+	}
 }
