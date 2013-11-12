@@ -79,7 +79,6 @@ public class HTMLReportBuilder implements IReportBuilder
 			this.document += "<th>" + str + "</th>";
 		}
 		this.document += "</thead><tbody>";
-		System.out.println("Document after starting table: " + document);
 	}
 
 	/*
@@ -90,7 +89,6 @@ public class HTMLReportBuilder implements IReportBuilder
 	@Override
 	public void addTableRow(String[] cells)
 	{
-		System.out.println("Document before adding row: " + document);
 		this.document += "<tr>";
 		for(String cell: cells)
 		{
@@ -98,7 +96,6 @@ public class HTMLReportBuilder implements IReportBuilder
 					"<td>" + StringEscapeUtils.escapeHtml4(cell) + "</td>";
 		}
 		this.document += "</tr>";
-		System.out.println("Document after adding row: " + document);
 	}
 
 	/*

@@ -45,7 +45,6 @@ public class RemovedItemsReport extends Report
 		for(RemovedItems items: this.removedItems)
 		{
 			String[] row = this.createRow(items);
-			System.out.println("Trying to add row: " + row);
 			this.builder.addTableRow(row);
 		}
 
