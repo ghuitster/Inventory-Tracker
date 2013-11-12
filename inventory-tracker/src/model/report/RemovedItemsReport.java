@@ -1,7 +1,6 @@
 
 package model.report;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -43,7 +42,6 @@ public class RemovedItemsReport extends Report
 						"Current Supply"};
 		this.builder.startTable(columns);
 
-		System.out.println("About to add rows to table.");
 		for(RemovedItems items: this.removedItems)
 		{
 			String[] row = this.createRow(items);
@@ -65,8 +63,7 @@ public class RemovedItemsReport extends Report
 		String supply = items.getSupply() + "";
 
 		String[] row = {desc, size, barcode, numRemoved, supply};
-		System.out.println("About to add " + Arrays.toString(row)
-				+ " to the table");
+
 		return row;
 	}
 }

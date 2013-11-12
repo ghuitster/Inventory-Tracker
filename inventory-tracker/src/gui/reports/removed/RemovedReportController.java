@@ -76,10 +76,8 @@ public class RemovedReportController extends Controller implements
 	@Override
 	public void display()
 	{
-		System.out.println(date);
 		Set<RemovedItems> removedItems =
 				Inventory.getInstance().getRemovedItems(date);
-		System.out.println("removed Items set: " + removedItems);
 		IReportBuilder builder = null;
 		String fileType = "";
 		if(this.getView().getFormat() == FileFormat.PDF)
