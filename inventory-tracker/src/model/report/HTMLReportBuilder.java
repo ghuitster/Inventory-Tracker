@@ -61,7 +61,7 @@ public class HTMLReportBuilder implements IReportBuilder
 	@Override
 	public void addText(String text)
 	{
-		this.document += "<p>" + text + "</p>";
+		this.document += "<br><p>" + text + "</p>";
 	}
 
 	/*
