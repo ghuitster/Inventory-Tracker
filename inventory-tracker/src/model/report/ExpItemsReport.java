@@ -20,6 +20,6 @@ public class ExpItemsReport extends Report
 	@Override
 	public void createReport(String path)
 	{
-		// TODO Auto-generated method stub
+		this.builder.buildHead("Expired Items");
 	}
 }

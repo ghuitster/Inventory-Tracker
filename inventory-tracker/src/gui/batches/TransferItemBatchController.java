@@ -136,6 +136,11 @@ public class TransferItemBatchController extends Controller implements
 		command.execute();
 		this.done.push(command);
 		
+		this.updateCurrentView();
+	}
+	
+	private void updateCurrentView()
+	{
 		ProductData[] pdArray = new ProductData[this.pdSet.size()];
 		this.getView().setProducts(this.pdSet.toArray(pdArray));
 		this.getView().setBarcode("");
@@ -178,12 +183,8 @@ public class TransferItemBatchController extends Controller implements
 			Command command = new TransferItemCommand(this.item, this.container, this.displayItems, this.pdSet);
 			command.execute();
 			this.done.push(command);
-			if(this.pdSet.size() == 0)
-				System.out.println("Well the didn't add anything");
-			ProductData[] pdArray = new ProductData[this.pdSet.size()];
-			this.getView().setProducts(this.pdSet.toArray(pdArray));
-			this.getView().setBarcode("");
-			this.enableComponents();
+			
+			this.updateCurrentView();
 		}
 
 	}
@@ -199,10 +200,7 @@ public class TransferItemBatchController extends Controller implements
 		command.undo();
 		this.undone.push(command);
 		
-		ProductData[] pdArray = new ProductData[this.pdSet.size()];
-		this.getView().setProducts(this.pdSet.toArray(pdArray));
-		this.getView().setBarcode("");
-		this.enableComponents();
+		this.updateCurrentView();
 		if(getView().getSelectedProduct() == null)
 			this.getView().setItems(new ItemData[0]);
 		else

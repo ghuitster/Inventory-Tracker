@@ -53,18 +53,6 @@ public class RemoveItemBatchController extends Controller implements
 		construct();
 	}
 
-	private void addItems(ProductData productData, ItemData itemData)
-	{
-		if(displayItems.get(productData) == null)
-		{
-			List<ItemData> tempList = new ArrayList<ItemData>();
-			tempList.add(itemData);
-			displayItems.put(productData, tempList);
-		}
-		else
-			displayItems.get(productData).add(itemData);
-	}
-
 	/**
 	 * This method is called when the "Item Barcode" field is changed in the
 	 * remove item batch view by the user.
@@ -178,20 +166,9 @@ public class RemoveItemBatchController extends Controller implements
 			return;
 		}
 
-		Command command = new RemoveItemCommand(removingItem.getContainer(), removingItem);
-		
-		ItemData removingItemData = DataUpdater.createItemData(removingItem);
-		IProduct removingProduct = removingItem.getProduct();
-		ProductData removingProductData =
-				DataUpdater.createProductData(removingProduct);
-		removingProductData.setCount("1");
-		displayProducts.add(removingProductData);
-		//items.add(removingItem);
-		addItems(removingProductData, removingItemData);
-		
-		//for(IItem ii: items)
+		Command command = new RemoveItemCommand(removingItem.getContainer(), removingItem, this.displayProducts, this.displayItems);
+
 		command.execute();
-		//items.clear();
 		
 		done.push(command);
 		this.updateCurrentView();
@@ -225,6 +202,10 @@ public class RemoveItemBatchController extends Controller implements
 		command.undo();
 		undone.push(command);
 		this.updateCurrentView();
+		if(getView().getSelectedProduct() == null)
+			this.getView().setItems(new ItemData[0]);
+		else
+			this.selectedProductChanged();
 		return;
 	}
 

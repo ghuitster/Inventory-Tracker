@@ -10,14 +10,14 @@ package model.report;
 public abstract class Report
 {
 	// Variables
-	private IReportBuilder reportBuilder = null;
+	protected IReportBuilder builder = null;
 
 	/**
 	 * Constructor for abstract class.
 	 */
 	public Report(IReportBuilder builder)
 	{
-		this.reportBuilder = builder;
+		this.builder = builder;
 	}
 
 	public abstract void createReport(String path);
