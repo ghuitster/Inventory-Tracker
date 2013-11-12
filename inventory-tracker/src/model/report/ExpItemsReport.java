@@ -42,7 +42,7 @@ public class ExpItemsReport extends Report
 				new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar
 						.getInstance().getTime());
 		String filename =
-				"Reports" + File.separator + "RemovedItemsReport-" + timeStamp
+				"Reports" + File.separator + "ExpiredItemsReport-" + timeStamp
 						+ ".pdf";
 
 		this.builder.finishAndSave(filename);

@@ -42,7 +42,7 @@ public class NMonthSupplyReport extends Report
 	}
 
 	@Override
-	public void createReport(String path)
+	public void createReport()
 	{
 		// TODO Auto-generated method stub
 
