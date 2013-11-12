@@ -7,6 +7,7 @@ import gui.item.ItemData;
 import gui.product.ProductData;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -110,8 +111,17 @@ public class InventoryViewUpdater
 				populateProductData((IProductContainer) inventoryView
 						.getSelectedProductContainer().getTag());
 
-				IProduct item = (IProduct) changedObj;
-				inventoryView.selectProduct((ProductData) item.getTag());
+				IProduct product = (IProduct) changedObj;
+				inventoryView.selectProduct((ProductData) product.getTag());
+				
+				for(IItem item : this.inventory.getAllItems(product))
+				{
+					Date expiration = item.getExpirationDate();
+					expiration.setMonth(item.getExpirationDate().getMonth() + 
+							item.getProduct().getShelfLife());
+							
+					item.setExpirationDate(expiration);
+				}
 			}
 
 		}

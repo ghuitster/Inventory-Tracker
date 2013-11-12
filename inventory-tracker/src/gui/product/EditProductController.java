@@ -28,11 +28,11 @@ public class EditProductController extends Controller implements
 	private Amount size = null;
 	private float sizeValue = 0;
 	private SizeUnits sizeUnits = SizeUnits.Count;
-	private int shelflife = 0;
+	private int shelfLife = 0;
 	private CountThreeMonthSupply cThreeMonthSupply = null;
 	private boolean amount = true;
 	private boolean threeMonthSupply = true;
-	private boolean shelfLife = true;
+	private boolean shelfLifeValid = true;
 	private boolean descriptNotEmpty = true;
 	private UnitType unitType = UnitType.COUNT;
 
@@ -89,7 +89,7 @@ public class EditProductController extends Controller implements
 			this.size = new UnitSize(this.sizeValue, this.unitType);
 		product.setBarcode(this.barcode);
 		product.setDescription(new ProductDescription(this.descript));
-		product.setShelfLife(this.shelflife);
+		product.setShelfLife(this.shelfLife);
 		product.setSize(this.size);
 		product.setThreeMonthSupply(cThreeMonthSupply);
 	}
@@ -167,7 +167,7 @@ public class EditProductController extends Controller implements
 
 	private boolean shouldOKBeEnabled()
 	{
-		return this.amount && this.shelfLife && this.threeMonthSupply && this.descriptNotEmpty;
+		return this.amount && this.shelfLifeValid && this.threeMonthSupply && this.descriptNotEmpty;
 	}
 
 	/**
@@ -243,25 +243,25 @@ public class EditProductController extends Controller implements
 		{
 			try
 			{
-				float temp = Float.parseFloat(getView().getShelfLife());
+				int temp = Integer.parseInt(getView().getShelfLife());
 				if(temp % 1 == 0)
 				{
-					this.sizeValue = temp;
-					this.shelfLife = true;
+					this.shelfLife = temp;
+					this.shelfLifeValid = true;
 				}
 				else
 				{
-					this.shelfLife = false;
+					this.shelfLifeValid = false;
 				}
 			}
 			catch(NumberFormatException e)
 			{
-				this.shelfLife = false;
+				this.shelfLifeValid = false;
 			}
 		}
 		else
 		{
-			this.shelfLife = false;
+			this.shelfLifeValid = false;
 		}
 	}
 
