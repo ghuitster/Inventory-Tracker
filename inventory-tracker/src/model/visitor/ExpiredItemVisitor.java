@@ -48,8 +48,11 @@ public class ExpiredItemVisitor implements IVisitor
 	@Override
 	public void visitItem(IItem item)
 	{
-		if(item.getExpirationDate().compareTo(DateUtils.currentDate()) < 0)
+		if(item.getExpirationDate() != null &&
+				item.getExpirationDate().compareTo(DateUtils.currentDate()) < 0)
+		{
 			results.add(item);
+		}
 	}
 
 	/**
