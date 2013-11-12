@@ -121,6 +121,7 @@ public class NSA implements Observer
 			objectAdded(obsArgs.getChangedObj());
 			break;
 		case REMOVED:
+		case TEMP_REMOVED:
 			objectRemoved(obsArgs.getChangedObj());
 			break;
 		case UPDATED:

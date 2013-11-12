@@ -160,4 +160,6 @@ public interface IProductContainer extends IObservable, ITaggable,
 	
 	public void traverse(IVisitor visitor);
 
+	void removeItemTemporary(IItem item);
+
 }

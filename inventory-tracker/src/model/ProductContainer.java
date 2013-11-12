@@ -305,11 +305,22 @@ public abstract class ProductContainer extends Observable implements
 	@Override
 	public void removeItem(IItem item)
 	{
+		removeItem(item, UpdateType.REMOVED);
+	}
+	
+	@Override
+	public void removeItemTemporary(IItem item)
+	{
+		removeItem(item, UpdateType.TEMP_REMOVED);
+	}
+	
+	private void removeItem(IItem item, UpdateType updateType)
+	{
 		item.setContainer(null);
 		this.items.remove(item);
 
 		this.setChanged();
-		this.notifyObservers(new ObservableArgs(item, UpdateType.REMOVED));
+		this.notifyObservers(new ObservableArgs(item, updateType));
 	}
 
 	/*
@@ -399,7 +410,7 @@ public abstract class ProductContainer extends Observable implements
 						toMove.add(otherItem);
 
 				for(IItem otherItem: toMove)
-					existing.removeItem(otherItem);
+					existing.removeItemTemporary(otherItem);
 				
 				for(IItem otherItem: toMove)
 					targetContainer.addItem(otherItem);
