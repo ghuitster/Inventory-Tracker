@@ -417,16 +417,18 @@ public abstract class ProductContainer extends Observable implements
 				Set<IItem> toMove = new HashSet<IItem>();
 
 				for(IItem otherItem: existing.getAllItems())
+				{
 					if(otherItem.getProduct() == item.getProduct())
 						toMove.add(otherItem);
+				}
 
 				for(IItem otherItem: toMove)
 					existing.removeItemTemporary(otherItem);
 				
+				existing.removeProduct(item.getProduct());
+				
 				for(IItem otherItem: toMove)
 					targetContainer.addItem(otherItem);
-
-				existing.removeProduct(item.getProduct());
 			}
 
 		}
