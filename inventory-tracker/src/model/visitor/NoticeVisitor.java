@@ -35,8 +35,7 @@ public class NoticeVisitor implements IVisitor
 	 */
 	public Map<IProductGroup, List<IProduct>> getResult()
 	{
-		//TODO
-		throw new UnsupportedOperationException();
+		return result;
 	}
 
 	/**
