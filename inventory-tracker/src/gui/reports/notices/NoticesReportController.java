@@ -1,7 +1,20 @@
 
 package gui.reports.notices;
 
+import java.util.List;
+import java.util.Map;
+
+import model.IProduct;
+import model.IProductContainer;
+import model.IProductGroup;
+import model.Inventory;
+import model.report.HTMLReportBuilder;
+import model.report.IReportBuilder;
+import model.report.NoticesReport;
+import model.report.PDFReportBuilder;
+import model.report.Report;
 import gui.common.Controller;
+import gui.common.FileFormat;
 import gui.common.IView;
 
 /**
@@ -33,7 +46,17 @@ public class NoticesReportController extends Controller implements
 	 */
 	@Override
 	public void display()
-	{}
+	{
+		IReportBuilder builder = null;
+		if(this.getView().getFormat() == FileFormat.PDF)
+			builder = new PDFReportBuilder();
+		else
+			builder = new HTMLReportBuilder();
+		Map<IProductGroup, List<IProduct>> inconsistentGroups =
+				Inventory.getInstance().getInconsistencies();
+		
+		Report report = new NoticesReport(inconsistentGroups, builder);
+	}
 
 	/**
 	 * Sets the enable/disable state of all components in the controller's view.
