@@ -107,22 +107,13 @@ public interface IInventory extends Observer, IObservable
 	IItem getItem(String barcodeNumber);
 
 	/**
-	 * Gets a list of productGroups which will run out in the passed time span
+	 * Gets a list of products and productGroups which will run out in the passed time span
 	 * @param months The number of months ahead to check
 	 * @pre none
 	 * @post none
-	 * @return A list describing the productGroup supplies which will expire
+	 * @return An object containing lists of the products and product groups with low supplies
 	 */
-	List<ProductGroupSupply> getLowProductGroupSupplies(int months);
-
-	/**
-	 * Gets a list of products which will run out in the passed time span
-	 * @param months The number of months ahead to check
-	 * @pre none
-	 * @post none
-	 * @return A list describing the product supplies which will expire
-	 */
-	List<ProductSupply> getLowProductSupplies(int months);
+	ProductSupplyReport getLowSupplies(int months);
 
 	/**
 	 * Gets the persistence object for saving and loading data to this object

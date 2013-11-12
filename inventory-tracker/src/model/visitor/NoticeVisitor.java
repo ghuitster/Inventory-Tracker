@@ -1,6 +1,8 @@
 
 package model.visitor;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,8 +19,13 @@ import model.IStorageUnit;
  */
 public class NoticeVisitor implements IVisitor
 {
+	
+	public NoticeVisitor()
+	{
+		result = new HashMap<IProductGroup, List<IProduct>>();
+	}
 
-	public Map<IProductContainer, List<IProduct>> result;
+	private Map<IProductGroup, List<IProduct>> result;
 
 	/**
 	 * Returns the result of the traversal
@@ -26,7 +33,7 @@ public class NoticeVisitor implements IVisitor
 	 * @post none
 	 * @return
 	 */
-	public Map<IProductContainer, List<IProduct>> getResult()
+	public Map<IProductGroup, List<IProduct>> getResult()
 	{
 		//TODO
 		throw new UnsupportedOperationException();
@@ -39,10 +46,7 @@ public class NoticeVisitor implements IVisitor
 	 */
 	@Override
 	public void visitItem(IItem item)
-	{
-		// TODO Auto-generated method stub
-
-	}
+	{ }
 
 	/**
 	 * Does nothing
@@ -51,13 +55,10 @@ public class NoticeVisitor implements IVisitor
 	 */
 	@Override
 	public void visitProduct(IProduct product)
-	{
-		// TODO Auto-generated method stub
-
-	}
+	{ }
 
 	/**
-	 * Checks if the product group's three month supply is consisten with its
+	 * Checks if the product group's three month supply is consistent with its
 	 * products
 	 * @pre group is not null
 	 * @post none
@@ -66,8 +67,22 @@ public class NoticeVisitor implements IVisitor
 	@Override
 	public void visitProductGroup(IProductGroup group)
 	{
-		// TODO Auto-generated method stub
-
+		 for(IProduct product : group.getAllProducts())
+		 {
+			 if(product.getThreeMonthSupply().getUnitType() != 
+					 group.getThreeMonthSupply().getUnitType())
+			 {
+				 List<IProduct> productList;
+				 if(result.containsKey(group))
+					 productList = result.get(group);
+				 else
+				 {
+					 productList = new ArrayList<IProduct>();
+					 result.put(group, productList);
+				 }
+				 productList.add(product);
+			 }
+		 }
 	}
 
 	/**
@@ -77,9 +92,6 @@ public class NoticeVisitor implements IVisitor
 	 */
 	@Override
 	public void visitStorageUnit(IStorageUnit unit)
-	{
-		// TODO Auto-generated method stub
-
-	}
+	{ }
 
 }

@@ -331,11 +331,22 @@ public abstract class ProductContainer extends Observable implements
 	@Override
 	public void removeProduct(IProduct product)
 	{
+		removeProduct(product, UpdateType.REMOVED);
+	}
+	
+	@Override
+	public void removeProductTemporary(IProduct product)
+	{
+		removeProduct(product, UpdateType.TEMP_REMOVED);
+	}
+	
+	private void removeProduct(IProduct product, UpdateType updateType)
+	{
 		product.removeContainer(this);
 		this.products.remove(product);
 
 		this.setChanged();
-		this.notifyObservers(new ObservableArgs(product, UpdateType.REMOVED));
+		this.notifyObservers(new ObservableArgs(product, updateType));
 	}
 
 	/*

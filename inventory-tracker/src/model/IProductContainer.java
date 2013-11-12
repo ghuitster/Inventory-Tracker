@@ -162,4 +162,6 @@ public interface IProductContainer extends IObservable, ITaggable,
 
 	void removeItemTemporary(IItem item);
 
+	void removeProductTemporary(IProduct product);
+
 }

@@ -17,10 +17,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import model.exception.InvalidNameException;
-import model.visitor.ExpiredItemVisitor;
-import model.visitor.IVisitor;
-import model.visitor.ItemVisitor;
-import model.visitor.ProductVisitor;
+import model.visitor.*;
 import common.util.DateUtils;
 
 /**
@@ -217,8 +214,9 @@ public class Inventory extends Observable implements IInventory, Serializable
 	@Override
 	public Map<IProductGroup, List<IProduct>> getInconsistencies()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		NoticeVisitor visitor = new NoticeVisitor();
+		this.traverse(visitor);
+		return visitor.getResult();
 	}
 
 	/**
@@ -239,14 +237,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	}
 
 	@Override
-	public List<ProductGroupSupply> getLowProductGroupSupplies(int months)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<ProductSupply> getLowProductSupplies(int months)
+	public ProductSupplyReport getLowSupplies(int months)
 	{
 		// TODO Auto-generated method stub
 		return null;
