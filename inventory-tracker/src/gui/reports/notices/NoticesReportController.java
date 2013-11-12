@@ -56,6 +56,8 @@ public class NoticesReportController extends Controller implements
 				Inventory.getInstance().getInconsistencies();
 		
 		Report report = new NoticesReport(inconsistentGroups, builder);
+		
+		report.createReport();
 	}
 
 	/**
