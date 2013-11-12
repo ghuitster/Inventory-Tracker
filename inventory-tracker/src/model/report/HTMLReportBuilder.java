@@ -50,7 +50,7 @@ public class HTMLReportBuilder implements IReportBuilder
 	@Override
 	public void addSectionHeader(String title)
 	{
-		this.document += "<h2>" + title + "</h2>";
+		this.document += "<br><h2>" + title + "</h2>";
 	}
 
 	/*
@@ -105,7 +105,7 @@ public class HTMLReportBuilder implements IReportBuilder
 	@Override
 	public void addBulletedList(String[] items)
 	{
-		this.document += "<ul>";
+		this.document += "<br><ul>";
 		for(String item: items)
 		{
 			this.document += "<li>" + item + "</li>";
