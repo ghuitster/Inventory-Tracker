@@ -46,7 +46,7 @@ public class ProdStatReport extends Report
 
 		builder.finishTable();
 
-		this.builder.finishAndSave(path);
+		builder.finishAndSave(path);
 	}
 
 	private String[] createRow(ProductStats stats)
