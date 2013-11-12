@@ -63,7 +63,7 @@ public class NMonthSupplyVisitor implements IVisitor
 		{
 			SortedSet<IItem> items = Inventory.getInstance().getAllItems(product);
 
-			float nMonthSupply = product.getThreeMonthSupply().getAmount() * (months * .33333f);
+			float nMonthSupply = product.getThreeMonthSupply().getAmount() * (months / 3.0f);
 			
 			if(nMonthSupply > items.size())
 			{
@@ -83,7 +83,7 @@ public class NMonthSupplyVisitor implements IVisitor
 		if(unitType == UnitType.COUNT)
 		{
 			CountAmount count = (CountAmount)group.getThreeMonthSupply();
-			float nMonthSupply = count.getAmount() * (months * .33333f);
+			float nMonthSupply = count.getAmount() * (months / 3.0f);
 			if(nMonthSupply > visitor.getTotalCount())
 			{
 				ProductGroupSupply supply = new ProductGroupSupply(group);
@@ -94,7 +94,7 @@ public class NMonthSupplyVisitor implements IVisitor
 		else
 		{
 			NonCountAmount amount = (NonCountAmount)group.getThreeMonthSupply();
-			float nMonthSupply = amount.getAmount() * (months * .33333f);
+			float nMonthSupply = amount.getAmount() * (months / 3.0f);
 			try
 			{
 				if((UnitUtils.UnitTypeIsWeight(unitType) && nMonthSupply > visitor.getWeight(unitType)) ||
