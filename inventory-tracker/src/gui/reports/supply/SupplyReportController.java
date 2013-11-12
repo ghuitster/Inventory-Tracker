@@ -1,7 +1,17 @@
 
 package gui.reports.supply;
 
+import java.util.List;
+
+import model.Inventory;
+import model.ProductStats;
+import model.report.HTMLReportBuilder;
+import model.report.IReportBuilder;
+import model.report.PDFReportBuilder;
+import model.report.ProdStatReport;
+import model.report.Report;
 import gui.common.Controller;
+import gui.common.FileFormat;
 import gui.common.IView;
 
 /**
@@ -10,7 +20,8 @@ import gui.common.IView;
 public class SupplyReportController extends Controller implements
 		ISupplyReportController
 {
-	/*---	STUDENT-INCLUDE-BEGIN
+	private int month;
+	private boolean submit;
 
 	 /**
 	 * Constructor.
@@ -21,6 +32,9 @@ public class SupplyReportController extends Controller implements
 	{
 		super(view);
 
+		this.month = 3;
+		this.submit = true;
+		
 		construct();
 	}
 
@@ -34,7 +48,18 @@ public class SupplyReportController extends Controller implements
 	 */
 	@Override
 	public void display()
-	{}
+	{
+		IReportBuilder builder = null;
+		if(this.getView().getFormat() == FileFormat.PDF)
+			builder = new PDFReportBuilder();
+		else
+			builder = new HTMLReportBuilder();
+		
+		/*List<ProductSupply> productStats = Inventory.getInstance().get;
+		
+		Report report = new NMothSupplyReport(productStats, builder, this.month);
+		report.createReport();*/
+	}
 
 	/**
 	 * Sets the enable/disable state of all components in the controller's view.
@@ -48,7 +73,9 @@ public class SupplyReportController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents()
-	{}
+	{
+		this.getView().enableOK(this.submit);
+	}
 
 	/**
 	 * Returns a reference to the view for this controller.
@@ -76,7 +103,9 @@ public class SupplyReportController extends Controller implements
 	 */
 	@Override
 	protected void loadValues()
-	{}
+	{
+		this.getView().setMonths("" + this.month);
+	}
 
 	/**
 	 * This method is called when any of the fields in the N-month supply report
@@ -84,6 +113,23 @@ public class SupplyReportController extends Controller implements
 	 */
 	@Override
 	public void valuesChanged()
-	{}
+	{
+		if(!this.getView().getMonths().startsWith("-"))
+		{
+			try
+			{
+				this.month = Integer.parseInt(this.getView().getMonths());
+				this.submit = true;
+			}
+			catch(NumberFormatException e)
+			{
+				this.submit = false;
+			}
+		}
+		else
+			this.submit = true;
+		
+		this.enableComponents();
+	}
 
 }
