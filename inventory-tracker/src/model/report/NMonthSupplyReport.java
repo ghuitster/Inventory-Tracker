@@ -3,6 +3,8 @@ package model.report;
 
 import java.util.List;
 
+import model.CountAmount;
+import model.NonCountAmount;
 import model.ProductGroupSupply;
 import model.ProductSupply;
 import model.ProductSupplyReport;
@@ -63,6 +65,72 @@ public class NMonthSupplyReport extends Report
 			String product =
 					prodSupply.getProduct().getDescription().getDescription();
 			String barcode = prodSupply.getProduct().getBarcode().getNumber();
+			double nSupply =
+					(this.productSupplyReport.getMonths()
+							* prodSupply.getProduct().getThreeMonthSupply()
+									.getAmount() / 3.0);
+			String nMonthsSupply =
+					""
+							+ Math.round(nSupply)
+							+ prodSupply.getProduct().getThreeMonthSupply()
+									.getUnitType().toString();
+			String currentSupply = prodSupply.getSupply().toString();
+
+			String[] cells = {product, barcode, nMonthsSupply, currentSupply};
+
+			this.builder.addTableRow(cells);
 		}
+
+		this.builder.finishTable();
+
+		columns[1] = "Storage Unit";
+		this.builder.startTable(columns);
+
+		for(ProductGroupSupply prodGroupSupply: this.productGroupSupplyInfo)
+		{
+			String productGroup = prodGroupSupply.getProductGroup().getName();
+			String stoUnit =
+					prodGroupSupply.getProductGroup().getStorageUnit()
+							.getName();
+
+			String nMonthsSupply = "";
+
+			if(prodGroupSupply.getProductGroup().getThreeMonthSupply() instanceof NonCountAmount)
+			{
+				NonCountAmount supply =
+						(NonCountAmount) prodGroupSupply.getProductGroup()
+								.getThreeMonthSupply();
+				double nSupply =
+						(this.productSupplyReport.getMonths()
+								* supply.getAmount() / 3.0);
+
+				nMonthsSupply =
+						"" + Math.round(nSupply)
+								+ supply.getUnitType().toString();
+			}
+			else
+			{
+				CountAmount supply =
+						(CountAmount) prodGroupSupply.getProductGroup()
+								.getThreeMonthSupply();
+				double nSupply =
+						(this.productSupplyReport.getMonths()
+								* supply.getAmount() / 3.0);
+
+				nMonthsSupply =
+						"" + Math.round(nSupply)
+								+ supply.getUnitType().toString();
+			}
+
+			String currentSupply = prodGroupSupply.getSupply().toString();
+
+			String[] cells =
+					{productGroup, stoUnit, nMonthsSupply, currentSupply};
+			this.builder.addTableRow(cells);
+		}
+
+		this.builder.finishTable();
+
+		this.builder.finishAndSave(path);
 	}
 }
