@@ -383,8 +383,8 @@ public class Inventory extends Observable implements IInventory, Serializable
 	
 	private void reportAddedItem(IItem item)
 	{
-		//this.removedItems.remove(item);
-		//item.setExitTime(null);
+		this.removedItems.remove(item);
+		item.setExitTime(null);
 		this.barcodeItems.put(item.getBarcode().toString(), item);
 	}
 
