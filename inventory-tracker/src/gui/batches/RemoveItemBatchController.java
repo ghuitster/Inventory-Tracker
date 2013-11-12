@@ -16,6 +16,7 @@ import model.IItem;
 import model.IProduct;
 import model.Inventory;
 import model.command.Command;
+import model.command.RemoveItemCommand;
 import observer.DataUpdater;
 
 /**
@@ -137,7 +138,9 @@ public class RemoveItemBatchController extends Controller implements
 	@Override
 	public void redo()
 	{
-		// not implemented yet
+		RemoveItemCommand command = (RemoveItemCommand) this.undone.pop();
+		command.execute();
+		this.done.push(command);
 		return;
 	}
 
@@ -165,6 +168,8 @@ public class RemoveItemBatchController extends Controller implements
 			return;
 		}
 
+		Command command = new RemoveItemCommand(removingItem.getContainer(), removingItem);
+		
 		ItemData removingItemData = DataUpdater.createItemData(removingItem);
 		IProduct removingProduct = removingItem.getProduct();
 		ProductData removingProductData =
@@ -179,6 +184,7 @@ public class RemoveItemBatchController extends Controller implements
 				ii.getContainer().removeItem(ii);
 		items.clear();
 		
+		done.push(command);
 		ProductData[] temp = new ProductData[displayProducts.size()];
 		getView().setProducts(displayProducts.toArray(temp));
 		barcode = "";
@@ -209,7 +215,10 @@ public class RemoveItemBatchController extends Controller implements
 	@Override
 	public void undo()
 	{
-		// not implemented yet
+		
+		RemoveItemCommand command = (RemoveItemCommand) done.pop();
+		command.undo();
+		undone.push(command);
 		return;
 	}
 

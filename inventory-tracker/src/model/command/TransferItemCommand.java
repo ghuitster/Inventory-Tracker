@@ -61,22 +61,13 @@ public class TransferItemCommand extends SingleItemCommand
 		ItemData id = (ItemData) this.item.getTag();
 		ProductData pd = (ProductData) this.item.getProduct().getTag();
 		this.pdSet.remove(pd);
-
-//		if(this.displayItems.containsKey(pd))
-//		{
-			this.displayItems.get(pd).remove(id);
-			if(this.ProductExistInContainer == null)
-			{
-				this.displayItems.remove(pd);
-				this.target.removeProduct(this.item.getProduct());
-			}
-//		}
-//		else
-//		{
-//			ArrayList<ItemData> temp = new ArrayList<ItemData>();
-//			temp.add(id);
-//			this.displayItems.put(pd, temp);
-//		}
+		
+		this.displayItems.get(pd).remove(id);
+		if(this.ProductExistInContainer == null)
+		{
+			this.displayItems.remove(pd);
+			this.target.removeProduct(this.item.getProduct());
+		}
 
 		this.target.transferItem(this.item, this.originalContainer);
 	}

@@ -23,10 +23,10 @@ public abstract class Command
 	/**
 	 * Perform the action for this command object
 	 */
-	protected abstract void execute();
+	public abstract void execute();
 
 	/**
 	 * Undo any action performed by execute
 	 */
-	protected abstract void undo();
+	public abstract void undo();
 }

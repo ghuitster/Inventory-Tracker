@@ -11,7 +11,7 @@ public abstract class MultipleItemCommand extends Command
 	protected List<IItem> items;
 
 	@Override
-	protected abstract void execute();
+	public abstract void execute();
 
 	public MultipleItemCommand(IProductContainer target, List<IItem> items)
 	{
@@ -20,7 +20,7 @@ public abstract class MultipleItemCommand extends Command
 	}
 
 	@Override
-	protected abstract void undo();
+	public abstract void undo();
 
 	public List<IItem> getItems()
 	{

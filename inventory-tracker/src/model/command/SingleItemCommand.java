@@ -9,7 +9,7 @@ public abstract class SingleItemCommand extends Command
 	protected IItem item;
 
 	@Override
-	protected abstract void execute();
+	public abstract void execute();
 
 	public SingleItemCommand(IProductContainer target, IItem item)
 	{
@@ -18,6 +18,6 @@ public abstract class SingleItemCommand extends Command
 	}
 
 	@Override
-	protected abstract void undo();
+	public abstract void undo();
 
 }

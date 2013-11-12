@@ -7,7 +7,6 @@ import gui.inventory.ProductContainerData;
 import gui.item.ItemData;
 import gui.product.ProductData;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -133,7 +132,7 @@ public class TransferItemBatchController extends Controller implements
 	@Override
 	public void redo()
 	{
-		TransferItemCommand command = (TransferItemCommand) this.undone.pop();
+		Command command = (TransferItemCommand) this.undone.pop();
 		command.execute();
 		this.done.push(command);
 		
@@ -176,7 +175,7 @@ public class TransferItemBatchController extends Controller implements
 		}
 		else
 		{
-			TransferItemCommand command = new TransferItemCommand(this.item, this.container, this.displayItems, this.pdSet);
+			Command command = new TransferItemCommand(this.item, this.container, this.displayItems, this.pdSet);
 			command.execute();
 			this.done.push(command);
 			if(this.pdSet.size() == 0)
@@ -196,7 +195,7 @@ public class TransferItemBatchController extends Controller implements
 	@Override
 	public void undo()
 	{
-		TransferItemCommand command = (TransferItemCommand) this.done.pop();
+		Command command = (TransferItemCommand) this.done.pop();
 		command.undo();
 		this.undone.push(command);
 		

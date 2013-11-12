@@ -1,8 +1,15 @@
 
 package model.command;
 
+import model.IItem;
+import model.IProductContainer;
+
 public class RemoveItemCommand extends SingleItemCommand
 {
+	public RemoveItemCommand(IProductContainer target, IItem item)
+	{
+		super(target, item);
+	}
 	/**
 	 * Remove the item(s) in this object's Set of Items
 	 */
