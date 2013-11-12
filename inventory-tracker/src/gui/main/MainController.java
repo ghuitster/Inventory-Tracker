@@ -44,7 +44,7 @@ public class MainController extends Controller implements IMainController
 	@Override
 	public boolean canPrintExpiredReport()
 	{
-		return false;
+		return true;
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class MainController extends Controller implements IMainController
 	@Override
 	public boolean canPrintNoticesReport()
 	{
-		return false;
+		return true;
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class MainController extends Controller implements IMainController
 	@Override
 	public boolean canPrintProductReport()
 	{
-		return false;
+		return true;
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class MainController extends Controller implements IMainController
 	@Override
 	public boolean canPrintRemovedReport()
 	{
-		return false;
+		return true;
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class MainController extends Controller implements IMainController
 	@Override
 	public boolean canPrintSupplyReport()
 	{
-		return false;
+		return true;
 	}
 
 	/**
