@@ -140,7 +140,10 @@ public class SupplyReportController extends Controller implements
 			try
 			{
 				this.month = Integer.parseInt(this.getView().getMonths());
-				this.submit = true;
+				if(this.month > 0 && this.month < 101)
+					this.submit = true;
+				else
+					this.submit = false;
 			}
 			catch(NumberFormatException e)
 			{

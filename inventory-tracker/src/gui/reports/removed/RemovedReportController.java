@@ -172,6 +172,10 @@ public class RemovedReportController extends Controller implements
 	@Override
 	public void valuesChanged()
 	{
+		if(this.getView().getSinceDate())
+			this.sinceDateValue = true;
+		else
+			this.sinceDateValue = false;
 		if(this.getView().getSinceLast())
 		{
 			this.date = this.reportFromLastdate;
@@ -180,6 +184,8 @@ public class RemovedReportController extends Controller implements
 		{
 			this.date = this.getView().getSinceDateValue();
 		}
+		
+		this.enableComponents();
 	}
 
 }
