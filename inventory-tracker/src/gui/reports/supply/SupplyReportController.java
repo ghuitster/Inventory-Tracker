@@ -1,14 +1,16 @@
 
 package gui.reports.supply;
 
-import java.util.List;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import model.Inventory;
-import model.ProductStats;
+import model.ProductSupplyReport;
 import model.report.HTMLReportBuilder;
 import model.report.IReportBuilder;
+import model.report.NMonthSupplyReport;
 import model.report.PDFReportBuilder;
-import model.report.ProdStatReport;
 import model.report.Report;
 import gui.common.Controller;
 import gui.common.FileFormat;
@@ -50,15 +52,34 @@ public class SupplyReportController extends Controller implements
 	public void display()
 	{
 		IReportBuilder builder = null;
+		String fileType = "";
 		if(this.getView().getFormat() == FileFormat.PDF)
+		{
 			builder = new PDFReportBuilder();
+			fileType = ".pdf";
+		}
 		else
+		{
 			builder = new HTMLReportBuilder();
+			fileType = ".html";
+		}
 		
-		/*List<ProductSupply> productStats = Inventory.getInstance().get;
+		ProductSupplyReport productSupplyReport = Inventory.getInstance().getLowSupplies(this.month);
 		
-		Report report = new NMothSupplyReport(productStats, builder, this.month);
-		report.createReport();*/
+		Report report = new NMonthSupplyReport(productSupplyReport, builder);
+		this.makePath(fileType);
+		report.createReport();
+	}
+	
+	private String makePath(String fileType)
+	{
+		  String timeStamp =
+				  new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar
+				  .getInstance().getTime());
+		  String filename =
+				  "Reports" + File.separator + "NMonthSupplyReport-" + timeStamp
+				  + fileType;
+		return filename;
 	}
 
 	/**

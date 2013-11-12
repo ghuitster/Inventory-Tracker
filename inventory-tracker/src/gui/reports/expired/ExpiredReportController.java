@@ -1,6 +1,9 @@
 
 package gui.reports.expired;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import model.IItem;
@@ -45,20 +48,34 @@ public class ExpiredReportController extends Controller implements
 	public void display()
 	{
 		IReportBuilder builder = null;
+		String fileType = "";
 		if(this.getView().getFormat() == FileFormat.PDF)
 		{
 			builder = new PDFReportBuilder();
+			fileType = ".pdf";
 		}
 		else
 		{
 			builder = new HTMLReportBuilder();
+			fileType = ".html";
 		}
 		
 		List<IItem> expired = Inventory.getInstance().getExpiredItems();
 		
 		Report report = new ExpItemsReport(expired, builder);
-		
+		this.makePath(fileType);
 		report.createReport();
+	}
+	
+	private String makePath(String fileType)
+	{
+		  String timeStamp =
+				  new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar
+				  .getInstance().getTime());
+		  String filename =
+				  "Reports" + File.separator + "ExpiredItemsReport-" + timeStamp
+				  + fileType;
+		return filename;
 	}
 
 	/**

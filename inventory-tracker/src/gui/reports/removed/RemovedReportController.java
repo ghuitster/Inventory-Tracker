@@ -1,7 +1,10 @@
 
 package gui.reports.removed;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -74,14 +77,32 @@ public class RemovedReportController extends Controller implements
 	{
 		Set<RemovedItems> removedItems = Inventory.getInstance().getRemovedItems(date);
 		IReportBuilder builder = null;
+		String fileType = "";
 		if(this.getView().getFormat() == FileFormat.PDF)
+		{
 			builder = new PDFReportBuilder();
+			fileType = ".pdf";
+		}
 		else
+		{
 			builder = new HTMLReportBuilder();
+			fileType = ".html";
+		}
 		List<RemovedItems> temp = new ArrayList<RemovedItems>(removedItems);
 		Report report = new RemovedItemsReport(temp, this.date, builder);
-		
+		this.makePath(fileType);
 		report.createReport();
+	}
+	
+	private String makePath(String fileType)
+	{
+		  String timeStamp =
+				  new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar
+				  .getInstance().getTime());
+		  String filename =
+				  "Reports" + File.separator + "RemovedItemsReport-" + timeStamp
+				  + fileType;
+		return filename;
 	}
 
 	/**

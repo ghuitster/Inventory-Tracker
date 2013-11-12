@@ -1,6 +1,9 @@
 
 package gui.reports.productstats;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import model.Inventory;
@@ -50,15 +53,34 @@ public class ProductStatsReportController extends Controller implements
 	public void display()
 	{
 		IReportBuilder builder = null;
+		String fileType = "";
 		if(this.getView().getFormat() == FileFormat.PDF)
+		{
 			builder = new PDFReportBuilder();
+			fileType = ".pdf";
+		}
 		else
+		{
 			builder = new HTMLReportBuilder();
+			fileType = ".html";
+		}
 		
 		List<ProductStats> productStats = Inventory.getInstance().getProductStats(this.month);
 		
 		Report report = new ProdStatReport(productStats, builder, this.month);
-		report.createReport();
+		String path = makePath(fileType);
+		report.createReport(path);
+	}
+
+	private String makePath(String fileType)
+	{
+		  String timeStamp =
+				  new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar
+				  .getInstance().getTime());
+		  String filename =
+				  "Reports" + File.separator + "ProductStatsReport-" + timeStamp
+				  + fileType;
+		return filename;
 	}
 
 	/**
