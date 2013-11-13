@@ -113,15 +113,6 @@ public class InventoryViewUpdater
 
 				IProduct product = (IProduct) changedObj;
 				inventoryView.selectProduct((ProductData) product.getTag());
-				
-				for(IItem item : this.inventory.getAllItems(product))
-				{
-					Date expiration = (Date)item.getEntryDate().clone();
-					expiration.setMonth(expiration.getMonth() + 
-							item.getProduct().getShelfLife());
-							
-					item.setExpirationDate(expiration);
-				}
 			}
 
 		}

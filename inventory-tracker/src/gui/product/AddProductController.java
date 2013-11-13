@@ -29,12 +29,12 @@ public class AddProductController extends Controller implements
 	private float sizeValue = 0;
 	private SizeUnits sizeUnits = SizeUnits.Count;
 	private SizeUnits oldSizeUnits = sizeUnits;
-	private int shelflife = 0;
+	private int shelfLife = 0;
 	private CountThreeMonthSupply cThreeMonthSupply =
 			new CountThreeMonthSupply(0);
 	private boolean amount = false;
 	private boolean threeMonthSupply = false;
-	private boolean shelfLife = false;
+	private boolean shelfLifeValid = false;
 	private boolean descriptNotEmpty = false;
 	private UnitType unitType = UnitType.COUNT;
 
@@ -71,7 +71,7 @@ public class AddProductController extends Controller implements
 			this.size = new UnitSize(this.sizeValue, this.unitType);
 		IProduct myProduct =
 				new Product(DateUtils.currentDate(), this.descript,
-						this.barcode, this.size, this.shelflife,
+						this.barcode, this.size, this.shelfLife,
 						this.cThreeMonthSupply);
 		AddItemBatchController.product = myProduct;
 	}
@@ -139,7 +139,7 @@ public class AddProductController extends Controller implements
 	{
 		this.getView().setBarcode(this.barcode.toString());
 		this.getView().setDescription(this.descript);
-		this.getView().setShelfLife("" + this.shelflife);
+		this.getView().setShelfLife("" + this.shelfLife);
 		this.getView().setSizeUnit(this.sizeUnits);
 		this.getView().setSizeValue("" + this.sizeValue);
 		this.getView().setSupply("" + this.cThreeMonthSupply.getAmount());
@@ -147,7 +147,7 @@ public class AddProductController extends Controller implements
 
 	private boolean shouldOKBeEnabled()
 	{
-		return this.amount && this.shelfLife && this.threeMonthSupply && this.descriptNotEmpty;
+		return this.amount && this.shelfLifeValid && this.threeMonthSupply && this.descriptNotEmpty;
 	}
 
 	/**
@@ -232,25 +232,25 @@ public class AddProductController extends Controller implements
 		{
 			try
 			{
-				float temp = Float.parseFloat(getView().getShelfLife());
+				int temp = Integer.parseInt(getView().getShelfLife());
 				if(temp % 1 == 0)
 				{
-					this.sizeValue = temp;
-					this.shelfLife = true;
+					this.shelfLife = temp;
+					this.shelfLifeValid = true;
 				}
 				else
 				{
-					this.shelfLife = false;
+					this.shelfLifeValid = false;
 				}
 			}
 			catch(NumberFormatException e)
 			{
-				this.shelfLife = false;
+				this.shelfLifeValid = false;
 			}
 		}
 		else
 		{
-			this.shelfLife = false;
+			this.shelfLifeValid = false;
 		}
 	}
 

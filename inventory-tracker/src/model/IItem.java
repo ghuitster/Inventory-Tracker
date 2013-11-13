@@ -28,13 +28,6 @@ public interface IItem extends IObservable, ITaggable, Comparable<IItem>
 	public abstract boolean ableToSetExitTime(Date exitTime);
 
 	/**
-	 * @pre expirationDate != null
-	 * @param expirationDate the expirationDate Date to attempt to set
-	 * @return whether or not the expirationDate can be set
-	 */
-	public abstract boolean ableToSetExpirationDate(Date expirationDate);
-
-	/**
 	 * @pre product != null
 	 * @param product the Product to attempt to set
 	 * @return whether or not the product can be set
@@ -111,12 +104,6 @@ public interface IItem extends IObservable, ITaggable, Comparable<IItem>
 	 */
 	public abstract void setExitTime(Date exitTime);
 
-	/**
-	 * @pre expirationDate != null
-	 * @post expirationDate == passed in expirationDate
-	 * @param expirationDate the expirationDate to set
-	 */
-	public abstract void setExpirationDate(Date expirationDate);
 
 	/**
 	 * @pre product != null
@@ -130,5 +117,7 @@ public interface IItem extends IObservable, ITaggable, Comparable<IItem>
 	 */
 	@Override
 	public abstract String toString();
+
+	void signalChanged();
 
 }

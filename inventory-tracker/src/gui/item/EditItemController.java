@@ -48,13 +48,6 @@ public class EditItemController extends Controller implements
 	public void editItem()
 	{
 		this.item.setEntryDate(this.entryDate);
-		Calendar expiration = Calendar.getInstance();
-		expiration.set(Calendar.MONTH, entryDate.getMonth());
-		expiration.set(Calendar.DAY_OF_MONTH, entryDate.getDate());
-		expiration.set(Calendar.YEAR, entryDate.getYear() + 1900);
-		expiration.add(Calendar.MONTH, this.item.getProduct().getShelfLife());
-		this.item.setExpirationDate(DateUtils.removeTimeFromDate(expiration
-				.getTime()));
 	}
 
 	/**

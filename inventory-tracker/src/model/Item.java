@@ -18,7 +18,6 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	private IProduct product;
 	private IBarcode barcode;
 	private Date entryDate;
-	private Date expirationDate;
 	private Date exitTime = null;
 	private IProductContainer container;
 
@@ -46,7 +45,6 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 		this.product = product;
 		this.barcode = barcode;
 		this.entryDate = entryDate;
-		this.expirationDate = expirationDate;
 		this.addObserver(Inventory.getInstance());
 	}
 
@@ -96,28 +94,6 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 		if(exitTime != null)
 		{
 			if(today.getTime().compareTo(exitTime) == 0)
-			{
-				response = true;
-			}
-		}
-
-		return response;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.IItem#ableToSetExpirationDate(java.util.Date)
-	 */
-	@Override
-	public boolean ableToSetExpirationDate(Date expirationDate)
-	{
-		boolean response = false;
-		Date today = new Date();
-
-		if(expirationDate != null)
-		{
-			if(today.compareTo(expirationDate) >= 0)
 			{
 				response = true;
 			}
@@ -248,7 +224,13 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	@Override
 	public Date getExpirationDate()
 	{
-		return expirationDate;
+		if(this.getProduct().getShelfLife() == 0)
+			return null;
+		
+		Date expiration = (Date)this.getEntryDate().clone();
+		expiration.setMonth(expiration.getMonth() + 
+				this.getProduct().getShelfLife());
+		return expiration;
 	}
 
 	/*
@@ -282,11 +264,6 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 						+ ((entryDate == null) ? 0 : entryDate.hashCode());
 		result =
 				prime * result + ((exitTime == null) ? 0 : exitTime.hashCode());
-		result =
-				prime
-						* result
-						+ ((expirationDate == null) ? 0 : expirationDate
-								.hashCode());
 		result = prime * result + ((product == null) ? 0 : product.hashCode());
 		return result;
 	}
@@ -301,8 +278,7 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	{
 		this.barcode = barcode;
 
-		this.setChanged();
-		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
+		signalChanged();
 	}
 
 	/*
@@ -325,8 +301,7 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	public void setEntryDate(Date entryDate)
 	{
 		this.entryDate = entryDate;
-		this.setChanged();
-		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
+		signalChanged();
 	}
 
 	/*
@@ -338,21 +313,7 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	public void setExitTime(Date exitTime)
 	{
 		this.exitTime = exitTime;
-		this.setChanged();
-		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.IItem#setExpirationDate(java.util.Date)
-	 */
-	@Override
-	public void setExpirationDate(Date expirationDate)
-	{
-		this.expirationDate = expirationDate;
-		this.setChanged();
-		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
+		signalChanged();
 	}
 
 	/*
@@ -364,9 +325,17 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	public void setProduct(IProduct product)
 	{
 		this.product = product;
+		signalChanged();
+	}
+
+	@Override
+	public void signalChanged()
+	{
 		this.setChanged();
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
+	
+	
 
 	@Override
 	public void setTag(Object tag)
@@ -384,7 +353,7 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	{
 		return "Item [product=" + product + ", barcode=" + barcode
 				+ ", entryDate=" + entryDate + ", expirationDate="
-				+ expirationDate + ", exitTime=" + exitTime + ", container="
+				+ getExpirationDate() + ", exitTime=" + exitTime + ", container="
 				+ container + "]";
 	}
 

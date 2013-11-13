@@ -433,6 +433,9 @@ public class Product extends Observable implements IProduct, Serializable
 
 		this.setChanged();
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
+		
+		for(IItem item : Inventory.getInstance().getAllItems(this))
+			item.signalChanged();
 	}
 
 	/*

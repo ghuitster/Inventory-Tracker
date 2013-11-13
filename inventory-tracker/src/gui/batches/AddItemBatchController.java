@@ -181,9 +181,6 @@ public class AddItemBatchController extends Controller implements
 			Calendar expiration = constructExpiration(product);
 			IItem addingItem = createItem(product, expiration);
 
-			if(product.getShelfLife() == 0)
-				addingItem.setExpirationDate(null);
-
 			items.add(addingItem);
 			ItemData addingItemData = DataUpdater.createItemData(addingItem);
 
