@@ -16,6 +16,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
+import com.itextpdf.text.html.simpleparser.HTMLWorker;
 
 /**
  * @author Michael
