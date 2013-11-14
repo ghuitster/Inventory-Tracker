@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import model.BarcodeLabelPage;
 import model.IItem;
 import model.IProduct;
 import model.IProductContainer;
@@ -26,9 +25,11 @@ import model.ItemBarcode;
 import model.command.AddItemCommand;
 import model.command.Command;
 import model.command.MultipleItemCommand;
+import model.report.BarcodeLabelPage;
 import observer.DataUpdater;
 
 import com.itextpdf.text.DocumentException;
+
 import common.util.DateUtils;
 
 /**

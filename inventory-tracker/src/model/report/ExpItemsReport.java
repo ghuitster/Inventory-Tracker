@@ -23,6 +23,7 @@ public class ExpItemsReport extends Report
 	@Override
 	public void createReport(String path)
 	{
+		this.builder.setPath(path);
 		this.builder.buildHead("Expired Items");
 		String[] temp =
 				{"Description", "Storage Unit", "Product Group", "Entry Date",
@@ -36,7 +37,7 @@ public class ExpItemsReport extends Report
 
 		this.builder.finishTable();
 
-		this.builder.finishAndSave(path);
+		this.builder.finishAndSave();
 	}
 
 	/**

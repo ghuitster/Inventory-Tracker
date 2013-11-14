@@ -20,13 +20,25 @@ public class HTMLReportBuilder implements IReportBuilder
 	// Variables
 	protected String document = null;
 	private int cellWidth = 0;
+	protected String path = null;
 
 	/**
-	 * 
+	 * Constructor for HTMLReportBuilder
 	 */
 	public HTMLReportBuilder()
 	{
 		this.document = "";
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.report.IReportBuilder#setPath(java.lang.String)
+	 */
+	@Override
+	public void setPath(String path)
+	{
+		this.path = path;
 	}
 
 	/*
@@ -136,14 +148,15 @@ public class HTMLReportBuilder implements IReportBuilder
 	 * @see model.report.IReportBuilder#finishAndSave(java.lang.String)
 	 */
 	@Override
-	public void finishAndSave(String path)
+	public void finishAndSave()
 	{
 		this.document += "</body></html>";
 		File directory =
-				new File(path.substring(0, path.lastIndexOf(File.separator)));
+				new File(this.path.substring(0,
+						this.path.lastIndexOf(File.separator)));
 		directory.mkdirs();
 
-		File file = new File(path);
+		File file = new File(this.path);
 		BufferedWriter bw = null;
 		try
 		{
@@ -151,10 +164,10 @@ public class HTMLReportBuilder implements IReportBuilder
 			{
 				file.createNewFile();
 			}
-			bw = new BufferedWriter(new FileWriter(path));
+			bw = new BufferedWriter(new FileWriter(this.path));
 			bw.write(this.document);
 			bw.close();
-			java.awt.Desktop.getDesktop().open(new File(path));
+			java.awt.Desktop.getDesktop().open(new File(this.path));
 		}
 		catch(IOException ie)
 		{

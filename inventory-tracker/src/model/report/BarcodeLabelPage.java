@@ -1,5 +1,5 @@
 
-package model;
+package model.report;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,6 +8,11 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+
+import model.IBarcode;
+import model.IBarcodeLabelPage;
+import model.IItem;
+import model.IProductDescription;
 
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -23,6 +28,7 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+
 import common.util.DateUtils;
 
 /**

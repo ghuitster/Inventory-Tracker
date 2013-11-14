@@ -25,6 +25,12 @@ public interface IReportBuilder
 	public void addSectionHeader(String title);
 
 	/**
+	 * Method to set the path to save the report file to.
+	 * @param path the path for the report file
+	 */
+	public void setPath(String path);
+
+	/**
 	 * Method to add text to a section or row.
 	 * @param text the text to be added.
 	 */
@@ -58,7 +64,6 @@ public interface IReportBuilder
 	/**
 	 * Method to finish the report document, and save it to disk before
 	 * displaying the report.
-	 * @param path the filename and path where the report should be saved.
 	 */
-	public void finishAndSave(String path);
+	public void finishAndSave();
 }

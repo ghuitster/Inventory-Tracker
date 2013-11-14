@@ -47,6 +47,7 @@ public class NMonthSupplyReport extends Report
 	@Override
 	public void createReport(String path)
 	{
+		this.builder.setPath(path);
 		String title =
 				this.productSupplyReport.getMonths() + "-Month Supply Report";
 		this.builder.buildHead(title);
@@ -72,6 +73,7 @@ public class NMonthSupplyReport extends Report
 			String nMonthsSupply =
 					""
 							+ Math.round(nSupply)
+							+ " "
 							+ prodSupply.getProduct().getThreeMonthSupply()
 									.getUnitType().toString();
 			String currentSupply = prodSupply.getSupply().toString();
@@ -83,6 +85,7 @@ public class NMonthSupplyReport extends Report
 
 		this.builder.finishTable();
 
+		this.builder.addSectionHeader("Product Groups");
 		columns[1] = "Storage Unit";
 		this.builder.startTable(columns);
 
@@ -105,7 +108,7 @@ public class NMonthSupplyReport extends Report
 								* supply.getAmount() / 3.0);
 
 				nMonthsSupply =
-						"" + Math.round(nSupply)
+						"" + Math.round(nSupply) + " "
 								+ supply.getUnitType().toString();
 			}
 			else
@@ -117,9 +120,7 @@ public class NMonthSupplyReport extends Report
 						(this.productSupplyReport.getMonths()
 								* supply.getAmount() / 3.0);
 
-				nMonthsSupply =
-						"" + Math.round(nSupply)
-								+ supply.getUnitType().toString();
+				nMonthsSupply = "" + Math.round(nSupply) + " count";
 			}
 
 			String currentSupply = prodGroupSupply.getSupply().toString();
@@ -131,6 +132,6 @@ public class NMonthSupplyReport extends Report
 
 		this.builder.finishTable();
 
-		this.builder.finishAndSave(path);
+		this.builder.finishAndSave();
 	}
 }

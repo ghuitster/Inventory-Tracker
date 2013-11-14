@@ -32,6 +32,7 @@ public class ProdStatReport extends Report
 	@Override
 	public void createReport(String path)
 	{
+		this.builder.setPath(path);
 		builder.buildHead("Product Report (" + monthsToShow + " Months)");
 		String[] columns =
 				{"Description", "Barcode", "Size", "3-Month Supply",
@@ -46,7 +47,7 @@ public class ProdStatReport extends Report
 
 		builder.finishTable();
 
-		builder.finishAndSave(path);
+		builder.finishAndSave();
 	}
 
 	private String[] createRow(ProductStats stats)

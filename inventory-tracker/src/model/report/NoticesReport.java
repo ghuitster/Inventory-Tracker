@@ -33,6 +33,7 @@ public class NoticesReport extends Report
 	@Override
 	public void createReport(String path)
 	{
+		this.builder.setPath(path);
 		this.builder.buildHead("Notices");
 
 		if(!this.inconsistentGroups.isEmpty())
@@ -73,6 +74,6 @@ public class NoticesReport extends Report
 			this.builder.addText("There are no notices at this time.");
 		}
 
-		this.builder.finishAndSave(path);
+		this.builder.finishAndSave();
 	}
 }

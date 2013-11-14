@@ -36,6 +36,7 @@ public class RemovedItemsReport extends Report
 	@Override
 	public void createReport(String path)
 	{
+		this.builder.setPath(path);
 		this.builder.buildHead("Items Removed Since " + this.dateString);
 		String[] columns =
 				{"Description", "Size", "Product Barcode", "Removed",
@@ -50,7 +51,7 @@ public class RemovedItemsReport extends Report
 
 		this.builder.finishTable();
 
-		this.builder.finishAndSave(path);
+		this.builder.finishAndSave();
 	}
 
 	private String[] createRow(RemovedItems items)

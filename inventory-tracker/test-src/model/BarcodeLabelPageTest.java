@@ -12,11 +12,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import model.report.BarcodeLabelPage;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.itextpdf.text.DocumentException;
+
 import common.util.DateUtils;
 
 /**
@@ -83,7 +86,7 @@ public class BarcodeLabelPageTest
 
 	/**
 	 * Test method for
-	 * {@link model.BarcodeLabelPage#BarcodeLabelPage(java.util.List)}.
+	 * {@link model.report.BarcodeLabelPage#BarcodeLabelPage(java.util.List)}.
 	 */
 	@Test
 	public final void testBarcodeLabelPage()
@@ -94,7 +97,7 @@ public class BarcodeLabelPageTest
 	}
 
 	/**
-	 * Test method for {@link model.BarcodeLabelPage#createPDF()}.
+	 * Test method for {@link model.report.BarcodeLabelPage#createPDF()}.
 	 */
 	@Test
 	public final void testCreatePDF()
