@@ -296,8 +296,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 			for(IItem item : items)
 			{
 				Date entry = (Date)item.getEntryDate().clone();
-				while(dateList.containsKey(entry))
-					entry.setTime(entry.getTime() + 1);
+				ensureDateUniqueness(dateList, entry);
 					
 				dateList.put(entry, 
 						new DateInfo(DateType.EntryDate, item));
@@ -306,9 +305,14 @@ public class Inventory extends Observable implements IInventory, Serializable
 			{
 				if(item.getProduct() == product)
 				{
-					dateList.put(item.getEntryDate(), 
+					Date entry = (Date)item.getEntryDate().clone();
+					ensureDateUniqueness(dateList, entry);
+					Date exit = (Date)item.getExitTime().clone();
+					ensureDateUniqueness(dateList, exit);
+					
+					dateList.put(entry, 
 							new DateInfo(DateType.EntryDate, item));
-					dateList.put(item.getExitTime(), 
+					dateList.put(exit, 
 							new DateInfo(DateType.ExitDate, item));
 				}
 			}
@@ -320,20 +324,14 @@ public class Inventory extends Observable implements IInventory, Serializable
 			boolean track = false;
 			int runningTotal = 0;
 			
-			int supplyMin = 0;
-			int supplyMax = 0;
-			int supplyUsed = 0;
-			int supplyAdded = 0;
+			int supplyMin = 0, supplyMax = 0, supplyUsed = 0, supplyAdded = 0, totalSeconds = 0;
 			float supplyEnumerator = 0;
-			int totalSeconds = 0;
 			
-			int usedAgeMax = 0;
+			int usedAgeMax = 0, usedAgeCount = 0;
 			float usedAgeTotal = 0;
-			int usedAgeCount = 0;
 			
+			int currentAgeCount = 0, currentAgeMax = 0;
 			float currentAgeTotal = 0;
-			int currentAgeCount = 0;
-			int currentAgeMax = 0;
 			
 			for(Date date : dateList.keySet())
 			{
@@ -365,13 +363,9 @@ public class Inventory extends Observable implements IInventory, Serializable
 					}
 					
 					if(info.dateType == DateType.EntryDate)
-					{
 						runningTotal++;
-					}
 					else if(info.dateType == DateType.ExitDate)
-					{
 						runningTotal--;
-					}
 					
 					if(track && lastDate != null)
 					{
@@ -415,6 +409,13 @@ public class Inventory extends Observable implements IInventory, Serializable
 			allStats.add(stats);
 		}
 		return allStats;
+	}
+
+	private void ensureDateUniqueness(SortedMap<Date, DateInfo> dateList,
+			Date entry)
+	{
+		while(dateList.containsKey(entry))
+			entry.setTime(entry.getTime() + 1);
 	}
 
 	private float getItemLifeSpanDays(Date exit, Date entry)
