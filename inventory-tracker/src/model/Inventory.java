@@ -382,14 +382,14 @@ public class Inventory extends Observable implements IInventory, Serializable
 				
 				lastDate = date;
 				
-				if(info.item != null && info.item.getExitTime() != null)
+				if(info.item != null && info.item.getExitTime() == null)
 				{
 					float itemAge = getItemLifeSpanDays
-							(info.item.getExitTime(), info.item.getEntryDate());
+							(DateUtils.currentDate(), info.item.getEntryDate());
 					currentAgeTotal += itemAge;
 					currentAgeCount++;
 					
-					itemAge += Math.round(itemAge);
+					itemAge = Math.round(itemAge);
 					currentAgeMax = Math.max(currentAgeMax, (int)itemAge);
 				}
 			}

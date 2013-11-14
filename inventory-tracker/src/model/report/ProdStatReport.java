@@ -1,6 +1,7 @@
 
 package model.report;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import model.ProductStats;
@@ -52,27 +53,32 @@ public class ProdStatReport extends Report
 
 	private String[] createRow(ProductStats stats)
 	{
+		DecimalFormat df = new DecimalFormat();
+		df.setMaximumFractionDigits(1);
+		
 		String desc = stats.getProduct().getDescription().getDescription();
 		String barcode = stats.getProduct().getBarcode().getNumber();
 		String size = stats.getProduct().getSize().toString();
-		String supply = stats.getProduct().getThreeMonthSupply().toString();
+		String supply = df.format((stats.getProduct().getThreeMonthSupply().getAmount() * 
+				monthsToShow / 3f)) + " " + 
+				stats.getProduct().getThreeMonthSupply().getUnitType();
 		String supplyCurAndAverage =
-				stats.getCurrentSupply() + " / " + stats.getAverageSupply();
+				df.format(stats.getCurrentSupply()) + " / " + df.format(stats.getAverageSupply());
 		String supplyMinAndMax =
-				stats.getMinSupply() + " / " + stats.getMaxSupply();
+				df.format(stats.getMinSupply()) + " / " + df.format(stats.getMaxSupply());
 		String supplyUsedAndAdded =
-				stats.getUsedSupply() + " / " + stats.getAddedSupply();
+				df.format(stats.getUsedSupply()) + " / " + df.format(stats.getAddedSupply());
 		String shelfLife = stats.getProduct().getShelfLife() + " months";
 		String usedAgeAvgAndMax =
-				stats.getAvgUsedAge() + " days / " + stats.getMaxUsedAge()
+				df.format(stats.getAvgUsedAge()) + " days / " + df.format(stats.getMaxUsedAge())
 						+ " days";
 		String curAgeAvgAndMax =
-				stats.getAvgCurrentAge() + " days / "
-						+ stats.getMaxCurrentAge() + " days";
+				df.format(stats.getAvgCurrentAge()) + " days / "
+						+ df.format(stats.getMaxCurrentAge()) + " days";
 
 		String[] row =
 				{desc, barcode, size, supply, supplyCurAndAverage,
-						supplyMinAndMax, supplyUsedAndAdded, shelfLife,
+						supplyMinAndMax, supplyUsedAndAdded, 
 						shelfLife, usedAgeAvgAndMax, curAgeAvgAndMax};
 		return row;
 	}
