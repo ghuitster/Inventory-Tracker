@@ -258,22 +258,99 @@ public class Inventory extends Observable implements IInventory, Serializable
 		return this.persistence;
 	}
 
+	private class DateInfo
+	{
+		public DateInfo(DateType dateType, IItem item)
+		{
+			this.dateType = dateType;
+			this.item = item;
+		}
+		public DateType dateType;
+		public IItem item;
+	}
+	
+	private enum DateType
+	{
+		EntryDate,
+		ExitDate,
+		StartOfReport,
+		EndOfReport
+	}
+	
 	@Override
 	public List<ProductStats> getProductStats(int months)
 	{
-		List<ProductStats> stats = new ArrayList<ProductStats>();
+		List<ProductStats> allStats = new ArrayList<ProductStats>();
+		
+		Date start = DateUtils.currentDate();
+		start.setMonth(start.getMonth() - months);
+		
 		for(IProduct product : this.getAllProducts())
 		{
 			SortedSet<IItem> items = this.getAllItems(product);
-			for(IItem item : this.removedItems)
+			
+			SortedMap<Date, DateInfo> dateList = new TreeMap<Date, DateInfo>();
+			
+			//Go through all items for this product and place them in a sorted mapping
+			//This mapping serves as a sorted list of every time the item count changed
+			for(IItem item : items)
+			{
+				dateList.put(item.getEntryDate(), 
+						new DateInfo(DateType.EntryDate, item));
+			}
+			for(IItem item : removedItems)
 			{
 				if(item.getProduct() == product)
-					items.add(item);
+				{
+					dateList.put(item.getEntryDate(), 
+							new DateInfo(DateType.EntryDate, item));
+					dateList.put(item.getExitTime(), 
+							new DateInfo(DateType.ExitDate, item));
+				}
 			}
 			
+			dateList.put(start, new DateInfo(DateType.StartOfReport, null));
+			dateList.put(DateUtils.currentDate(), new DateInfo(DateType.EndOfReport, null));
 			
+			Date lastDate = null;
+			boolean track = false;
+			int runningTotal = 0;
+			float supplyEnumerator = 0f;
+			int totalSeconds = 0;
+			for(Date date : dateList.keySet())
+			{
+				DateInfo info = dateList.get(date);
+				if(info.dateType != DateType.StartOfReport)
+				{
+					if(track && lastDate != null)
+					{
+						int blockSeconds = (int)((date.getTime() - lastDate.getTime()) / 1000);
+						totalSeconds += blockSeconds;
+						supplyEnumerator += runningTotal * blockSeconds;
+					}
+					
+					if(info.dateType == DateType.EntryDate)
+					{
+						runningTotal++;
+					}
+					else if(info.dateType == DateType.ExitDate)
+					{
+						runningTotal--;
+					}
+				}
+				else
+					track = true;
+				
+				lastDate = date;
+			}
+			
+			ProductStats stats = new ProductStats(product);
+			stats.setCurrentSupply(runningTotal);
+			stats.setAverageSupply(supplyEnumerator / totalSeconds);
+			
+			allStats.add(stats);
 		}
-		return stats;
+		return allStats;
 	}
 
 
