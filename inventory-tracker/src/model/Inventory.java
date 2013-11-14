@@ -295,7 +295,11 @@ public class Inventory extends Observable implements IInventory, Serializable
 			//This mapping serves as a sorted list of every time the item count changed
 			for(IItem item : items)
 			{
-				dateList.put(item.getEntryDate(), 
+				Date entry = (Date)item.getEntryDate().clone();
+				while(dateList.containsKey(entry))
+					entry.setTime(entry.getTime() + 1);
+					
+				dateList.put(entry, 
 						new DateInfo(DateType.EntryDate, item));
 			}
 			for(IItem item : removedItems)
@@ -315,18 +319,49 @@ public class Inventory extends Observable implements IInventory, Serializable
 			Date lastDate = null;
 			boolean track = false;
 			int runningTotal = 0;
-			float supplyEnumerator = 0f;
+			
+			int supplyMin = 0;
+			int supplyMax = 0;
+			int supplyUsed = 0;
+			int supplyAdded = 0;
+			float supplyEnumerator = 0;
 			int totalSeconds = 0;
+			
+			int usedAgeMax = 0;
+			float usedAgeTotal = 0;
+			int usedAgeCount = 0;
+			
+			float currentAgeTotal = 0;
+			int currentAgeCount = 0;
+			int currentAgeMax = 0;
+			
 			for(Date date : dateList.keySet())
 			{
 				DateInfo info = dateList.get(date);
 				if(info.dateType != DateType.StartOfReport)
 				{
-					if(track && lastDate != null)
+					if(track && lastDate != null && runningTotal > 0)
 					{
+						if(info.dateType == DateType.EntryDate)
+							supplyAdded++;
+						if(info.dateType == DateType.ExitDate)
+							supplyUsed++;
+						
 						int blockSeconds = (int)((date.getTime() - lastDate.getTime()) / 1000);
 						totalSeconds += blockSeconds;
 						supplyEnumerator += runningTotal * blockSeconds;
+						
+						if(info.dateType == DateType.ExitDate)
+						{
+							float usedAge = getItemLifeSpanDays(info.item.getExitTime(), 
+									info.item.getEntryDate());
+							usedAge = Math.round(usedAge);
+							usedAgeMax = Math.max(usedAgeMax, (int)usedAge);
+							
+							usedAgeTotal += usedAge;
+							usedAgeCount++;
+						}
+						
 					}
 					
 					if(info.dateType == DateType.EntryDate)
@@ -337,20 +372,54 @@ public class Inventory extends Observable implements IInventory, Serializable
 					{
 						runningTotal--;
 					}
+					
+					if(track && lastDate != null)
+					{
+						supplyMin = Math.min(supplyMin, runningTotal);
+						supplyMax = Math.max(supplyMax, runningTotal);
+					}
 				}
 				else
+				{
 					track = true;
+					supplyMin = runningTotal;
+					supplyMax = runningTotal;
+				}
 				
 				lastDate = date;
+				
+				if(info.item != null && info.item.getExitTime() != null)
+				{
+					float itemAge = getItemLifeSpanDays
+							(info.item.getExitTime(), info.item.getEntryDate());
+					currentAgeTotal += itemAge;
+					currentAgeCount++;
+					
+					itemAge += Math.round(itemAge);
+					currentAgeMax = Math.max(currentAgeMax, (int)itemAge);
+				}
 			}
 			
 			ProductStats stats = new ProductStats(product);
 			stats.setCurrentSupply(runningTotal);
 			stats.setAverageSupply(supplyEnumerator / totalSeconds);
+			stats.setMinSupply(supplyMin);
+			stats.setMaxSupply(supplyMax);
+			stats.setUsedSupply(supplyUsed);
+			stats.setAddedSupply(supplyAdded);
+			stats.setAvgUsedAge(usedAgeTotal / usedAgeCount);
+			stats.setMaxUsedAge(usedAgeMax);
+			stats.setAvgCurrentAge(currentAgeTotal / currentAgeCount);
+			stats.setMaxCurrentAge(currentAgeMax);
 			
 			allStats.add(stats);
 		}
 		return allStats;
+	}
+
+	private float getItemLifeSpanDays(Date exit, Date entry)
+	{
+		return (int)(exit.getTime() - entry.getTime()) / 1000f / 3600f / 24f;
 	}
 
 
