@@ -4,19 +4,15 @@
 
 package model.report;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
-
-import org.apache.commons.lang3.StringEscapeUtils;
+import java.io.StringReader;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.PageSize;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.tool.xml.XMLWorkerHelper;
 import com.itextpdf.text.html.simpleparser.HTMLWorker;
+import com.itextpdf.text.pdf.PdfWriter;
 
 /**
  * @author Michael
@@ -42,7 +38,6 @@ public class PDFReportBuilder extends HTMLReportBuilder
 	public void finishAndSave(String path)
 	{
 		this.document += "</body></html>";
-		this.document = StringEscapeUtils.escapeHtml4(this.document);
 		OutputStream file = null;
 
 		try
@@ -53,10 +48,10 @@ public class PDFReportBuilder extends HTMLReportBuilder
 			directory.mkdirs();
 			file = new FileOutputStream(new File(path));
 			Document pdfDocument = new Document(PageSize.LETTER_LANDSCAPE);
-			PdfWriter writer = PdfWriter.getInstance(pdfDocument, file);
+			PdfWriter.getInstance(pdfDocument, file);
 			pdfDocument.open();
-			InputStream is = new ByteArrayInputStream(this.document.getBytes());
-			XMLWorkerHelper.getInstance().parseXHtml(writer, pdfDocument, is);
+			HTMLWorker htmlWorker = new HTMLWorker(pdfDocument);
+			htmlWorker.parse(new StringReader(this.document));
 			pdfDocument.close();
 			file.close();
 			java.awt.Desktop.getDesktop().open(new File(path));
@@ -65,7 +60,6 @@ public class PDFReportBuilder extends HTMLReportBuilder
 		{
 			e.printStackTrace();
 		}
-
 	}
 
 }

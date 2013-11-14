@@ -19,6 +19,7 @@ public class HTMLReportBuilder implements IReportBuilder
 {
 	// Variables
 	protected String document = null;
+	private int cellWidth = 0;
 
 	/**
 	 * 
@@ -38,7 +39,7 @@ public class HTMLReportBuilder implements IReportBuilder
 	{
 		this.document +=
 				"<!DOCTYPE html><html><head><title>" + title
-						+ "</title></head><body><h1 align=\"center\"><b>"
+						+ "</title></head><body><br><h1 align=\"center\"><b>"
 						+ title + "</b></h1>";
 	}
 
@@ -72,11 +73,13 @@ public class HTMLReportBuilder implements IReportBuilder
 	@Override
 	public void startTable(String[] columnHeaders)
 	{
+		cellWidth = 100 / columnHeaders.length;
 		this.document +=
 				"<table width=\"100%\" align=\"center\" style=\"text-align: left; border: 1px solid;\"><thead>";
 		for(String str: columnHeaders)
 		{
-			this.document += "<th>" + str + "</th>";
+			this.document +=
+					"<th width=\"" + this.cellWidth + "%\">" + str + "</th>";
 		}
 		this.document += "</thead><tbody>";
 	}
@@ -93,7 +96,8 @@ public class HTMLReportBuilder implements IReportBuilder
 		for(String cell: cells)
 		{
 			this.document +=
-					"<td>" + StringEscapeUtils.escapeHtml4(cell) + "</td>";
+					"<td width=\"" + this.cellWidth + "%\">"
+							+ StringEscapeUtils.escapeHtml4(cell) + "</td>";
 		}
 		this.document += "</tr>";
 	}
