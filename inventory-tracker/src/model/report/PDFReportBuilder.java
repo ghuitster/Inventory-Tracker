@@ -276,7 +276,7 @@ public class PDFReportBuilder implements IReportBuilder
 		// this.document += "</ul>";
 
 		List unorderedList = new List(List.UNORDERED);
-		unorderedList.setListSymbol("•");
+		unorderedList.setListSymbol("*");
 
 		for(String item: items)
 		{
