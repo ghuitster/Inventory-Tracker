@@ -29,7 +29,6 @@ import model.report.BarcodeLabelPage;
 import observer.DataUpdater;
 
 import com.itextpdf.text.DocumentException;
-
 import common.util.DateUtils;
 
 /**
@@ -258,31 +257,6 @@ public class AddItemBatchController extends Controller implements
 		getView().close();
 	}
 
-	private void printBarcodes()
-	{
-		List<IItem> items = new ArrayList<IItem>();
-
-		for(Command command: executedActions)
-			for(IItem item: ((MultipleItemCommand) command).getItems())
-				items.add(item);
-
-		BarcodeLabelPage printer = new BarcodeLabelPage(items);
-		try
-		{
-			printer.createPDF();
-		}
-		catch(DocumentException e)
-		{
-			getView().displayErrorMessage(
-					"There was a barcode label creation error");
-		}
-		catch(IOException e)
-		{
-			getView().displayErrorMessage(
-					"There was a barcode label creation error");
-		}
-	}
-
 	/**
 	 * Sets the enable/disable state of all components in the controller's view.
 	 * A component should be enabled only if the user is currently allowed to
@@ -382,6 +356,31 @@ public class AddItemBatchController extends Controller implements
 		getView().setCount(count + "");
 		getView().setEntryDate(entryDate);
 		getView().setUseScanner(useBarcodeScanner);
+	}
+
+	private void printBarcodes()
+	{
+		List<IItem> items = new ArrayList<IItem>();
+
+		for(Command command: executedActions)
+			for(IItem item: ((MultipleItemCommand) command).getItems())
+				items.add(item);
+
+		BarcodeLabelPage printer = new BarcodeLabelPage(items);
+		try
+		{
+			printer.createPDF();
+		}
+		catch(DocumentException e)
+		{
+			getView().displayErrorMessage(
+					"There was a barcode label creation error");
+		}
+		catch(IOException e)
+		{
+			getView().displayErrorMessage(
+					"There was a barcode label creation error");
+		}
 	}
 
 	/**

@@ -1,6 +1,10 @@
 
 package gui.reports.supply;
 
+import gui.common.Controller;
+import gui.common.FileFormat;
+import gui.common.IView;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -12,9 +16,6 @@ import model.report.IReportBuilder;
 import model.report.NMonthSupplyReport;
 import model.report.PDFReportBuilder;
 import model.report.Report;
-import gui.common.Controller;
-import gui.common.FileFormat;
-import gui.common.IView;
 
 /**
  * Controller class for the N-month supply report view.
@@ -25,7 +26,7 @@ public class SupplyReportController extends Controller implements
 	private int month;
 	private boolean submit;
 
-	 /**
+	/**
 	 * Constructor.
 	 * 
 	 * @param view Reference to the N-month supply report view
@@ -36,7 +37,7 @@ public class SupplyReportController extends Controller implements
 
 		this.month = 3;
 		this.submit = true;
-		
+
 		construct();
 	}
 
@@ -63,23 +64,13 @@ public class SupplyReportController extends Controller implements
 			builder = new HTMLReportBuilder();
 			fileType = ".html";
 		}
-		
-		ProductSupplyReport productSupplyReport = Inventory.getInstance().getLowSupplies(this.month);
-		
+
+		ProductSupplyReport productSupplyReport =
+				Inventory.getInstance().getLowSupplies(this.month);
+
 		Report report = new NMonthSupplyReport(productSupplyReport, builder);
-		
+
 		report.createReport(this.makePath(fileType));
-	}
-	
-	private String makePath(String fileType)
-	{
-		  String timeStamp =
-				  new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar
-				  .getInstance().getTime());
-		  String filename =
-				  "Reports" + File.separator + "NMonthSupplyReport-" + timeStamp
-				  + fileType;
-		return filename;
 	}
 
 	/**
@@ -111,10 +102,6 @@ public class SupplyReportController extends Controller implements
 		return (ISupplyReportView) super.getView();
 	}
 
-	//
-	// IExpiredReportController overrides
-	//
-
 	/**
 	 * Loads data into the controller's view.
 	 * 
@@ -126,6 +113,21 @@ public class SupplyReportController extends Controller implements
 	protected void loadValues()
 	{
 		this.getView().setMonths("" + this.month);
+	}
+
+	//
+	// IExpiredReportController overrides
+	//
+
+	private String makePath(String fileType)
+	{
+		String timeStamp =
+				new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar
+						.getInstance().getTime());
+		String filename =
+				"Reports" + File.separator + "NMonthSupplyReport-" + timeStamp
+						+ fileType;
+		return filename;
 	}
 
 	/**
@@ -152,7 +154,7 @@ public class SupplyReportController extends Controller implements
 		}
 		else
 			this.submit = true;
-		
+
 		this.enableComponents();
 	}
 

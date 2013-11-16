@@ -63,7 +63,7 @@ public class DataUpdater
 		productData.setShelfLife("" + product.getShelfLife());
 		productData.setSize(product.getSize().toString());
 		productData.setSupply(product.getThreeMonthSupply().toString());
-		//product.setTag(productData);
+		// product.setTag(productData);
 		productData.setTag(product);
 	}
 

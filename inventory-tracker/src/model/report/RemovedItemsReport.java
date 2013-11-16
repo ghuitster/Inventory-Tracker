@@ -25,14 +25,6 @@ public class RemovedItemsReport extends Report
 
 	// Methods
 
-	/**
-	 * Gets the removed items for this report
-	 */
-	public List<RemovedItems> getremovedItems()
-	{
-		throw new UnsupportedOperationException();
-	}
-
 	@Override
 	public void createReport(String path)
 	{
@@ -65,5 +57,13 @@ public class RemovedItemsReport extends Report
 		String[] row = {desc, size, barcode, numRemoved, supply};
 
 		return row;
+	}
+
+	/**
+	 * Gets the removed items for this report
+	 */
+	public List<RemovedItems> getremovedItems()
+	{
+		throw new UnsupportedOperationException();
 	}
 }

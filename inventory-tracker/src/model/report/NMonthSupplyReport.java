@@ -27,23 +27,6 @@ public class NMonthSupplyReport extends Report
 				this.productSupplyReport.getGroupSupplies();
 	}
 
-	// Methods
-	/**
-	 * Gets the product group information for this report
-	 */
-	public List<ProductGroupSupply> getProductGroupSupplyInfo()
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * Gets the product information for this report
-	 */
-	public List<ProductSupply> getProductSupplyInfo()
-	{
-		throw new UnsupportedOperationException();
-	}
-
 	@Override
 	public void createReport(String path)
 	{
@@ -135,5 +118,22 @@ public class NMonthSupplyReport extends Report
 		this.builder.finishTable();
 
 		this.builder.finishAndSave();
+	}
+
+	// Methods
+	/**
+	 * Gets the product group information for this report
+	 */
+	public List<ProductGroupSupply> getProductGroupSupplyInfo()
+	{
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * Gets the product information for this report
+	 */
+	public List<ProductSupply> getProductSupplyInfo()
+	{
+		throw new UnsupportedOperationException();
 	}
 }

@@ -22,15 +22,6 @@ public class NoticesReport extends Report
 
 	}
 
-	/**
-	 * Gets the inconsistent groups for this report, mapped to the offending
-	 * products
-	 */
-	public Map<IProductGroup, List<IProduct>> getInconsistentGroups()
-	{
-		throw new UnsupportedOperationException();
-	}
-
 	@Override
 	public void createReport(String path)
 	{
@@ -85,5 +76,14 @@ public class NoticesReport extends Report
 		}
 
 		this.builder.finishAndSave();
+	}
+
+	/**
+	 * Gets the inconsistent groups for this report, mapped to the offending
+	 * products
+	 */
+	public Map<IProductGroup, List<IProduct>> getInconsistentGroups()
+	{
+		throw new UnsupportedOperationException();
 	}
 }

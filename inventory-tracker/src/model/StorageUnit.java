@@ -27,7 +27,8 @@ public class StorageUnit extends ProductContainer implements IStorageUnit
 		return "StorageUnit [name=" + name + ", products=" + products
 				+ ", items=" + items + ", productGroups=" + productGroups + "]";
 	}
-	
+
+	@Override
 	public void traverse(IVisitor visitor)
 	{
 		visitor.visitStorageUnit(this);

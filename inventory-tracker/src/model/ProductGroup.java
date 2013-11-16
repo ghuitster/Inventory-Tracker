@@ -139,6 +139,6 @@ public class ProductGroup extends ProductContainer implements IProductGroup
 	{
 		visitor.visitProductGroup(this);
 		super.visitChildren(visitor);
-		
+
 	}
 }

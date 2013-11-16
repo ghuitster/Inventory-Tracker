@@ -141,7 +141,7 @@ public class AddProductGroupController extends Controller implements
 				float temp = Float.parseFloat(getView().getSupplyValue());
 				if(temp % 1 == 0)
 				{
-					this.value = (int)temp;
+					this.value = (int) temp;
 					this.amount = true;
 				}
 				else

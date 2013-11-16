@@ -17,7 +17,13 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import model.exception.InvalidNameException;
-import model.visitor.*;
+import model.visitor.ExpiredItemVisitor;
+import model.visitor.IVisitor;
+import model.visitor.ItemVisitor;
+import model.visitor.NMonthSupplyVisitor;
+import model.visitor.NoticeVisitor;
+import model.visitor.ProductVisitor;
+
 import common.util.DateUtils;
 
 /**
@@ -27,6 +33,23 @@ import common.util.DateUtils;
  */
 public class Inventory extends Observable implements IInventory, Serializable
 {
+	private class DateInfo
+	{
+		public DateType dateType;
+
+		public IItem item;
+		public DateInfo(DateType dateType, IItem item)
+		{
+			this.dateType = dateType;
+			this.item = item;
+		}
+	}
+
+	private enum DateType
+	{
+		EntryDate, ExitDate, StartOfReport, EndOfReport
+	}
+
 	/**
 	 * 
 	 */
@@ -59,7 +82,6 @@ public class Inventory extends Observable implements IInventory, Serializable
 	 * Persistence object for saving and loading data
 	 */
 	private final IPersistence persistence;
-
 	/**
 	 * Mapping of all removed Items, for easy retrieval
 	 */
@@ -69,6 +91,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	 * Record of orphaned products
 	 */
 	private final SortedSet<IProduct> removedProducts;
+
 	/**
 	 * Static reference to the one and only Inventory instance
 	 */
@@ -80,6 +103,8 @@ public class Inventory extends Observable implements IInventory, Serializable
 	private final Map<String, IItem> barcodeItems;
 
 	private long lastGeneratedBarCode;
+
+	private Date lastRemovedItemReportTime;
 
 	/**
 	 * Creates a new instance of the Inventory class. Used only by singleton
@@ -166,6 +191,13 @@ public class Inventory extends Observable implements IInventory, Serializable
 		this.notifyObservers(new ObservableArgs(storageUnit, UpdateType.ADDED));
 	}
 
+	private void ensureDateUniqueness(SortedMap<Date, DateInfo> dateList,
+			Date entry)
+	{
+		while(dateList.containsKey(entry))
+			entry.setTime(entry.getTime() + 1);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -189,7 +221,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	{
 		ProductVisitor visitor = new ProductVisitor();
 		this.traverse(visitor);
-		return visitor.getResults(); 
+		return visitor.getResults();
 	}
 
 	/*
@@ -236,6 +268,17 @@ public class Inventory extends Observable implements IInventory, Serializable
 		return this.barcodeItems.get(barcodeNumber);
 	}
 
+	private float getItemLifeSpanDays(Date exit, Date entry)
+	{
+		return (int) (exit.getTime() - entry.getTime()) / 1000f / 3600f / 24f;
+	}
+
+	@Override
+	public Date getLastRemovedItemReportTime()
+	{
+		return this.lastRemovedItemReportTime;
+	}
+
 	@Override
 	public ProductSupplyReport getLowSupplies(int months)
 	{
@@ -258,82 +301,64 @@ public class Inventory extends Observable implements IInventory, Serializable
 		return this.persistence;
 	}
 
-	private class DateInfo
-	{
-		public DateInfo(DateType dateType, IItem item)
-		{
-			this.dateType = dateType;
-			this.item = item;
-		}
-		public DateType dateType;
-		public IItem item;
-	}
-	
-	private enum DateType
-	{
-		EntryDate,
-		ExitDate,
-		StartOfReport,
-		EndOfReport
-	}
-	
 	@Override
 	public List<ProductStats> getProductStats(int months)
 	{
 		List<ProductStats> allStats = new ArrayList<ProductStats>();
-		
+
 		Date start = DateUtils.currentDate();
 		start.setMonth(start.getMonth() - months);
-		
-		for(IProduct product : this.getAllProducts())
+
+		for(IProduct product: this.getAllProducts())
 		{
 			SortedSet<IItem> items = this.getAllItems(product);
-			
+
 			SortedMap<Date, DateInfo> dateList = new TreeMap<Date, DateInfo>();
-			
-			//Go through all items for this product and place them in a sorted mapping
-			//This mapping serves as a sorted list of every time the item count changed
-			for(IItem item : items)
+
+			// Go through all items for this product and place them in a sorted
+			// mapping
+			// This mapping serves as a sorted list of every time the item count
+			// changed
+			for(IItem item: items)
 			{
-				Date entry = (Date)item.getEntryDate().clone();
+				Date entry = (Date) item.getEntryDate().clone();
 				ensureDateUniqueness(dateList, entry);
-					
-				dateList.put(entry, 
-						new DateInfo(DateType.EntryDate, item));
+
+				dateList.put(entry, new DateInfo(DateType.EntryDate, item));
 			}
-			for(IItem item : removedItems)
+			for(IItem item: removedItems)
 			{
 				if(item.getProduct() == product)
 				{
-					Date entry = (Date)item.getEntryDate().clone();
+					Date entry = (Date) item.getEntryDate().clone();
 					ensureDateUniqueness(dateList, entry);
-					Date exit = (Date)item.getExitTime().clone();
+					Date exit = (Date) item.getExitTime().clone();
 					ensureDateUniqueness(dateList, exit);
-					
-					dateList.put(entry, 
-							new DateInfo(DateType.EntryDate, item));
-					dateList.put(exit, 
-							new DateInfo(DateType.ExitDate, item));
+
+					dateList.put(entry, new DateInfo(DateType.EntryDate, item));
+					dateList.put(exit, new DateInfo(DateType.ExitDate, item));
 				}
 			}
-			
+
 			dateList.put(start, new DateInfo(DateType.StartOfReport, null));
-			dateList.put(DateUtils.currentDate(), new DateInfo(DateType.EndOfReport, null));
-			
+			dateList.put(DateUtils.currentDate(), new DateInfo(
+					DateType.EndOfReport, null));
+
 			Date lastDate = null;
 			boolean track = false;
 			int runningTotal = 0;
-			
-			int supplyMin = 0, supplyMax = 0, supplyUsed = 0, supplyAdded = 0, totalSeconds = 0;
+
+			int supplyMin = 0, supplyMax = 0, supplyUsed = 0, supplyAdded = 0, totalSeconds =
+					0;
 			float supplyEnumerator = 0;
-			
+
 			int usedAgeMax = 0, usedAgeCount = 0;
 			float usedAgeTotal = 0;
-			
+
 			int currentAgeCount = 0, currentAgeMax = 0;
 			float currentAgeTotal = 0;
-			
-			for(Date date : dateList.keySet())
+
+			for(Date date: dateList.keySet())
 			{
 				DateInfo info = dateList.get(date);
 				if(info.dateType != DateType.StartOfReport)
@@ -345,31 +370,34 @@ public class Inventory extends Observable implements IInventory, Serializable
 						if(info.dateType == DateType.ExitDate)
 							supplyUsed++;
 					}
-					
+
 					if(track && lastDate != null && runningTotal > 0)
-					{	
-						int blockSeconds = (int)((date.getTime() - lastDate.getTime()) / 1000);
+					{
+						int blockSeconds =
+								(int) ((date.getTime() - lastDate.getTime()) / 1000);
 						totalSeconds += blockSeconds;
 						supplyEnumerator += runningTotal * blockSeconds;
-						
+
 						if(info.dateType == DateType.ExitDate)
 						{
-							float usedAge = getItemLifeSpanDays(info.item.getExitTime(), 
-									info.item.getEntryDate());
+							float usedAge =
+									getItemLifeSpanDays(
+											info.item.getExitTime(),
+											info.item.getEntryDate());
 							usedAge = Math.round(usedAge);
-							usedAgeMax = Math.max(usedAgeMax, (int)usedAge);
-							
+							usedAgeMax = Math.max(usedAgeMax, (int) usedAge);
+
 							usedAgeTotal += usedAge;
 							usedAgeCount++;
 						}
-						
+
 					}
-					
+
 					if(info.dateType == DateType.EntryDate)
 						runningTotal++;
 					else if(info.dateType == DateType.ExitDate)
 						runningTotal--;
-					
+
 					if(track && lastDate != null)
 					{
 						supplyMin = Math.min(supplyMin, runningTotal);
@@ -382,21 +410,22 @@ public class Inventory extends Observable implements IInventory, Serializable
 					supplyMin = runningTotal;
 					supplyMax = runningTotal;
 				}
-				
+
 				lastDate = date;
-				
+
 				if(info.item != null && info.item.getExitTime() == null)
 				{
-					float itemAge = getItemLifeSpanDays
-							(DateUtils.currentDate(), info.item.getEntryDate());
+					float itemAge =
+							getItemLifeSpanDays(DateUtils.currentDate(),
+									info.item.getEntryDate());
 					currentAgeTotal += itemAge;
 					currentAgeCount++;
-					
+
 					itemAge = Math.round(itemAge);
-					currentAgeMax = Math.max(currentAgeMax, (int)itemAge);
+					currentAgeMax = Math.max(currentAgeMax, (int) itemAge);
 				}
 			}
-			
+
 			ProductStats stats = new ProductStats(product);
 			stats.setCurrentSupply(runningTotal);
 			stats.setAverageSupply(supplyEnumerator / totalSeconds);
@@ -408,39 +437,26 @@ public class Inventory extends Observable implements IInventory, Serializable
 			stats.setMaxUsedAge(usedAgeMax);
 			stats.setAvgCurrentAge(currentAgeTotal / currentAgeCount);
 			stats.setMaxCurrentAge(currentAgeMax);
-			
+
 			allStats.add(stats);
 		}
 		return allStats;
 	}
 
-	private void ensureDateUniqueness(SortedMap<Date, DateInfo> dateList,
-			Date entry)
-	{
-		while(dateList.containsKey(entry))
-			entry.setTime(entry.getTime() + 1);
-	}
-
-	private float getItemLifeSpanDays(Date exit, Date entry)
-	{
-		return (int)(exit.getTime() - entry.getTime()) / 1000f / 3600f / 24f;
-	}
-
-
 	@Override
 	public SortedSet<RemovedItems> getRemovedItems(Date since)
 	{
-		
+
 		SortedSet<RemovedItems> results = new TreeSet<RemovedItems>();
-		
-		for(IItem item : this.removedItems)
+
+		for(IItem item: this.removedItems)
 		{
 			if(item.getExitTime().compareTo(since) < 0)
 				break;
-			
+
 			RemovedItems result = null;
 			boolean found = false;
-			for(RemovedItems existingResult : results)
+			for(RemovedItems existingResult: results)
 			{
 				if(existingResult.getProduct() == item.getProduct())
 				{
@@ -449,31 +465,24 @@ public class Inventory extends Observable implements IInventory, Serializable
 					break;
 				}
 			}
-			
+
 			if(!found)
 			{
 				result = new RemovedItems(item.getProduct());
-				
+
 				ItemVisitor currentFinder = new ItemVisitor(item.getProduct());
 				this.traverse(currentFinder);
 				result.setSupply(currentFinder.getResults().size());
 				results.add(result);
-				
+
 			}
-			
+
 			result.setCount(result.getCount() + 1);
-			
+
 		}
-		
+
 		this.lastRemovedItemReportTime = DateUtils.currentDate();
 		return results;
-	}
-	
-	private Date lastRemovedItemReportTime;
-	
-	public Date getLastRemovedItemReportTime()
-	{
-		return this.lastRemovedItemReportTime;
 	}
 
 	/**
@@ -533,6 +542,14 @@ public class Inventory extends Observable implements IInventory, Serializable
 		this.notifyObservers(new ObservableArgs(storageUnit, UpdateType.REMOVED));
 	}
 
+	private void reportAddedItem(IItem item)
+	{
+		if(item.getExitTime() != null)
+			this.removedItems.remove(item);
+		item.setExitTime(null);
+		this.barcodeItems.put(item.getBarcode().toString(), item);
+	}
+
 	/**
 	 * Reports that an item has been removed from the system
 	 * @pre Item is not null
@@ -546,14 +563,6 @@ public class Inventory extends Observable implements IInventory, Serializable
 		item.setContainer(null);
 		this.removedItems.add(item);
 		this.barcodeItems.remove(item.getBarcode().toString());
-	}
-	
-	private void reportAddedItem(IItem item)
-	{
-		if(item.getExitTime() != null)
-			this.removedItems.remove(item);
-		item.setExitTime(null);
-		this.barcodeItems.put(item.getBarcode().toString(), item);
 	}
 
 	/**
@@ -578,7 +587,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	@Override
 	public void traverse(IVisitor visitor)
 	{
-		for(IStorageUnit unit : this.storageUnits)
+		for(IStorageUnit unit: this.storageUnits)
 		{
 			unit.traverse(visitor);
 		}

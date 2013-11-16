@@ -1,3 +1,4 @@
+
 package model.visitor;
 
 import java.util.SortedSet;
@@ -12,16 +13,21 @@ public class ItemVisitor implements IVisitor
 {
 	private SortedSet<IItem> results;
 	private IProduct filter;
-	
+
 	public ItemVisitor()
 	{
 		results = new TreeSet<IItem>();
 	}
-	
+
 	public ItemVisitor(IProduct filter)
 	{
 		results = new TreeSet<IItem>();
 		this.filter = filter;
+	}
+
+	public SortedSet<IItem> getResults()
+	{
+		return new TreeSet<IItem>(results);
 	}
 
 	@Override
@@ -33,18 +39,13 @@ public class ItemVisitor implements IVisitor
 
 	@Override
 	public void visitProduct(IProduct product)
-	{ }
+	{}
 
 	@Override
 	public void visitProductGroup(IProductGroup group)
-	{ }
+	{}
 
 	@Override
 	public void visitStorageUnit(IStorageUnit unit)
-	{ }
-	
-	public SortedSet<IItem> getResults()
-	{
-		return new TreeSet<IItem>(results);
-	}
+	{}
 }

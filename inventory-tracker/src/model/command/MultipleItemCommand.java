@@ -10,9 +10,6 @@ public abstract class MultipleItemCommand extends Command
 {
 	protected List<IItem> items;
 
-	@Override
-	public abstract void execute();
-
 	public MultipleItemCommand(IProductContainer target, List<IItem> items)
 	{
 		super(target);
@@ -20,11 +17,14 @@ public abstract class MultipleItemCommand extends Command
 	}
 
 	@Override
-	public abstract void undo();
+	public abstract void execute();
 
 	public List<IItem> getItems()
 	{
 		return items;
 	}
+
+	@Override
+	public abstract void undo();
 
 }

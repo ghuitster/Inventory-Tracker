@@ -125,6 +125,8 @@ public interface IProductContainer extends IObservable, ITaggable,
 	 */
 	public abstract void removeItem(IItem item);
 
+	void removeItemTemporary(IItem item);
+
 	/**
 	 * @pre product must be a valid Product and not null
 	 * @pre my.items.doesNotContain(Items of this Product type)
@@ -139,6 +141,8 @@ public interface IProductContainer extends IObservable, ITaggable,
 	 * @param productGroup the ProductGroup to remove
 	 */
 	public abstract void removeProductGroup(IProductGroup productGroup);
+
+	void removeProductTemporary(IProduct product);
 
 	/**
 	 * @pre name must be a valid String and not null
@@ -157,11 +161,7 @@ public interface IProductContainer extends IObservable, ITaggable,
 	 */
 	public abstract void transferItem(IItem item,
 			IProductContainer targetContainer);
-	
+
 	public void traverse(IVisitor visitor);
-
-	void removeItemTemporary(IItem item);
-
-	void removeProductTemporary(IProduct product);
 
 }

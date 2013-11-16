@@ -226,10 +226,10 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	{
 		if(this.getProduct().getShelfLife() == 0)
 			return null;
-		
-		Date expiration = (Date)this.getEntryDate().clone();
-		expiration.setMonth(expiration.getMonth() + 
-				this.getProduct().getShelfLife());
+
+		Date expiration = (Date) this.getEntryDate().clone();
+		expiration.setMonth(expiration.getMonth()
+				+ this.getProduct().getShelfLife());
 		return expiration;
 	}
 
@@ -329,18 +329,16 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	}
 
 	@Override
+	public void setTag(Object tag)
+	{
+		this.tag = tag;
+	}
+
+	@Override
 	public void signalChanged()
 	{
 		this.setChanged();
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
-	}
-	
-	
-
-	@Override
-	public void setTag(Object tag)
-	{
-		this.tag = tag;
 	}
 
 	/*
@@ -353,8 +351,8 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	{
 		return "Item [product=" + product + ", barcode=" + barcode
 				+ ", entryDate=" + entryDate + ", expirationDate="
-				+ getExpirationDate() + ", exitTime=" + exitTime + ", container="
-				+ container + "]";
+				+ getExpirationDate() + ", exitTime=" + exitTime
+				+ ", container=" + container + "]";
 	}
 
 }

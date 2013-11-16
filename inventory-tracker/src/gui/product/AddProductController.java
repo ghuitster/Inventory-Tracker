@@ -15,6 +15,7 @@ import model.Product;
 import model.ProductBarcode;
 import model.UnitSize;
 import model.UnitType;
+
 import common.util.DateUtils;
 
 /**
@@ -145,43 +146,6 @@ public class AddProductController extends Controller implements
 		this.getView().setSupply("" + this.cThreeMonthSupply.getAmount());
 	}
 
-	private boolean shouldOKBeEnabled()
-	{
-		return this.amount && this.shelfLifeValid && this.threeMonthSupply && this.descriptNotEmpty;
-	}
-
-	/**
-	 * This method is called when any of the fields in the add product view is
-	 * changed by the user.
-	 */
-	@Override
-	public void valuesChanged()
-	{
-		this.setThreeMonthSupply();
-		this.setDescript();
-		this.descript = getView().getDescription();
-		this.oldSizeUnits = this.sizeUnits;
-		this.sizeUnits = getView().getSizeUnit();
-
-		if(this.sizeUnits == SizeUnits.Count
-				&& this.oldSizeUnits != SizeUnits.Count)
-		{
-			this.sizeValue = 1;
-			getView().setSizeValue("1");
-		}
-		else if(this.sizeUnits != SizeUnits.Count
-				&& this.oldSizeUnits == SizeUnits.Count)
-		{
-			this.sizeValue = 0;
-			getView().setSizeValue("0");
-		}
-		
-		this.setShelfLife();
-		this.setAmount();
-
-		this.enableComponents();
-	}
-	
 	private void setAmount()
 	{
 		if(!getView().getSizeValue().isEmpty()
@@ -225,6 +189,15 @@ public class AddProductController extends Controller implements
 		}
 	}
 
+	private void setDescript()
+	{
+		this.descript = getView().getDescription();
+		if(this.descript.isEmpty())
+			this.descriptNotEmpty = false;
+		else
+			this.descriptNotEmpty = true;
+	}
+
 	private void setShelfLife()
 	{
 		if(!getView().getShelfLife().isEmpty()
@@ -254,15 +227,6 @@ public class AddProductController extends Controller implements
 		}
 	}
 
-	private void setDescript()
-	{
-		this.descript = getView().getDescription();
-		if(this.descript.isEmpty())
-			this.descriptNotEmpty = false;
-		else
-			this.descriptNotEmpty = true;
-	}
-
 	private void setThreeMonthSupply()
 	{
 		if(!getView().getSupply().isEmpty()
@@ -274,7 +238,7 @@ public class AddProductController extends Controller implements
 				if(temp % 1 == 0)
 				{
 					this.cThreeMonthSupply =
-						new CountThreeMonthSupply((int)temp);
+							new CountThreeMonthSupply((int) temp);
 					this.threeMonthSupply = true;
 				}
 				else
@@ -291,5 +255,43 @@ public class AddProductController extends Controller implements
 		{
 			this.threeMonthSupply = false;
 		}
+	}
+
+	private boolean shouldOKBeEnabled()
+	{
+		return this.amount && this.shelfLifeValid && this.threeMonthSupply
+				&& this.descriptNotEmpty;
+	}
+
+	/**
+	 * This method is called when any of the fields in the add product view is
+	 * changed by the user.
+	 */
+	@Override
+	public void valuesChanged()
+	{
+		this.setThreeMonthSupply();
+		this.setDescript();
+		this.descript = getView().getDescription();
+		this.oldSizeUnits = this.sizeUnits;
+		this.sizeUnits = getView().getSizeUnit();
+
+		if(this.sizeUnits == SizeUnits.Count
+				&& this.oldSizeUnits != SizeUnits.Count)
+		{
+			this.sizeValue = 1;
+			getView().setSizeValue("1");
+		}
+		else if(this.sizeUnits != SizeUnits.Count
+				&& this.oldSizeUnits == SizeUnits.Count)
+		{
+			this.sizeValue = 0;
+			getView().setSizeValue("0");
+		}
+
+		this.setShelfLife();
+		this.setAmount();
+
+		this.enableComponents();
 	}
 }

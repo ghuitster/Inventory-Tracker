@@ -307,13 +307,7 @@ public abstract class ProductContainer extends Observable implements
 	{
 		removeItem(item, UpdateType.REMOVED);
 	}
-	
-	@Override
-	public void removeItemTemporary(IItem item)
-	{
-		removeItem(item, UpdateType.TEMP_REMOVED);
-	}
-	
+
 	private void removeItem(IItem item, UpdateType updateType)
 	{
 		item.setContainer(null);
@@ -321,6 +315,12 @@ public abstract class ProductContainer extends Observable implements
 
 		this.setChanged();
 		this.notifyObservers(new ObservableArgs(item, updateType));
+	}
+
+	@Override
+	public void removeItemTemporary(IItem item)
+	{
+		removeItem(item, UpdateType.TEMP_REMOVED);
 	}
 
 	/*
@@ -333,13 +333,7 @@ public abstract class ProductContainer extends Observable implements
 	{
 		removeProduct(product, UpdateType.REMOVED);
 	}
-	
-	@Override
-	public void removeProductTemporary(IProduct product)
-	{
-		removeProduct(product, UpdateType.TEMP_REMOVED);
-	}
-	
+
 	private void removeProduct(IProduct product, UpdateType updateType)
 	{
 		product.removeContainer(this);
@@ -361,6 +355,12 @@ public abstract class ProductContainer extends Observable implements
 		this.setChanged();
 		this.notifyObservers(new ObservableArgs(productGroup,
 				UpdateType.REMOVED));
+	}
+
+	@Override
+	public void removeProductTemporary(IProduct product)
+	{
+		removeProduct(product, UpdateType.TEMP_REMOVED);
 	}
 
 	/*
@@ -424,9 +424,9 @@ public abstract class ProductContainer extends Observable implements
 
 				for(IItem otherItem: toMove)
 					existing.removeItemTemporary(otherItem);
-				
+
 				existing.removeProduct(item.getProduct());
-				
+
 				for(IItem otherItem: toMove)
 					targetContainer.addItem(otherItem);
 			}
@@ -436,20 +436,20 @@ public abstract class ProductContainer extends Observable implements
 		for(IItem itemToAdd: itemsToAdd)
 			targetContainer.addItem(itemToAdd);
 	}
-	
+
 	void visitChildren(IVisitor visitor)
 	{
-		for(IProduct product : this.products)
+		for(IProduct product: this.products)
 		{
 			visitor.visitProduct(product);
 		}
-		
-		for(IItem item : this.items)
+
+		for(IItem item: this.items)
 		{
 			visitor.visitItem(item);
 		}
-		
-		for(IProductGroup group : this.productGroups)
+
+		for(IProductGroup group: this.productGroups)
 		{
 			group.traverse(visitor);
 		}

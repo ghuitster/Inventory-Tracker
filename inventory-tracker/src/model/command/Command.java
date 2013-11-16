@@ -12,13 +12,13 @@ import model.IProductContainer;
  */
 public abstract class Command
 {
+	protected IProductContainer target;
+
 	public Command(IProductContainer target)
 	{
 		super();
 		this.target = target;
 	}
-
-	protected IProductContainer target;
 
 	/**
 	 * Perform the action for this command object

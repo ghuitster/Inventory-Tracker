@@ -19,7 +19,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.itextpdf.text.DocumentException;
-
 import common.util.DateUtils;
 
 /**

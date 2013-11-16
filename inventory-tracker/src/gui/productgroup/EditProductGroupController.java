@@ -145,32 +145,6 @@ public class EditProductGroupController extends Controller implements
 		this.getView().setSupplyUnit(this.sizeUnits);
 	}
 
-	private boolean shouldOKBeEnabled()
-	{
-		boolean temp = true;
-		if(!this.name.equals(this.originalName))
-			temp = this.container.ableToAddProductGroupNamed(this.name);
-		return this.amount && this.descriptNotEmpty && temp;
-	}
-
-	/**
-	 * This method is called when any of the fields in the edit product group
-	 * view is changed by the user.
-	 */
-	@Override
-	public void valuesChanged()
-	{
-		this.name = this.getView().getProductGroupName();
-		if(this.name.isEmpty())
-			this.descriptNotEmpty = false;
-		else
-			this.descriptNotEmpty = true;
-		this.sizeUnits = this.getView().getSupplyUnit();
-		this.setAmount();
-		
-		this.enableComponents();
-	}
-
 	private void setAmount()
 	{
 		if(!getView().getSupplyValue().isEmpty()
@@ -182,7 +156,7 @@ public class EditProductGroupController extends Controller implements
 					float temp = Float.parseFloat(getView().getSupplyValue());
 					if(temp % 1 == 0)
 					{
-						this.value = (int)temp;
+						this.value = (int) temp;
 						this.amount = true;
 					}
 					else
@@ -211,5 +185,31 @@ public class EditProductGroupController extends Controller implements
 		{
 			this.amount = false;
 		}
+	}
+
+	private boolean shouldOKBeEnabled()
+	{
+		boolean temp = true;
+		if(!this.name.equals(this.originalName))
+			temp = this.container.ableToAddProductGroupNamed(this.name);
+		return this.amount && this.descriptNotEmpty && temp;
+	}
+
+	/**
+	 * This method is called when any of the fields in the edit product group
+	 * view is changed by the user.
+	 */
+	@Override
+	public void valuesChanged()
+	{
+		this.name = this.getView().getProductGroupName();
+		if(this.name.isEmpty())
+			this.descriptNotEmpty = false;
+		else
+			this.descriptNotEmpty = true;
+		this.sizeUnits = this.getView().getSupplyUnit();
+		this.setAmount();
+
+		this.enableComponents();
 	}
 }

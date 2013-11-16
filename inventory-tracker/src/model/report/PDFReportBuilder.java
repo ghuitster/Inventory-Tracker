@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.List;
@@ -49,6 +50,167 @@ public class PDFReportBuilder implements IReportBuilder
 	}
 
 	// Methods
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.report.IReportBuilder#addBulletedList(java.lang.String[])
+	 */
+	@Override
+	public void addBulletedList(String[] items)
+	{
+		List unorderedList = new List(List.UNORDERED);
+		unorderedList.setListSymbol("\t* ");
+
+		for(String item: items)
+		{
+			unorderedList.add(new ListItem(item));
+		}
+
+		try
+		{
+			this.pdfDocument.add(unorderedList);
+		}
+		catch(DocumentException de)
+		{
+			de.printStackTrace();
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.report.IReportBuilder#addSectionHeader(java.lang.String)
+	 */
+	@Override
+	public void addSectionHeader(String title)
+	{
+		// this.document += "<br><h2>" + title + "</h2>";
+		Font sectionFont = FontFactory.getFont("Helvetica", 18, Font.BOLD);
+		Paragraph sectionParagraph = new Paragraph(title, sectionFont);
+		sectionParagraph.setAlignment(Element.ALIGN_LEFT);
+		sectionParagraph.setSpacingAfter(5);
+		try
+		{
+			this.pdfDocument.add(sectionParagraph);
+		}
+		catch(DocumentException de)
+		{
+			de.printStackTrace();
+		}
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.report.IReportBuilder#addTableRow(java.lang.String[])
+	 */
+	@Override
+	public void addTableRow(String[] cells)
+	{
+		PdfPCell cell = this.table.getDefaultCell();
+		cell.setBorder(this.cellBorder);
+		cell.setPadding(this.cellPadding);
+		cell.setMinimumHeight(12f);
+		Font cellFont = FontFactory.getFont("Helvetica", 12, Font.NORMAL);
+
+		for(String text: cells)
+		{
+			Paragraph cellParagraph = new Paragraph(text, cellFont);
+			cellParagraph.setAlignment(Element.ALIGN_LEFT);
+			cell = new PdfPCell(cellParagraph);
+			//
+			// cell.addElement(cellParagraph);
+			this.table.addCell(cell);
+		}
+
+		this.table.completeRow();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.report.IReportBuilder#addText(java.lang.String)
+	 */
+	@Override
+	public void addText(String text)
+	{
+		// this.document += "<br><p>" + text + "</p>";
+		Font textFont = FontFactory.getFont("Helvetica", 12, Font.NORMAL);
+		Paragraph titleParagraph = new Paragraph(text, textFont);
+		titleParagraph.setAlignment(Element.ALIGN_LEFT);
+		titleParagraph.setSpacingAfter(5);
+		try
+		{
+			this.pdfDocument.add(titleParagraph);
+		}
+		catch(DocumentException de)
+		{
+			de.printStackTrace();
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.report.IReportBuilder#buildHead(java.lang.String)
+	 */
+	@Override
+	public void buildHead(String title)
+	{
+		Font titleFont = FontFactory.getFont("Helvetica", 24, Font.BOLD);
+		Paragraph titleParagraph = new Paragraph(title, titleFont);
+		titleParagraph.setAlignment(Element.ALIGN_CENTER);
+		titleParagraph.setSpacingAfter(10);
+		try
+		{
+			this.pdfDocument.add(titleParagraph);
+		}
+		catch(DocumentException de)
+		{
+			de.printStackTrace();
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.report.IReportBuilder#finishAndSave(java.lang.String)
+	 */
+	@Override
+	public void finishAndSave()
+	{
+		this.pdfDocument.close();
+		try
+		{
+			this.pdfos.close();
+			java.awt.Desktop.getDesktop().open(new File(this.path));
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.report.IReportBuilder#finishTable()
+	 */
+	@Override
+	public void finishTable()
+	{
+		this.table.setSpacingAfter(10f);
+		try
+		{
+			this.pdfDocument.add(this.table);
+		}
+		catch(DocumentException de)
+		{
+			de.printStackTrace();
+		}
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -104,75 +266,6 @@ public class PDFReportBuilder implements IReportBuilder
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.report.IReportBuilder#buildHead(java.lang.String)
-	 */
-	@Override
-	public void buildHead(String title)
-	{
-		Font titleFont = FontFactory.getFont("Helvetica", 24, Font.BOLD);
-		Paragraph titleParagraph = new Paragraph(title, titleFont);
-		titleParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-		titleParagraph.setSpacingAfter(10);
-		try
-		{
-			this.pdfDocument.add(titleParagraph);
-		}
-		catch(DocumentException de)
-		{
-			de.printStackTrace();
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.report.IReportBuilder#addSectionHeader(java.lang.String)
-	 */
-	@Override
-	public void addSectionHeader(String title)
-	{
-		// this.document += "<br><h2>" + title + "</h2>";
-		Font sectionFont = FontFactory.getFont("Helvetica", 18, Font.BOLD);
-		Paragraph sectionParagraph = new Paragraph(title, sectionFont);
-		sectionParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-		sectionParagraph.setSpacingAfter(5);
-		try
-		{
-			this.pdfDocument.add(sectionParagraph);
-		}
-		catch(DocumentException de)
-		{
-			de.printStackTrace();
-		}
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.report.IReportBuilder#addText(java.lang.String)
-	 */
-	@Override
-	public void addText(String text)
-	{
-		// this.document += "<br><p>" + text + "</p>";
-		Font textFont = FontFactory.getFont("Helvetica", 12, Font.NORMAL);
-		Paragraph titleParagraph = new Paragraph(text, textFont);
-		titleParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-		titleParagraph.setSpacingAfter(5);
-		try
-		{
-			this.pdfDocument.add(titleParagraph);
-		}
-		catch(DocumentException de)
-		{
-			de.printStackTrace();
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see model.report.IReportBuilder#startTable(java.lang.String[])
 	 */
 	@Override
@@ -195,104 +288,12 @@ public class PDFReportBuilder implements IReportBuilder
 		for(String header: columnHeaders)
 		{
 			Paragraph cellParagraph = new Paragraph(header, cellFont);
-			cellParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+			cellParagraph.setAlignment(Element.ALIGN_LEFT);
 			cell = new PdfPCell(cellParagraph);
 			this.table.addCell(cell);
 		}
 
 		this.table.completeRow();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.report.IReportBuilder#addTableRow(java.lang.String[])
-	 */
-	@Override
-	public void addTableRow(String[] cells)
-	{
-		PdfPCell cell = this.table.getDefaultCell();
-		cell.setBorder(this.cellBorder);
-		cell.setPadding(this.cellPadding);
-		cell.setMinimumHeight(12f);
-		Font cellFont = FontFactory.getFont("Helvetica", 12, Font.NORMAL);
-
-		for(String text: cells)
-		{
-			Paragraph cellParagraph = new Paragraph(text, cellFont);
-			cellParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-			cell = new PdfPCell(cellParagraph);
-			//
-			// cell.addElement(cellParagraph);
-			this.table.addCell(cell);
-		}
-
-		this.table.completeRow();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.report.IReportBuilder#addBulletedList(java.lang.String[])
-	 */
-	@Override
-	public void addBulletedList(String[] items)
-	{
-		List unorderedList = new List(List.UNORDERED);
-		unorderedList.setListSymbol("\t* ");
-
-		for(String item: items)
-		{
-			unorderedList.add(new ListItem(item));
-		}
-
-		try
-		{
-			this.pdfDocument.add(unorderedList);
-		}
-		catch(DocumentException de)
-		{
-			de.printStackTrace();
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.report.IReportBuilder#finishTable()
-	 */
-	@Override
-	public void finishTable()
-	{
-		this.table.setSpacingAfter(10f);
-		try
-		{
-			this.pdfDocument.add(this.table);
-		}
-		catch(DocumentException de)
-		{
-			de.printStackTrace();
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.report.IReportBuilder#finishAndSave(java.lang.String)
-	 */
-	@Override
-	public void finishAndSave()
-	{
-		this.pdfDocument.close();
-		try
-		{
-			this.pdfos.close();
-			java.awt.Desktop.getDesktop().open(new File(this.path));
-		}
-		catch(IOException e)
-		{
-			e.printStackTrace();
-		}
 	}
 
 }

@@ -13,11 +13,9 @@ import java.util.Map;
 import java.util.Stack;
 
 import model.IItem;
-import model.IProduct;
 import model.Inventory;
 import model.command.Command;
 import model.command.RemoveItemCommand;
-import observer.DataUpdater;
 
 /**
  * Controller class for the remove item batch view.
@@ -46,7 +44,7 @@ public class RemoveItemBatchController extends Controller implements
 		displayItems = new HashMap<ProductData, List<ItemData>>();
 		displayProducts = new ArrayList<ProductData>();
 		items = new ArrayList<IItem>();
-		
+
 		this.done = new Stack<Command>();
 		this.undone = new Stack<Command>();
 
@@ -132,15 +130,6 @@ public class RemoveItemBatchController extends Controller implements
 		this.updateCurrentView();
 		return;
 	}
-	
-	private void updateCurrentView()
-	{
-		ProductData[] temp = new ProductData[displayProducts.size()];
-		getView().setProducts(displayProducts.toArray(temp));
-		barcode = "";
-		loadValues();
-		enableComponents();
-	}
 
 	/**
 	 * This method is called when the user clicks the "Remove Item" button in
@@ -166,10 +155,12 @@ public class RemoveItemBatchController extends Controller implements
 			return;
 		}
 
-		Command command = new RemoveItemCommand(removingItem.getContainer(), removingItem, this.displayProducts, this.displayItems);
+		Command command =
+				new RemoveItemCommand(removingItem.getContainer(),
+						removingItem, this.displayProducts, this.displayItems);
 
 		command.execute();
-		
+
 		done.push(command);
 		this.updateCurrentView();
 	}
@@ -197,7 +188,7 @@ public class RemoveItemBatchController extends Controller implements
 	@Override
 	public void undo()
 	{
-		
+
 		RemoveItemCommand command = (RemoveItemCommand) done.pop();
 		command.undo();
 		undone.push(command);
@@ -207,6 +198,15 @@ public class RemoveItemBatchController extends Controller implements
 		else
 			this.selectedProductChanged();
 		return;
+	}
+
+	private void updateCurrentView()
+	{
+		ProductData[] temp = new ProductData[displayProducts.size()];
+		getView().setProducts(displayProducts.toArray(temp));
+		barcode = "";
+		loadValues();
+		enableComponents();
 	}
 
 	/**

@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Observer;
-import java.util.Set;
-import java.util.SortedMap;
 import java.util.SortedSet;
 
 import model.exception.InvalidNameException;
@@ -107,11 +105,18 @@ public interface IInventory extends Observer, IObservable
 	IItem getItem(String barcodeNumber);
 
 	/**
-	 * Gets a list of products and productGroups which will run out in the passed time span
+	 * The last time the Removed Items Report was run
+	 */
+	Date getLastRemovedItemReportTime();
+
+	/**
+	 * Gets a list of products and productGroups which will run out in the
+	 * passed time span
 	 * @param months The number of months ahead to check
 	 * @pre none
 	 * @post none
-	 * @return An object containing lists of the products and product groups with low supplies
+	 * @return An object containing lists of the products and product groups
+	 *         with low supplies
 	 */
 	ProductSupplyReport getLowSupplies(int months);
 
@@ -140,11 +145,6 @@ public interface IInventory extends Observer, IObservable
 	 */
 	SortedSet<RemovedItems> getRemovedItems(Date since);
 
-	/**
-	 * The last time the Removed Items Report was run
-	 */
-	Date getLastRemovedItemReportTime();
-	
 	/**
 	 * Clears all Storage Units from the system
 	 * @pre (none)

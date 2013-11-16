@@ -52,7 +52,7 @@ public class TransferItemBatchController extends Controller implements
 		this.displayItems = new HashMap<ProductData, List<ItemData>>();
 		this.pdSet = new HashSet<ProductData>();
 		this.container = (IProductContainer) target.getTag();
-		
+
 		done = new Stack<Command>();
 		undone = new Stack<Command>();
 
@@ -132,19 +132,11 @@ public class TransferItemBatchController extends Controller implements
 	@Override
 	public void redo()
 	{
-		Command command = (TransferItemCommand) this.undone.pop();
+		Command command = this.undone.pop();
 		command.execute();
 		this.done.push(command);
-		
+
 		this.updateCurrentView();
-	}
-	
-	private void updateCurrentView()
-	{
-		ProductData[] pdArray = new ProductData[this.pdSet.size()];
-		this.getView().setProducts(this.pdSet.toArray(pdArray));
-		this.getView().setBarcode("");
-		this.enableComponents();
 	}
 
 	/**
@@ -180,10 +172,12 @@ public class TransferItemBatchController extends Controller implements
 		}
 		else
 		{
-			Command command = new TransferItemCommand(this.item, this.container, this.displayItems, this.pdSet);
+			Command command =
+					new TransferItemCommand(this.item, this.container,
+							this.displayItems, this.pdSet);
 			command.execute();
 			this.done.push(command);
-			
+
 			this.updateCurrentView();
 		}
 
@@ -196,15 +190,23 @@ public class TransferItemBatchController extends Controller implements
 	@Override
 	public void undo()
 	{
-		Command command = (TransferItemCommand) this.done.pop();
+		Command command = this.done.pop();
 		command.undo();
 		this.undone.push(command);
-		
+
 		this.updateCurrentView();
 		if(getView().getSelectedProduct() == null)
 			this.getView().setItems(new ItemData[0]);
 		else
 			this.selectedProductChanged();
+	}
+
+	private void updateCurrentView()
+	{
+		ProductData[] pdArray = new ProductData[this.pdSet.size()];
+		this.getView().setProducts(this.pdSet.toArray(pdArray));
+		this.getView().setBarcode("");
+		this.enableComponents();
 	}
 
 	/**

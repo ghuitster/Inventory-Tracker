@@ -6,14 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import common.UnitUtils;
-
 import model.IItem;
 import model.IProduct;
-import model.IProductContainer;
 import model.IProductGroup;
 import model.IStorageUnit;
 import model.UnitType;
+
+import common.UnitUtils;
 
 /**
  * Visitor which searches for product groups with inconsistent products
@@ -22,13 +21,13 @@ import model.UnitType;
  */
 public class NoticeVisitor implements IVisitor
 {
-	
+
+	private Map<IProductGroup, List<IProduct>> result;
+
 	public NoticeVisitor()
 	{
 		result = new HashMap<IProductGroup, List<IProduct>>();
 	}
-
-	private Map<IProductGroup, List<IProduct>> result;
 
 	/**
 	 * Returns the result of the traversal
@@ -48,7 +47,7 @@ public class NoticeVisitor implements IVisitor
 	 */
 	@Override
 	public void visitItem(IItem item)
-	{ }
+	{}
 
 	/**
 	 * Does nothing
@@ -57,7 +56,7 @@ public class NoticeVisitor implements IVisitor
 	 */
 	@Override
 	public void visitProduct(IProduct product)
-	{ }
+	{}
 
 	/**
 	 * Checks if the product group's three month supply is consistent with its
@@ -69,28 +68,28 @@ public class NoticeVisitor implements IVisitor
 	@Override
 	public void visitProductGroup(IProductGroup group)
 	{
-		 for(IProduct product : group.getAllProducts())
-		 {
-			 UnitType productUnit = product.getThreeMonthSupply().getUnitType();
-			 UnitType groupUnit = group.getThreeMonthSupply().getUnitType();
-			 
-			 if((productUnit == UnitType.COUNT && groupUnit != UnitType.COUNT) ||
-					 (UnitUtils.UnitTypeIsVolume(productUnit) &&
-					 !UnitUtils.UnitTypeIsVolume(groupUnit)) ||
-					 (UnitUtils.UnitTypeIsWeight(productUnit) &&
-					 !UnitUtils.UnitTypeIsWeight(groupUnit)))
-			 {
-				 List<IProduct> productList;
-				 if(result.containsKey(group))
-					 productList = result.get(group);
-				 else
-				 {
-					 productList = new ArrayList<IProduct>();
-					 result.put(group, productList);
-				 }
-				 productList.add(product);
-			 }
-		 }
+		for(IProduct product: group.getAllProducts())
+		{
+			UnitType productUnit = product.getThreeMonthSupply().getUnitType();
+			UnitType groupUnit = group.getThreeMonthSupply().getUnitType();
+
+			if((productUnit == UnitType.COUNT && groupUnit != UnitType.COUNT)
+					|| (UnitUtils.UnitTypeIsVolume(productUnit) && !UnitUtils
+							.UnitTypeIsVolume(groupUnit))
+					|| (UnitUtils.UnitTypeIsWeight(productUnit) && !UnitUtils
+							.UnitTypeIsWeight(groupUnit)))
+			{
+				List<IProduct> productList;
+				if(result.containsKey(group))
+					productList = result.get(group);
+				else
+				{
+					productList = new ArrayList<IProduct>();
+					result.put(group, productList);
+				}
+				productList.add(product);
+			}
+		}
 	}
 
 	/**
@@ -100,6 +99,6 @@ public class NoticeVisitor implements IVisitor
 	 */
 	@Override
 	public void visitStorageUnit(IStorageUnit unit)
-	{ }
+	{}
 
 }

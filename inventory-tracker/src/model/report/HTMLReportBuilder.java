@@ -33,26 +33,18 @@ public class HTMLReportBuilder implements IReportBuilder
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.report.IReportBuilder#setPath(java.lang.String)
+	 * @see model.report.IReportBuilder#addBulletedList(java.lang.String[])
 	 */
 	@Override
-	public void setPath(String path)
+	public void addBulletedList(String[] items)
 	{
-		this.path = path;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.report.IReportBuilder#buildHead(java.lang.String)
-	 */
-	@Override
-	public void buildHead(String title)
-	{
-		this.document +=
-				"<!DOCTYPE html><html><head><title>" + title
-						+ "</title></head><body><br><h1 align=\"center\"><b>"
-						+ title + "</b></h1>";
+		this.document += "<br><ul>";
+		for(String item: items)
+		{
+			this.document +=
+					"<li>" + StringEscapeUtils.escapeHtml4(item) + "</li>";
+		}
+		this.document += "</ul>";
 	}
 
 	/*
@@ -64,36 +56,6 @@ public class HTMLReportBuilder implements IReportBuilder
 	public void addSectionHeader(String title)
 	{
 		this.document += "<br><h2>" + title + "</h2>";
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.report.IReportBuilder#addText(java.lang.String)
-	 */
-	@Override
-	public void addText(String text)
-	{
-		this.document += "<br><p>" + text + "</p>";
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see model.report.IReportBuilder#startTable(java.lang.String[])
-	 */
-	@Override
-	public void startTable(String[] columnHeaders)
-	{
-		cellWidth = 100 / columnHeaders.length;
-		this.document +=
-				"<table width=\"100%\" align=\"center\" style=\"text-align: left; border: 1px solid;\"><thead>";
-		for(String str: columnHeaders)
-		{
-			this.document +=
-					"<th width=\"" + this.cellWidth + "%\">" + str + "</th>";
-		}
-		this.document += "</thead><tbody>";
 	}
 
 	/*
@@ -117,29 +79,26 @@ public class HTMLReportBuilder implements IReportBuilder
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.report.IReportBuilder#addBulletedList(java.lang.String[])
+	 * @see model.report.IReportBuilder#addText(java.lang.String)
 	 */
 	@Override
-	public void addBulletedList(String[] items)
+	public void addText(String text)
 	{
-		this.document += "<br><ul>";
-		for(String item: items)
-		{
-			this.document +=
-					"<li>" + StringEscapeUtils.escapeHtml4(item) + "</li>";
-		}
-		this.document += "</ul>";
+		this.document += "<br><p>" + text + "</p>";
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see model.report.IReportBuilder#finishTable()
+	 * @see model.report.IReportBuilder#buildHead(java.lang.String)
 	 */
 	@Override
-	public void finishTable()
+	public void buildHead(String title)
 	{
-		this.document += "</tbody><tfoot></tfoot></table>";
+		this.document +=
+				"<!DOCTYPE html><html><head><title>" + title
+						+ "</title></head><body><br><h1 align=\"center\"><b>"
+						+ title + "</b></h1>";
 	}
 
 	/*
@@ -174,5 +133,46 @@ public class HTMLReportBuilder implements IReportBuilder
 			ie.printStackTrace();
 			return;
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.report.IReportBuilder#finishTable()
+	 */
+	@Override
+	public void finishTable()
+	{
+		this.document += "</tbody><tfoot></tfoot></table>";
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.report.IReportBuilder#setPath(java.lang.String)
+	 */
+	@Override
+	public void setPath(String path)
+	{
+		this.path = path;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see model.report.IReportBuilder#startTable(java.lang.String[])
+	 */
+	@Override
+	public void startTable(String[] columnHeaders)
+	{
+		cellWidth = 100 / columnHeaders.length;
+		this.document +=
+				"<table width=\"100%\" align=\"center\" style=\"text-align: left; border: 1px solid;\"><thead>";
+		for(String str: columnHeaders)
+		{
+			this.document +=
+					"<th width=\"" + this.cellWidth + "%\">" + str + "</th>";
+		}
+		this.document += "</thead><tbody>";
 	}
 }

@@ -4,7 +4,6 @@ package gui.item;
 import gui.common.Controller;
 import gui.common.IView;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import model.IItem;

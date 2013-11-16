@@ -21,15 +21,6 @@ public class ProdStatReport extends Report
 		this.monthsToShow = monthsToShow;
 	}
 
-	// Methods
-	/**
-	 * Gets the product statistics for this report
-	 */
-	public List<ProductStats> getProductStats()
-	{
-		return productStats;
-	}
-
 	@Override
 	public void createReport(String path)
 	{
@@ -55,23 +46,29 @@ public class ProdStatReport extends Report
 	{
 		DecimalFormat df = new DecimalFormat();
 		df.setMaximumFractionDigits(2);
-		
+
 		String desc = stats.getProduct().getDescription().getDescription();
 		String barcode = stats.getProduct().getBarcode().getNumber();
 		String size = stats.getProduct().getSize().toString();
-		String supply = df.format((stats.getProduct().getThreeMonthSupply().getAmount() * 
-				monthsToShow / 3f)) + " " + 
-				stats.getProduct().getThreeMonthSupply().getUnitType();
+		String supply =
+				df.format((stats.getProduct().getThreeMonthSupply().getAmount()
+						* monthsToShow / 3f))
+						+ " "
+						+ stats.getProduct().getThreeMonthSupply()
+								.getUnitType();
 		String supplyCurAndAverage =
-				df.format(stats.getCurrentSupply()) + " / " + df.format(stats.getAverageSupply());
+				df.format(stats.getCurrentSupply()) + " / "
+						+ df.format(stats.getAverageSupply());
 		String supplyMinAndMax =
-				df.format(stats.getMinSupply()) + " / " + df.format(stats.getMaxSupply());
+				df.format(stats.getMinSupply()) + " / "
+						+ df.format(stats.getMaxSupply());
 		String supplyUsedAndAdded =
-				df.format(stats.getUsedSupply()) + " / " + df.format(stats.getAddedSupply());
+				df.format(stats.getUsedSupply()) + " / "
+						+ df.format(stats.getAddedSupply());
 		String shelfLife = stats.getProduct().getShelfLife() + " months";
 		String usedAgeAvgAndMax =
-				stats.getMaxUsedAge() > 0 ? 
-				df.format(stats.getAvgUsedAge()) + " days / " + df.format(stats.getMaxUsedAge())
+				stats.getMaxUsedAge() > 0 ? df.format(stats.getAvgUsedAge())
+						+ " days / " + df.format(stats.getMaxUsedAge())
 						+ " days" : "";
 		String curAgeAvgAndMax =
 				df.format(stats.getAvgCurrentAge()) + " days / "
@@ -79,8 +76,17 @@ public class ProdStatReport extends Report
 
 		String[] row =
 				{desc, barcode, size, supply, supplyCurAndAverage,
-						supplyMinAndMax, supplyUsedAndAdded, 
-						shelfLife, usedAgeAvgAndMax, curAgeAvgAndMax};
+						supplyMinAndMax, supplyUsedAndAdded, shelfLife,
+						usedAgeAvgAndMax, curAgeAvgAndMax};
 		return row;
+	}
+
+	// Methods
+	/**
+	 * Gets the product statistics for this report
+	 */
+	public List<ProductStats> getProductStats()
+	{
+		return productStats;
 	}
 }

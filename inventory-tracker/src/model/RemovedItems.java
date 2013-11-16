@@ -18,6 +18,16 @@ public class RemovedItems implements Comparable<RemovedItems>
 		this.product = product;
 	}
 
+	@Override
+	public int compareTo(RemovedItems other)
+	{
+		return this
+				.getProduct()
+				.getDescription()
+				.getDescription()
+				.compareTo(other.getProduct().getDescription().getDescription());
+	}
+
 	public int getCount()
 	{
 		return count;
@@ -41,11 +51,5 @@ public class RemovedItems implements Comparable<RemovedItems>
 	public void setSupply(int supply)
 	{
 		this.supply = supply;
-	}
-	
-	public int compareTo(RemovedItems other)
-	{
-		return this.getProduct().getDescription().getDescription()
-				.compareTo(other.getProduct().getDescription().getDescription());
 	}
 }

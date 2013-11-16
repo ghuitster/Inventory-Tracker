@@ -1,7 +1,6 @@
 
 package model;
 
-import model.visitor.IVisitor;
 
 public interface IStorageUnit extends IProductContainer
 {
@@ -11,5 +10,5 @@ public interface IStorageUnit extends IProductContainer
 	 */
 	@Override
 	public abstract String toString();
-	
+
 }

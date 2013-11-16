@@ -96,17 +96,6 @@ public class RemovedReportController extends Controller implements
 		report.createReport(this.makePath(fileType));
 	}
 
-	private String makePath(String fileType)
-	{
-		String timeStamp =
-				new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar
-						.getInstance().getTime());
-		String filename =
-				"Reports" + File.separator + "RemovedItemsReport-" + timeStamp
-						+ fileType;
-		return filename;
-	}
-
 	/**
 	 * Sets the enable/disable state of all components in the controller's view.
 	 * A component should be enabled only if the user is currently allowed to
@@ -140,10 +129,6 @@ public class RemovedReportController extends Controller implements
 		return (IRemovedReportView) super.getView();
 	}
 
-	//
-	// IExpiredReportController overrides
-	//
-
 	/**
 	 * Loads data into the controller's view.
 	 * 
@@ -165,6 +150,21 @@ public class RemovedReportController extends Controller implements
 		{
 			this.date = this.getView().getSinceDateValue();
 		}
+	}
+
+	//
+	// IExpiredReportController overrides
+	//
+
+	private String makePath(String fileType)
+	{
+		String timeStamp =
+				new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar
+						.getInstance().getTime());
+		String filename =
+				"Reports" + File.separator + "RemovedItemsReport-" + timeStamp
+						+ fileType;
+		return filename;
 	}
 
 	/**

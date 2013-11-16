@@ -104,7 +104,6 @@ public interface IItem extends IObservable, ITaggable, Comparable<IItem>
 	 */
 	public abstract void setExitTime(Date exitTime);
 
-
 	/**
 	 * @pre product != null
 	 * @post product == product passed in
@@ -112,12 +111,12 @@ public interface IItem extends IObservable, ITaggable, Comparable<IItem>
 	 */
 	public abstract void setProduct(IProduct product);
 
+	void signalChanged();
+
 	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public abstract String toString();
-
-	void signalChanged();
 
 }

@@ -1,6 +1,10 @@
 
 package gui.reports.productstats;
 
+import gui.common.Controller;
+import gui.common.FileFormat;
+import gui.common.IView;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -13,9 +17,6 @@ import model.report.IReportBuilder;
 import model.report.PDFReportBuilder;
 import model.report.ProdStatReport;
 import model.report.Report;
-import gui.common.Controller;
-import gui.common.FileFormat;
-import gui.common.IView;
 
 /**
  * Controller class for the product statistics report view.
@@ -34,7 +35,7 @@ public class ProductStatsReportController extends Controller implements
 	public ProductStatsReportController(IView view)
 	{
 		super(view);
-		
+
 		this.month = 3;
 		this.submit = true;
 
@@ -64,23 +65,13 @@ public class ProductStatsReportController extends Controller implements
 			builder = new HTMLReportBuilder();
 			fileType = ".html";
 		}
-		
-		List<ProductStats> productStats = Inventory.getInstance().getProductStats(this.month);
-		
+
+		List<ProductStats> productStats =
+				Inventory.getInstance().getProductStats(this.month);
+
 		Report report = new ProdStatReport(productStats, builder, this.month);
 		String path = makePath(fileType);
 		report.createReport(path);
-	}
-
-	private String makePath(String fileType)
-	{
-		  String timeStamp =
-				  new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar
-				  .getInstance().getTime());
-		  String filename =
-				  "Reports" + File.separator + "ProductStatsReport-" + timeStamp
-				  + fileType;
-		return filename;
 	}
 
 	/**
@@ -112,10 +103,6 @@ public class ProductStatsReportController extends Controller implements
 		return (IProductStatsReportView) super.getView();
 	}
 
-	//
-	// IProductStatsReportController overrides
-	//
-
 	/**
 	 * Loads data into the controller's view.
 	 * 
@@ -127,6 +114,21 @@ public class ProductStatsReportController extends Controller implements
 	protected void loadValues()
 	{
 		this.getView().setMonths("" + this.month);
+	}
+
+	//
+	// IProductStatsReportController overrides
+	//
+
+	private String makePath(String fileType)
+	{
+		String timeStamp =
+				new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar
+						.getInstance().getTime());
+		String filename =
+				"Reports" + File.separator + "ProductStatsReport-" + timeStamp
+						+ fileType;
+		return filename;
 	}
 
 	/**
@@ -153,7 +155,7 @@ public class ProductStatsReportController extends Controller implements
 		}
 		else
 			this.submit = true;
-		
+
 		this.enableComponents();
 	}
 
