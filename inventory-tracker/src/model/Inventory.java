@@ -338,13 +338,16 @@ public class Inventory extends Observable implements IInventory, Serializable
 				DateInfo info = dateList.get(date);
 				if(info.dateType != DateType.StartOfReport)
 				{
-					if(track && lastDate != null && runningTotal > 0)
+					if(track)
 					{
 						if(info.dateType == DateType.EntryDate)
 							supplyAdded++;
 						if(info.dateType == DateType.ExitDate)
 							supplyUsed++;
-						
+					}
+					
+					if(track && lastDate != null && runningTotal > 0)
+					{	
 						int blockSeconds = (int)((date.getTime() - lastDate.getTime()) / 1000);
 						totalSeconds += blockSeconds;
 						supplyEnumerator += runningTotal * blockSeconds;

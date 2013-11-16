@@ -54,7 +54,7 @@ public class ProdStatReport extends Report
 	private String[] createRow(ProductStats stats)
 	{
 		DecimalFormat df = new DecimalFormat();
-		df.setMaximumFractionDigits(1);
+		df.setMaximumFractionDigits(2);
 		
 		String desc = stats.getProduct().getDescription().getDescription();
 		String barcode = stats.getProduct().getBarcode().getNumber();
@@ -70,8 +70,9 @@ public class ProdStatReport extends Report
 				df.format(stats.getUsedSupply()) + " / " + df.format(stats.getAddedSupply());
 		String shelfLife = stats.getProduct().getShelfLife() + " months";
 		String usedAgeAvgAndMax =
+				stats.getMaxUsedAge() > 0 ? 
 				df.format(stats.getAvgUsedAge()) + " days / " + df.format(stats.getMaxUsedAge())
-						+ " days";
+						+ " days" : "";
 		String curAgeAvgAndMax =
 				df.format(stats.getAvgCurrentAge()) + " days / "
 						+ df.format(stats.getMaxCurrentAge()) + " days";
