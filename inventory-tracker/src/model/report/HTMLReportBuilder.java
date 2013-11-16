@@ -167,7 +167,8 @@ public class HTMLReportBuilder implements IReportBuilder
 	{
 		cellWidth = 100 / columnHeaders.length;
 		this.document +=
-				"<table width=\"100%\" align=\"center\" style=\"text-align: left; border: 1px solid;\"><thead>";
+				"<table width=\"100%\" align=\"center\" "
+						+ "style=\"text-align: left; border: 1px solid;\"><thead>";
 		for(String str: columnHeaders)
 		{
 			this.document +=
