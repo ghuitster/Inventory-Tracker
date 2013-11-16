@@ -17,7 +17,6 @@ import com.itextpdf.text.List;
 import com.itextpdf.text.ListItem;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -29,18 +28,11 @@ import com.itextpdf.text.pdf.PdfWriter;
 public class PDFReportBuilder implements IReportBuilder
 {
 	// Variables
-	private final String document = null;
 	private float cellWidth = 0.0f;
 	private Document pdfDocument = null;
-	private final float BAR_HEIGHT_MULTIPLE = 3.0f;
-	private final float LABEL_WIDTH_PADDING = 10.0f;
-	private final float TOP_BOTTOM_MARGINS = 36f;
 	private final float LEFT_RIGHT_MARGINS = 24f;
-	private final float fontSize = 7.0f;
 	private final float cellPadding = 5.0f;
 	private final int cellBorder = 1;
-	private BaseFont basefont;
-	private Font font;
 	private String path = null;
 	private PdfWriter writer = null;
 	private PdfPTable table = null;
@@ -54,22 +46,6 @@ public class PDFReportBuilder implements IReportBuilder
 	{
 		this.path = "";
 		this.pdfDocument = new Document(PageSize.LETTER_LANDSCAPE.rotate());
-		// // step 1
-		// Document document = new Document(PageSize.A4.rotate());
-		// // step 2
-		// PdfWriter.getInstance(document, new FileOutputStream(filename));
-		// // step 3
-		// document.open();
-		// // step 4
-		// List<Date> days = PojoFactory.getDays(connection);
-		// for (Date day : days) {
-		// document.add(getTable(connection, day));
-		// document.newPage();
-		// }
-		// // step 5
-		// document.close();
-		// // close the database connection
-		// connection.close();
 	}
 
 	// Methods
@@ -82,12 +58,8 @@ public class PDFReportBuilder implements IReportBuilder
 	@Override
 	public void setPath(String path)
 	{
-		// Set the path and get the document, writer, and file output stream
-		// ready to build the document.
 		this.path = path;
 
-		// Create the label directory and filename for this particular batch of
-		// labels.
 		File directory =
 				new File(path.substring(0, path.lastIndexOf(File.separator)));
 		directory.mkdirs();
@@ -133,11 +105,6 @@ public class PDFReportBuilder implements IReportBuilder
 	@Override
 	public void buildHead(String title)
 	{
-		// this.document +=
-		// "<!DOCTYPE html><html><head><title>" + title
-		// + "</title></head><body><br><h1 align=\"center\"><b>"
-		// + title + "</b></h1>";
-
 		Font titleFont = FontFactory.getFont("Helvetica", 24, Font.BOLD);
 		Paragraph titleParagraph = new Paragraph(title, titleFont);
 		titleParagraph.setAlignment(Paragraph.ALIGN_CENTER);
@@ -267,16 +234,8 @@ public class PDFReportBuilder implements IReportBuilder
 	@Override
 	public void addBulletedList(String[] items)
 	{
-		// this.document += "<br><ul>";
-		// for(String item: items)
-		// {
-		// this.document +=
-		// "<li>" + StringEscapeUtils.escapeHtml4(item) + "</li>";
-		// }
-		// this.document += "</ul>";
-
 		List unorderedList = new List(List.UNORDERED);
-		unorderedList.setListSymbol("*");
+		unorderedList.setListSymbol("\t* ");
 
 		for(String item: items)
 		{
@@ -301,8 +260,6 @@ public class PDFReportBuilder implements IReportBuilder
 	@Override
 	public void finishTable()
 	{
-		// this.document += "</tbody><tfoot></tfoot></table>";
-
 		this.table.setSpacingAfter(10f);
 		try
 		{
@@ -322,30 +279,6 @@ public class PDFReportBuilder implements IReportBuilder
 	@Override
 	public void finishAndSave()
 	{
-		// this.document += "</body></html>";
-		// OutputStream file = null;
-		//
-		// try
-		// {
-		// File directory =
-		// new File(this.path.substring(0,
-		// this.path.lastIndexOf(File.separator)));
-		// directory.mkdirs();
-		// file = new FileOutputStream(new File(this.path));
-		// pdfDocument = new Document(PageSize.LETTER_LANDSCAPE);
-		// PdfWriter.getInstance(pdfDocument, file);
-		// pdfDocument.open();
-		// HTMLWorker htmlWorker = new HTMLWorker(pdfDocument);
-		// htmlWorker.parse(new StringReader(this.document));
-		// pdfDocument.close();
-		// file.close();
-		// java.awt.Desktop.getDesktop().open(new File(this.path));
-		// }
-		// catch(Exception e)
-		// {
-		// e.printStackTrace();
-		// }
-
 		this.pdfDocument.close();
 		try
 		{

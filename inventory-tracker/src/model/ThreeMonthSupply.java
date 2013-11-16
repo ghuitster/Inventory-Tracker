@@ -97,8 +97,7 @@ public class ThreeMonthSupply extends NonCountAmount
 	@Override
 	public String toString()
 	{
-		return "NewThreeMonthSupply [amount=" + amount + ", unitType="
-				+ unitType + "]";
+		return amount + " " + unitType;
 	}
 
 }

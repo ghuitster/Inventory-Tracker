@@ -63,6 +63,8 @@ public class NMonthSupplyReport extends Report
 
 		for(ProductSupply prodSupply: this.productSupplyInfo)
 		{
+			System.out.println(prodSupply.getProduct().getDescription()
+					.getDescription());
 			String product =
 					prodSupply.getProduct().getDescription().getDescription();
 			String barcode = prodSupply.getProduct().getBarcode().getNumber();

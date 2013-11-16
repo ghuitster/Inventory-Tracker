@@ -103,6 +103,6 @@ public class CountUnitSize extends CountAmount
 	@Override
 	public String toString()
 	{
-		return "" + amount;
+		return amount + " " + this.unitType;
 	}
 }

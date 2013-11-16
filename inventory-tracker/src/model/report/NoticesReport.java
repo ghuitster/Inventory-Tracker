@@ -4,6 +4,7 @@ package model.report;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import model.IProduct;
 import model.IProductGroup;
@@ -36,14 +37,17 @@ public class NoticesReport extends Report
 		this.builder.setPath(path);
 		this.builder.buildHead("Notices");
 
+		System.out.println(this.inconsistentGroups.isEmpty());
+
 		if(!this.inconsistentGroups.isEmpty())
 		{
 			this.builder.addSectionHeader("3-Month Supply Warnings");
-			IProductGroup[] keys =
-					(IProductGroup[]) this.inconsistentGroups.keySet()
-							.toArray();
+			Set<IProductGroup> keySet = this.inconsistentGroups.keySet();
 
-			for(IProductGroup prodGroup: keys)
+			// IProductGroup[] keys =
+			// (ProductGroup[]) this.inconsistentGroups.keySet().toArray();
+
+			for(IProductGroup prodGroup: keySet)
 			{
 				String paragraph =
 						"Product group "
@@ -66,7 +70,13 @@ public class NoticesReport extends Report
 					prodStrings.add(prodString);
 				}
 
-				this.builder.addBulletedList((String[]) prodStrings.toArray());
+				String[] temp = new String[prodStrings.size()];
+				for(int i = 0; i < temp.length; i++)
+				{
+					temp[i] = prodStrings.get(i);
+				}
+
+				this.builder.addBulletedList(temp);
 			}
 		}
 		else
