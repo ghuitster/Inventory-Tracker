@@ -91,9 +91,13 @@ public class PDFReportBuilder implements IReportBuilder
 			this.writer.setPdfVersion(PdfWriter.VERSION_1_7);
 			this.pdfDocument.open();
 		}
-		catch(DocumentException | FileNotFoundException e)
+		catch(DocumentException de)
 		{
-			e.printStackTrace();
+			de.printStackTrace();
+		}
+		catch(FileNotFoundException fnfe)
+		{
+			fnfe.printStackTrace();
 		}
 	}
 
