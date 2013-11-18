@@ -138,9 +138,10 @@ public class AddItemBatchController extends Controller implements
 				addingProduct = AddItemBatchController.product;
 				addingProductData =
 						DataUpdater.createProductData(addingProduct);
+				addingProductData.setTag(addingProduct);
+				addingProduct.setTag(addingProductData);
 				addingProductData.setCount(count + "");
 				displayProducts.add(addingProductData);
-				AddItemBatchController.product = addingProduct;
 			}
 		}
 
@@ -150,9 +151,9 @@ public class AddItemBatchController extends Controller implements
 				new AddItemCommand((IProductContainer) target.getTag(), items,
 						!productExistsInSystem);
 		((AddItemCommand) command).execute();
-
+		addingProductData.setCount(displayItems.get(addingProductData).size()
+				+ "");
 		executedActions.push(command);
-
 		items = new ArrayList<IItem>();
 
 		initializeValues();
@@ -196,6 +197,21 @@ public class AddItemBatchController extends Controller implements
 	public void barcodeChanged()
 	{
 		barcode = getView().getBarcode();
+
+		if(useBarcodeScanner)
+		{
+			try
+			{
+				Thread.sleep(800);
+			}
+			catch(InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+
+			this.addItem();
+		}
+
 		enableComponents();
 	}
 
@@ -400,12 +416,13 @@ public class AddItemBatchController extends Controller implements
 		boolean found = false;
 
 		for(ProductData data: displayProducts)
-			if(data.equals(productData))
+			if(data.getBarcode().equals(productData.getBarcode()))
 			{
-				data.setCount((Integer.parseInt(data.getCount()) + Integer
-						.parseInt(productData.getCount())) + "");
+				data.setCount((Integer.parseInt(data.getCount()) + count) + "");
 				found = true;
 			}
+
+		System.out.println(found);
 
 		if(!found)
 			displayProducts.add(productData);
