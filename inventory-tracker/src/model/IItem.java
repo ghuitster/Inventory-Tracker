@@ -5,6 +5,11 @@ import java.util.Date;
 
 public interface IItem extends IObservable, ITaggable, Comparable<IItem>
 {
+	/**
+	 * A unique ID to represent this product container 
+	 * @return
+	 */
+	public abstract int getId();
 
 	/**
 	 * @pre barcode != null
