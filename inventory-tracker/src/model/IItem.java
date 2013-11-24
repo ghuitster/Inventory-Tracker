@@ -6,7 +6,7 @@ import java.util.Date;
 public interface IItem extends IObservable, ITaggable, Comparable<IItem>
 {
 	/**
-	 * A unique ID to represent this product container 
+	 * A unique ID to represent this item 
 	 * @return
 	 */
 	public abstract int getId();

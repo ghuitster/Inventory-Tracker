@@ -355,4 +355,11 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 				+ ", container=" + container + "]";
 	}
 
+	@Override
+	public int getId()
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

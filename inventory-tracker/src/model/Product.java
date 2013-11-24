@@ -485,4 +485,11 @@ public class Product extends Observable implements IProduct, Serializable
 				+ ", shelfLife=" + shelfLife + ", threeMonthSupply="
 				+ threeMonthSupply + ", containers=" + containers + "]";
 	}
+
+	@Override
+	public int getId()
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

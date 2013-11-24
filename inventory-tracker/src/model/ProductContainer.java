@@ -454,4 +454,11 @@ public abstract class ProductContainer extends Observable implements
 			group.traverse(visitor);
 		}
 	}
+	
+	@Override
+	public int getId()
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

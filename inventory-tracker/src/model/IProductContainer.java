@@ -10,6 +10,12 @@ public interface IProductContainer extends IObservable, ITaggable,
 {
 
 	/**
+	 * A unique ID to represent this product container 
+	 * @return
+	 */
+	public abstract int getId();
+	
+	/**
 	 * @pre item.barcode != empty
 	 * @pre item.barcode is a valid UPC barcode
 	 * @pre item.barcode is unique among all items
