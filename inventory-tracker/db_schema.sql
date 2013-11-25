@@ -9,32 +9,30 @@ CREATE TABLE ProductContainer
 	Name TEXT NOT NULL,
 	ThreeMonthSupply REAL,
 	parentID INT NOT NULL,
-	ThreeMonthSupplyType TEXT,
-	CONSTRAINT ck_ThreeMonthSupplyType CHECK(ThreeMonthSupplyType IN(""))
+	ThreeMonthSupplyType INT
 );
 
 CREATE TABLE Item
 (
 	id INT NOT NULL PRIMARY KEY AUTOINCREMENT,
 	productID INT NOT NULL,
-	Barcode REAL NOT NULL,
-	EntryTEXT TEXT NOT NULL,
-	ExitTime TEXT,
-	ExpirationDate TEXT,
+	Barcode INT NOT NULL,
+	EntryDate INT NOT NULL,
+	ExitTime INT,
+	ExpirationDate INT,
 	containerID INT NOT NULL 
 );
 
 CREATE TABLE Product
 (
 	id INT NOT NULL PRIMARY KEY AUTOINCREMENT,
-	CreationTEXT TEXT NOT NULL,
+	CreationDate INT NOT NULL,
 	Barcode TEXT NOT NULL,
 	Description TEXT NOT NULL,
 	Size REAL NOT NULL,
 	ShelfLife INT,
 	ThreeMonthSupply INT,
-	SizeUnit TEXT NOT NULL,
-	CONSTRAINT ck_SizeUnit CHECK(SizeUnit IN(""))
+	SizeUnit INT NOT NULL
 );
 
 CREATE TABLE ContainerProducts
