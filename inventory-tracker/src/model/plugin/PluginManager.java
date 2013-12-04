@@ -3,12 +3,15 @@ package model.plugin;
 
 public class PluginManager
 {
+	private Plugin firstPlugin = null;
+	private String configFilePath = null;
 	/**
 	 * constructor
 	 */
-	public PluginManager()
+	public PluginManager(String filePath)
 	{
-
+		this.configFilePath = filePath;
+		this.loadConfig();
 	}
 
 	/**
@@ -18,7 +21,7 @@ public class PluginManager
 	 */
 	public Plugin getFirstPlugin()
 	{
-		return null;
+		return this.firstPlugin;
 	}
 
 	/**
@@ -27,6 +30,6 @@ public class PluginManager
 	 */
 	private void loadConfig()
 	{
-
+		
 	}
 }

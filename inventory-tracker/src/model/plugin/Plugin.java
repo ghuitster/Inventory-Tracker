@@ -23,6 +23,6 @@ public abstract class Plugin
 	 */
 	public void setNext(Plugin plugin)
 	{
-
+		this.nextPlugin = plugin;
 	}
 }
