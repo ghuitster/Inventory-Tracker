@@ -560,7 +560,8 @@ public class Inventory extends Observable implements IInventory, Serializable
 	 */
 	private void reportRemovedItem(IItem item)
 	{
-		item.setExitTime(DateUtils.currentDate());
+		if(item.getExitTime() == null)
+			item.setExitTime(DateUtils.currentDate());
 		item.setContainer(null);
 		this.removedItems.add(item);
 		this.barcodeItems.remove(item.getBarcode().toString());
