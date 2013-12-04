@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS ProductContainer;
 DROP TABLE IF EXISTS Item;
 DROP TABLE IF EXISTS Product;
 DROP TABLE IF EXISTS ContainerProducts;
+DROP TABLE IF EXISTS InventoryData;
 
 CREATE TABLE ProductContainer
 (
@@ -39,4 +40,11 @@ CREATE TABLE ContainerProducts
 (
 	containerID INT NOT NULL,
 	productID INT NOT NULL
+);
+
+CREATE TABLE InventoryData
+(
+	id INT NOT NULL PRIMARY KEY AUTOINCREMENT,
+	key TEXT NOT NULL,
+	value TEXT NOT NULL
 );
