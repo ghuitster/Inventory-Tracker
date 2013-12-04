@@ -297,6 +297,13 @@ public class Product extends Observable implements IProduct, Serializable
 		return description;
 	}
 
+	@Override
+	public int getId()
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -484,12 +491,5 @@ public class Product extends Observable implements IProduct, Serializable
 				+ description + ", barcode=" + barcode + ", size=" + size
 				+ ", shelfLife=" + shelfLife + ", threeMonthSupply="
 				+ threeMonthSupply + ", containers=" + containers + "]";
-	}
-
-	@Override
-	public int getId()
-	{
-		// TODO Auto-generated method stub
-		return 0;
 	}
 }

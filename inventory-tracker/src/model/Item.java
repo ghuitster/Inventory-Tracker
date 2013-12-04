@@ -233,6 +233,13 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 		return expiration;
 	}
 
+	@Override
+	public int getId()
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -353,13 +360,6 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 				+ ", entryDate=" + entryDate + ", expirationDate="
 				+ getExpirationDate() + ", exitTime=" + exitTime
 				+ ", container=" + container + "]";
-	}
-
-	@Override
-	public int getId()
-	{
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 }

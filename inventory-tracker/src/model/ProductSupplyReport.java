@@ -30,6 +30,7 @@ public class ProductSupplyReport
 	{
 		return productSupplies;
 	}
+
 	public void setGroupSupplies(List<ProductGroupSupply> groupSupplies)
 	{
 		this.groupSupplies = groupSupplies;

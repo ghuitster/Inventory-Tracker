@@ -6,12 +6,6 @@ import java.util.Date;
 public interface IItem extends IObservable, ITaggable, Comparable<IItem>
 {
 	/**
-	 * A unique ID to represent this item 
-	 * @return
-	 */
-	public abstract int getId();
-
-	/**
 	 * @pre barcode != null
 	 * @param barcode the Barcode to attempt to set
 	 * @return whether or not the barcode can be set
@@ -69,6 +63,12 @@ public interface IItem extends IObservable, ITaggable, Comparable<IItem>
 	 * @return the expirationDate
 	 */
 	public abstract Date getExpirationDate();
+
+	/**
+	 * A unique ID to represent this item
+	 * @return
+	 */
+	public abstract int getId();
 
 	/**
 	 * @return the product

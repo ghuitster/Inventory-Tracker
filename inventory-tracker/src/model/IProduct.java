@@ -7,12 +7,6 @@ import java.util.Set;
 public interface IProduct extends ITaggable, IObservable, Comparable<IProduct>
 {
 	/**
-	 * A unique ID to represent this product 
-	 * @return
-	 */
-	public abstract int getId();
-
-	/**
 	 * @pre container != null
 	 * @param container the container to attempt to add
 	 * @return whether the container can be added or not
@@ -99,6 +93,12 @@ public interface IProduct extends ITaggable, IObservable, Comparable<IProduct>
 	 * @return the description
 	 */
 	public abstract IProductDescription getDescription();
+
+	/**
+	 * A unique ID to represent this product
+	 * @return
+	 */
+	public abstract int getId();
 
 	/**
 	 * @return the shelfLife

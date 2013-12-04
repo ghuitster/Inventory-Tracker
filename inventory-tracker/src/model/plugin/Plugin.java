@@ -1,3 +1,4 @@
+
 package model.plugin;
 
 import java.util.List;
@@ -5,7 +6,7 @@ import java.util.List;
 public abstract class Plugin
 {
 	protected Plugin nextPlugin;
-	
+
 	/**
 	 * 
 	 * @param barcode
@@ -14,7 +15,7 @@ public abstract class Plugin
 	 * @post null if no product is found or a list of the data
 	 */
 	abstract List<String> findProduct(String barcode);
-	
+
 	/**
 	 * @pre plugin is not null
 	 * @post plugin is stored
@@ -22,6 +23,6 @@ public abstract class Plugin
 	 */
 	public void setNext(Plugin plugin)
 	{
-		
+
 	}
 }

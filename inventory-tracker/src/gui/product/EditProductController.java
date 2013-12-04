@@ -48,8 +48,7 @@ public class EditProductController extends Controller implements
 
 		product = (IProduct) target.getTag();
 		createSizeUnitsFromUnitType();
-		this.cThreeMonthSupply =
-				this.product.getThreeMonthSupply();
+		this.cThreeMonthSupply = this.product.getThreeMonthSupply();
 		if(this.sizeUnits == SizeUnits.Count)
 			this.sizeValue = ((CountUnitSize) product.getSize()).getAmount();
 		else
@@ -158,9 +157,7 @@ public class EditProductController extends Controller implements
 		else
 			this.getView().setSizeValue("" + this.sizeValue);
 		this.getView().setSupply(
-				""
-						+ this.product
-								.getThreeMonthSupply().getAmount());
+				"" + this.product.getThreeMonthSupply().getAmount());
 
 		this.getView().setSizeUnit(this.sizeUnits);
 	}

@@ -1,7 +1,6 @@
 
 package model;
 
-
 public interface IStorageUnit extends IProductContainer
 {
 

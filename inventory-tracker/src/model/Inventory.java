@@ -38,6 +38,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 		public DateType dateType;
 
 		public IItem item;
+
 		public DateInfo(DateType dateType, IItem item)
 		{
 			this.dateType = dateType;

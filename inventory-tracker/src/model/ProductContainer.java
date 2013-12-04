@@ -269,6 +269,13 @@ public abstract class ProductContainer extends Observable implements
 		return new TreeSet<IProduct>(this.products);
 	}
 
+	@Override
+	public int getId()
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -453,12 +460,5 @@ public abstract class ProductContainer extends Observable implements
 		{
 			group.traverse(visitor);
 		}
-	}
-	
-	@Override
-	public int getId()
-	{
-		// TODO Auto-generated method stub
-		return 0;
 	}
 }
