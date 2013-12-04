@@ -1,6 +1,6 @@
 package model.plugin;
 
-public class basePlugin extends Plugin
+public class BasePlugin extends Plugin
 {
 
 	@Override

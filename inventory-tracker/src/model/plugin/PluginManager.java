@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class PluginManager
 {
-	private Plugin firstPlugin = new basePlugin();
+	private Plugin firstPlugin = new BasePlugin();
 	/**
 	 * constructor
 	 */
