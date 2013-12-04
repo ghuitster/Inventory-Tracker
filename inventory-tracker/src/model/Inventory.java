@@ -77,21 +77,21 @@ public class Inventory extends Observable implements IInventory, Serializable
 	/**
 	 * A list of all the storage units
 	 */
-	private final Set<IStorageUnit> storageUnits;
+	private Set<IStorageUnit> storageUnits;
 
 	/**
 	 * Persistence object for saving and loading data
 	 */
-	private final IPersistence persistence;
+	private IPersistence persistence;
 	/**
 	 * Mapping of all removed Items, for easy retrieval
 	 */
-	private final SortedSet<IItem> removedItems;
+	private SortedSet<IItem> removedItems;
 
 	/**
 	 * Record of orphaned products
 	 */
-	private final SortedSet<IProduct> removedProducts;
+	private SortedSet<IProduct> removedProducts;
 
 	/**
 	 * Static reference to the one and only Inventory instance
@@ -101,7 +101,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 	/**
 	 * ItemBarcode Number mapping for all items.
 	 */
-	private final Map<String, IItem> barcodeItems;
+	private Map<String, IItem> barcodeItems;
 
 	private long lastGeneratedBarCode;
 
@@ -612,9 +612,11 @@ public class Inventory extends Observable implements IInventory, Serializable
 		}
 		else if(obsArg.getChangedObj() instanceof IProduct)
 		{
-			if(obsArg.getUpdateType() == UpdateType.REMOVED)
+			IProduct product = (IProduct)obsArg.getChangedObj();
+			
+			if(product.getContainers().size() == 0)
 				this.removedProducts.add((IProduct) obsArg.getChangedObj());
-			if(obsArg.getUpdateType() == UpdateType.ADDED)
+			else
 				this.removedProducts.remove(obsArg.getChangedObj());
 		}
 

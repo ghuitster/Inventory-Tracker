@@ -5,6 +5,16 @@ import java.util.List;
 
 public class DatabaseAccess
 {
+	public static boolean databaseExists(String name)
+	{
+		return false;
+	}
+	
+	public DatabaseAccess(String databaseName)
+	{
+		
+	}
+	
 	/**
 	 * Adds an item to the database
 	 * @param item The item to add

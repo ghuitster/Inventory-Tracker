@@ -5,6 +5,10 @@ import model.exception.SerializerException;
 
 public class Database implements IPersistence
 {
+	private DatabaseAccess dbAccess;
+	private String databaseName;
+	
+	
 	/**
 	 * Initializes an instance of Database
 	 * @param databaseName The name of the database to store/load information
@@ -12,7 +16,8 @@ public class Database implements IPersistence
 	 */
 	public Database(String databaseName)
 	{
-		throw new UnsupportedOperationException("Not yet implemented");
+		dbAccess = new DatabaseAccess(databaseName);
+		this.databaseName = databaseName;
 	}
 
 	/**
@@ -22,7 +27,7 @@ public class Database implements IPersistence
 	@Override
 	public boolean canLoadData()
 	{
-		throw new UnsupportedOperationException("Not yet implemented");
+		return DatabaseAccess.databaseExists(this.databaseName);
 	}
 
 	/**
@@ -35,7 +40,7 @@ public class Database implements IPersistence
 	@Override
 	public void loadData() throws SerializerException
 	{
-		throw new UnsupportedOperationException("Not yet implemented");
+		dbAccess.getAllStorageUnits();
 	}
 
 	/**
