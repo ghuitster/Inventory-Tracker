@@ -89,7 +89,8 @@ public class Database implements IPersistence, Observer
 				dbAccess.addProduct(product);
 				break;
 			case REMOVED:
-				dbAccess.removeProduct(product);
+				//dbAccess.removeProduct(product);
+				dbAccess.updateProduct(product);
 				break;
 			case UPDATED:
 				dbAccess.updateProduct(product);
@@ -106,7 +107,8 @@ public class Database implements IPersistence, Observer
 				dbAccess.addItem(item);
 				break;
 			case REMOVED:
-				dbAccess.removeItem(item);
+				//dbAccess.removeItem(item);
+				dbAccess.updateItem(item);
 				break;
 			case UPDATED:
 				dbAccess.updateItem(item);

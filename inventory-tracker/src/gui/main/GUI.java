@@ -28,8 +28,8 @@ public final class GUI extends JFrame implements IMainView
 
 	public static void main(final String[] args)
 	{
-		if(args.length > 1 && args[1] == "-ser")
-			Inventory.useSerializer = true;
+		if(args.length > 1 && args[1] == "-sql")
+			Inventory.useSerializer = false;
 		try
 		{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

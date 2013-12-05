@@ -53,7 +53,7 @@ public class Inventory extends Observable implements IInventory, Serializable
 		EntryDate, ExitDate, StartOfReport, EndOfReport
 	}
 
-	public static boolean useSerializer = false;
+	public static boolean useSerializer = true;
 
 	/**
 	 * 
