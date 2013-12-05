@@ -17,13 +17,14 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import model.exception.InvalidNameException;
+import model.plugin.Plugin;
+import model.plugin.PluginManager;
 import model.visitor.ExpiredItemVisitor;
 import model.visitor.IVisitor;
 import model.visitor.ItemVisitor;
 import model.visitor.NMonthSupplyVisitor;
 import model.visitor.NoticeVisitor;
 import model.visitor.ProductVisitor;
-
 import common.util.DateUtils;
 
 /**
@@ -623,6 +624,16 @@ public class Inventory extends Observable implements IInventory, Serializable
 
 		this.setChanged();
 		this.notifyObservers(obsArg);
+	}
+
+	public String findProductInfo(String barcode)
+	{
+		PluginManager pm = new PluginManager();
+		Plugin plugin = pm.getFirstPlugin();
+		String result = plugin.findProduct(barcode);
+		if(result == null)
+			return "";
+		return result;
 	}
 
 }

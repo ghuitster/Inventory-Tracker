@@ -11,11 +11,11 @@ import model.CountThreeMonthSupply;
 import model.CountUnitSize;
 import model.IBarcode;
 import model.IProduct;
+import model.Inventory;
 import model.Product;
 import model.ProductBarcode;
 import model.UnitSize;
 import model.UnitType;
-
 import common.util.DateUtils;
 
 /**
@@ -48,7 +48,9 @@ public class AddProductController extends Controller implements
 	public AddProductController(IView view, String barcode)
 	{
 		super(view);
-
+		this.descript = Inventory.getInstance().findProductInfo(barcode);
+		if(!this.descript.isEmpty())
+			this.descriptNotEmpty = true;
 		this.barcode = new ProductBarcode(barcode);
 		construct();
 	}
