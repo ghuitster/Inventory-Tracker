@@ -29,7 +29,6 @@ public class FirePlugin extends Plugin
 		{
 			e.printStackTrace();
 		}
-		System.out.println(results);
 		String description = this.getDescriptionFromJSON(results);
 		if(description == null && this.nextPlugin != null)
 			return this.nextPlugin.findProduct(barcode); 
@@ -44,7 +43,8 @@ public class FirePlugin extends Plugin
 		if(results.toLowerCase().contains(compare))
 		{
 			int startIndex = results.toLowerCase().indexOf("\"title\":\"");
-			int endIndex = results.toLowerCase().indexOf("\",");
+			int endIndex = results.toLowerCase().indexOf("\",", startIndex);
+			System.out.println("start index: " + startIndex + " end index: " + endIndex);
 			temp = results.substring(startIndex + compare.length(), endIndex);
 		}
 		if(temp.isEmpty())
