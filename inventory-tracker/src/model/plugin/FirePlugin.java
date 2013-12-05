@@ -6,9 +6,6 @@ import java.net.*;
 import java.util.Map;
 import java.util.Scanner;
 
-import com.json.parsers.JSONParser;
-import com.json.parsers.JsonParserFactory;
-
 public class FirePlugin extends Plugin
 {
 
@@ -42,21 +39,17 @@ public class FirePlugin extends Plugin
 	
 	private String getDescriptionFromJSON(String results)
 	{
-		int index = results.indexOf("total_results");
-		String temp = results.substring(index);
-		Scanner scan = new Scanner(temp);
-		scan.useDelimiter(",");
-		String total_results = scan.next();
-//		JsonParserFactory factory = JsonParserFactory.getInstance();
-//		JSONParser parser = factory.newJsonParser();
-//		Map<String, String> jsonData = parser.parseJson(results);
-//		System.out.println(jsonData.toString());
-//		int numberOfResults = Integer.parseInt(jsonData.get("total_results"));
-//		System.out.println(numberOfResults);
-//		if(numberOfResults > 0)
-//			return jsonData.get("title");
-//		return null;
-		return null;
+		String compare = "\"title\":\"";
+		String temp = "";
+		if(results.toLowerCase().contains(compare))
+		{
+			int startIndex = results.toLowerCase().indexOf("\"title\":\"");
+			int endIndex = results.toLowerCase().indexOf("\",");
+			temp = results.substring(startIndex + compare.length(), endIndex);
+		}
+		if(temp.isEmpty())
+			return null;
+		return temp;
 	}
 
 	private HttpURLConnection makeHTTPConnection(String request) throws IOException
