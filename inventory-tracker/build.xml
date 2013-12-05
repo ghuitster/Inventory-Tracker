@@ -43,7 +43,7 @@
 	
 	<property name="commons-lang3-home" location="${lib}/commons-lang3-3.1" />
 	
-	<property name="plugin-home" location="${lib}/Plugins" />
+	<property name="plugins-home" location="${lib}/Plugins" />
 
 	<property name="import-data-file" location="import.xml"/>
 	<property name="export-data-file" location="export.xml"/>
