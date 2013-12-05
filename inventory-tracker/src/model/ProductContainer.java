@@ -20,29 +20,17 @@ public abstract class ProductContainer extends Observable implements
 		IProductContainer, Serializable
 
 {
-	
+
 	private static final long serialVersionUID = 9015876223451150036L;
 	protected String name;
 	protected SortedSet<IProduct> products;
 	protected SortedSet<IItem> items;
 	protected SortedSet<IProductGroup> productGroups;
 	private int id;
-	
+
 	private transient Object tag;
 
 	protected ProductContainer(String name)
-	{
-		this.id = -1;
-		init(name);
-	}
-	
-	protected ProductContainer(int id, String name)
-	{
-		this.id = id;
-		init(name);
-	}
-
-	private void init(String name)
 	{
 		this.name = name;
 		products = new TreeSet<IProduct>();
@@ -50,7 +38,7 @@ public abstract class ProductContainer extends Observable implements
 		productGroups = new TreeSet<IProductGroup>();
 		this.addObserver(Inventory.getInstance());
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -287,6 +275,12 @@ public abstract class ProductContainer extends Observable implements
 	public int getId()
 	{
 		return id;
+	}
+
+	@Override
+	public void setId(int id)
+	{
+		this.id = id;
 	}
 
 	/*

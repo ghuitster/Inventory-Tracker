@@ -118,6 +118,12 @@ public interface IProductContainer extends IObservable, ITaggable,
 	public abstract int getId();
 
 	/**
+	 * Set the unique ID to represent this product container.
+	 * @param id the unique ID to be set
+	 */
+	public abstract void setId(int id);
+
+	/**
 	 * @return the name
 	 */
 	public abstract String getName();
