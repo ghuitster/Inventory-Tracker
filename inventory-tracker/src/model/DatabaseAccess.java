@@ -3,6 +3,7 @@ package model;
 
 import java.io.File;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -161,7 +162,23 @@ public class DatabaseAccess
 			}
 			else
 			{
+				Date creation = new Date(products.getLong("Product.CreationDate"));
+				String description = products.getString("Product.Description");
 				
+				UnitType sizeUnit = UnitType.values()[products.getInt("Product.SizeUnit")];
+				Amount size;
+				if(sizeUnit == UnitType.COUNT)
+					size = new CountUnitSize((int)products.getFloat("Product.Size"));
+				else size = new UnitSize(products.getFloat("Product.Size"), sizeUnit);
+				
+				int shelfLife = products.getInt("ShelfLife");
+				CountThreeMonthSupply supply = new CountThreeMonthSupply
+						(products.getInt("Product.ThreeMonthSupply"));
+				
+				Product product = new Product(creation, description, 
+						new ProductBarcode(barcode), size, shelfLife, supply);
+				container.addProduct(product);
+				existingProducts.put(product.getBarcode().getNumber(), product);
 			}
 		}
 		
