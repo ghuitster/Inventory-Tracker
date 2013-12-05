@@ -9,16 +9,20 @@ import java.util.Scanner;
 
 public class PluginManager
 {
-	private Plugin firstPlugin = new BasePlugin();
+	// Variables
+	private final Plugin firstPlugin = new BasePlugin();
+	private final String configFilePath = "Plugin.conf";
+
 	/**
 	 * constructor
 	 */
-	public PluginManager(String filePath)
+	public PluginManager()
 	{
-		System.out.println("using config file: " + filePath);
-		this.loadConfig(filePath);
+		System.out.println("using config file: " + this.configFilePath);
+		this.loadConfig(this.configFilePath);
 	}
 
+	// Methods
 	/**
 	 * @pre the plugins are loaded in
 	 * @post returns the first plugin
@@ -30,7 +34,7 @@ public class PluginManager
 	}
 
 	/**
-	 * @param filePath 
+	 * @param filePath
 	 * @pre must have reference to valid config file
 	 * @post config will load the plugins
 	 */
@@ -50,31 +54,35 @@ public class PluginManager
 				}
 				catch(ClassNotFoundException e)
 				{
+					e.printStackTrace();
 				}
-				
+
 				Plugin p = null;
 				try
 				{
-					p = (Plugin)c.newInstance();
+					p = (Plugin) c.newInstance();
 				}
 				catch(InstantiationException e)
 				{
+					e.printStackTrace();
 				}
 				catch(IllegalAccessException e)
 				{
+					e.printStackTrace();
 				}
 				pList.add(p);
 			}
-			
+
 			scan.close();
 			this.firstPlugin.setNext(pList.get(0));
-			for(int i = 1; i < pList.size(); i ++)
+			for(int i = 1; i < pList.size(); i++)
 			{
-				pList.get(i-1).setNext(pList.get(i));
+				pList.get(i - 1).setNext(pList.get(i));
 			}
 		}
 		catch(FileNotFoundException e)
 		{
+			e.printStackTrace();
 		}
 	}
 }
