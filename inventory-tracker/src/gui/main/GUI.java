@@ -20,12 +20,16 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
+import model.Inventory;
+
 @SuppressWarnings("serial")
 public final class GUI extends JFrame implements IMainView
 {
 
 	public static void main(final String[] args)
 	{
+		if(args.length > 1 && args[1] == "-ser")
+			Inventory.useSerializer = true;
 		try
 		{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

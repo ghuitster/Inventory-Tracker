@@ -34,6 +34,8 @@ import common.util.DateUtils;
  */
 public class Inventory extends Observable implements IInventory, Serializable
 {
+	public static boolean useSerializer = false;
+	
 	private class DateInfo
 	{
 		public DateType dateType;
@@ -123,7 +125,9 @@ public class Inventory extends Observable implements IInventory, Serializable
 	private Inventory()
 	{
 		this.storageUnits = new HashSet<IStorageUnit>();
-		this.persistence = new Serializer("./data.inventory");
+		if(useSerializer)
+			this.persistence = new Serializer("./data.inventory");
+		else this.persistence = new Database("hit");
 		this.removedItems = new TreeSet<IItem>(new RemovedItemComparator());
 		this.removedProducts = new TreeSet<IProduct>();
 		this.barcodeItems = new HashMap<String, IItem>();
