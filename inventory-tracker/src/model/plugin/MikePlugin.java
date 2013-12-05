@@ -50,7 +50,6 @@ public class MikePlugin extends Plugin
 					else
 						break;
 				}
-				System.out.println(data);
 
 				String validString =
 						data.substring(data.indexOf("<valid>") + 7,
@@ -61,8 +60,6 @@ public class MikePlugin extends Plugin
 					productDescription =
 							data.substring(data.indexOf("<itemname>") + 10,
 									data.indexOf("</itemname>"));
-
-				System.out.println(productDescription);
 			}
 
 		}
