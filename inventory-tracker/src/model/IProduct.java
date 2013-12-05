@@ -184,4 +184,7 @@ public interface IProduct extends ITaggable, IObservable, Comparable<IProduct>
 	@Override
 	public abstract String toString();
 
+	public abstract void setID(int id);
+	
+	public abstract int getID();
 }

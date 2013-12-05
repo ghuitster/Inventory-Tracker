@@ -22,6 +22,7 @@ public class Product extends Observable implements IProduct, Serializable
 	private int shelfLife;
 	private CountThreeMonthSupply threeMonthSupply;
 	private final Set<IProductContainer> containers;
+	private int ID;
 
 	private transient Object tag;
 
@@ -491,5 +492,17 @@ public class Product extends Observable implements IProduct, Serializable
 				+ description + ", barcode=" + barcode + ", size=" + size
 				+ ", shelfLife=" + shelfLife + ", threeMonthSupply="
 				+ threeMonthSupply + ", containers=" + containers + "]";
+	}
+
+	@Override
+	public void setID(int id)
+	{
+		this.ID = id;
+	}
+
+	@Override
+	public int getID()
+	{
+		return this.ID;
 	}
 }
