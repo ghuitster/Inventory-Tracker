@@ -2,6 +2,7 @@
 package model.plugin;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
@@ -19,6 +20,10 @@ public class MikePluginTest
 		test = mp.findProduct("0111222333447");
 
 		assertEquals(test, null);
+
+		test = mp.findProduct("noProductHere");
+
+		assertNull(test);
 	}
 
 }
