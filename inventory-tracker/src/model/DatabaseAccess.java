@@ -21,6 +21,7 @@ public class DatabaseAccess
 	{
 		return false;
 	}
+
 	private final String databaseName;
 	private Connection connection;
 
@@ -479,6 +480,8 @@ public class DatabaseAccess
 	 */
 	public void loadInventory()
 	{
+		this.createDatabase();
+
 		IInventory inventory = Inventory.getInstance();
 
 		String storageUnitsQuery =
