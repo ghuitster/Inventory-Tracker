@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import model.exception.InvalidNameException;
@@ -30,10 +29,6 @@ public class DatabaseAccess
 		this.databaseName = databaseName;
 	}
 
-	/**
-	 * Adds an item to the database
-	 * @param item The item to add
-	 */
 	public void addItem(IItem item)
 	{
 		// I'm assuming that all the information about the item, its product and
@@ -77,6 +72,36 @@ public class DatabaseAccess
 	 */
 	public void addProduct(IProduct product)
 	{
+		double size = 0.0;
+
+		if(product.getSize() instanceof CountAmount)
+			size = ((CountAmount) product.getSize()).getAmount();
+		else if(product.getSize() instanceof NonCountAmount)
+			size = ((NonCountAmount) product.getSize()).getAmount();
+
+		String query =
+				"INSERT INTO Product (\"CreationDate\", \"Barcode\", \"Description\", \"Size\", "
+						+ "\"ShelfLife\", \"ThreeMonthSupply\", \"SizeUnit\") VALUES (\""
+						+ product.getCreationDate().getTime()
+						+ "\", \""
+						+ product.getBarcode().getNumber()
+						+ "\", \""
+						+ product.getDescription().getDescription()
+						+ "\", \""
+						+ size
+						+ "\", \""
+						+ product.getShelfLife()
+						+ "\", \""
+						+ product.getThreeMonthSupply().getAmount()
+						+ "\", \""
+						+ product.getSize().getUnitType().ordinal() + "\")";
+
+		query =
+				"SELECT id FROM Product WHERE Barcode=\""
+						+ product.getBarcode().getNumber() + "\"";
+
+		product.getContainers().iterator().next().getId();
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -86,6 +111,55 @@ public class DatabaseAccess
 	 */
 	public void addProductContainer(IProductContainer productContainer)
 	{
+		if(productContainer instanceof ProductGroup)
+		{
+			double threeMonthSupply = -1.0;
+			int parentID = -1;
+			int threeMonthSupplyType = -1;
+
+			if(((ProductGroup) productContainer).getThreeMonthSupply() instanceof CountAmount)
+			{
+				threeMonthSupplyType =
+						((CountAmount) ((ProductGroup) productContainer)
+								.getThreeMonthSupply()).getUnitType().ordinal();
+				threeMonthSupply =
+						((CountAmount) ((ProductGroup) productContainer)
+								.getThreeMonthSupply()).getAmount();
+			}
+			else if(((ProductGroup) productContainer).getThreeMonthSupply() instanceof NonCountAmount)
+			{
+				threeMonthSupplyType =
+						((NonCountAmount) ((ProductGroup) productContainer)
+								.getThreeMonthSupply()).getUnitType().ordinal();
+				threeMonthSupply =
+						((NonCountAmount) ((ProductGroup) productContainer)
+								.getThreeMonthSupply()).getAmount();
+			}
+
+			parentID = ((ProductGroup) productContainer).getContainer().getId();
+
+			String query =
+					"INSERT INTO ProductContainer (\"Name\", \"ThreeMonthSupply\", \"parentID\", \"ThreeMonthSupplyType\") VALUES (\""
+							+ productContainer.getName()
+							+ "\", \""
+							+ threeMonthSupply
+							+ "\", \""
+							+ parentID
+							+ "\", \""
+							+ threeMonthSupplyType + "\")";
+		}
+
+		else
+		{
+			String query =
+					"INSERT INTO ProductContainer (\"Name\") VALUES (\""
+							+ productContainer.getName() + "\")";
+		}
+
+		String query =
+				"SELECT id FROM ProductContainer WHERE Name=\""
+						+ productContainer.getName() + "\"";
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -96,18 +170,20 @@ public class DatabaseAccess
 	public void loadInventory()
 	{
 		IInventory inventory = Inventory.getInstance();
-		
-		String storageUnitsQuery = 
+
+		String storageUnitsQuery =
 				"SELECT id, Name FROM ProductContainer "
-				+ "WHERE parentID IS NULL;";
-		
+						+ "WHERE parentID IS NULL;";
+
 		try
 		{
 			this.createConnection();
-			ResultSet storageUnits = this.statement.executeQuery(storageUnitsQuery);
-			
-			Map<Integer, IProduct> existingProducts = new HashMap<Integer, IProduct>();
-			
+			ResultSet storageUnits =
+					this.statement.executeQuery(storageUnitsQuery);
+
+			Map<Integer, IProduct> existingProducts =
+					new HashMap<Integer, IProduct>();
+
 			while(storageUnits.next())
 			{
 				int id = storageUnits.getInt("id");
@@ -117,28 +193,31 @@ public class DatabaseAccess
 					IStorageUnit unit = new StorageUnit(name);
 					unit.setId(id);
 					inventory.addStorageUnit(unit);
-					
+
 					addChildGroups(unit, existingProducts);
-					
+
 					addProducts(unit, existingProducts);
 					addItems(unit, existingProducts);
-					
+
 					addRemovedProducts(existingProducts);
 					addRemovedItems(existingProducts);
-					
-				} catch (InvalidNameException e) { }
+
+				}
+				catch(InvalidNameException e)
+				{}
 			}
-			
+
 			long largestBarcode = 400000000000l;
 			String largestBarcodeQuery =
-					"SELECT Barcode FROM Items "
-					+ "ORDER BY id DESC"
-					+ "LIMIT 1";
-			ResultSet largestBarcodeSet = this.statement.executeQuery(largestBarcodeQuery);
+					"SELECT Barcode FROM Items " + "ORDER BY id DESC"
+							+ "LIMIT 1";
+			ResultSet largestBarcodeSet =
+					this.statement.executeQuery(largestBarcodeQuery);
 			while(largestBarcodeSet.next())
 				largestBarcode = largestBarcodeSet.getLong("Barcode");
-			inventory.setLastGeneratedBarCode(new ItemBarcode("" + largestBarcode));
-			
+			inventory.setLastGeneratedBarCode(new ItemBarcode(""
+					+ largestBarcode));
+
 		}
 		catch(ClassNotFoundException | SQLException e)
 		{
@@ -157,13 +236,13 @@ public class DatabaseAccess
 		}
 	}
 
-	private void addRemovedItems(Map<Integer, IProduct> existingProducts) throws SQLException
+	private void addRemovedItems(Map<Integer, IProduct> existingProducts)
+			throws SQLException
 	{
-		String itemQuery = 
+		String itemQuery =
 				"SELECT id, productID, Barcode, EntryDate, ExitTime, ExpirationDate "
-				+ "FROM Item "
-				+ "WHERE containerID IS NULL";
-		
+						+ "FROM Item " + "WHERE containerID IS NULL";
+
 		ResultSet items = this.statement.executeQuery(itemQuery);
 		while(items.next())
 		{
@@ -172,15 +251,16 @@ public class DatabaseAccess
 		}
 	}
 
-	private void addRemovedProducts(Map<Integer, IProduct> existingProducts) throws SQLException
+	private void addRemovedProducts(Map<Integer, IProduct> existingProducts)
+			throws SQLException
 	{
 		String productQuery =
 				"SELECT Product.id Product.CreationDate, Product.Barcode, Product.Description, "
-				+ "Product.Size, Product.ShelfLife, Product.ThreeMonthSupply, Product.SizeUnit "
-				+ "FROM Product "
-				+ "LEFT JOIN ContainerProducts "
-				+ "ON ContainerProducts.productID = Product.id "
-				+ "WHERE ContainerProducts.containerID IS NULL";
+						+ "Product.Size, Product.ShelfLife, Product.ThreeMonthSupply, Product.SizeUnit "
+						+ "FROM Product "
+						+ "LEFT JOIN ContainerProducts "
+						+ "ON ContainerProducts.productID = Product.id "
+						+ "WHERE ContainerProducts.containerID IS NULL";
 		ResultSet products = this.statement.executeQuery(productQuery);
 		while(products.next())
 		{
@@ -189,20 +269,21 @@ public class DatabaseAccess
 		}
 	}
 
-	private void addItems(IProductContainer container, Map<Integer, IProduct> existingProducts) throws SQLException
+	private void addItems(IProductContainer container,
+			Map<Integer, IProduct> existingProducts) throws SQLException
 	{
-		String itemQuery = 
+		String itemQuery =
 				"SELECT id, productID, Barcode, EntryDate, ExitTime, ExpirationDate "
-				+ "FROM Item "
-				+ "WHERE containerID = " + container.getId();
-		
+						+ "FROM Item " + "WHERE containerID = "
+						+ container.getId();
+
 		ResultSet items = this.statement.executeQuery(itemQuery);
 		while(items.next())
 		{
 			Item item = makeItem(existingProducts, items);
 			container.addItem(item);
 		}
-		
+
 	}
 
 	private Item makeItem(Map<Integer, IProduct> existingProducts,
@@ -220,23 +301,26 @@ public class DatabaseAccess
 		Date expiration = null;
 		if(!items.wasNull())
 			expiration = new Date(expirationSeconds);
-		
+
 		IProduct product = existingProducts.get(productId);
-		Item item = new Item(product, new ItemBarcode("" + barcode), 
-				entry, expiration);
+		Item item =
+				new Item(product, new ItemBarcode("" + barcode), entry,
+						expiration);
 		return item;
 	}
 
-	private void addProducts(IProductContainer container, Map<Integer, IProduct> existingProducts) throws SQLException
+	private void addProducts(IProductContainer container,
+			Map<Integer, IProduct> existingProducts) throws SQLException
 	{
 		String productQuery =
 				"SELECT Product.id Product.CreationDate, Product.Barcode, Product.Description, "
-				+ "Product.Size, Product.ShelfLife, Product.ThreeMonthSupply, Product.SizeUnit "
-				+ "FROM Product "
-				+ "INNER JOIN ContainerProducts "
-				+ "ON ContainerProducts.productID = Product.id "
-				+ "WHERE ContainerProducts.containerID = " + container.getId();
-		
+						+ "Product.Size, Product.ShelfLife, Product.ThreeMonthSupply, Product.SizeUnit "
+						+ "FROM Product "
+						+ "INNER JOIN ContainerProducts "
+						+ "ON ContainerProducts.productID = Product.id "
+						+ "WHERE ContainerProducts.containerID = "
+						+ container.getId();
+
 		ResultSet products = this.statement.executeQuery(productQuery);
 		while(products.next())
 		{
@@ -252,63 +336,74 @@ public class DatabaseAccess
 				existingProducts.put(product.getID(), product);
 			}
 		}
-		
+
 	}
 
-	private Product makeProduct(ResultSet products)
-			throws SQLException
+	private Product makeProduct(ResultSet products) throws SQLException
 	{
 		int id = products.getInt("Product.id");
-		Barcode barcode = new ProductBarcode(products.getString("Product.Barcode"));
+		Barcode barcode =
+				new ProductBarcode(products.getString("Product.Barcode"));
 		Date creation = new Date(products.getLong("Product.CreationDate"));
 		String description = products.getString("Product.Description");
-		
-		UnitType sizeUnit = UnitType.values()[products.getInt("Product.SizeUnit")];
+
+		UnitType sizeUnit =
+				UnitType.values()[products.getInt("Product.SizeUnit")];
 		Amount size;
 		if(sizeUnit == UnitType.COUNT)
-			size = new CountUnitSize((int)products.getFloat("Product.Size"));
-		else size = new UnitSize(products.getFloat("Product.Size"), sizeUnit);
-		
+			size = new CountUnitSize((int) products.getFloat("Product.Size"));
+		else
+			size = new UnitSize(products.getFloat("Product.Size"), sizeUnit);
+
 		int shelfLife = products.getInt("ShelfLife");
 		if(products.wasNull())
 			shelfLife = 0;
-		CountThreeMonthSupply supply = new CountThreeMonthSupply
-				(products.getInt("Product.ThreeMonthSupply"));
-		
-		Product product = new Product(creation, description, barcode, size, shelfLife, supply);
+		CountThreeMonthSupply supply =
+				new CountThreeMonthSupply(
+						products.getInt("Product.ThreeMonthSupply"));
+
+		Product product =
+				new Product(creation, description, barcode, size, shelfLife,
+						supply);
 		product.setID(id);
 		return product;
 	}
 
-	private void addChildGroups(IProductContainer parent, Map<Integer, IProduct> existingProducts) throws SQLException
+	private void addChildGroups(IProductContainer parent,
+			Map<Integer, IProduct> existingProducts) throws SQLException
 	{
-		String productGroupQuery = 
+		String productGroupQuery =
 				"SELECT id, Name, ThreeMonthSupply, parentID, ThreeMonthSupplyType "
-				+ "FROM ProductContainer"
-				+ "WHERE parentID = " + parent.getId();
-		
-		ResultSet productGroups = this.statement.executeQuery(productGroupQuery);
+						+ "FROM ProductContainer" + "WHERE parentID = "
+						+ parent.getId();
+
+		ResultSet productGroups =
+				this.statement.executeQuery(productGroupQuery);
 		while(productGroups.next())
 		{
 			int id = productGroups.getInt("id");
 			String name = productGroups.getString("Name");
-			float threeMonthSupplyValue = productGroups.getFloat("ThreeMonthSupply");
-			int threeMonthSupplyType = productGroups.getInt("ThreeMonthSupplyType");
-			
+			float threeMonthSupplyValue =
+					productGroups.getFloat("ThreeMonthSupply");
+			int threeMonthSupplyType =
+					productGroups.getInt("ThreeMonthSupplyType");
+
 			UnitType supplyType = UnitType.values()[threeMonthSupplyType];
 			Amount threeMonthSupply;
-			
+
 			if(supplyType == UnitType.COUNT)
-				threeMonthSupply = new CountThreeMonthSupply((int)threeMonthSupplyValue);
+				threeMonthSupply =
+						new CountThreeMonthSupply((int) threeMonthSupplyValue);
 			else
-				threeMonthSupply = new ThreeMonthSupply(threeMonthSupplyValue, supplyType);
-			
+				threeMonthSupply =
+						new ThreeMonthSupply(threeMonthSupplyValue, supplyType);
+
 			IProductGroup group = new ProductGroup(name, threeMonthSupply);
 			group.setId(id);
 			parent.addProductGroup(group);
 			addProducts(group, existingProducts);
 			addItems(group, existingProducts);
-			
+
 			addChildGroups(group, existingProducts);
 		}
 	}
@@ -345,7 +440,7 @@ public class DatabaseAccess
 	 */
 	public void removeItem(IItem item)
 	{
-
+		String query = "DELETE FROM Item WHERE id=\"" + item.getId() + "\"";
 	}
 
 	/**
@@ -354,7 +449,8 @@ public class DatabaseAccess
 	 */
 	public void removeProduct(IProduct product)
 	{
-
+		String query =
+				"DELETE FROM Product WHERE id=\"" + product.getId() + "\"";
 	}
 
 	/**
@@ -363,7 +459,9 @@ public class DatabaseAccess
 	 */
 	public void removeProductContainer(IProductContainer container)
 	{
-
+		String query =
+				"DELETE FROM ProductContainer WHERE id=\"" + container.getId()
+						+ "\"";
 	}
 
 	/**
@@ -371,7 +469,16 @@ public class DatabaseAccess
 	 */
 	public void updateItem(IItem item)
 	{
-
+		String query =
+				"UPDATE Item SET \"productID\"=\"" + item.getProduct().getId()
+						+ "\", \"Barcode\"=\"" + item.getBarcode().getNumber()
+						+ "\", \"EntryDate\"=\""
+						+ item.getEntryDate().getTime() + "\", \"ExitTime\"=\""
+						+ item.getExitTime().getTime() + "\", "
+						+ "\"ExpirationDate\"=\""
+						+ item.getExpirationDate().getTime()
+						+ "\", \"containerID\"=\""
+						+ item.getContainer().getId() + "\")";
 	}
 
 	/**
@@ -380,6 +487,50 @@ public class DatabaseAccess
 	 */
 	public void updateProductContainer(IProductContainer productContainer)
 	{
+		if(productContainer instanceof ProductGroup)
+		{
+			double threeMonthSupply = -1.0;
+			int parentID = -1;
+			int threeMonthSupplyType = -1;
+
+			if(((ProductGroup) productContainer).getThreeMonthSupply() instanceof CountAmount)
+			{
+				threeMonthSupplyType =
+						((CountAmount) ((ProductGroup) productContainer)
+								.getThreeMonthSupply()).getUnitType().ordinal();
+				threeMonthSupply =
+						((CountAmount) ((ProductGroup) productContainer)
+								.getThreeMonthSupply()).getAmount();
+			}
+			else if(((ProductGroup) productContainer).getThreeMonthSupply() instanceof NonCountAmount)
+			{
+				threeMonthSupplyType =
+						((NonCountAmount) ((ProductGroup) productContainer)
+								.getThreeMonthSupply()).getUnitType().ordinal();
+				threeMonthSupply =
+						((NonCountAmount) ((ProductGroup) productContainer)
+								.getThreeMonthSupply()).getAmount();
+			}
+
+			parentID = ((ProductGroup) productContainer).getContainer().getId();
+
+			String query =
+					"UPDATE ProductContainer SET \"Name\"=\""
+							+ productContainer.getName()
+							+ "\", \"ThreeMonthSupply\"=\"" + threeMonthSupply
+							+ "\", \"parentID\"=\"" + parentID
+							+ "\", \"ThreeMonthSupplyType\"=\""
+							+ threeMonthSupplyType + "\"";
+		}
+
+		else
+		{
+			String query =
+					"UPDATE ProductContainer SET \"Name\"=\""
+							+ productContainer.getName() + "\"";
+		}
+
+		throw new UnsupportedOperationException();
 
 	}
 
@@ -389,6 +540,29 @@ public class DatabaseAccess
 	 */
 	public void updateProduct(IProduct product)
 	{
+		double size = 0.0;
 
+		if(product.getSize() instanceof CountAmount)
+			size = ((CountAmount) product.getSize()).getAmount();
+		else if(product.getSize() instanceof NonCountAmount)
+			size = ((NonCountAmount) product.getSize()).getAmount();
+
+		String query =
+				"UPDATE Product SET \"CreationDate\"=\""
+						+ product.getCreationDate().getTime()
+						+ "\", \"Barcode\"=\""
+						+ product.getBarcode().getNumber()
+						+ "\", \"Description\"=\""
+						+ product.getDescription().getDescription()
+						+ "\", \"Size\"=\"" + size + "\", "
+						+ "\"ShelfLife\"=\"" + product.getShelfLife()
+						+ "\", \"ThreeMonthSupply\"=\""
+						+ product.getThreeMonthSupply().getAmount()
+						+ "\", \"SizeUnit\"=\""
+						+ product.getSize().getUnitType().ordinal() + "\"";
+
+		product.getContainers().iterator().next().getId();
+
+		throw new UnsupportedOperationException();
 	}
 }
