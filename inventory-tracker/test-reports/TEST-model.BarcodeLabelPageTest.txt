@@ -1,5 +1,0 @@
-Testsuite: model.BarcodeLabelPageTest
-Tests run: 2, Failures: 0, Errors: 0, Time elapsed: 1.722 sec
-
-Testcase: testCreatePDF took 1.637 sec
-Testcase: testBarcodeLabelPage took 0.05 sec

@@ -2,3 +2,4 @@ Thumbs.db
 .metadata
 *.pdf
 inventory-tracker/doc
+*.class
