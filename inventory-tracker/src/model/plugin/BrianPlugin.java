@@ -18,7 +18,7 @@ public class BrianPlugin extends Plugin
 		{
 			URL destination =
 					new URL("http://www.searchupc.com/handlers/upcsearch.ashx?"
-							+ "request_type=1&access_token=B4C153DB-8929-4655-"
+							+ "request_type=3&access_token=B4C153DB-8929-4655-"
 							+ "8377-DE75D2B3E637&upc=" + barcode);
 			HttpURLConnection connection =
 					(HttpURLConnection) destination.openConnection();
@@ -36,8 +36,8 @@ public class BrianPlugin extends Plugin
 			while((line = input.readLine()) != null)
 				response += line;
 
-			int indexOfDesc = response.indexOf("\n") + 2;
-			int descEnd = response.indexOf("\"", indexOfDesc) - 1;
+			int indexOfDesc = response.indexOf("productname\":\"") + 14;
+			int descEnd = response.indexOf("\"", indexOfDesc);
 			productDescription = response.substring(indexOfDesc, descEnd);
 			if(productDescription.trim().equals(""))
 				productDescription = null;
