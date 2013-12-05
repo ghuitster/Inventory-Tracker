@@ -5,10 +5,6 @@ import java.util.List;
 
 public class DatabaseAccess
 {
-	public static boolean databaseExists(String name)
-	{
-		return false;
-	}
 	
 	public DatabaseAccess(String databaseName)
 	{
@@ -53,27 +49,27 @@ public class DatabaseAccess
 
 	/**
 	 * Removes an item by id from the database
-	 * @param id The id of the item to remove
+	 * @param item The item to remove
 	 */
-	public void removeItem(int id)
+	public void removeItem(IItem item)
 	{
 
 	}
 
 	/**
 	 * Removes a product by id from the database
-	 * @param id The id of the product to remove
+	 * @param product The product to remove
 	 */
-	public void removeProduct(int id)
+	public void removeProduct(IProduct product)
 	{
 
 	}
 
 	/**
 	 * Removes a product container by id from the database
-	 * @param id The id of the container to remove
+	 * @param container The container to remove
 	 */
-	public void removeProductContainer(int id)
+	public void removeProductContainer(IProductContainer container)
 	{
 
 	}

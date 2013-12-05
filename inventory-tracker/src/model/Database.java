@@ -1,9 +1,12 @@
 
 package model;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import model.exception.SerializerException;
 
-public class Database implements IPersistence
+public class Database implements IPersistence, Observer
 {
 	private DatabaseAccess dbAccess;
 	private String databaseName;
@@ -18,6 +21,7 @@ public class Database implements IPersistence
 	{
 		dbAccess = new DatabaseAccess(databaseName);
 		this.databaseName = databaseName;
+		Inventory.getInstance().addObserver(this);
 	}
 
 	/**
@@ -27,7 +31,7 @@ public class Database implements IPersistence
 	@Override
 	public boolean canLoadData()
 	{
-		return DatabaseAccess.databaseExists(this.databaseName);
+		return true;
 	}
 
 	/**
@@ -53,6 +57,37 @@ public class Database implements IPersistence
 	public void saveData() throws SerializerException
 	{
 		throw new UnsupportedOperationException("Not yet implemented");
+	}
+
+	@Override
+	public void update(Observable o, Object arg)
+	{
+		ObservableArgs obsArg = (ObservableArgs) arg;
+		if(obsArg.getChangedObj() instanceof IProductContainer)
+		{
+			IProductContainer container = (IProductContainer)obsArg.getChangedObj();
+			switch(obsArg.getUpdateType())
+			{
+				case ADDED:
+					dbAccess.addProductContainer(container);
+					break;
+				case REMOVED:
+					dbAccess.removeProductContainer(container);
+					break;
+				case UPDATED:
+					
+					break;
+				
+			}
+		}
+		else if(obsArg.getChangedObj() instanceof IProduct)
+		{
+			
+		}
+		else if(obsArg.getChangedObj() instanceof IItem)
+		{
+			
+		}
 	}
 
 }
