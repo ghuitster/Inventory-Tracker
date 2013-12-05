@@ -1,64 +1,64 @@
 1) Test a report period that includes a transition from Standard Time to Daylight Savings Time 
-a. The transition occurs in the middle of the report period 
-b. The transition occurs on the first day of the report period 
-c. The transition occurs on the last day of the report period 
+	a. The transition occurs in the middle of the report period 
+	b. The transition occurs on the first day of the report period 
+	c. The transition occurs on the last day of the report period 
 2) Test a report period that includes a transition from Daylight Savings Time to Standard Time
-a. The transition occurs in the middle of the report period 
-b. The transition occurs on the first day of the report period 
-c. The transition occurs on the last day of the report period 
+	a. The transition occurs in the middle of the report period 
+	b. The transition occurs on the first day of the report period 
+	c. The transition occurs on the last day of the report period 
 3) Test a product that was initially added to the system during the reporting period (to make sure that the days before the product was created are not counted in the product’s statistics) 
-a. The product was added in the middle of the reporting period 
-b. The product was added on the first day of the reporting period 
-c. The product was added on the last day of the reporting period
+	a. The product was added in the middle of the reporting period 
+	b. The product was added on the first day of the reporting period 
+	c. The product was added on the last day of the reporting period
 4) Test a product that was initially added to the system before the reporting period (to make sure that the days before the reporting period are not counted in the product’s statistics) 
-a. The product was added many days before the reporting period 
-b. The product was added the day before the reporting period
+	a. The product was added many days before the reporting period 
+	b. The product was added the day before the reporting period
 5) Test report will only allow up to 100 months to be entered
-a. Input 100
-b. Input 99
-c. Input 101
+	a. Input 100
+	b. Input 99
+	c. Input 101
 6) Test a report period to handle February when leap year is not in reporting period
-a. February occurs in the middle of the report period
-b. February occurs as the last month of the report period
-c. February occurs as the first month of the report period
+	a. February occurs in the middle of the report period
+	b. February occurs as the last month of the report period
+	c. February occurs as the first month of the report period
 7) Test a report period to handle February when leap year is in the reporting period
-a. Leap Year February occurs in the middle of the report period
-b. Leap Year February occurs as the last month of the report period
-c. Leap Year February occurs as the first month of the report period
+	a. Leap Year February occurs in the middle of the report period
+	b. Leap Year February occurs as the last month of the report period
+	c. Leap Year February occurs as the first month of the report period
 8) Test a report period to handle a Leap Year February and a regular February in same report period
-a. Leap Year February occurs as the first month of the report period 
-b. Leap Year February occurs in middle of report period after a regular February
-c. Leap Year February occurs in the middle of report period before a regular February
-d. Leap Year February occurs as the last month of report period
+	a. Leap Year February occurs as the first month of the report period 
+	b. Leap Year February occurs in middle of report period after a regular February
+	c. Leap Year February occurs in the middle of report period before a regular February
+	d. Leap Year February occurs as the last month of report period
 9) Test report period be greater than 0
-a. Input -1
-b. Input 0 
-c. Input 1
+	a. Input -1
+	b. Input 0 
+	c. Input 1
 10) Test write access for reports
-a. Write to a location with no write access
-b. Write to a location with write access
+	a. Write to a location with no write access
+	b. Write to a location with write access
 11) Test report to contain correct Information
-a. For if there is one product
-i. Description is correct
-ii. Barcode is correct
-iii. Size is correct
-iv. 3-month Supply is correct
-v. Current/ Average Supply is correct
-vi. Min/Max Supply is correct
-vii. Used/Added Supply is correct
-viii. Shelf life is correct
-ix. Avg/ Max used age is correct
-x. Avg/ Max current age is correct
-b. If there is more than one product
-c. If there are no more products
+	a. For if there is one product
+		i. Description is correct
+		ii. Barcode is correct
+		iii. Size is correct
+		iv. 3-month Supply is correct
+		v. Current/ Average Supply is correct
+		vi. Min/Max Supply is correct
+		vii. Used/Added Supply is correct
+		viii. Shelf life is correct
+		ix. Avg/ Max used age is correct
+		x. Avg/ Max current age is correct
+	b. If there is more than one product
+	c. If there are no more products
 12) Test report if handles non-Integers 
-a. Input 99.9
-b. Input 0.1
-c. Input 50.5
+	a. Input 99.9
+	b. Input 0.1
+	c. Input 50.5
 13) Test report with non-digits
-a. Input letters
-b. Input symbols
-c. Input other alphabet characters
+	a. Input letters
+	b. Input symbols
+	c. Input other alphabet characters
 14) Test report to output correct file type
-a. Request report in PDF 
-b. Request report in HTML
+	a. Request report in PDF 
+	b. Request report in HTML
