@@ -100,6 +100,7 @@
 			<include name="FirePlugin.jar" />
 			<include name="DavidPlugin.jar" />
 			<include name="MikePlugin.jar" />
+			<include name="BrianPlugin.jar" />
 		</fileset>
 	</path>
 	
@@ -156,6 +157,7 @@
 	<property name="FirePlugin.jar" value="lib/Plugins/FirePlugin.jar"/>
 	<property name="DavidPlugin.jar" value="lib/Plugins/DavidPlugin.jar"/>
 	<property name="MikePlugin.jar" value="lib/Plugins/MikePlugin.jar"/>
+	<property name="BrianPlugin.jar" value="lib/Plugins/BrianPlugin.jar"/>
 	
 	<target name="package" depends="compile"
         description="package the jar file" >
