@@ -1,0 +1,5 @@
+Testsuite: model.CountThreeMonthSupplyTest
+Tests run: 2, Failures: 0, Errors: 0, Time elapsed: 0.161 sec
+
+Testcase: valueTest took 0.071 sec
+Testcase: equalsTest took 0.002 sec
