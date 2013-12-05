@@ -61,7 +61,18 @@ public class RemoveItemBatchController extends Controller implements
 		barcode = getView().getBarcode();
 
 		if(useBarcodeScanner)
-			removeItem();
+		{
+			try
+			{
+				Thread.sleep(800);
+			}
+			catch(InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+
+			this.removeItem();
+		}
 
 		enableComponents();
 	}
