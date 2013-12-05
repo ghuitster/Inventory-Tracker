@@ -42,6 +42,8 @@
 	<property name="itext-home" location="${lib}/itext-5.1.0" />
 	
 	<property name="commons-lang3-home" location="${lib}/commons-lang3-3.1" />
+	
+	<property name="plugin-home" location="${lib}/Plugins" />
 
 	<property name="import-data-file" location="import.xml"/>
 	<property name="export-data-file" location="export.xml"/>
@@ -93,6 +95,14 @@
 		</fileset>
 	</path>
 	
+	<path id="plugins-classpath">
+		<fileset dir="${plugins-home}">
+			<include name="FirePlugin.jar" />
+			<include name="DavidPlugin.jar" />
+			<include name="MikePlugin.jar" />
+		</fileset>
+	</path>
+	
 	<!-- ***************** -->
 	<!-- task definintions -->
 	<!-- ***************** -->
@@ -136,12 +146,16 @@
 			<classpath refid="itext-classpath" />
 			<classpath refid="sqlite-classpath" />
 			<classpath refid="commons-lang3-classpath" />
+			<classpath refid="plugins-classpath" />
 		</javac>
 	</target>
 	
 	<property name="itext.jar" value="lib/itext-5.1.0/itextpdf-5.1.0.jar"/>
 	<property name="sqlite.jar" value="lib/sqlitejdbc-v056/sqlitejdbc-v056.jar"/>
 	<property name="commons-lang3.jar" value="lib/commons-lang3-3.1/commons-lang3-3.1.jar"/>
+	<property name="FirePlugin.jar" value="lib/Plugins/FirePlugin.jar"/>
+	<property name="DavidPlugin.jar" value="lib/Plugins/DavidPlugin.jar"/>
+	<property name="MikePlugin.jar" value="lib/Plugins/MikePlugin.jar"/>
 	
 	<target name="package" depends="compile"
         description="package the jar file" >
@@ -268,6 +282,7 @@
 			<classpath refid="itext-classpath" />
 			<classpath refid="sqlite-classpath" />
 			<classpath refid="commons-lang3-classpath" />
+			<classpath refid="plugins-classpath" />
 		</javac>
 	</target>
 	
@@ -285,6 +300,7 @@
 			<classpath refid="itext-classpath" />
 			<classpath refid="sqlite-classpath" />
 			<classpath refid="commons-lang3-classpath" />
+			<classpath refid="plugins-classpath" />
 
 			<sysproperty key="net.sourceforge.cobertura.datafile"
 				value="${coverage-data-file}"/>

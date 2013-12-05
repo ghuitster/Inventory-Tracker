@@ -24,5 +24,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/Plugins/FirePlugin.jar"/>
 	<classpathentry kind="lib" path="lib/Plugins/MikePlugin.jar"/>
+	<classpathentry kind="lib" path="lib/Plugins/DavidPlugin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
