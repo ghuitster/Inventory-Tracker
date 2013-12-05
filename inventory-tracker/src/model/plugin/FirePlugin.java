@@ -3,8 +3,6 @@ package model.plugin;
 
 import java.io.*;
 import java.net.*;
-import java.util.Map;
-import java.util.Scanner;
 
 public class FirePlugin extends Plugin
 {
@@ -18,11 +16,15 @@ public class FirePlugin extends Plugin
 		try
 		{
 			HttpURLConnection conn = this.makeHTTPConnection(temp);
-			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			String line;
-			while((line = rd.readLine()) != null)
+			System.out.println(conn.getResponseCode() + " barcode: " + barcode);
+			if(conn.getResponseCode() == HttpURLConnection.HTTP_OK)
 			{
-				results += line;
+				rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				String line;
+				while((line = rd.readLine()) != null)
+				{
+					results += line;
+				}
 			}
 		}
 		catch(IOException e)
@@ -44,7 +46,6 @@ public class FirePlugin extends Plugin
 		{
 			int startIndex = results.toLowerCase().indexOf("\"title\":\"");
 			int endIndex = results.toLowerCase().indexOf("\",", startIndex);
-			System.out.println("start index: " + startIndex + " end index: " + endIndex);
 			temp = results.substring(startIndex + compare.length(), endIndex);
 		}
 		if(temp.isEmpty())
