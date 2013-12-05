@@ -67,10 +67,20 @@ public class TransferItemBatchController extends Controller implements
 	public void barcodeChanged()
 	{
 		this.barcode = getView().getBarcode();
-		if(this.useBarcodeScanner)
+		if(useBarcodeScanner)
 		{
+			try
+			{
+				Thread.sleep(800);
+			}
+			catch(InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+
 			this.transferItem();
 		}
+		
 		this.enableComponents();
 	}
 
