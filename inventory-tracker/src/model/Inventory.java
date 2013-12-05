@@ -105,6 +105,12 @@ public class Inventory extends Observable implements IInventory, Serializable
 	private Map<String, IItem> barcodeItems;
 
 	private long lastGeneratedBarCode;
+	
+	@Override
+	public void setLastGeneratedBarCode(ItemBarcode barcode)
+	{
+		lastGeneratedBarCode = Long.parseLong(barcode.getNumber());
+	}
 
 	private Date lastRemovedItemReportTime;
 
@@ -559,13 +565,20 @@ public class Inventory extends Observable implements IInventory, Serializable
 	 *       null, and it has been added to the map of removed items
 	 * @param item The item that has been removed
 	 */
-	private void reportRemovedItem(IItem item)
+	@Override
+	public void reportRemovedItem(IItem item)
 	{
 		if(item.getExitTime() == null)
 			item.setExitTime(DateUtils.currentDate());
 		item.setContainer(null);
 		this.removedItems.add(item);
 		this.barcodeItems.remove(item.getBarcode().toString());
+	}
+	
+	@Override
+	public void reportRemovedProduct(IProduct product)
+	{
+		this.removedProducts.add(product);
 	}
 
 	/**
@@ -616,9 +629,9 @@ public class Inventory extends Observable implements IInventory, Serializable
 		{
 			IProduct product = (IProduct)obsArg.getChangedObj();
 			
-			if(product.getContainers().size() == 0)
+			if(obsArg.getUpdateType() == UpdateType.REMOVED)
 				this.removedProducts.add((IProduct) obsArg.getChangedObj());
-			else
+			else if (obsArg.getUpdateType() == UpdateType.ADDED)
 				this.removedProducts.remove(obsArg.getChangedObj());
 		}
 

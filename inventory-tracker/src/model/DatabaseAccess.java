@@ -124,9 +124,20 @@ public class DatabaseAccess
 					addItems(unit, existingProducts);
 					
 					addRemovedProducts(existingProducts);
+					addRemovedItems(existingProducts);
 					
 				} catch (InvalidNameException e) { }
 			}
+			
+			long largestBarcode = 400000000000l;
+			String largestBarcodeQuery =
+					"SELECT Barcode FROM Items "
+					+ "ORDER BY id DESC"
+					+ "LIMIT 1";
+			ResultSet largestBarcodeSet = this.statement.executeQuery(largestBarcodeQuery);
+			while(largestBarcodeSet.next())
+				largestBarcode = largestBarcodeSet.getLong("Barcode");
+			inventory.setLastGeneratedBarCode(new ItemBarcode("" + largestBarcode));
 			
 		}
 		catch(ClassNotFoundException | SQLException e)
@@ -146,9 +157,36 @@ public class DatabaseAccess
 		}
 	}
 
-	private void addRemovedProducts(Map<Integer, IProduct> existingProducts)
+	private void addRemovedItems(Map<Integer, IProduct> existingProducts) throws SQLException
 	{
+		String itemQuery = 
+				"SELECT id, productID, Barcode, EntryDate, ExitTime, ExpirationDate "
+				+ "FROM Item "
+				+ "WHERE containerID IS NULL";
 		
+		ResultSet items = this.statement.executeQuery(itemQuery);
+		while(items.next())
+		{
+			Item item = makeItem(existingProducts, items);
+			Inventory.getInstance().reportRemovedItem(item);
+		}
+	}
+
+	private void addRemovedProducts(Map<Integer, IProduct> existingProducts) throws SQLException
+	{
+		String productQuery =
+				"SELECT Product.id Product.CreationDate, Product.Barcode, Product.Description, "
+				+ "Product.Size, Product.ShelfLife, Product.ThreeMonthSupply, Product.SizeUnit "
+				+ "FROM Product "
+				+ "LEFT JOIN ContainerProducts "
+				+ "ON ContainerProducts.productID = Product.id "
+				+ "WHERE ContainerProducts.containerID IS NULL";
+		ResultSet products = this.statement.executeQuery(productQuery);
+		while(products.next())
+		{
+			Product product = makeProduct(products);
+			Inventory.getInstance().reportRemovedProduct(product);
+		}
 	}
 
 	private void addItems(IProductContainer container, Map<Integer, IProduct> existingProducts) throws SQLException
@@ -161,25 +199,32 @@ public class DatabaseAccess
 		ResultSet items = this.statement.executeQuery(itemQuery);
 		while(items.next())
 		{
-			int id = items.getInt("id");
-			int productId = items.getInt("productID");
-			long barcode = items.getLong("Barcode");
-			Date entry = new Date(items.getLong("EntryDate"));
-			long exitSeconds = items.getLong("ExitTime");
-			Date exit = null;
-			if(!items.wasNull())
-				exit = new Date(exitSeconds);
-			long expirationSeconds = items.getLong("ExpirationDate");
-			Date expiration = null;
-			if(!items.wasNull())
-				expiration = new Date(expirationSeconds);
-			
-			IProduct product = existingProducts.get(productId);
-			Item item = new Item(product, new ItemBarcode("" + barcode), 
-					entry, expiration);
+			Item item = makeItem(existingProducts, items);
 			container.addItem(item);
 		}
 		
+	}
+
+	private Item makeItem(Map<Integer, IProduct> existingProducts,
+			ResultSet items) throws SQLException
+	{
+		int id = items.getInt("id");
+		int productId = items.getInt("productID");
+		long barcode = items.getLong("Barcode");
+		Date entry = new Date(items.getLong("EntryDate"));
+		long exitSeconds = items.getLong("ExitTime");
+		Date exit = null;
+		if(!items.wasNull())
+			exit = new Date(exitSeconds);
+		long expirationSeconds = items.getLong("ExpirationDate");
+		Date expiration = null;
+		if(!items.wasNull())
+			expiration = new Date(expirationSeconds);
+		
+		IProduct product = existingProducts.get(productId);
+		Item item = new Item(product, new ItemBarcode("" + barcode), 
+				entry, expiration);
+		return item;
 	}
 
 	private void addProducts(IProductContainer container, Map<Integer, IProduct> existingProducts) throws SQLException
@@ -195,36 +240,44 @@ public class DatabaseAccess
 		ResultSet products = this.statement.executeQuery(productQuery);
 		while(products.next())
 		{
-			String barcode = products.getString("Product.Barcode");
-			if(existingProducts.containsKey(barcode))
+			int id = products.getInt("Product.id");
+			if(existingProducts.containsKey(id))
 			{
-				container.addProduct(existingProducts.get(barcode));
+				container.addProduct(existingProducts.get(id));
 			}
 			else
 			{
-				Date creation = new Date(products.getLong("Product.CreationDate"));
-				String description = products.getString("Product.Description");
-				
-				UnitType sizeUnit = UnitType.values()[products.getInt("Product.SizeUnit")];
-				Amount size;
-				if(sizeUnit == UnitType.COUNT)
-					size = new CountUnitSize((int)products.getFloat("Product.Size"));
-				else size = new UnitSize(products.getFloat("Product.Size"), sizeUnit);
-				
-				int shelfLife = products.getInt("ShelfLife");
-				if(products.wasNull())
-					shelfLife = 0;
-				CountThreeMonthSupply supply = new CountThreeMonthSupply
-						(products.getInt("Product.ThreeMonthSupply"));
-				
-				Product product = new Product(creation, description, 
-						new ProductBarcode(barcode), size, shelfLife, supply);
-				product.setID(products.getInt("Product.id"));
+				Product product = makeProduct(products);
 				container.addProduct(product);
 				existingProducts.put(product.getID(), product);
 			}
 		}
 		
+	}
+
+	private Product makeProduct(ResultSet products)
+			throws SQLException
+	{
+		int id = products.getInt("Product.id");
+		Barcode barcode = new ProductBarcode(products.getString("Product.Barcode"));
+		Date creation = new Date(products.getLong("Product.CreationDate"));
+		String description = products.getString("Product.Description");
+		
+		UnitType sizeUnit = UnitType.values()[products.getInt("Product.SizeUnit")];
+		Amount size;
+		if(sizeUnit == UnitType.COUNT)
+			size = new CountUnitSize((int)products.getFloat("Product.Size"));
+		else size = new UnitSize(products.getFloat("Product.Size"), sizeUnit);
+		
+		int shelfLife = products.getInt("ShelfLife");
+		if(products.wasNull())
+			shelfLife = 0;
+		CountThreeMonthSupply supply = new CountThreeMonthSupply
+				(products.getInt("Product.ThreeMonthSupply"));
+		
+		Product product = new Product(creation, description, barcode, size, shelfLife, supply);
+		product.setID(id);
+		return product;
 	}
 
 	private void addChildGroups(IProductContainer parent, Map<Integer, IProduct> existingProducts) throws SQLException

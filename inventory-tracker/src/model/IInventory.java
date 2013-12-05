@@ -177,4 +177,10 @@ public interface IInventory extends Observer, IObservable
 	 */
 	void traverse(IVisitor visitor);
 
+	void reportRemovedProduct(IProduct product);
+
+	void reportRemovedItem(IItem item);
+
+	void setLastGeneratedBarCode(ItemBarcode barcode);
+
 }
