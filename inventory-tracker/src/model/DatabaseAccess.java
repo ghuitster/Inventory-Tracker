@@ -166,7 +166,7 @@ public class DatabaseAccess
 	 * Updates a product in the database
 	 * @param product
 	 */
-	public void updateProdut(IProduct product)
+	public void updateProduct(IProduct product)
 	{
 
 	}

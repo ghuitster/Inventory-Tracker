@@ -75,18 +75,44 @@ public class Database implements IPersistence, Observer
 					dbAccess.removeProductContainer(container);
 					break;
 				case UPDATED:
-					
+					dbAccess.updateProductContainer(container);
 					break;
 				
 			}
 		}
 		else if(obsArg.getChangedObj() instanceof IProduct)
 		{
-			
+			IProduct product = (IProduct)obsArg.getChangedObj();
+			switch(obsArg.getUpdateType())
+			{
+				case ADDED:
+					dbAccess.addProduct(product);
+					break;
+				case REMOVED:
+					dbAccess.removeProduct(product);
+					break;
+				case UPDATED:
+					dbAccess.updateProduct(product);
+					break;
+				
+			}
 		}
 		else if(obsArg.getChangedObj() instanceof IItem)
 		{
-			
+			IItem item = (IItem)obsArg.getChangedObj();
+			switch(obsArg.getUpdateType())
+			{
+				case ADDED:
+					dbAccess.addItem(item);
+					break;
+				case REMOVED:
+					dbAccess.removeItem(item);
+					break;
+				case UPDATED:
+					dbAccess.updateItem(item);
+					break;
+				
+			}
 		}
 	}
 
