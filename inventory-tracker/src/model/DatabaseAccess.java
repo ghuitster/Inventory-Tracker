@@ -106,7 +106,7 @@ public class DatabaseAccess
 			this.createConnection();
 			ResultSet storageUnits = this.statement.executeQuery(storageUnitsQuery);
 			
-			Map<String, IProduct> existingProducts = new HashMap<String, IProduct>();
+			Map<Integer, IProduct> existingProducts = new HashMap<Integer, IProduct>();
 			
 			while(storageUnits.next())
 			{
@@ -114,12 +114,16 @@ public class DatabaseAccess
 				String name = storageUnits.getString("Name");
 				try
 				{
-					IStorageUnit unit = new StorageUnit(id, name);
+					IStorageUnit unit = new StorageUnit(name);
+					unit.setId(id);
 					inventory.addStorageUnit(unit);
 					
-					addChildGroups(unit);
+					addChildGroups(unit, existingProducts);
 					
 					addProducts(unit, existingProducts);
+					addItems(unit, existingProducts);
+					
+					addRemovedProducts(existingProducts);
 					
 				} catch (InvalidNameException e) { }
 			}
@@ -142,11 +146,47 @@ public class DatabaseAccess
 		}
 	}
 
-	private void addProducts(IProductContainer container, Map<String, IProduct> existingProducts) throws SQLException
+	private void addRemovedProducts(Map<Integer, IProduct> existingProducts)
+	{
+		
+	}
+
+	private void addItems(IProductContainer container, Map<Integer, IProduct> existingProducts) throws SQLException
+	{
+		String itemQuery = 
+				"SELECT id, productID, Barcode, EntryDate, ExitTime, ExpirationDate "
+				+ "FROM Item "
+				+ "WHERE containerID = " + container.getId();
+		
+		ResultSet items = this.statement.executeQuery(itemQuery);
+		while(items.next())
+		{
+			int id = items.getInt("id");
+			int productId = items.getInt("productID");
+			long barcode = items.getLong("Barcode");
+			Date entry = new Date(items.getLong("EntryDate"));
+			long exitSeconds = items.getLong("ExitTime");
+			Date exit = null;
+			if(!items.wasNull())
+				exit = new Date(exitSeconds);
+			long expirationSeconds = items.getLong("ExpirationDate");
+			Date expiration = null;
+			if(!items.wasNull())
+				expiration = new Date(expirationSeconds);
+			
+			IProduct product = existingProducts.get(productId);
+			Item item = new Item(product, new ItemBarcode("" + barcode), 
+					entry, expiration);
+			container.addItem(item);
+		}
+		
+	}
+
+	private void addProducts(IProductContainer container, Map<Integer, IProduct> existingProducts) throws SQLException
 	{
 		String productQuery =
-				"SELECT Product.CreationDate, Product.Barcode, Product.Description, Product.Size, "
-				+ "Product.ShelfLife, Product.ThreeMonthSupply, Product.SizeUnit "
+				"SELECT Product.id Product.CreationDate, Product.Barcode, Product.Description, "
+				+ "Product.Size, Product.ShelfLife, Product.ThreeMonthSupply, Product.SizeUnit "
 				+ "FROM Product "
 				+ "INNER JOIN ContainerProducts "
 				+ "ON ContainerProducts.productID = Product.id "
@@ -172,19 +212,22 @@ public class DatabaseAccess
 				else size = new UnitSize(products.getFloat("Product.Size"), sizeUnit);
 				
 				int shelfLife = products.getInt("ShelfLife");
+				if(products.wasNull())
+					shelfLife = 0;
 				CountThreeMonthSupply supply = new CountThreeMonthSupply
 						(products.getInt("Product.ThreeMonthSupply"));
 				
 				Product product = new Product(creation, description, 
 						new ProductBarcode(barcode), size, shelfLife, supply);
+				product.setID(products.getInt("Product.id"));
 				container.addProduct(product);
-				existingProducts.put(product.getBarcode().getNumber(), product);
+				existingProducts.put(product.getID(), product);
 			}
 		}
 		
 	}
 
-	private void addChildGroups(IProductContainer parent) throws SQLException
+	private void addChildGroups(IProductContainer parent, Map<Integer, IProduct> existingProducts) throws SQLException
 	{
 		String productGroupQuery = 
 				"SELECT id, Name, ThreeMonthSupply, parentID, ThreeMonthSupplyType "
@@ -194,8 +237,8 @@ public class DatabaseAccess
 		ResultSet productGroups = this.statement.executeQuery(productGroupQuery);
 		while(productGroups.next())
 		{
-			int _id = productGroups.getInt("id");
-			String _name = productGroups.getString("Name");
+			int id = productGroups.getInt("id");
+			String name = productGroups.getString("Name");
 			float threeMonthSupplyValue = productGroups.getFloat("ThreeMonthSupply");
 			int threeMonthSupplyType = productGroups.getInt("ThreeMonthSupplyType");
 			
@@ -207,10 +250,13 @@ public class DatabaseAccess
 			else
 				threeMonthSupply = new ThreeMonthSupply(threeMonthSupplyValue, supplyType);
 			
-			IProductGroup group = new ProductGroup(_id, _name, threeMonthSupply);
+			IProductGroup group = new ProductGroup(name, threeMonthSupply);
+			group.setId(id);
 			parent.addProductGroup(group);
+			addProducts(group, existingProducts);
+			addItems(group, existingProducts);
 			
-			addChildGroups(group);
+			addChildGroups(group, existingProducts);
 		}
 	}
 
