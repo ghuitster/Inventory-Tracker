@@ -25,6 +25,7 @@ import model.visitor.ItemVisitor;
 import model.visitor.NMonthSupplyVisitor;
 import model.visitor.NoticeVisitor;
 import model.visitor.ProductVisitor;
+
 import common.util.DateUtils;
 
 /**
@@ -34,8 +35,6 @@ import common.util.DateUtils;
  */
 public class Inventory extends Observable implements IInventory, Serializable
 {
-	public static boolean useSerializer = false;
-	
 	private class DateInfo
 	{
 		public DateType dateType;
@@ -54,10 +53,17 @@ public class Inventory extends Observable implements IInventory, Serializable
 		EntryDate, ExitDate, StartOfReport, EndOfReport
 	}
 
+	public static boolean useSerializer = false;
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6708314065210008512L;
+
+	/**
+	 * Static reference to the one and only Inventory instance
+	 */
+	private static Inventory instance;
 
 	/**
 	 * Gets the static Inventory instance. Creates it if it does not exist.
@@ -81,11 +87,11 @@ public class Inventory extends Observable implements IInventory, Serializable
 	 * A list of all the storage units
 	 */
 	private Set<IStorageUnit> storageUnits;
-
 	/**
 	 * Persistence object for saving and loading data
 	 */
 	private IPersistence persistence;
+
 	/**
 	 * Mapping of all removed Items, for easy retrieval
 	 */
@@ -97,22 +103,11 @@ public class Inventory extends Observable implements IInventory, Serializable
 	private SortedSet<IProduct> removedProducts;
 
 	/**
-	 * Static reference to the one and only Inventory instance
-	 */
-	private static Inventory instance;
-
-	/**
 	 * ItemBarcode Number mapping for all items.
 	 */
 	private Map<String, IItem> barcodeItems;
 
 	private long lastGeneratedBarCode;
-	
-	@Override
-	public void setLastGeneratedBarCode(ItemBarcode barcode)
-	{
-		lastGeneratedBarCode = Long.parseLong(barcode.getNumber());
-	}
 
 	private Date lastRemovedItemReportTime;
 
@@ -127,7 +122,8 @@ public class Inventory extends Observable implements IInventory, Serializable
 		this.storageUnits = new HashSet<IStorageUnit>();
 		if(useSerializer)
 			this.persistence = new Serializer("./data.inventory");
-		else this.persistence = new Database("hit");
+		else
+			this.persistence = new Database("hit");
 		this.removedItems = new TreeSet<IItem>(new RemovedItemComparator());
 		this.removedProducts = new TreeSet<IProduct>();
 		this.barcodeItems = new HashMap<String, IItem>();
@@ -208,6 +204,16 @@ public class Inventory extends Observable implements IInventory, Serializable
 	{
 		while(dateList.containsKey(entry))
 			entry.setTime(entry.getTime() + 1);
+	}
+
+	public String findProductInfo(String barcode)
+	{
+		PluginManager pm = new PluginManager();
+		Plugin plugin = pm.getFirstPlugin();
+		String result = plugin.findProduct(barcode);
+		if(result == null)
+			return "";
+		return result;
 	}
 
 	/*
@@ -578,11 +584,17 @@ public class Inventory extends Observable implements IInventory, Serializable
 		this.removedItems.add(item);
 		this.barcodeItems.remove(item.getBarcode().toString());
 	}
-	
+
 	@Override
 	public void reportRemovedProduct(IProduct product)
 	{
 		this.removedProducts.add(product);
+	}
+
+	@Override
+	public void setLastGeneratedBarCode(ItemBarcode barcode)
+	{
+		lastGeneratedBarCode = Long.parseLong(barcode.getNumber());
 	}
 
 	/**
@@ -631,26 +643,16 @@ public class Inventory extends Observable implements IInventory, Serializable
 		}
 		else if(obsArg.getChangedObj() instanceof IProduct)
 		{
-			IProduct product = (IProduct)obsArg.getChangedObj();
-			
+			IProduct product = (IProduct) obsArg.getChangedObj();
+
 			if(obsArg.getUpdateType() == UpdateType.REMOVED)
 				this.removedProducts.add((IProduct) obsArg.getChangedObj());
-			else if (obsArg.getUpdateType() == UpdateType.ADDED)
+			else if(obsArg.getUpdateType() == UpdateType.ADDED)
 				this.removedProducts.remove(obsArg.getChangedObj());
 		}
 
 		this.setChanged();
 		this.notifyObservers(obsArg);
-	}
-
-	public String findProductInfo(String barcode)
-	{
-		PluginManager pm = new PluginManager();
-		Plugin plugin = pm.getFirstPlugin();
-		String result = plugin.findProduct(barcode);
-		if(result == null)
-			return "";
-		return result;
 	}
 
 }

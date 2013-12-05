@@ -80,7 +80,7 @@ public class TransferItemBatchController extends Controller implements
 
 			this.transferItem();
 		}
-		
+
 		this.enableComponents();
 	}
 

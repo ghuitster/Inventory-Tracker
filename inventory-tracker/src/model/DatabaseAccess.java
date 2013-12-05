@@ -2,6 +2,7 @@
 package model;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -10,23 +11,63 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 import model.exception.InvalidNameException;
 
 public class DatabaseAccess
 {
-	private final String databaseName;
-	private Connection connection;
-	private Statement statement;
-
 	public static boolean databaseExists(String name)
 	{
 		return false;
 	}
+	private final String databaseName;
+	private Connection connection;
+
+	private Statement statement;
 
 	public DatabaseAccess(String databaseName)
 	{
 		this.databaseName = databaseName;
+	}
+
+	private void addChildGroups(IProductContainer parent,
+			Map<Integer, IProduct> existingProducts) throws SQLException
+	{
+		String productGroupQuery =
+				"SELECT id, Name, ThreeMonthSupply, parentID, ThreeMonthSupplyType "
+						+ "FROM ProductContainer" + "WHERE parentID = "
+						+ parent.getId();
+
+		ResultSet productGroups =
+				this.statement.executeQuery(productGroupQuery);
+		while(productGroups.next())
+		{
+			int id = productGroups.getInt("id");
+			String name = productGroups.getString("Name");
+			float threeMonthSupplyValue =
+					productGroups.getFloat("ThreeMonthSupply");
+			int threeMonthSupplyType =
+					productGroups.getInt("ThreeMonthSupplyType");
+
+			UnitType supplyType = UnitType.values()[threeMonthSupplyType];
+			Amount threeMonthSupply;
+
+			if(supplyType == UnitType.COUNT)
+				threeMonthSupply =
+						new CountThreeMonthSupply((int) threeMonthSupplyValue);
+			else
+				threeMonthSupply =
+						new ThreeMonthSupply(threeMonthSupplyValue, supplyType);
+
+			IProductGroup group = new ProductGroup(name, threeMonthSupply);
+			group.setId(id);
+			parent.addProductGroup(group);
+			addProducts(group, existingProducts);
+			addItems(group, existingProducts);
+
+			addChildGroups(group, existingProducts);
+		}
 	}
 
 	public void addItem(IItem item)
@@ -64,6 +105,50 @@ public class DatabaseAccess
 			}
 		}
 
+		query =
+				"SELECT id FROM Item WHERE Barcode=\""
+						+ item.getBarcode().getNumber() + "\"";
+
+		try
+		{
+			this.createConnection();
+			ResultSet results = this.statement.executeQuery(query);
+
+			results.first();
+			item.setID(results.getInt("id"));
+		}
+		catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				this.closeConnection();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void addItems(IProductContainer container,
+			Map<Integer, IProduct> existingProducts) throws SQLException
+	{
+		String itemQuery =
+				"SELECT id, productID, Barcode, EntryDate, ExitTime, ExpirationDate "
+						+ "FROM Item " + "WHERE containerID = "
+						+ container.getId();
+
+		ResultSet items = this.statement.executeQuery(itemQuery);
+		while(items.next())
+		{
+			Item item = makeItem(existingProducts, items);
+			container.addItem(item);
+		}
+
 	}
 
 	/**
@@ -96,13 +181,81 @@ public class DatabaseAccess
 						+ "\", \""
 						+ product.getSize().getUnitType().ordinal() + "\")";
 
+		try
+		{
+			this.createConnection();
+			this.statement.executeUpdate(query);
+		}
+		catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				this.closeConnection();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+
 		query =
 				"SELECT id FROM Product WHERE Barcode=\""
 						+ product.getBarcode().getNumber() + "\"";
 
-		product.getContainers().iterator().next().getId();
+		try
+		{
+			this.createConnection();
+			ResultSet results = this.statement.executeQuery(query);
 
-		throw new UnsupportedOperationException();
+			results.first();
+			product.setID(results.getInt("id"));
+		}
+		catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				this.closeConnection();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+
+		int containerID = product.getContainers().iterator().next().getId();
+
+		query =
+				"INSERT INTO ContainerProducts (\"containerID\", \"productID\") VALUES (\""
+						+ containerID + "\", \"" + product.getId() + "\")";
+
+		try
+		{
+			this.createConnection();
+			this.statement.executeUpdate(query);
+		}
+		catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				this.closeConnection();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -111,6 +264,8 @@ public class DatabaseAccess
 	 */
 	public void addProductContainer(IProductContainer productContainer)
 	{
+		String query = "";
+
 		if(productContainer instanceof ProductGroup)
 		{
 			double threeMonthSupply = -1.0;
@@ -138,7 +293,7 @@ public class DatabaseAccess
 
 			parentID = ((ProductGroup) productContainer).getContainer().getId();
 
-			String query =
+			query =
 					"INSERT INTO ProductContainer (\"Name\", \"ThreeMonthSupply\", \"parentID\", \"ThreeMonthSupplyType\") VALUES (\""
 							+ productContainer.getName()
 							+ "\", \""
@@ -151,16 +306,171 @@ public class DatabaseAccess
 
 		else
 		{
-			String query =
+			query =
 					"INSERT INTO ProductContainer (\"Name\") VALUES (\""
 							+ productContainer.getName() + "\")";
 		}
 
-		String query =
+		try
+		{
+			this.createConnection();
+			this.statement.executeUpdate(query);
+		}
+		catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				this.closeConnection();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+
+		query =
 				"SELECT id FROM ProductContainer WHERE Name=\""
 						+ productContainer.getName() + "\"";
 
-		throw new UnsupportedOperationException();
+		try
+		{
+			this.createConnection();
+			ResultSet results = this.statement.executeQuery(query);
+
+			results.first();
+			productContainer.setId(results.getInt("id"));
+		}
+		catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				this.closeConnection();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void addProducts(IProductContainer container,
+			Map<Integer, IProduct> existingProducts) throws SQLException
+	{
+		String productQuery =
+				"SELECT Product.id Product.CreationDate, Product.Barcode, Product.Description, "
+						+ "Product.Size, Product.ShelfLife, Product.ThreeMonthSupply, Product.SizeUnit "
+						+ "FROM Product "
+						+ "INNER JOIN ContainerProducts "
+						+ "ON ContainerProducts.productID = Product.id "
+						+ "WHERE ContainerProducts.containerID = "
+						+ container.getId();
+
+		ResultSet products = this.statement.executeQuery(productQuery);
+		while(products.next())
+		{
+			int id = products.getInt("Product.id");
+			if(existingProducts.containsKey(id))
+			{
+				container.addProduct(existingProducts.get(id));
+			}
+			else
+			{
+				Product product = makeProduct(products);
+				container.addProduct(product);
+				existingProducts.put(product.getID(), product);
+			}
+		}
+
+	}
+
+	private void addRemovedItems(Map<Integer, IProduct> existingProducts)
+			throws SQLException
+	{
+		String itemQuery =
+				"SELECT id, productID, Barcode, EntryDate, ExitTime, ExpirationDate "
+						+ "FROM Item " + "WHERE containerID IS NULL";
+
+		ResultSet items = this.statement.executeQuery(itemQuery);
+		while(items.next())
+		{
+			Item item = makeItem(existingProducts, items);
+			Inventory.getInstance().reportRemovedItem(item);
+		}
+	}
+
+	private void addRemovedProducts(Map<Integer, IProduct> existingProducts)
+			throws SQLException
+	{
+		String productQuery =
+				"SELECT Product.id Product.CreationDate, Product.Barcode, Product.Description, "
+						+ "Product.Size, Product.ShelfLife, Product.ThreeMonthSupply, Product.SizeUnit "
+						+ "FROM Product "
+						+ "LEFT JOIN ContainerProducts "
+						+ "ON ContainerProducts.productID = Product.id "
+						+ "WHERE ContainerProducts.containerID IS NULL";
+		ResultSet products = this.statement.executeQuery(productQuery);
+		while(products.next())
+		{
+			Product product = makeProduct(products);
+			Inventory.getInstance().reportRemovedProduct(product);
+		}
+	}
+
+	/**
+	 * This method will close the connection with the database
+	 * @throws SQLException If something bad happens when trying to close the
+	 *             connection
+	 */
+	private void closeConnection() throws SQLException
+	{
+		this.statement.close();
+		this.connection.close();
+	}
+
+	/**
+	 * This method will create a connection with the database
+	 * @throws SQLException If something bad happens when attempting to create
+	 *             the statements to be executed
+	 * @throws ClassNotFoundException If something bad happens when attempting
+	 *             to load the SQLite driver
+	 */
+	private void createConnection() throws SQLException, ClassNotFoundException
+	{
+		Class.forName("org.sqlite.JDBC");
+		String path = "jdbc:sqlite:database" + File.separator + databaseName;
+		this.connection = DriverManager.getConnection(path);
+		this.statement = this.connection.createStatement();
+	}
+
+	/**
+	 * Creates the database using SQL statements from a txt file
+	 * @throws FileNotFoundException Should never happen
+	 * @throws SQLException from addSqlBatch from DataAccess
+	 */
+	private void createDatabase()
+	{
+		try
+		{
+			Scanner scan = new Scanner(new File("db_schema.sql"));
+			this.createConnection();
+
+			while(scan.hasNext())
+				this.statement.executeUpdate(scan.nextLine());
+
+			scan.close();
+		}
+		catch(FileNotFoundException | ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -236,56 +546,6 @@ public class DatabaseAccess
 		}
 	}
 
-	private void addRemovedItems(Map<Integer, IProduct> existingProducts)
-			throws SQLException
-	{
-		String itemQuery =
-				"SELECT id, productID, Barcode, EntryDate, ExitTime, ExpirationDate "
-						+ "FROM Item " + "WHERE containerID IS NULL";
-
-		ResultSet items = this.statement.executeQuery(itemQuery);
-		while(items.next())
-		{
-			Item item = makeItem(existingProducts, items);
-			Inventory.getInstance().reportRemovedItem(item);
-		}
-	}
-
-	private void addRemovedProducts(Map<Integer, IProduct> existingProducts)
-			throws SQLException
-	{
-		String productQuery =
-				"SELECT Product.id Product.CreationDate, Product.Barcode, Product.Description, "
-						+ "Product.Size, Product.ShelfLife, Product.ThreeMonthSupply, Product.SizeUnit "
-						+ "FROM Product "
-						+ "LEFT JOIN ContainerProducts "
-						+ "ON ContainerProducts.productID = Product.id "
-						+ "WHERE ContainerProducts.containerID IS NULL";
-		ResultSet products = this.statement.executeQuery(productQuery);
-		while(products.next())
-		{
-			Product product = makeProduct(products);
-			Inventory.getInstance().reportRemovedProduct(product);
-		}
-	}
-
-	private void addItems(IProductContainer container,
-			Map<Integer, IProduct> existingProducts) throws SQLException
-	{
-		String itemQuery =
-				"SELECT id, productID, Barcode, EntryDate, ExitTime, ExpirationDate "
-						+ "FROM Item " + "WHERE containerID = "
-						+ container.getId();
-
-		ResultSet items = this.statement.executeQuery(itemQuery);
-		while(items.next())
-		{
-			Item item = makeItem(existingProducts, items);
-			container.addItem(item);
-		}
-
-	}
-
 	private Item makeItem(Map<Integer, IProduct> existingProducts,
 			ResultSet items) throws SQLException
 	{
@@ -307,36 +567,6 @@ public class DatabaseAccess
 				new Item(product, new ItemBarcode("" + barcode), entry,
 						expiration);
 		return item;
-	}
-
-	private void addProducts(IProductContainer container,
-			Map<Integer, IProduct> existingProducts) throws SQLException
-	{
-		String productQuery =
-				"SELECT Product.id Product.CreationDate, Product.Barcode, Product.Description, "
-						+ "Product.Size, Product.ShelfLife, Product.ThreeMonthSupply, Product.SizeUnit "
-						+ "FROM Product "
-						+ "INNER JOIN ContainerProducts "
-						+ "ON ContainerProducts.productID = Product.id "
-						+ "WHERE ContainerProducts.containerID = "
-						+ container.getId();
-
-		ResultSet products = this.statement.executeQuery(productQuery);
-		while(products.next())
-		{
-			int id = products.getInt("Product.id");
-			if(existingProducts.containsKey(id))
-			{
-				container.addProduct(existingProducts.get(id));
-			}
-			else
-			{
-				Product product = makeProduct(products);
-				container.addProduct(product);
-				existingProducts.put(product.getID(), product);
-			}
-		}
-
 	}
 
 	private Product makeProduct(ResultSet products) throws SQLException
@@ -369,71 +599,6 @@ public class DatabaseAccess
 		return product;
 	}
 
-	private void addChildGroups(IProductContainer parent,
-			Map<Integer, IProduct> existingProducts) throws SQLException
-	{
-		String productGroupQuery =
-				"SELECT id, Name, ThreeMonthSupply, parentID, ThreeMonthSupplyType "
-						+ "FROM ProductContainer" + "WHERE parentID = "
-						+ parent.getId();
-
-		ResultSet productGroups =
-				this.statement.executeQuery(productGroupQuery);
-		while(productGroups.next())
-		{
-			int id = productGroups.getInt("id");
-			String name = productGroups.getString("Name");
-			float threeMonthSupplyValue =
-					productGroups.getFloat("ThreeMonthSupply");
-			int threeMonthSupplyType =
-					productGroups.getInt("ThreeMonthSupplyType");
-
-			UnitType supplyType = UnitType.values()[threeMonthSupplyType];
-			Amount threeMonthSupply;
-
-			if(supplyType == UnitType.COUNT)
-				threeMonthSupply =
-						new CountThreeMonthSupply((int) threeMonthSupplyValue);
-			else
-				threeMonthSupply =
-						new ThreeMonthSupply(threeMonthSupplyValue, supplyType);
-
-			IProductGroup group = new ProductGroup(name, threeMonthSupply);
-			group.setId(id);
-			parent.addProductGroup(group);
-			addProducts(group, existingProducts);
-			addItems(group, existingProducts);
-
-			addChildGroups(group, existingProducts);
-		}
-	}
-
-	/**
-	 * This method will create a connection with the database
-	 * @throws SQLException If something bad happens when attempting to create
-	 *             the statements to be executed
-	 * @throws ClassNotFoundException If something bad happens when attempting
-	 *             to load the SQLite driver
-	 */
-	private void createConnection() throws SQLException, ClassNotFoundException
-	{
-		Class.forName("org.sqlite.JDBC");
-		String path = "jdbc:sqlite:database" + File.separator + databaseName;
-		this.connection = DriverManager.getConnection(path);
-		this.statement = this.connection.createStatement();
-	}
-
-	/**
-	 * This method will close the connection with the database
-	 * @throws SQLException If something bad happens when trying to close the
-	 *             connection
-	 */
-	private void closeConnection() throws SQLException
-	{
-		this.statement.close();
-		this.connection.close();
-	}
-
 	/**
 	 * Removes an item by id from the database
 	 * @param item The item to remove
@@ -441,6 +606,27 @@ public class DatabaseAccess
 	public void removeItem(IItem item)
 	{
 		String query = "DELETE FROM Item WHERE id=\"" + item.getId() + "\"";
+
+		try
+		{
+			this.createConnection();
+			this.statement.executeUpdate(query);
+		}
+		catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				this.closeConnection();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -451,6 +637,27 @@ public class DatabaseAccess
 	{
 		String query =
 				"DELETE FROM Product WHERE id=\"" + product.getId() + "\"";
+
+		try
+		{
+			this.createConnection();
+			this.statement.executeUpdate(query);
+		}
+		catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				this.closeConnection();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -462,6 +669,27 @@ public class DatabaseAccess
 		String query =
 				"DELETE FROM ProductContainer WHERE id=\"" + container.getId()
 						+ "\"";
+
+		try
+		{
+			this.createConnection();
+			this.statement.executeUpdate(query);
+		}
+		catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				this.closeConnection();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -479,59 +707,27 @@ public class DatabaseAccess
 						+ item.getExpirationDate().getTime()
 						+ "\", \"containerID\"=\""
 						+ item.getContainer().getId() + "\")";
-	}
 
-	/**
-	 * Updates a product container in the database
-	 * @param productContainer
-	 */
-	public void updateProductContainer(IProductContainer productContainer)
-	{
-		if(productContainer instanceof ProductGroup)
+		try
 		{
-			double threeMonthSupply = -1.0;
-			int parentID = -1;
-			int threeMonthSupplyType = -1;
-
-			if(((ProductGroup) productContainer).getThreeMonthSupply() instanceof CountAmount)
-			{
-				threeMonthSupplyType =
-						((CountAmount) ((ProductGroup) productContainer)
-								.getThreeMonthSupply()).getUnitType().ordinal();
-				threeMonthSupply =
-						((CountAmount) ((ProductGroup) productContainer)
-								.getThreeMonthSupply()).getAmount();
-			}
-			else if(((ProductGroup) productContainer).getThreeMonthSupply() instanceof NonCountAmount)
-			{
-				threeMonthSupplyType =
-						((NonCountAmount) ((ProductGroup) productContainer)
-								.getThreeMonthSupply()).getUnitType().ordinal();
-				threeMonthSupply =
-						((NonCountAmount) ((ProductGroup) productContainer)
-								.getThreeMonthSupply()).getAmount();
-			}
-
-			parentID = ((ProductGroup) productContainer).getContainer().getId();
-
-			String query =
-					"UPDATE ProductContainer SET \"Name\"=\""
-							+ productContainer.getName()
-							+ "\", \"ThreeMonthSupply\"=\"" + threeMonthSupply
-							+ "\", \"parentID\"=\"" + parentID
-							+ "\", \"ThreeMonthSupplyType\"=\""
-							+ threeMonthSupplyType + "\"";
+			this.createConnection();
+			this.statement.executeUpdate(query);
 		}
-
-		else
+		catch(ClassNotFoundException | SQLException e)
 		{
-			String query =
-					"UPDATE ProductContainer SET \"Name\"=\""
-							+ productContainer.getName() + "\"";
+			e.printStackTrace();
 		}
-
-		throw new UnsupportedOperationException();
-
+		finally
+		{
+			try
+			{
+				this.closeConnection();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -561,8 +757,97 @@ public class DatabaseAccess
 						+ "\", \"SizeUnit\"=\""
 						+ product.getSize().getUnitType().ordinal() + "\"";
 
-		product.getContainers().iterator().next().getId();
+		try
+		{
+			this.createConnection();
+			this.statement.executeUpdate(query);
+		}
+		catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				this.closeConnection();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
 
-		throw new UnsupportedOperationException();
+	/**
+	 * Updates a product container in the database
+	 * @param productContainer
+	 */
+	public void updateProductContainer(IProductContainer productContainer)
+	{
+		String query = "";
+		if(productContainer instanceof ProductGroup)
+		{
+			double threeMonthSupply = -1.0;
+			int parentID = -1;
+			int threeMonthSupplyType = -1;
+
+			if(((ProductGroup) productContainer).getThreeMonthSupply() instanceof CountAmount)
+			{
+				threeMonthSupplyType =
+						((CountAmount) ((ProductGroup) productContainer)
+								.getThreeMonthSupply()).getUnitType().ordinal();
+				threeMonthSupply =
+						((CountAmount) ((ProductGroup) productContainer)
+								.getThreeMonthSupply()).getAmount();
+			}
+			else if(((ProductGroup) productContainer).getThreeMonthSupply() instanceof NonCountAmount)
+			{
+				threeMonthSupplyType =
+						((NonCountAmount) ((ProductGroup) productContainer)
+								.getThreeMonthSupply()).getUnitType().ordinal();
+				threeMonthSupply =
+						((NonCountAmount) ((ProductGroup) productContainer)
+								.getThreeMonthSupply()).getAmount();
+			}
+
+			parentID = ((ProductGroup) productContainer).getContainer().getId();
+
+			query =
+					"UPDATE ProductContainer SET \"Name\"=\""
+							+ productContainer.getName()
+							+ "\", \"ThreeMonthSupply\"=\"" + threeMonthSupply
+							+ "\", \"parentID\"=\"" + parentID
+							+ "\", \"ThreeMonthSupplyType\"=\""
+							+ threeMonthSupplyType + "\"";
+		}
+
+		else
+		{
+			query =
+					"UPDATE ProductContainer SET \"Name\"=\""
+							+ productContainer.getName() + "\"";
+		}
+
+		try
+		{
+			this.createConnection();
+			this.statement.executeUpdate(query);
+		}
+		catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				this.closeConnection();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 }

@@ -118,12 +118,6 @@ public interface IProductContainer extends IObservable, ITaggable,
 	public abstract int getId();
 
 	/**
-	 * Set the unique ID to represent this product container.
-	 * @param id the unique ID to be set
-	 */
-	public abstract void setId(int id);
-
-	/**
 	 * @return the name
 	 */
 	public abstract String getName();
@@ -155,6 +149,12 @@ public interface IProductContainer extends IObservable, ITaggable,
 	public abstract void removeProductGroup(IProductGroup productGroup);
 
 	void removeProductTemporary(IProduct product);
+
+	/**
+	 * Set the unique ID to represent this product container.
+	 * @param id the unique ID to be set
+	 */
+	public abstract void setId(int id);
 
 	/**
 	 * @pre name must be a valid String and not null

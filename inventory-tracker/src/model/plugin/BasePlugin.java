@@ -1,3 +1,4 @@
+
 package model.plugin;
 
 public class BasePlugin extends Plugin

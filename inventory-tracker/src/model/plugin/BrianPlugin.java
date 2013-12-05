@@ -25,29 +25,29 @@ public class BrianPlugin extends Plugin
 			connection.setRequestMethod("GET");
 			connection.setDoInput(true);
 			connection.connect();
-	
+
 			BufferedReader input =
 					new BufferedReader(new InputStreamReader(
 							connection.getInputStream()));
-	
+
 			String line;
 			String response = "";
-	
+
 			while((line = input.readLine()) != null)
 				response += line;
-			
+
 			int indexOfDesc = response.indexOf("\n") + 2;
 			int descEnd = response.indexOf("\"", indexOfDesc) - 1;
 			productDescription = response.substring(indexOfDesc, descEnd);
 			if(productDescription.trim().equals(""))
 				productDescription = null;
-			
+
 		}
 		catch(IOException e)
 		{
 			e.printStackTrace();
 		}
-		
+
 		if(productDescription == null && this.nextPlugin != null)
 			return this.nextPlugin.findProduct(barcode);
 		else

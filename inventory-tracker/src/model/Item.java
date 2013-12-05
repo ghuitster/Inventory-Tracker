@@ -241,6 +241,12 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 		return 0;
 	}
 
+	@Override
+	public int getID()
+	{
+		return this.id;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -324,6 +330,12 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 		signalChanged();
 	}
 
+	@Override
+	public void setID(int id)
+	{
+		this.id = id;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -361,18 +373,6 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 				+ ", entryDate=" + entryDate + ", expirationDate="
 				+ getExpirationDate() + ", exitTime=" + exitTime
 				+ ", container=" + container + "]";
-	}
-
-	@Override
-	public void setID(int id)
-	{
-		this.id = id;
-	}
-
-	@Override
-	public int getID()
-	{
-		return this.id;
 	}
 
 }

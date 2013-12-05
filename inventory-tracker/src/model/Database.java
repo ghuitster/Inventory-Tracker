@@ -10,8 +10,7 @@ public class Database implements IPersistence, Observer
 {
 	private DatabaseAccess dbAccess;
 	private String databaseName;
-	
-	
+
 	/**
 	 * Initializes an instance of Database
 	 * @param databaseName The name of the database to store/load information
@@ -65,53 +64,54 @@ public class Database implements IPersistence, Observer
 		ObservableArgs obsArg = (ObservableArgs) arg;
 		if(obsArg.getChangedObj() instanceof IProductContainer)
 		{
-			IProductContainer container = (IProductContainer)obsArg.getChangedObj();
+			IProductContainer container =
+					(IProductContainer) obsArg.getChangedObj();
 			switch(obsArg.getUpdateType())
 			{
-				case ADDED:
-					dbAccess.addProductContainer(container);
-					break;
-				case REMOVED:
-					dbAccess.removeProductContainer(container);
-					break;
-				case UPDATED:
-					dbAccess.updateProductContainer(container);
-					break;
-				
+			case ADDED:
+				dbAccess.addProductContainer(container);
+				break;
+			case REMOVED:
+				dbAccess.removeProductContainer(container);
+				break;
+			case UPDATED:
+				dbAccess.updateProductContainer(container);
+				break;
+
 			}
 		}
 		else if(obsArg.getChangedObj() instanceof IProduct)
 		{
-			IProduct product = (IProduct)obsArg.getChangedObj();
+			IProduct product = (IProduct) obsArg.getChangedObj();
 			switch(obsArg.getUpdateType())
 			{
-				case ADDED:
-					dbAccess.addProduct(product);
-					break;
-				case REMOVED:
-					dbAccess.removeProduct(product);
-					break;
-				case UPDATED:
-					dbAccess.updateProduct(product);
-					break;
-				
+			case ADDED:
+				dbAccess.addProduct(product);
+				break;
+			case REMOVED:
+				dbAccess.removeProduct(product);
+				break;
+			case UPDATED:
+				dbAccess.updateProduct(product);
+				break;
+
 			}
 		}
 		else if(obsArg.getChangedObj() instanceof IItem)
 		{
-			IItem item = (IItem)obsArg.getChangedObj();
+			IItem item = (IItem) obsArg.getChangedObj();
 			switch(obsArg.getUpdateType())
 			{
-				case ADDED:
-					dbAccess.addItem(item);
-					break;
-				case REMOVED:
-					dbAccess.removeItem(item);
-					break;
-				case UPDATED:
-					dbAccess.updateItem(item);
-					break;
-				
+			case ADDED:
+				dbAccess.addItem(item);
+				break;
+			case REMOVED:
+				dbAccess.removeItem(item);
+				break;
+			case UPDATED:
+				dbAccess.updateItem(item);
+				break;
+
 			}
 		}
 	}

@@ -277,12 +277,6 @@ public abstract class ProductContainer extends Observable implements
 		return id;
 	}
 
-	@Override
-	public void setId(int id)
-	{
-		this.id = id;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -375,6 +369,12 @@ public abstract class ProductContainer extends Observable implements
 	public void removeProductTemporary(IProduct product)
 	{
 		removeProduct(product, UpdateType.TEMP_REMOVED);
+	}
+
+	@Override
+	public void setId(int id)
+	{
+		this.id = id;
 	}
 
 	/*

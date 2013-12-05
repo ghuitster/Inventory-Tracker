@@ -25,11 +25,11 @@ public class InventoryTest
 		assertTrue(Inventory.getInstance() != null);
 		assertEquals(0, Inventory.getInstance().getAllStorageUnits().size());
 		assertEquals(0, Inventory.getInstance().getAllProducts().size());
-//		assertEquals(0, Inventory.getInstance().getItemExpirations().size());
-//		assertEquals(0, Inventory.getInstance().getNMonthSupplyGroupMap()
-//				.size());
-//		assertEquals(0, Inventory.getInstance().getNMonthSupplyMap().size());
-//		assertEquals(0, Inventory.getInstance().getRemovedItems().size());
+		// assertEquals(0, Inventory.getInstance().getItemExpirations().size());
+		// assertEquals(0, Inventory.getInstance().getNMonthSupplyGroupMap()
+		// .size());
+		// assertEquals(0, Inventory.getInstance().getNMonthSupplyMap().size());
+		// assertEquals(0, Inventory.getInstance().getRemovedItems().size());
 	}
 
 	@Test

@@ -100,6 +100,8 @@ public interface IProduct extends ITaggable, IObservable, Comparable<IProduct>
 	 */
 	public abstract int getId();
 
+	public abstract int getID();
+
 	/**
 	 * @return the shelfLife
 	 */
@@ -153,6 +155,8 @@ public interface IProduct extends ITaggable, IObservable, Comparable<IProduct>
 	 */
 	public abstract void setDescription(IProductDescription description);
 
+	public abstract void setID(int id);
+
 	/**
 	 * @pre shelfLife != null
 	 * @pre shelfLife must be non negative
@@ -183,8 +187,4 @@ public interface IProduct extends ITaggable, IObservable, Comparable<IProduct>
 	 */
 	@Override
 	public abstract String toString();
-
-	public abstract void setID(int id);
-	
-	public abstract int getID();
 }

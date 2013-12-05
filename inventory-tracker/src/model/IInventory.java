@@ -168,6 +168,12 @@ public interface IInventory extends Observer, IObservable
 	 */
 	void removeStorageUnit(IStorageUnit storageUnit);
 
+	void reportRemovedItem(IItem item);
+
+	void reportRemovedProduct(IProduct product);
+
+	void setLastGeneratedBarCode(ItemBarcode barcode);
+
 	/**
 	 * Traverses the passed visitor across the inventory Calls the appropriate
 	 * visitor methods once for each Product Container, Product, and Item
@@ -176,11 +182,5 @@ public interface IInventory extends Observer, IObservable
 	 * @param visitor The visitor to use
 	 */
 	void traverse(IVisitor visitor);
-
-	void reportRemovedProduct(IProduct product);
-
-	void reportRemovedItem(IItem item);
-
-	void setLastGeneratedBarCode(ItemBarcode barcode);
 
 }

@@ -40,17 +40,6 @@ public interface IItem extends IObservable, ITaggable, Comparable<IItem>
 	public abstract boolean equals(Object obj);
 
 	/**
-	 * @pre id != null
-	 * @param id
-	 */
-	public abstract void setID(int id);
-
-	/**
-	 * @return the IItem's ID
-	 */
-	public abstract int getID();
-
-	/**
 	 * @return the barcode
 	 */
 	public abstract IBarcode getBarcode();
@@ -80,6 +69,11 @@ public interface IItem extends IObservable, ITaggable, Comparable<IItem>
 	 * @return
 	 */
 	public abstract int getId();
+
+	/**
+	 * @return the IItem's ID
+	 */
+	public abstract int getID();
 
 	/**
 	 * @return the product
@@ -119,6 +113,12 @@ public interface IItem extends IObservable, ITaggable, Comparable<IItem>
 	 * @param exitTime the exitTime to set
 	 */
 	public abstract void setExitTime(Date exitTime);
+
+	/**
+	 * @pre id != null
+	 * @param id
+	 */
+	public abstract void setID(int id);
 
 	/**
 	 * @pre product != null

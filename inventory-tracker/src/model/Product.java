@@ -305,6 +305,12 @@ public class Product extends Observable implements IProduct, Serializable
 		return 0;
 	}
 
+	@Override
+	public int getID()
+	{
+		return this.ID;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -429,6 +435,12 @@ public class Product extends Observable implements IProduct, Serializable
 		this.notifyObservers(new ObservableArgs(this, UpdateType.UPDATED));
 	}
 
+	@Override
+	public void setID(int id)
+	{
+		this.ID = id;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -492,17 +504,5 @@ public class Product extends Observable implements IProduct, Serializable
 				+ description + ", barcode=" + barcode + ", size=" + size
 				+ ", shelfLife=" + shelfLife + ", threeMonthSupply="
 				+ threeMonthSupply + ", containers=" + containers + "]";
-	}
-
-	@Override
-	public void setID(int id)
-	{
-		this.ID = id;
-	}
-
-	@Override
-	public int getID()
-	{
-		return this.ID;
 	}
 }
