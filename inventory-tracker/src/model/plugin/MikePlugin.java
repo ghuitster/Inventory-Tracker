@@ -7,16 +7,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Map;
-
-import com.json.parsers.JSONParser;
-import com.json.parsers.JsonParserFactory;
 
 public class MikePlugin extends Plugin
 {
 	// Variables
 	private final String BASE_URL =
-			"http://api.upcdatabase.org/json/16ae5fc3774baf93a452e21353a1fb75/";
+			"http://api.upcdatabase.org/xml/16ae5fc3774baf93a452e21353a1fb75/";
 
 	// Constructor
 
@@ -29,6 +25,7 @@ public class MikePlugin extends Plugin
 		HttpURLConnection connection = null;
 		String productDescription = null;
 		BufferedReader bRead = null;
+		Boolean valid = null;
 
 		try
 		{
@@ -37,9 +34,6 @@ public class MikePlugin extends Plugin
 			connection.setRequestMethod("GET");
 			connection.setDoInput(true);
 			connection.connect();
-
-			JsonParserFactory jpf = JsonParserFactory.getInstance();
-			JSONParser jParser = jpf.newJsonParser();
 
 			if(connection.getResponseCode() == HttpURLConnection.HTTP_OK)
 			{
@@ -56,13 +50,19 @@ public class MikePlugin extends Plugin
 					else
 						break;
 				}
-
 				System.out.println(data);
-				Map jsonData = jParser.parseJson(data);
 
-				String valid = (String) jsonData.get("valid");
-				if(valid.equals("true"))
-					productDescription = (String) jsonData.get("itemname");
+				String validString =
+						data.substring(data.indexOf("<valid>") + 7,
+								data.indexOf("</valid>"));
+				valid = new Boolean(validString);
+
+				if(valid)
+					productDescription =
+							data.substring(data.indexOf("<itemname>") + 10,
+									data.indexOf("</itemname>"));
+
+				System.out.println(productDescription);
 			}
 
 		}

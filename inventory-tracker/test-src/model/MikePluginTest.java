@@ -37,6 +37,10 @@ public class MikePluginTest
 		String test = mp.findProduct("0111222333446");
 
 		assertEquals(test, "UPC Database Testing Code");
+
+		test = mp.findProduct("0111222333447");
+
+		assertEquals(test, null);
 	}
 
 }
