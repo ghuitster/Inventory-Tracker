@@ -7,7 +7,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import model.exception.InvalidNameException;
 
@@ -95,23 +97,29 @@ public class DatabaseAccess
 		IInventory inventory = Inventory.getInstance();
 		
 		String storageUnitsQuery = 
-				"SELECT id, Name FROM ProductContainer"
+				"SELECT id, Name FROM ProductContainer "
 				+ "WHERE parentID IS NULL;";
 		
 		try
 		{
 			this.createConnection();
-			this.statement.executeUpdate(storageUnitsQuery);
+			ResultSet storageUnits = this.statement.executeQuery(storageUnitsQuery);
 			
-			ResultSet storageUnits = this.statement.getResultSet();
+			Map<String, IProduct> existingProducts = new HashMap<String, IProduct>();
+			
 			while(storageUnits.next())
 			{
-				int id = storageUnits.getInt(0);
-				String name = storageUnits.getString(1);
+				int id = storageUnits.getInt("id");
+				String name = storageUnits.getString("Name");
 				try
 				{
 					IStorageUnit unit = new StorageUnit(id, name);
 					inventory.addStorageUnit(unit);
+					
+					addChildGroups(unit);
+					
+					addProducts(unit, existingProducts);
+					
 				} catch (InvalidNameException e) { }
 			}
 			
@@ -130,6 +138,62 @@ public class DatabaseAccess
 			{
 				e.printStackTrace();
 			}
+		}
+	}
+
+	private void addProducts(IProductContainer container, Map<String, IProduct> existingProducts) throws SQLException
+	{
+		String productQuery =
+				"SELECT Product.CreationDate, Product.Barcode, Product.Description, Product.Size, "
+				+ "Product.ShelfLife, Product.ThreeMonthSupply, Product.SizeUnit "
+				+ "FROM Product "
+				+ "INNER JOIN ContainerProducts "
+				+ "ON ContainerProducts.productID = Product.id "
+				+ "WHERE ContainerProducts.containerID = " + container.getId();
+		
+		ResultSet products = this.statement.executeQuery(productQuery);
+		while(products.next())
+		{
+			String barcode = products.getString("Product.Barcode");
+			if(existingProducts.containsKey(barcode))
+			{
+				container.addProduct(existingProducts.get(barcode));
+			}
+			else
+			{
+				
+			}
+		}
+		
+	}
+
+	private void addChildGroups(IProductContainer parent) throws SQLException
+	{
+		String productGroupQuery = 
+				"SELECT id, Name, ThreeMonthSupply, parentID, ThreeMonthSupplyType "
+				+ "FROM ProductContainer"
+				+ "WHERE parentID = " + parent.getId();
+		
+		ResultSet productGroups = this.statement.executeQuery(productGroupQuery);
+		while(productGroups.next())
+		{
+			int _id = productGroups.getInt("id");
+			String _name = productGroups.getString("Name");
+			float threeMonthSupplyValue = productGroups.getFloat("ThreeMonthSupply");
+			int threeMonthSupplyType = productGroups.getInt("ThreeMonthSupplyType");
+			
+			UnitType supplyType = UnitType.values()[threeMonthSupplyType];
+			Amount threeMonthSupply;
+			
+			if(supplyType == UnitType.COUNT)
+				threeMonthSupply = new CountThreeMonthSupply((int)threeMonthSupplyValue);
+			else
+				threeMonthSupply = new ThreeMonthSupply(threeMonthSupplyValue, supplyType);
+			
+			IProductGroup group = new ProductGroup(_id, _name, threeMonthSupply);
+			parent.addProductGroup(group);
+			
+			addChildGroups(group);
 		}
 	}
 

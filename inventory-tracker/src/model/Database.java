@@ -21,7 +21,6 @@ public class Database implements IPersistence, Observer
 	{
 		dbAccess = new DatabaseAccess(databaseName);
 		this.databaseName = databaseName;
-		Inventory.getInstance().addObserver(this);
 	}
 
 	/**
@@ -45,6 +44,7 @@ public class Database implements IPersistence, Observer
 	public void loadData()
 	{
 		dbAccess.loadInventory();
+		Inventory.getInstance().addObserver(this);
 	}
 
 	/**

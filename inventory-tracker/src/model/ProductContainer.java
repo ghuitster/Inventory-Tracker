@@ -21,8 +21,6 @@ public abstract class ProductContainer extends Observable implements
 
 {
 	
-	static int lastUsedId = 0;
-	
 	private static final long serialVersionUID = 9015876223451150036L;
 	protected String name;
 	protected SortedSet<IProduct> products;
@@ -34,7 +32,7 @@ public abstract class ProductContainer extends Observable implements
 
 	protected ProductContainer(String name)
 	{
-		this.id = lastUsedId++;
+		this.id = -1;
 		init(name);
 	}
 	
@@ -288,8 +286,7 @@ public abstract class ProductContainer extends Observable implements
 	@Override
 	public int getId()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return id;
 	}
 
 	/*
