@@ -24,12 +24,6 @@ public class ProductGroup extends ProductContainer implements IProductGroup
 		super(name);
 		this.threeMonthSupply = threeMonthSupply;
 	}
-	
-	public ProductGroup(int id, String name, Amount threeMonthSupply)
-	{
-		super(id, name);
-		this.threeMonthSupply = threeMonthSupply;
-	}
 
 	/*
 	 * (non-Javadoc)

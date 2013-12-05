@@ -15,11 +15,6 @@ public class StorageUnit extends ProductContainer implements IStorageUnit
 	{
 		super(name);
 	}
-	
-	public StorageUnit(int id, String name)
-	{
-		super(id, name);
-	}
 
 	/*
 	 * (non-Javadoc)
