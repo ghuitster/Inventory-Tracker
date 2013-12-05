@@ -16,7 +16,13 @@ public class DavidPluginTest
 		String name = plugin.findProduct("123456789012");
 		assertEquals(name, "THE MORAL MINORITY: MORAL MINORITY");
 
+		name = plugin.findProduct("123456784567");
+		assertNull(name);
+
 		name = plugin.findProduct("123456789011");
+		assertNull(name);
+
+		name = plugin.findProduct("aaaa");
 		assertNull(name);
 	}
 }
