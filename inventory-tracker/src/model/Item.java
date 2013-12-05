@@ -20,6 +20,7 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	private Date entryDate;
 	private Date exitTime = null;
 	private IProductContainer container;
+	private int id = 0;
 
 	private transient Object tag;
 
@@ -360,6 +361,18 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 				+ ", entryDate=" + entryDate + ", expirationDate="
 				+ getExpirationDate() + ", exitTime=" + exitTime
 				+ ", container=" + container + "]";
+	}
+
+	@Override
+	public void setID(int id)
+	{
+		this.id = id;
+	}
+
+	@Override
+	public int getID()
+	{
+		return this.id;
 	}
 
 }

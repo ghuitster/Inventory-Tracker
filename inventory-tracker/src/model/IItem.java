@@ -40,6 +40,17 @@ public interface IItem extends IObservable, ITaggable, Comparable<IItem>
 	public abstract boolean equals(Object obj);
 
 	/**
+	 * @pre id != null
+	 * @param id
+	 */
+	public abstract void setID(int id);
+
+	/**
+	 * @return the IItem's ID
+	 */
+	public abstract int getID();
+
+	/**
 	 * @return the barcode
 	 */
 	public abstract IBarcode getBarcode();
