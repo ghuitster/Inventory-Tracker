@@ -50,7 +50,7 @@ public class PluginManager
 				Class c = null;
 				try
 				{
-					c = Class.forName(temp);
+					c = Class.forName("model.plugin." + temp);
 				}
 				catch(ClassNotFoundException e)
 				{
