@@ -87,7 +87,7 @@ public class DatabaseAccess
 	 * Gets the complete Product Container tree from the database. This will go
 	 * get EVERYTHING from the database and build the in memory representation
 	 */
-	public List<IStorageUnit> getAllStorageUnits()
+	public List<IStorageUnit> loadInventory()
 	{
 		throw new UnsupportedOperationException();
 	}

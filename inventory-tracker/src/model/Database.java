@@ -42,9 +42,9 @@ public class Database implements IPersistence, Observer
 	 * @throws SerializerException
 	 */
 	@Override
-	public void loadData() throws SerializerException
+	public void loadData()
 	{
-		dbAccess.getAllStorageUnits();
+		dbAccess.loadInventory();
 	}
 
 	/**
