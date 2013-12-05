@@ -22,5 +22,7 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/inventory-tracker/lib/commons-lang3-3.1/commons-lang3-3.1-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/Plugins/FirePlugin.jar"/>
+	<classpathentry kind="lib" path="lib/Plugins/MikePlugin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
