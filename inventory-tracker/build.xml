@@ -42,8 +42,6 @@
 	<property name="itext-home" location="${lib}/itext-5.1.0" />
 	
 	<property name="commons-lang3-home" location="${lib}/commons-lang3-3.1" />
-	
-	<property name="quick-json-home" location="${lib}/quick-json-1.0.2.3" />
 
 	<property name="import-data-file" location="import.xml"/>
 	<property name="export-data-file" location="export.xml"/>
@@ -95,12 +93,6 @@
 		</fileset>
 	</path>
 	
-	<path id="quick-json-classpath">
-		<fileset dir="${quick-json-home}">
-			<include name="quick-json-1.0.2.3.jar" />
-		</fileset>
-	</path>
-
 	<!-- ***************** -->
 	<!-- task definintions -->
 	<!-- ***************** -->
@@ -144,14 +136,12 @@
 			<classpath refid="itext-classpath" />
 			<classpath refid="sqlite-classpath" />
 			<classpath refid="commons-lang3-classpath" />
-			<classpath refid="quick-json-classpath" />
 		</javac>
 	</target>
 	
 	<property name="itext.jar" value="lib/itext-5.1.0/itextpdf-5.1.0.jar"/>
 	<property name="sqlite.jar" value="lib/sqlitejdbc-v056/sqlitejdbc-v056.jar"/>
 	<property name="commons-lang3.jar" value="lib/commons-lang3-3.1/commons-lang3-3.1.jar"/>
-	<property name="quick-json-1.0.2.3.jar" value="lib/quick-json-1.0.2.3/quick-json-1.0.2.3.jar"/>
 	
 	<target name="package" depends="compile"
         description="package the jar file" >
@@ -278,7 +268,6 @@
 			<classpath refid="itext-classpath" />
 			<classpath refid="sqlite-classpath" />
 			<classpath refid="commons-lang3-classpath" />
-			<classpath refid="quick-json-classpath" />
 		</javac>
 	</target>
 	
@@ -296,7 +285,6 @@
 			<classpath refid="itext-classpath" />
 			<classpath refid="sqlite-classpath" />
 			<classpath refid="commons-lang3-classpath" />
-			<classpath refid="quick-json-classpath" />
 
 			<sysproperty key="net.sourceforge.cobertura.datafile"
 				value="${coverage-data-file}"/>

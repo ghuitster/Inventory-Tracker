@@ -1,7 +1,9 @@
 
 package model.plugin;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -26,6 +28,7 @@ public class MikePlugin extends Plugin
 		URL url = null;
 		HttpURLConnection connection = null;
 		String productDescription = null;
+		BufferedReader bRead = null;
 
 		try
 		{
@@ -40,11 +43,26 @@ public class MikePlugin extends Plugin
 
 			if(connection.getResponseCode() == HttpURLConnection.HTTP_OK)
 			{
-				String response = connection.getResponseMessage();
+				String data = "";
+				bRead =
+						new BufferedReader(new InputStreamReader(
+								connection.getInputStream()));
+				while(true)
+				{
+					String line = bRead.readLine();
 
-				Map jsonData = jParser.parseJson(response);
+					if(line != null)
+						data += line;
+					else
+						break;
+				}
 
-				System.out.println(jsonData.get("valid"));
+				System.out.println(data);
+				Map jsonData = jParser.parseJson(data);
+
+				String valid = (String) jsonData.get("valid");
+				if(valid.equals("true"))
+					productDescription = (String) jsonData.get("itemname");
 			}
 
 		}
