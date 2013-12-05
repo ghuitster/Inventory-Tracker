@@ -4,9 +4,12 @@ package model;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+
+import model.exception.InvalidNameException;
 
 public class DatabaseAccess
 {
@@ -87,9 +90,47 @@ public class DatabaseAccess
 	 * Gets the complete Product Container tree from the database. This will go
 	 * get EVERYTHING from the database and build the in memory representation
 	 */
-	public List<IStorageUnit> loadInventory()
+	public void loadInventory()
 	{
-		throw new UnsupportedOperationException();
+		IInventory inventory = Inventory.getInstance();
+		
+		String storageUnitsQuery = 
+				"SELECT id, Name FROM ProductContainer"
+				+ "WHERE parentID IS NULL;";
+		
+		try
+		{
+			this.createConnection();
+			this.statement.executeUpdate(storageUnitsQuery);
+			
+			ResultSet storageUnits = this.statement.getResultSet();
+			while(storageUnits.next())
+			{
+				int id = storageUnits.getInt(0);
+				String name = storageUnits.getString(1);
+				try
+				{
+					IStorageUnit unit = new StorageUnit(id, name);
+					inventory.addStorageUnit(unit);
+				} catch (InvalidNameException e) { }
+			}
+			
+		}
+		catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				this.closeConnection();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**

@@ -35,6 +35,17 @@ public abstract class ProductContainer extends Observable implements
 	protected ProductContainer(String name)
 	{
 		this.id = lastUsedId++;
+		init(name);
+	}
+	
+	protected ProductContainer(int id, String name)
+	{
+		this.id = id;
+		init(name);
+	}
+
+	private void init(String name)
+	{
 		this.name = name;
 		products = new TreeSet<IProduct>();
 		items = new TreeSet<IItem>();
