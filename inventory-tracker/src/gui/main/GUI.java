@@ -28,7 +28,7 @@ public final class GUI extends JFrame implements IMainView
 
 	public static void main(final String[] args)
 	{
-		if(args.length > 1 && args[1] == "-sql")
+		if(args.length > 0 && args[0].equals("-sql"))
 			Inventory.useSerializer = false;
 		try
 		{
