@@ -34,9 +34,9 @@ public class AddProductController extends Controller implements
 	private int shelfLife = 0;
 	private CountThreeMonthSupply cThreeMonthSupply =
 			new CountThreeMonthSupply(0);
-	private boolean amount = false;
-	private boolean threeMonthSupply = false;
-	private boolean shelfLifeValid = false;
+	private boolean amount = true;
+	private boolean threeMonthSupply = true;
+	private boolean shelfLifeValid = true;
 	private boolean descriptNotEmpty = false;
 	private UnitType unitType = UnitType.COUNT;
 
@@ -51,7 +51,9 @@ public class AddProductController extends Controller implements
 		super(view);
 		this.descript = Inventory.getInstance().findProductInfo(barcode);
 		if(!this.descript.isEmpty())
+		{
 			this.descriptNotEmpty = true;
+		}
 		this.barcode = new ProductBarcode(barcode);
 		construct();
 	}
