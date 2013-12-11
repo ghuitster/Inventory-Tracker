@@ -92,6 +92,7 @@ public class Database implements IPersistence, Observer
 				dbAccess.updateProduct(product);
 				break;
 			case PERMANENTLY_REMOVED:
+			case TEMP_REMOVED:
 				dbAccess.removeProduct(product);
 				break;
 			case UPDATED:
@@ -112,6 +113,7 @@ public class Database implements IPersistence, Observer
 				dbAccess.updateItem(item);
 				break;
 			case PERMANENTLY_REMOVED:
+			case TEMP_REMOVED:
 				dbAccess.removeItem(item);
 				break;
 			case UPDATED:
