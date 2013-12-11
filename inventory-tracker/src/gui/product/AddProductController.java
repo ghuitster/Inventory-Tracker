@@ -49,13 +49,22 @@ public class AddProductController extends Controller implements
 	public AddProductController(IView view, String barcode)
 	{
 		super(view);
-		this.descript = Inventory.getInstance().findProductInfo(barcode);
+		this.barcode = new ProductBarcode(barcode);
+		construct();
+		this.checkPluginsForProductInfo();
+	}
+
+	private void checkPluginsForProductInfo()
+	{
+		this.getView().enableDescription(false);
+		this.getView().setDescription("Identifying Product - Please Wait");
+		this.descript = Inventory.getInstance().findProductInfo(barcode.getNumber());
 		if(!this.descript.isEmpty())
 		{
 			this.descriptNotEmpty = true;
 		}
-		this.barcode = new ProductBarcode(barcode);
-		construct();
+		this.getView().enableDescription(true);
+		this.getView().setDescription(this.descript);
 	}
 
 	//
