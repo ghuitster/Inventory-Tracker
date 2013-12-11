@@ -55,7 +55,7 @@ public class Database implements IPersistence, Observer
 	@Override
 	public void saveData() throws SerializerException
 	{
-		throw new UnsupportedOperationException("Not yet implemented");
+		
 	}
 
 	@Override

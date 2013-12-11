@@ -9,7 +9,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -37,11 +39,14 @@ public class DatabaseAccess
 	{
 		String productGroupQuery =
 				"SELECT id, Name, ThreeMonthSupply, parentID, ThreeMonthSupplyType "
-						+ "FROM ProductContainer" + "WHERE parentID = "
+						+ "FROM ProductContainer" + " WHERE parentID = "
 						+ parent.getId();
 
 		ResultSet productGroups =
 				this.statement.executeQuery(productGroupQuery);
+		
+		List<IProductGroup> newGroups = new ArrayList<IProductGroup>();
+		
 		while(productGroups.next())
 		{
 			int id = productGroups.getInt("id");
@@ -67,6 +72,11 @@ public class DatabaseAccess
 			addProducts(group, existingProducts);
 			addItems(group, existingProducts);
 
+			newGroups.add(group);
+		}
+		
+		for(IProductGroup group : newGroups)
+		{
 			addChildGroups(group, existingProducts);
 		}
 	}
@@ -366,7 +376,7 @@ public class DatabaseAccess
 			Map<Integer, IProduct> existingProducts) throws SQLException
 	{
 		String productQuery =
-				"SELECT Product.id Product.CreationDate, Product.Barcode, Product.Description, "
+				"SELECT Product.id, Product.CreationDate, Product.Barcode, Product.Description, "
 						+ "Product.Size, Product.ShelfLife, Product.ThreeMonthSupply, Product.SizeUnit "
 						+ "FROM Product "
 						+ "INNER JOIN ContainerProducts "
@@ -411,7 +421,7 @@ public class DatabaseAccess
 			throws SQLException
 	{
 		String productQuery =
-				"SELECT Product.id Product.CreationDate, Product.Barcode, Product.Description, "
+				"SELECT Product.id, Product.CreationDate, Product.Barcode, Product.Description, "
 						+ "Product.Size, Product.ShelfLife, Product.ThreeMonthSupply, Product.SizeUnit "
 						+ "FROM Product "
 						+ "LEFT JOIN ContainerProducts "
@@ -447,7 +457,7 @@ public class DatabaseAccess
 	{
 		Class.forName("org.sqlite.JDBC");
 		new File("." + File.separator + "database" + File.separator).mkdir();
-		String path = "jdbc:sqlite:database" + File.separator + databaseName;
+		String path = "jdbc:sqlite:database" + File.separator + databaseName + ".sqlite";
 		this.connection = DriverManager.getConnection(path);
 		this.statement = this.connection.createStatement();
 	}
@@ -499,7 +509,7 @@ public class DatabaseAccess
 
 			Map<Integer, IProduct> existingProducts =
 					new HashMap<Integer, IProduct>();
-
+			
 			while(storageUnits.next())
 			{
 				int id = storageUnits.getInt("id");
@@ -510,18 +520,21 @@ public class DatabaseAccess
 					unit.setId(id);
 					inventory.addStorageUnit(unit);
 
-					addChildGroups(unit, existingProducts);
-
-					addProducts(unit, existingProducts);
-					addItems(unit, existingProducts);
-
-					addRemovedProducts(existingProducts);
-					addRemovedItems(existingProducts);
-
 				}
 				catch(InvalidNameException e)
 				{}
 			}
+			
+			for(IStorageUnit unit : inventory.getAllStorageUnits())
+			{
+				addChildGroups(unit, existingProducts);
+
+				addProducts(unit, existingProducts);
+				addItems(unit, existingProducts);
+			}
+			
+			addRemovedProducts(existingProducts);
+			addRemovedItems(existingProducts);
 
 			long largestBarcode = 400000000000l;
 			String largestBarcodeQuery =
@@ -572,6 +585,7 @@ public class DatabaseAccess
 		Item item =
 				new Item(product, new ItemBarcode("" + barcode), entry,
 						expiration);
+		item.setExitTime(exit);
 		return item;
 	}
 
