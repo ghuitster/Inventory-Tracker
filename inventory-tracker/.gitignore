@@ -8,3 +8,4 @@ data.inventory
 /style-reports
 /Reports/*.html
 /Reports/*.pdf
+/database/*

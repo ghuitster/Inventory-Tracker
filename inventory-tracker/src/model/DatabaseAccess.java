@@ -446,6 +446,7 @@ public class DatabaseAccess
 	private void createConnection() throws SQLException, ClassNotFoundException
 	{
 		Class.forName("org.sqlite.JDBC");
+		new File("." + File.separator + "database" + File.separator).mkdir();
 		String path = "jdbc:sqlite:database" + File.separator + databaseName;
 		this.connection = DriverManager.getConnection(path);
 		this.statement = this.connection.createStatement();
@@ -524,7 +525,7 @@ public class DatabaseAccess
 
 			long largestBarcode = 400000000000l;
 			String largestBarcodeQuery =
-					"SELECT Barcode FROM Items " + "ORDER BY id DESC"
+					"SELECT Barcode FROM Items " + "ORDER BY id DESC "
 							+ "LIMIT 1";
 			ResultSet largestBarcodeSet =
 					this.statement.executeQuery(largestBarcodeQuery);
