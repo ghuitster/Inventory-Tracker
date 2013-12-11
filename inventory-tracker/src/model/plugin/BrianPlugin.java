@@ -42,7 +42,8 @@ public class BrianPlugin extends Plugin
 				if(indexOfDesc >= 14)
 				{
 					int descEnd = response.indexOf("\"", indexOfDesc);
-					productDescription = response.substring(indexOfDesc, descEnd);
+					productDescription =
+							response.substring(indexOfDesc, descEnd);
 					if(productDescription.trim().equals(""))
 						productDescription = null;
 				}
