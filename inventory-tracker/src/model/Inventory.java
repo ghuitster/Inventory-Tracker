@@ -239,7 +239,10 @@ public class Inventory extends Observable implements IInventory, Serializable
 	{
 		ProductVisitor visitor = new ProductVisitor();
 		this.traverse(visitor);
-		return visitor.getResults();
+		SortedSet<IProduct> results = visitor.getResults();
+		for(IProduct product : this.removedProducts)
+			results.add(product);
+		return results;
 	}
 
 	/*
@@ -538,9 +541,21 @@ public class Inventory extends Observable implements IInventory, Serializable
 	public void removeProduct(IProduct product)
 	{
 		this.removedProducts.remove(product);
+		List<IItem> itemsToRemove = new ArrayList<IItem>();
+		for(IItem item : this.removedItems)
+		{
+			if(item.getProduct() == product)
+				itemsToRemove.add(item);
+		}
+		for(IItem item : itemsToRemove)
+		{
+			this.removedItems.remove(item);
+			this.setChanged();
+			this.notifyObservers(new ObservableArgs(item, UpdateType.PERMANENTLY_REMOVED));
+		}
 		product.deleteObserver(this);
 		this.setChanged();
-		this.notifyObservers(new ObservableArgs(product, UpdateType.REMOVED));
+		this.notifyObservers(new ObservableArgs(product, UpdateType.PERMANENTLY_REMOVED));
 	}
 
 	/*
@@ -646,9 +661,9 @@ public class Inventory extends Observable implements IInventory, Serializable
 			IProduct product = (IProduct) obsArg.getChangedObj();
 
 			if(obsArg.getUpdateType() == UpdateType.REMOVED)
-				this.removedProducts.add((IProduct) obsArg.getChangedObj());
+				this.removedProducts.add(product);
 			else if(obsArg.getUpdateType() == UpdateType.ADDED)
-				this.removedProducts.remove(obsArg.getChangedObj());
+				this.removedProducts.remove(product);
 		}
 
 		this.setChanged();
