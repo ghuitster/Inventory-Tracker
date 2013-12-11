@@ -404,7 +404,7 @@ public class DatabaseAccess
 		ResultSet products = this.statement.executeQuery(productQuery);
 		while(products.next())
 		{
-			int id = products.getInt("Product.id");
+			int id = products.getInt("id");
 			if(existingProducts.containsKey(id))
 			{
 				container.addProduct(existingProducts.get(id));
@@ -610,26 +610,26 @@ public class DatabaseAccess
 
 	private Product makeProduct(ResultSet products) throws SQLException
 	{
-		int id = products.getInt("Product.id");
+		int id = products.getInt("id");
 		Barcode barcode =
-				new ProductBarcode(products.getString("Product.Barcode"));
-		Date creation = new Date(products.getLong("Product.CreationDate"));
-		String description = products.getString("Product.Description");
+				new ProductBarcode(products.getString("Barcode"));
+		Date creation = new Date(products.getLong("CreationDate"));
+		String description = products.getString("Description");
 
 		UnitType sizeUnit =
-				UnitType.values()[products.getInt("Product.SizeUnit")];
+				UnitType.values()[products.getInt("SizeUnit")];
 		Amount size;
 		if(sizeUnit == UnitType.COUNT)
-			size = new CountUnitSize((int) products.getFloat("Product.Size"));
+			size = new CountUnitSize((int) products.getFloat("Size"));
 		else
-			size = new UnitSize(products.getFloat("Product.Size"), sizeUnit);
+			size = new UnitSize(products.getFloat("Size"), sizeUnit);
 
 		int shelfLife = products.getInt("ShelfLife");
 		if(products.wasNull())
 			shelfLife = 0;
 		CountThreeMonthSupply supply =
 				new CountThreeMonthSupply(
-						products.getInt("Product.ThreeMonthSupply"));
+						products.getInt("ThreeMonthSupply"));
 
 		Product product =
 				new Product(creation, description, barcode, size, shelfLife,
