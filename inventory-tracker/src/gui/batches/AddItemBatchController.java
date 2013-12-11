@@ -91,7 +91,8 @@ public class AddItemBatchController extends Controller implements
 
 		if(barcode.isEmpty())
 		{
-			getView().displayErrorMessage("Empty barcode");
+			// getView().displayErrorMessage("Empty barcode"); // Commented out
+			// to resolve issue 452
 			return;
 		}
 
