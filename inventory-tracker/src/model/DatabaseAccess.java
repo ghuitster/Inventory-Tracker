@@ -115,7 +115,7 @@ public class DatabaseAccess
 			this.createConnection();
 			ResultSet results = this.statement.executeQuery(query);
 
-			results.first();
+			results.next();
 			item.setID(results.getInt("id"));
 		}
 		catch(ClassNotFoundException | SQLException e)
@@ -212,7 +212,7 @@ public class DatabaseAccess
 			this.createConnection();
 			ResultSet results = this.statement.executeQuery(query);
 
-			results.first();
+			results.next();
 			product.setID(results.getInt("id"));
 		}
 		catch(ClassNotFoundException | SQLException e)
@@ -342,7 +342,7 @@ public class DatabaseAccess
 			this.createConnection();
 			ResultSet results = this.statement.executeQuery(query);
 
-			results.first();
+			results.next();
 			productContainer.setId(results.getInt("id"));
 		}
 		catch(ClassNotFoundException | SQLException e)
