@@ -417,7 +417,8 @@ public class AddItemBatchController extends Controller implements
 		boolean found = false;
 
 		for(ProductData data: displayProducts)
-			if(data.getBarcode().equals(productData.getBarcode()))
+			// if(data.getBarcode().equals(productData.getBarcode()))
+			if(data.equals(productData))
 			{
 				data.setCount((Integer.parseInt(data.getCount()) + count) + "");
 				found = true;
