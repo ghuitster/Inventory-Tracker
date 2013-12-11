@@ -99,7 +99,6 @@ public class MainController extends Controller implements IMainController
 		}
 		catch(SerializerException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

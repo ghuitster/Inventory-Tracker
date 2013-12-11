@@ -83,12 +83,13 @@ public class DatabaseAccess
 
 	public void addItem(IItem item)
 	{
+		System.out.println("inserting item");
 		// I'm assuming that all the information about the item, its product and
 		// product container have been set correctly before we get here...
 		String firstPartOfQuery =
 				"INSERT INTO Item (\"productID\", \"Barcode\", \"EntryDate\", ";
 		String secondPartOfQuery =
-				"VALUES (\"" + item.getProduct().getId() + "\", \""
+				"VALUES (\"" + item.getProduct().getID() + "\", \""
 						+ item.getBarcode().getNumber() + "\", \""
 						+ item.getEntryDate().getTime() + "\", ";
 
@@ -181,6 +182,7 @@ public class DatabaseAccess
 	 */
 	public void addProduct(IProduct product)
 	{
+		System.out.println("Adding product");
 		double size = 0.0;
 
 		if(product.getSize() instanceof CountAmount)
@@ -236,7 +238,9 @@ public class DatabaseAccess
 			ResultSet results = this.statement.executeQuery(query);
 
 			results.next();
+			// System.out.println(results.getInt("id"));
 			product.setID(results.getInt("id"));
+			System.out.println(product.getID());
 		}
 		catch(ClassNotFoundException | SQLException e)
 		{
@@ -258,7 +262,7 @@ public class DatabaseAccess
 
 		query =
 				"INSERT INTO ContainerProducts (\"containerID\", \"productID\") VALUES (\""
-						+ containerID + "\", \"" + product.getId() + "\")";
+						+ containerID + "\", \"" + product.getID() + "\")";
 
 		try
 		{

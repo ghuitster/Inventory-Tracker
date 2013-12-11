@@ -301,8 +301,7 @@ public class Product extends Observable implements IProduct, Serializable
 	@Override
 	public int getId()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return this.ID;
 	}
 
 	@Override

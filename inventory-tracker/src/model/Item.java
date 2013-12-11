@@ -237,8 +237,7 @@ public class Item extends Observable implements IItem, Serializable, ITaggable
 	@Override
 	public int getId()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return this.id;
 	}
 
 	@Override
