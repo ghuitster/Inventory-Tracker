@@ -44,9 +44,9 @@ public class DatabaseAccess
 
 		ResultSet productGroups =
 				this.statement.executeQuery(productGroupQuery);
-		
+
 		List<IProductGroup> newGroups = new ArrayList<IProductGroup>();
-		
+
 		while(productGroups.next())
 		{
 			int id = productGroups.getInt("id");
@@ -74,8 +74,8 @@ public class DatabaseAccess
 
 			newGroups.add(group);
 		}
-		
-		for(IProductGroup group : newGroups)
+
+		for(IProductGroup group: newGroups)
 		{
 			addChildGroups(group, existingProducts);
 		}
@@ -85,20 +85,33 @@ public class DatabaseAccess
 	{
 		// I'm assuming that all the information about the item, its product and
 		// product container have been set correctly before we get here...
-		String query =
-				"INSERT INTO Item (\"productID\", \"Barcode\", \"EntryDate\", \"ExitTime\", "
-						+ "\"ExpirationDate\", \"containerID\") VALUES (\""
-						+ item.getProduct().getId() + "\", \""
+		String firstPartOfQuery =
+				"INSERT INTO Item (\"productID\", \"Barcode\", \"EntryDate\", ";
+		String secondPartOfQuery =
+				"VALUES (\"" + item.getProduct().getId() + "\", \""
 						+ item.getBarcode().getNumber() + "\", \""
-						+ item.getEntryDate().getTime() + "\", \""
-						+ item.getExitTime().getTime() + "\", \""
-						+ item.getExpirationDate().getTime() + "\", \""
-						+ item.getContainer().getId() + "\")";
+						+ item.getEntryDate().getTime() + "\", ";
+
+		if(item.getExitTime() != null)
+		{
+			firstPartOfQuery += "\"ExitTime\", ";
+			secondPartOfQuery += "\"" + item.getExitTime().getTime() + "\", ";
+		}
+
+		if(item.getExpirationDate() != null)
+		{
+			firstPartOfQuery += "\"ExpirationDate\", ";
+			secondPartOfQuery +=
+					"\"" + item.getExpirationDate().getTime() + "\", ";
+		}
+
+		firstPartOfQuery += "\"containerID\") ";
+		secondPartOfQuery += "\"" + item.getContainer().getId() + "\")";
 
 		try
 		{
 			this.createConnection();
-			this.statement.executeUpdate(query);
+			this.statement.executeUpdate(firstPartOfQuery + secondPartOfQuery);
 		}
 		catch(ClassNotFoundException | SQLException e)
 		{
@@ -116,7 +129,7 @@ public class DatabaseAccess
 			}
 		}
 
-		query =
+		String query =
 				"SELECT id FROM Item WHERE Barcode=\""
 						+ item.getBarcode().getNumber() + "\"";
 
@@ -457,7 +470,9 @@ public class DatabaseAccess
 	{
 		Class.forName("org.sqlite.JDBC");
 		new File("." + File.separator + "database" + File.separator).mkdir();
-		String path = "jdbc:sqlite:database" + File.separator + databaseName + ".sqlite";
+		String path =
+				"jdbc:sqlite:database" + File.separator + databaseName
+						+ ".sqlite";
 		this.connection = DriverManager.getConnection(path);
 		this.statement = this.connection.createStatement();
 	}
@@ -509,7 +524,7 @@ public class DatabaseAccess
 
 			Map<Integer, IProduct> existingProducts =
 					new HashMap<Integer, IProduct>();
-			
+
 			while(storageUnits.next())
 			{
 				int id = storageUnits.getInt("id");
@@ -524,15 +539,15 @@ public class DatabaseAccess
 				catch(InvalidNameException e)
 				{}
 			}
-			
-			for(IStorageUnit unit : inventory.getAllStorageUnits())
+
+			for(IStorageUnit unit: inventory.getAllStorageUnits())
 			{
 				addChildGroups(unit, existingProducts);
 
 				addProducts(unit, existingProducts);
 				addItems(unit, existingProducts);
 			}
-			
+
 			addRemovedProducts(existingProducts);
 			addRemovedItems(existingProducts);
 
@@ -721,12 +736,17 @@ public class DatabaseAccess
 				"UPDATE Item SET \"productID\"=\"" + item.getProduct().getId()
 						+ "\", \"Barcode\"=\"" + item.getBarcode().getNumber()
 						+ "\", \"EntryDate\"=\""
-						+ item.getEntryDate().getTime() + "\", \"ExitTime\"=\""
-						+ item.getExitTime().getTime() + "\", "
-						+ "\"ExpirationDate\"=\""
-						+ item.getExpirationDate().getTime()
-						+ "\", \"containerID\"=\""
-						+ item.getContainer().getId() + "\")";
+						+ item.getEntryDate().getTime() + "\", ";
+
+		if(item.getExitTime() != null)
+			query += "\"ExitTime\"=\"" + item.getExitTime().getTime() + "\", ";
+
+		if(item.getExpirationDate() != null)
+			query +=
+					"\"ExpirationDate\"=\""
+							+ item.getExpirationDate().getTime() + "\", ";
+
+		query += "\"containerID\"=\"" + item.getContainer().getId() + "\"";
 
 		try
 		{
