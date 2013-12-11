@@ -202,7 +202,7 @@ public class AddItemBatchController extends Controller implements
 		{
 			try
 			{
-				Thread.sleep(800);
+				Thread.sleep(500);
 			}
 			catch(InterruptedException e)
 			{
