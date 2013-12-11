@@ -39,10 +39,13 @@ public class BrianPlugin extends Plugin
 			if(!response.isEmpty())
 			{
 				int indexOfDesc = response.indexOf("productname\":\"") + 14;
-				int descEnd = response.indexOf("\"", indexOfDesc);
-				productDescription = response.substring(indexOfDesc, descEnd);
-				if(productDescription.trim().equals(""))
-					productDescription = null;
+				if(indexOfDesc >= 14)
+				{
+					int descEnd = response.indexOf("\"", indexOfDesc);
+					productDescription = response.substring(indexOfDesc, descEnd);
+					if(productDescription.trim().equals(""))
+						productDescription = null;
+				}
 			}
 
 		}
