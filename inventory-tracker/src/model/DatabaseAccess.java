@@ -525,7 +525,7 @@ public class DatabaseAccess
 
 			long largestBarcode = 400000000000l;
 			String largestBarcodeQuery =
-					"SELECT Barcode FROM Items " + "ORDER BY id DESC "
+					"SELECT Barcode FROM Item " + "ORDER BY id DESC "
 							+ "LIMIT 1";
 			ResultSet largestBarcodeSet =
 					this.statement.executeQuery(largestBarcodeQuery);
