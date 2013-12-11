@@ -36,11 +36,14 @@ public class BrianPlugin extends Plugin
 			while((line = input.readLine()) != null)
 				response += line;
 
-			int indexOfDesc = response.indexOf("productname\":\"") + 14;
-			int descEnd = response.indexOf("\"", indexOfDesc);
-			productDescription = response.substring(indexOfDesc, descEnd);
-			if(productDescription.trim().equals(""))
-				productDescription = null;
+			if(!response.isEmpty())
+			{
+				int indexOfDesc = response.indexOf("productname\":\"") + 14;
+				int descEnd = response.indexOf("\"", indexOfDesc);
+				productDescription = response.substring(indexOfDesc, descEnd);
+				if(productDescription.trim().equals(""))
+					productDescription = null;
+			}
 
 		}
 		catch(IOException e)
