@@ -21,10 +21,10 @@ public class AddProductGroupController extends Controller implements
 		IAddProductGroupController
 {
 
-	private IProductContainer PC;
+	private final IProductContainer PC;
 	private IProductGroup PG = null;
-	private boolean amount = false;
-	private boolean descriptNotEmpty = false;
+	private boolean amountHasBeenSet = false;
+	private boolean validProductGroup = false;
 	private SizeUnits sizeUnits = SizeUnits.Count;
 	private String name = "";
 	private float value = 0;
@@ -66,13 +66,9 @@ public class AddProductGroupController extends Controller implements
 		PG = new ProductGroup(this.name, this.threeMonthSupply);
 		if(PC.ableToAddProductGroup(PG))
 		{
+			System.out.println("Apparently We can add this product group.");
 			PC.addProductGroup(PG);
 			PG.setContainer(PC);
-		}
-		else
-		{
-			this.getView().displayErrorMessage(
-					"This Product Group can not be added");
 		}
 	}
 
@@ -142,34 +138,34 @@ public class AddProductGroupController extends Controller implements
 				if(temp % 1 == 0)
 				{
 					this.value = (int) temp;
-					this.amount = true;
+					this.amountHasBeenSet = true;
 				}
 				else
 				{
-					this.amount = false;
+					this.amountHasBeenSet = false;
 				}
 			}
 			catch(NumberFormatException e)
 			{
-				this.amount = false;
+				this.amountHasBeenSet = false;
 			}
 		else
 		{
 			try
 			{
 				this.value = Float.parseFloat(getView().getSupplyValue());
-				this.amount = true;
+				this.amountHasBeenSet = true;
 			}
 			catch(NumberFormatException e)
 			{
-				this.amount = false;
+				this.amountHasBeenSet = false;
 			}
 		}
 	}
 
 	private boolean shouldOKBeEnabled()
 	{
-		return this.descriptNotEmpty && this.amount;
+		return this.validProductGroup && this.amountHasBeenSet;
 	}
 
 	/**
@@ -180,10 +176,12 @@ public class AddProductGroupController extends Controller implements
 	public void valuesChanged()
 	{
 		this.name = this.getView().getProductGroupName();
-		if(this.name.isEmpty())
-			this.descriptNotEmpty = false;
+		if(!this.name.isEmpty()
+				&& this.PC.ableToAddProductGroup(new ProductGroup(this.name,
+						new CountThreeMonthSupply(0))))
+			this.validProductGroup = true;
 		else
-			this.descriptNotEmpty = true;
+			this.validProductGroup = false;
 		this.sizeUnits = this.getView().getSupplyUnit();
 		if(!getView().getSupplyValue().isEmpty()
 				&& !getView().getSupplyValue().startsWith("-"))
@@ -192,7 +190,7 @@ public class AddProductGroupController extends Controller implements
 		}
 		else
 		{
-			this.amount = false;
+			this.amountHasBeenSet = false;
 		}
 
 		this.enableComponents();
