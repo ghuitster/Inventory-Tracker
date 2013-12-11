@@ -479,10 +479,16 @@ public class AddItemBatchController extends Controller implements
 		ProductData data =
 				(ProductData) ((AddItemCommand) command).getItems().get(0)
 						.getProduct().getTag();
-		displayProducts.remove(data);
 
 		for(IItem item: ((AddItemCommand) command).getItems())
-			displayItems.get(data).remove(item.getTag());
+		{
+			List<ItemData> tempList = displayItems.get(data);
+			tempList.remove(item.getTag());
+
+			// displayItems.get(data).remove(item.getTag()); // Split this up
+			// into two lines above for Issue 499, in order to debug better.
+		}
+		displayProducts.remove(data);
 
 		ProductData[] temp = new ProductData[displayProducts.size()];
 		getView().setProducts(displayProducts.toArray(temp));
