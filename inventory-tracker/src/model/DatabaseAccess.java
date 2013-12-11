@@ -611,13 +611,11 @@ public class DatabaseAccess
 	private Product makeProduct(ResultSet products) throws SQLException
 	{
 		int id = products.getInt("id");
-		Barcode barcode =
-				new ProductBarcode(products.getString("Barcode"));
+		Barcode barcode = new ProductBarcode(products.getString("Barcode"));
 		Date creation = new Date(products.getLong("CreationDate"));
 		String description = products.getString("Description");
 
-		UnitType sizeUnit =
-				UnitType.values()[products.getInt("SizeUnit")];
+		UnitType sizeUnit = UnitType.values()[products.getInt("SizeUnit")];
 		Amount size;
 		if(sizeUnit == UnitType.COUNT)
 			size = new CountUnitSize((int) products.getFloat("Size"));
@@ -628,8 +626,7 @@ public class DatabaseAccess
 		if(products.wasNull())
 			shelfLife = 0;
 		CountThreeMonthSupply supply =
-				new CountThreeMonthSupply(
-						products.getInt("ThreeMonthSupply"));
+				new CountThreeMonthSupply(products.getInt("ThreeMonthSupply"));
 
 		Product product =
 				new Product(creation, description, barcode, size, shelfLife,
@@ -740,17 +737,20 @@ public class DatabaseAccess
 				"UPDATE Item SET \"productID\"=\"" + item.getProduct().getId()
 						+ "\", \"Barcode\"=\"" + item.getBarcode().getNumber()
 						+ "\", \"EntryDate\"=\""
-						+ item.getEntryDate().getTime() + "\", ";
+						+ item.getEntryDate().getTime() + "\"";
 
 		if(item.getExitTime() != null)
-			query += "\"ExitTime\"=\"" + item.getExitTime().getTime() + "\", ";
+			query +=
+					", \"ExitTime\"=\"" + item.getExitTime().getTime() + "\", ";
 
 		if(item.getExpirationDate() != null)
 			query +=
-					"\"ExpirationDate\"=\""
+					", \"ExpirationDate\"=\""
 							+ item.getExpirationDate().getTime() + "\", ";
 
-		query += "\"containerID\"=\"" + item.getContainer().getId() + "\"";
+		if(item.getContainer() != null)
+			query +=
+					", \"containerID\"=\"" + item.getContainer().getId() + "\"";
 
 		try
 		{
