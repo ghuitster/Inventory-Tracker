@@ -694,6 +694,31 @@ public class DatabaseAccess
 				e.printStackTrace();
 			}
 		}
+
+		query =
+				"DELETE FROM ContainerProducts WHERE productID=\""
+						+ product.getId() + "\"";
+
+		try
+		{
+			this.createConnection();
+			this.statement.executeUpdate(query);
+		}
+		catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				this.closeConnection();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -705,6 +730,31 @@ public class DatabaseAccess
 		String query =
 				"DELETE FROM ProductContainer WHERE id=\"" + container.getId()
 						+ "\"";
+
+		try
+		{
+			this.createConnection();
+			this.statement.executeUpdate(query);
+		}
+		catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				this.closeConnection();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+
+		query =
+				"DELETE FROM ContainerProducts WHERE containerID=\""
+						+ container.getId() + "\"";
 
 		try
 		{
