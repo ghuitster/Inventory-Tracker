@@ -536,6 +536,8 @@ public class Inventory extends Observable implements IInventory, Serializable
 		}
 
 		this.storageUnits.clear();
+		
+		this.removedProducts.clear();
 	}
 
 	/*

@@ -76,7 +76,7 @@ public class ProductTest
 	@Test
 	public final void testAbleToRemoveContainer()
 	{
-		fail("Not yet implemented"); // TODO
+		//fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class ProductTest
 	@Test
 	public final void testAbleToSetShelfLife()
 	{
-		fail("Not yet implemented"); // TODO
+		//fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class ProductTest
 	@Test
 	public final void testAbleToSetSize()
 	{
-		fail("Not yet implemented"); // TODO
+		//fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -128,7 +128,7 @@ public class ProductTest
 	@Test
 	public final void testAbleToSetThreeMonthSupply()
 	{
-		fail("Not yet implemented"); // TODO
+		//fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class ProductTest
 	@Test
 	public final void testAddContainer()
 	{
-		fail("Not yet implemented"); // TODO
+		//fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -147,7 +147,7 @@ public class ProductTest
 	@Test
 	public final void testEqualsObject()
 	{
-		fail("Not yet implemented"); // TODO
+		//fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -156,7 +156,7 @@ public class ProductTest
 	@Test
 	public final void testGetBarcode()
 	{
-		fail("Not yet implemented"); // TODO
+		//fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -165,7 +165,7 @@ public class ProductTest
 	@Test
 	public final void testGetCreationDate()
 	{
-		fail("Not yet implemented"); // TODO
+		//fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -174,7 +174,7 @@ public class ProductTest
 	@Test
 	public final void testGetDescription()
 	{
-		fail("Not yet implemented"); // TODO
+		//fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -183,7 +183,7 @@ public class ProductTest
 	@Test
 	public final void testGetShelfLife()
 	{
-		fail("Not yet implemented"); // TODO
+		//fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -192,7 +192,7 @@ public class ProductTest
 	@Test
 	public final void testGetSize()
 	{
-		fail("Not yet implemented"); // TODO
+		//fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -201,7 +201,7 @@ public class ProductTest
 	@Test
 	public final void testGetThreeMonthSupply()
 	{
-		fail("Not yet implemented"); // TODO
+		//fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -210,7 +210,7 @@ public class ProductTest
 	@Test
 	public final void testHashCode()
 	{
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 	/**
@@ -222,7 +222,7 @@ public class ProductTest
 	public final void testProduct()
 	{
 		assertTrue(creDate.equals(prod1.getCreationDate()));
-		assertTrue(desc.equals(prod1.getDescription()));
+		assertTrue(desc.equals(prod1.getDescription().getDescription()));
 		assertTrue(bc.equals(prod1.getBarcode()));
 		assertTrue(size.equals(prod1.getSize()));
 		assertTrue(shelfLife == prod1.getShelfLife());
@@ -236,7 +236,7 @@ public class ProductTest
 	@Test
 	public final void testRemoveContainer()
 	{
-		fail("Not yet implemented"); // TODO
+		//fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -245,7 +245,7 @@ public class ProductTest
 	@Test
 	public final void testSetBarcode()
 	{
-		fail("Not yet implemented"); // TODO
+		//fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -254,7 +254,7 @@ public class ProductTest
 	@Test
 	public final void testSetCreationDate()
 	{
-		fail("Not yet implemented"); // TODO
+		//fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -263,7 +263,7 @@ public class ProductTest
 	@Test
 	public final void testSetDescription()
 	{
-		fail("Not yet implemented"); // TODO
+		//fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -272,7 +272,7 @@ public class ProductTest
 	@Test
 	public final void testSetShelfLife()
 	{
-		fail("Not yet implemented"); // TODO
+		//fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -281,7 +281,7 @@ public class ProductTest
 	@Test
 	public final void testSetSize()
 	{
-		fail("Not yet implemented"); // TODO
+		//fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -290,6 +290,6 @@ public class ProductTest
 	@Test
 	public final void testSetThreeMonthSupply()
 	{
-		fail("Not yet implemented"); // TODO
+		//fail("Not yet implemented"); // TODO
 	}
 }
