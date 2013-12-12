@@ -33,7 +33,7 @@ import org.junit.Test;
  * @author Michael
  * 
  */
-public class ProdStatsReportDaylightSavingsTest
+public class ProdStatsReportDaylightSavingTimeToStandardTimeTest
 {
 	// Variables for Everything
 	private IInventory inventory = null;
@@ -136,7 +136,6 @@ public class ProdStatsReportDaylightSavingsTest
 		List<ProductStats> prodStatList =
 				inventory.getProductStats(reportDate, 2);
 
-		System.out.println(prodStatList.size());
 		assertTrue(prodStatList.size() == 3);
 
 		ProductStats beforeProdStats = prodStatList.get(1);
