@@ -12,3 +12,4 @@ data.inventory
 /report-test/*
 /report-valid-test/*
 /coverage-reports/*
+/coverage-reports
