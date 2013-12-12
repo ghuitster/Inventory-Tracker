@@ -70,9 +70,9 @@ public class ProdStatsReportStandardTimeToDaylightSavingTimeTest
 		inventory = Inventory.getInstance();
 		inventory.addStorageUnit(asu);
 
-		Date beforeDate = new Date(2013, 3, 8, 12, 0, 0);
-		Date onDate = new Date(2013, 3, 9, 2, 0, 0);
-		Date afterDate = new Date(2013, 3, 10, 12, 0, 0);
+		Date beforeDate = new Date(2013, 3, 9, 12, 0, 0);
+		Date onDate = new Date(2013, 3, 10, 2, 0, 0);
+		Date afterDate = new Date(2013, 3, 11, 12, 0, 0);
 
 		beforeProduct =
 				new Product(beforeDate, "beforeProduct", new ProductBarcode(
@@ -131,7 +131,7 @@ public class ProdStatsReportStandardTimeToDaylightSavingTimeTest
 	@Test
 	public final void transitionInMiddleTest()
 	{
-		Date reportDate = new Date(2013, 4, 9, 12, 0, 0);
+		Date reportDate = new Date(2013, 4, 10, 12, 0, 0);
 
 		List<ProductStats> prodStatList =
 				inventory.getProductStats(reportDate, 2);
@@ -156,7 +156,7 @@ public class ProdStatsReportStandardTimeToDaylightSavingTimeTest
 	@Test
 	public final void transitionAtBeginningTest()
 	{
-		Date reportDate = new Date(2013, 4, 9, 0, 0, 0);
+		Date reportDate = new Date(2013, 4, 10, 0, 0, 0);
 
 		List<ProductStats> prodStatList =
 				inventory.getProductStats(reportDate, 1);
@@ -180,7 +180,7 @@ public class ProdStatsReportStandardTimeToDaylightSavingTimeTest
 	@Test
 	public final void transitionAtEndTest()
 	{
-		Date reportDate = new Date(2013, 3, 9, 23, 59, 59);
+		Date reportDate = new Date(2013, 3, 10, 23, 59, 59);
 
 		List<ProductStats> prodStatList =
 				inventory.getProductStats(reportDate, 1);
