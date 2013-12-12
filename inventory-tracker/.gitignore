@@ -10,3 +10,4 @@ data.inventory
 /Reports/*.pdf
 /database/*
 /report-test/*
+/report-valid-test/*
