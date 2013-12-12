@@ -71,6 +71,136 @@ public class ProductStasticsControllerInputTests
 	}
 
 	@Test
+	public void testGoodValues()
+	{
+		((FakeProductStatisticsView) view).setFormat(FileFormat.HTML);
+		((FakeProductStatisticsView) view).setMonths("2");
+		((ProductStatsReportController) controller).valuesChanged();
+		assertTrue(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths("10");
+		((ProductStatsReportController) controller).valuesChanged();
+		assertTrue(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths("25");
+		((ProductStatsReportController) controller).valuesChanged();
+		assertTrue(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths("50");
+		((ProductStatsReportController) controller).valuesChanged();
+		assertTrue(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths("75");
+		((ProductStatsReportController) controller).valuesChanged();
+		assertTrue(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths("90");
+		((ProductStatsReportController) controller).valuesChanged();
+		assertTrue(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths("98");
+		((ProductStatsReportController) controller).valuesChanged();
+		assertTrue(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setFormat(FileFormat.PDF);
+		((FakeProductStatisticsView) view).setMonths("2");
+		((ProductStatsReportController) controller).valuesChanged();
+		assertTrue(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths("10");
+		((ProductStatsReportController) controller).valuesChanged();
+		assertTrue(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths("25");
+		((ProductStatsReportController) controller).valuesChanged();
+		assertTrue(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths("50");
+		((ProductStatsReportController) controller).valuesChanged();
+		assertTrue(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths("75");
+		((ProductStatsReportController) controller).valuesChanged();
+		assertTrue(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths("90");
+		((ProductStatsReportController) controller).valuesChanged();
+		assertTrue(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths("98");
+		((ProductStatsReportController) controller).valuesChanged();
+		assertTrue(((FakeProductStatisticsView) view).getOKEnabledStatus());
+	}
+
+	@Test
+	public void testOverFlow()
+	{
+		((FakeProductStatisticsView) view).setFormat(FileFormat.HTML);
+		((FakeProductStatisticsView) view).setMonths("" + Integer.MAX_VALUE);
+		((ProductStatsReportController) controller).valuesChanged();
+		assertFalse(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths(""
+				+ (Integer.MAX_VALUE + 1));
+		((ProductStatsReportController) controller).valuesChanged();
+		assertFalse(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths(""
+				+ (Integer.MAX_VALUE - 1));
+		((ProductStatsReportController) controller).valuesChanged();
+		assertFalse(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setFormat(FileFormat.PDF);
+		((FakeProductStatisticsView) view).setMonths("" + Integer.MAX_VALUE);
+		((ProductStatsReportController) controller).valuesChanged();
+		assertFalse(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths(""
+				+ (Integer.MAX_VALUE + 1));
+		((ProductStatsReportController) controller).valuesChanged();
+		assertFalse(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths(""
+				+ (Integer.MAX_VALUE - 1));
+		((ProductStatsReportController) controller).valuesChanged();
+		assertFalse(((FakeProductStatisticsView) view).getOKEnabledStatus());
+	}
+
+	@Test
+	public void testUnderFlow()
+	{
+		((FakeProductStatisticsView) view).setFormat(FileFormat.HTML);
+		((FakeProductStatisticsView) view).setMonths("" + Integer.MIN_VALUE);
+		((ProductStatsReportController) controller).valuesChanged();
+		assertFalse(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths(""
+				+ (Integer.MIN_VALUE + 1));
+		((ProductStatsReportController) controller).valuesChanged();
+		assertFalse(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths(""
+				+ (Integer.MIN_VALUE - 1));
+		((ProductStatsReportController) controller).valuesChanged();
+		assertFalse(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setFormat(FileFormat.PDF);
+		((FakeProductStatisticsView) view).setMonths("" + Integer.MIN_VALUE);
+		((ProductStatsReportController) controller).valuesChanged();
+		assertFalse(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths(""
+				+ (Integer.MIN_VALUE + 1));
+		((ProductStatsReportController) controller).valuesChanged();
+		assertFalse(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths(""
+				+ (Integer.MIN_VALUE - 1));
+		((ProductStatsReportController) controller).valuesChanged();
+		assertFalse(((FakeProductStatisticsView) view).getOKEnabledStatus());
+	}
+
+	@Test
 	public void testCloseTo0()
 	{
 		((FakeProductStatisticsView) view).setFormat(FileFormat.HTML);
@@ -101,7 +231,7 @@ public class ProductStasticsControllerInputTests
 	}
 
 	@Test
-	public void testNonIntegers()
+	public void testPositiveNonIntegers()
 	{
 		((FakeProductStatisticsView) view).setFormat(FileFormat.HTML);
 		((FakeProductStatisticsView) view).setMonths("99.9");
@@ -131,10 +261,44 @@ public class ProductStasticsControllerInputTests
 	}
 
 	@Test
+	public void testNegativeNonIntegers()
+	{
+		((FakeProductStatisticsView) view).setFormat(FileFormat.HTML);
+		((FakeProductStatisticsView) view).setMonths("-99.9");
+		((ProductStatsReportController) controller).valuesChanged();
+		assertFalse(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths("-0.1");
+		((ProductStatsReportController) controller).valuesChanged();
+		assertFalse(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths("-50.5");
+		((ProductStatsReportController) controller).valuesChanged();
+		assertFalse(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setFormat(FileFormat.PDF);
+		((FakeProductStatisticsView) view).setMonths("-99.9");
+		((ProductStatsReportController) controller).valuesChanged();
+		assertFalse(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths("-0.1");
+		((ProductStatsReportController) controller).valuesChanged();
+		assertFalse(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths("-50.5");
+		((ProductStatsReportController) controller).valuesChanged();
+		assertFalse(((FakeProductStatisticsView) view).getOKEnabledStatus());
+	}
+
+	@Test
 	public void testNonDigits()
 	{
 		((FakeProductStatisticsView) view).setFormat(FileFormat.HTML);
 		((FakeProductStatisticsView) view).setMonths("asdfghjkl");
+		((ProductStatsReportController) controller).valuesChanged();
+		assertFalse(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths("ASDFGHJKL");
 		((ProductStatsReportController) controller).valuesChanged();
 		assertFalse(((FakeProductStatisticsView) view).getOKEnabledStatus());
 
@@ -148,6 +312,10 @@ public class ProductStasticsControllerInputTests
 
 		((FakeProductStatisticsView) view).setFormat(FileFormat.PDF);
 		((FakeProductStatisticsView) view).setMonths("asdfghjkl");
+		((ProductStatsReportController) controller).valuesChanged();
+		assertFalse(((FakeProductStatisticsView) view).getOKEnabledStatus());
+
+		((FakeProductStatisticsView) view).setMonths("ASDFGHJKL");
 		((ProductStatsReportController) controller).valuesChanged();
 		assertFalse(((FakeProductStatisticsView) view).getOKEnabledStatus());
 
