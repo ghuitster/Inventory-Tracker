@@ -19,7 +19,7 @@ public class FirePluginTest
 
 		name = plugin.findProduct("123456789012");
 
-		assertEquals(name, "HP TFT7600 G2  KVM console  17.3");
+		assertEquals(name, "HP TFT7600 G2 - KVM console - 17.3");
 
 		name = plugin.findProduct("2135");
 

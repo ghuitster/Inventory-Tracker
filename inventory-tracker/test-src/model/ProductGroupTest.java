@@ -64,6 +64,7 @@ public class ProductGroupTest
 		ProductGroup group =
 				new ProductGroup("Test Group", new ThreeMonthSupply(1.0f,
 						UnitType.CHEVROLET));
+		group.setContainer(unit);
 		return group;
 	}
 

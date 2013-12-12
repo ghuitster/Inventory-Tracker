@@ -9,6 +9,8 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import common.util.DateUtils;
+
 public class ProductContainerTest
 {
 	@Test
@@ -71,15 +73,17 @@ public class ProductContainerTest
 	public void testAbleToRemoveProduct()
 	{
 		StorageUnit unit = new StorageUnit("test");
-		IProductContainer container =
+		ProductGroup container =
 				new ProductGroup("test", new ThreeMonthSupply(1.0f,
 						UnitType.CHEVROLET));
+		container.setContainer(unit);
 
 		IProduct product =
 				new Product(new Date(), "test", new ProductBarcode(
 						"400000000000"), new CountUnitSize(3), 3, null);
 		container.addProduct(product);
-		Item item = new Item(product, null, null, null);
+		Item item = new Item(product, new ItemBarcode(Inventory.getInstance()
+				.getUniqueBarCode() + ""), DateUtils.currentDate(), null);
 		for(IProduct prod: container.getAllProducts())
 		{
 			product = prod;

@@ -325,9 +325,15 @@ public class Inventory extends Observable implements IInventory, Serializable
 	@Override
 	public List<ProductStats> getProductStats(int months)
 	{
+		return getProductStats(DateUtils.currentDate(), months);
+	}
+	
+	@Override
+	public List<ProductStats> getProductStats(Date currentDate, int months)
+	{
 		List<ProductStats> allStats = new ArrayList<ProductStats>();
 
-		Date start = DateUtils.currentDate();
+		Date start = currentDate;
 		start.setMonth(start.getMonth() - months);
 
 		for(IProduct product: this.getAllProducts())

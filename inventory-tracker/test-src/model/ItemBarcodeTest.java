@@ -125,11 +125,9 @@ public class ItemBarcodeTest
 	public final void testToString()
 	{
 		String goodBCNum = "400000000001";
-		String test = "Barcode [number=400000000001]";
 		IBarcode goodBC = new ItemBarcode(goodBCNum);
 
-		assertFalse(goodBCNum.equals(goodBC.toString()));
-		assertTrue(test.equals(goodBC.toString()));
+		assertTrue(goodBC.toString().contains(goodBCNum));
 	}
 
 }

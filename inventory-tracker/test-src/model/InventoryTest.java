@@ -25,11 +25,6 @@ public class InventoryTest
 		assertTrue(Inventory.getInstance() != null);
 		assertEquals(0, Inventory.getInstance().getAllStorageUnits().size());
 		assertEquals(0, Inventory.getInstance().getAllProducts().size());
-		// assertEquals(0, Inventory.getInstance().getItemExpirations().size());
-		// assertEquals(0, Inventory.getInstance().getNMonthSupplyGroupMap()
-		// .size());
-		// assertEquals(0, Inventory.getInstance().getNMonthSupplyMap().size());
-		// assertEquals(0, Inventory.getInstance().getRemovedItems().size());
 	}
 
 	@Test
@@ -52,6 +47,7 @@ public class InventoryTest
 		ProductGroup pg1 =
 				new ProductGroup("pg1", new ThreeMonthSupply(1.0f,
 						UnitType.CHEVROLET));
+		pg1.setContainer(unit1);
 		prod =
 				new Product(new Date(), "asdf", new ProductBarcode("1"),
 						new CountUnitSize(1), 1, new CountThreeMonthSupply(1));

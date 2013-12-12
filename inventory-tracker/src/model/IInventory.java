@@ -126,6 +126,8 @@ public interface IInventory extends Observer, IObservable
 	 */
 	IPersistence getPersistence();
 
+	List<ProductStats> getProductStats(Date currentDate, int months);
+	
 	/**
 	 * Gets statistics for products since for a period of time
 	 * @pre none
