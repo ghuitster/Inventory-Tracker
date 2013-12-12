@@ -20,8 +20,16 @@ public class ReportWriteTest
 		
 		String reportDir = "." + File.separator + "report-test" + 
 				File.separator;
+		File directory = new File(reportDir);
+		directory.mkdirs();
+		directory.setWritable(false);
 		clearDir(reportDir);
 		report.createReport(reportDir + "productStatsReportTest.html");
+		assertTrue(directory.listFiles().length == 0);
+		directory.setWritable(true);
+		report.createReport(reportDir + "productStatsReportTest.html");
+		assertTrue(directory.listFiles().length == 1);
+		
 	}
 
 	private void clearDir(String reportDir)
