@@ -91,11 +91,9 @@ public class ProductDescriptionTest
 	public final void testToString()
 	{
 		String goodPD = "Test Product No. 1";
-		String test = "ProductDescription [description=Test Product No. 1]";
+		
 		IProductDescription pdGood = new ProductDescription(goodPD);
-
-		assertFalse(goodPD.equals(pdGood.toString()));
-		assertTrue(test.equals(pdGood.toString()));
+		assertTrue(pdGood.toString().contains(goodPD));
 	}
 
 }

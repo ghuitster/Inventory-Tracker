@@ -210,9 +210,7 @@ public class ProductTest
 	@Test
 	public final void testHashCode()
 	{
-		assertFalse(prod1.hashCode() == prod2.hashCode());
-		prod2.setDescription(new ProductDescription(desc2));
-		assertTrue(prod1.hashCode() == prod2.hashCode());
+		fail("Not yet implemented");
 	}
 
 	/**
