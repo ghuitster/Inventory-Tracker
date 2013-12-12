@@ -9,3 +9,4 @@ data.inventory
 /Reports/*.html
 /Reports/*.pdf
 /database/*
+/report-test/*

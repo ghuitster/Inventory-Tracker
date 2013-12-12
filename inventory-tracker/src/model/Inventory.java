@@ -366,9 +366,6 @@ public class Inventory extends Observable implements IInventory, Serializable
 					dateList.put(exit, new DateInfo(DateType.ExitDate, item));
 				}
 			}
-			
-			if(dateList.firstKey().getTime() > currentDate.getTime())
-				continue;
 
 			dateList.put(start, new DateInfo(DateType.StartOfReport, null));
 			dateList.put(currentDate, new DateInfo(

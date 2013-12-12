@@ -22,11 +22,11 @@ public class ReportWriteTest
 				File.separator;
 		File directory = new File(reportDir);
 		directory.mkdirs();
-		directory.setWritable(false);
 		clearDir(reportDir);
+		directory.setWritable(false, false);
 		report.createReport(reportDir + "productStatsReportTest.html");
 		assertTrue(directory.listFiles().length == 0);
-		directory.setWritable(true);
+		directory.setWritable(true, false);
 		report.createReport(reportDir + "productStatsReportTest.html");
 		assertTrue(directory.listFiles().length == 1);
 		
