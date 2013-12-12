@@ -154,7 +154,7 @@ public class ProductStatsReportController extends Controller implements
 			}
 		}
 		else
-			this.submit = true;
+			this.submit = false;
 
 		this.enableComponents();
 	}
