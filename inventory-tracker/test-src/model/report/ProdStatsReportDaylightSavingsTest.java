@@ -4,11 +4,23 @@
 
 package model.report;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Date;
+import java.util.List;
+
+import model.CountThreeMonthSupply;
+import model.CountUnitSize;
 import model.IInventory;
+import model.IItem;
 import model.IProduct;
 import model.Inventory;
+import model.Item;
+import model.ItemBarcode;
 import model.Product;
+import model.ProductBarcode;
+import model.ProductStats;
 import model.StorageUnit;
 
 import org.junit.After;
@@ -26,8 +38,12 @@ public class ProdStatsReportDaylightSavingsTest
 	// Variables for Everything
 	private IInventory inventory = null;
 	private final StorageUnit asu = new StorageUnit("a");
-	private final StorageUnit bsu = new StorageUnit("b");
-	private final StorageUnit csu = new StorageUnit("c");
+	IProduct beforeProduct = null;
+	IProduct onProduct = null;
+	IProduct afterProduct = null;
+	IItem beforeItem = null;
+	IItem onItem = null;
+	IItem afterItem = null;
 
 	/**
 	 * @throws java.lang.Exception
@@ -53,10 +69,42 @@ public class ProdStatsReportDaylightSavingsTest
 	{
 		inventory = Inventory.getInstance();
 		inventory.addStorageUnit(asu);
-		inventory.addStorageUnit(bsu);
-		inventory.addStorageUnit(csu);
 
-		IProduct testProduct = new Product(null, null, null, null, 0, null);
+		Date beforeDate = new Date(2013, 11, 2, 12, 0, 0);
+		Date onDate = new Date(2013, 11, 3, 2, 0, 0);
+		Date afterDate = new Date(2013, 11, 4, 12, 0, 0);
+
+		beforeProduct =
+				new Product(beforeDate, "beforeProduct", new ProductBarcode(
+						"010101010101"), new CountUnitSize(3), 0,
+						new CountThreeMonthSupply(0));
+		onProduct =
+				new Product(onDate, "onProduct", new ProductBarcode(
+						"010101010102"), new CountUnitSize(3), 0,
+						new CountThreeMonthSupply(0));
+		afterProduct =
+				new Product(afterDate, "afterProduct", new ProductBarcode(
+						"010101010103"), new CountUnitSize(3), 0,
+						new CountThreeMonthSupply(0));
+
+		beforeItem =
+				new Item(beforeProduct, new ItemBarcode(""
+						+ Inventory.getInstance().getUniqueBarCode()),
+						beforeDate, null);
+
+		onItem =
+				new Item(onProduct, new ItemBarcode(""
+						+ Inventory.getInstance().getUniqueBarCode()), onDate,
+						null);
+
+		afterItem =
+				new Item(afterProduct, new ItemBarcode(""
+						+ Inventory.getInstance().getUniqueBarCode()),
+						afterDate, null);
+
+		asu.addItem(beforeItem);
+		asu.addItem(onItem);
+		asu.addItem(afterItem);
 	}
 
 	/**
@@ -64,12 +112,94 @@ public class ProdStatsReportDaylightSavingsTest
 	 */
 	@After
 	public void tearDown() throws Exception
-	{}
+	{
+		asu.removeItem(beforeItem);
+		asu.removeItem(onItem);
+		asu.removeItem(afterItem);
+		asu.removeProduct(beforeProduct);
+		asu.removeProduct(onProduct);
+		asu.removeProduct(afterProduct);
+		inventory.removeStorageUnit(asu);
+		beforeProduct = null;
+		onProduct = null;
+		afterProduct = null;
+		beforeItem = null;
+		onItem = null;
+		afterItem = null;
+	}
 
 	@Test
-	public final void test()
+	public final void transitionInMiddleTest()
 	{
-		fail("Not yet implemented"); // TODO
+		Date reportDate = new Date(2013, 12, 11, 12, 0, 0);
+
+		List<ProductStats> prodStatList =
+				inventory.getProductStats(reportDate, 2);
+
+		System.out.println(prodStatList.size());
+		assertTrue(prodStatList.size() == 3);
+
+		ProductStats beforeProdStats = prodStatList.get(1);
+		ProductStats onProdStats = prodStatList.get(2);
+		ProductStats afterProdStats = prodStatList.get(0);
+
+		assertEquals(beforeProdStats.getProduct().getBarcode(),
+				beforeProduct.getBarcode());
+
+		assertEquals(onProdStats.getProduct().getBarcode(),
+				onProduct.getBarcode());
+
+		assertEquals(afterProdStats.getProduct().getBarcode(),
+				afterProduct.getBarcode());
+
+	}
+
+	@Test
+	public final void transitionAtBeginningTest()
+	{
+		Date reportDate = new Date(2013, 12, 3, 0, 0, 0);
+
+		List<ProductStats> prodStatList =
+				inventory.getProductStats(reportDate, 1);
+
+		assertTrue(prodStatList.size() == 3);
+
+		ProductStats beforeProdStats = prodStatList.get(1);
+		ProductStats onProdStats = prodStatList.get(2);
+		ProductStats afterProdStats = prodStatList.get(0);
+
+		assertEquals(beforeProdStats.getProduct().getBarcode(),
+				beforeProduct.getBarcode());
+
+		assertEquals(onProdStats.getProduct().getBarcode(),
+				onProduct.getBarcode());
+
+		assertEquals(afterProdStats.getProduct().getBarcode(),
+				afterProduct.getBarcode());
+	}
+
+	@Test
+	public final void transitionAtEndTest()
+	{
+		Date reportDate = new Date(2013, 11, 3, 23, 59, 59);
+
+		List<ProductStats> prodStatList =
+				inventory.getProductStats(reportDate, 1);
+
+		assertTrue(prodStatList.size() == 3);
+
+		ProductStats beforeProdStats = prodStatList.get(1);
+		ProductStats onProdStats = prodStatList.get(2);
+		ProductStats afterProdStats = prodStatList.get(0);
+
+		assertEquals(beforeProdStats.getProduct().getBarcode(),
+				beforeProduct.getBarcode());
+
+		assertEquals(onProdStats.getProduct().getBarcode(),
+				onProduct.getBarcode());
+
+		assertEquals(afterProdStats.getProduct().getBarcode(),
+				afterProduct.getBarcode());
 	}
 
 }
