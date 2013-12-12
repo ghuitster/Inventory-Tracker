@@ -1,0 +1,13 @@
+Testsuite: model.plugin.FirePluginTest
+Tests run: 1, Failures: 1, Errors: 0, Time elapsed: 0.794 sec
+------------- Standard Output ---------------
+200 barcode: 051000148704
+200 barcode: 123456789012
+------------- ---------------- ---------------
+
+Testcase: test took 0.78 sec
+	FAILED
+expected:<HP TFT7600 G2 [- KVM console -] 17.3> but was:<HP TFT7600 G2 [ KVM console ] 17.3>
+junit.framework.AssertionFailedError: expected:<HP TFT7600 G2 [- KVM console -] 17.3> but was:<HP TFT7600 G2 [ KVM console ] 17.3>
+	at model.plugin.FirePluginTest.test(FirePluginTest.java:22)
+

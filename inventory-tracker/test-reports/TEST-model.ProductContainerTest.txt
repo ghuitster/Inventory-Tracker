@@ -1,0 +1,18 @@
+Testsuite: model.ProductContainerTest
+Tests run: 9, Failures: 0, Errors: 1, Time elapsed: 0.064 sec
+
+Testcase: testAbleToAddProduct took 0.022 sec
+Testcase: testAbleToAddProductGroup took 0 sec
+Testcase: testAbleToAddItem took 0.001 sec
+Testcase: testAbleToRemoveItem took 0 sec
+Testcase: testAbleToRemoveProduct took 0.003 sec
+	Caused an ERROR
+null
+java.lang.NullPointerException
+	at model.ProductContainer.addProduct(ProductContainer.java:176)
+	at model.ProductContainerTest.testAbleToRemoveProduct(ProductContainerTest.java:81)
+
+Testcase: testAbleToRemoveProductGroup took 0.002 sec
+Testcase: testGetAllItems took 0 sec
+Testcase: testGetAllProductGroups took 0 sec
+Testcase: testGetAllProducts took 0 sec

@@ -1,0 +1,4 @@
+Testsuite: model.plugin.DavidPluginTest
+Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 2.375 sec
+
+Testcase: test took 2.36 sec

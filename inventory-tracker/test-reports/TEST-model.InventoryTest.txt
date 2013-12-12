@@ -1,0 +1,36 @@
+Testsuite: model.InventoryTest
+Tests run: 5, Failures: 0, Errors: 4, Time elapsed: 0.054 sec
+
+Testcase: persistenceTest took 0.023 sec
+	Caused an ERROR
+null
+java.lang.NullPointerException
+	at model.ProductContainer.addProduct(ProductContainer.java:176)
+	at model.InventoryTest.populateInventory(InventoryTest.java:58)
+	at model.InventoryTest.persistenceTest(InventoryTest.java:38)
+
+Testcase: constructorTest took 0.001 sec
+Testcase: productListTest took 0.001 sec
+	Caused an ERROR
+null
+java.lang.NullPointerException
+	at model.ProductContainer.addProduct(ProductContainer.java:176)
+	at model.InventoryTest.populateInventory(InventoryTest.java:58)
+	at model.InventoryTest.productListTest(InventoryTest.java:68)
+
+Testcase: storageUnitTest took 0.001 sec
+	Caused an ERROR
+null
+java.lang.NullPointerException
+	at model.ProductContainer.addProduct(ProductContainer.java:176)
+	at model.InventoryTest.populateInventory(InventoryTest.java:58)
+	at model.InventoryTest.storageUnitTest(InventoryTest.java:93)
+
+Testcase: removeTest took 0 sec
+	Caused an ERROR
+null
+java.lang.NullPointerException
+	at model.ProductContainer.addProduct(ProductContainer.java:176)
+	at model.InventoryTest.populateInventory(InventoryTest.java:58)
+	at model.InventoryTest.removeTest(InventoryTest.java:77)
+

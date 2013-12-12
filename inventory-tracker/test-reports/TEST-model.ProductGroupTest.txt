@@ -1,0 +1,21 @@
+Testsuite: model.ProductGroupTest
+Tests run: 4, Failures: 0, Errors: 2, Time elapsed: 0.049 sec
+
+Testcase: addProductTest took 0.026 sec
+	Caused an ERROR
+null
+java.lang.NullPointerException
+	at model.ProductContainer.addProduct(ProductContainer.java:176)
+	at model.ProductGroupTest.populateTestGroup(ProductGroupTest.java:78)
+	at model.ProductGroupTest.addProductTest(ProductGroupTest.java:44)
+
+Testcase: constructorTest took 0 sec
+Testcase: addChildTest took 0 sec
+Testcase: addItemTest took 0.001 sec
+	Caused an ERROR
+null
+java.lang.NullPointerException
+	at model.ProductContainer.addProduct(ProductContainer.java:176)
+	at model.ProductGroupTest.populateTestGroup(ProductGroupTest.java:78)
+	at model.ProductGroupTest.addItemTest(ProductGroupTest.java:32)
+
