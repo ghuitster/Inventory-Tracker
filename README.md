@@ -1,3 +1,7 @@
-Inventory-Tracker
+Inventory Tracker
 =================
-Nothing to see here
+
+Fall 2013 CS 340 Team 5 Inventory Tracker - Snell
+Mike Eagar
+Chris Thomsen
+Brian Spencer
